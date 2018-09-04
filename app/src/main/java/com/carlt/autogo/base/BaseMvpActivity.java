@@ -9,12 +9,14 @@ import com.carlt.autogo.basemvp.PresenterDispatch;
 import com.carlt.autogo.basemvp.PresenterProviders;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompatActivity implements BaseMvpView {
 
     private PresenterProviders mPresenterProviders;
     private PresenterDispatch  mPresenterDispatch;
+    private Unbinder           unbinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +24,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
         setContentView(getContentView());
         mPresenterProviders = PresenterProviders.inject(this);
         mPresenterDispatch = new PresenterDispatch(mPresenterProviders);
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
         mPresenterDispatch.attachView(this, this);
         mPresenterDispatch.onCreatePresenter(savedInstanceState);
         init();
@@ -65,5 +67,6 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     protected void onDestroy() {
         super.onDestroy();
         mPresenterDispatch.detachView();
+        unbinder.unbind();
     }
 }

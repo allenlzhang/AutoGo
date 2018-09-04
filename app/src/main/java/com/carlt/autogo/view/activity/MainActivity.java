@@ -1,4 +1,4 @@
-package com.carlt.autogo;
+package com.carlt.autogo.view.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

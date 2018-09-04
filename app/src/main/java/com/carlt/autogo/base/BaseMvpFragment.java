@@ -18,6 +18,7 @@ import com.carlt.autogo.basemvp.PresenterDispatch;
 import com.carlt.autogo.basemvp.PresenterProviders;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 /**
@@ -36,6 +37,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends Fragment 
 
     private PresenterProviders mPresenterProviders;
     private PresenterDispatch  mPresenterDispatch;
+    private Unbinder unbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -53,7 +55,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends Fragment 
                 parent.removeView(mRootView);
         } else {
             mRootView = inflater.inflate(getLayoutId(), container, false);
-            ButterKnife.bind(this, mRootView);
+            unbinder = ButterKnife.bind(this, mRootView);
             mActivity = getActivity();
             mContext = mActivity;
             this.inflater = inflater;
@@ -168,6 +170,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends Fragment 
     public void onDestroyView() {
         super.onDestroyView();
         mPresenterDispatch.detachView();
+        unbinder.unbind();
     }
 
     @Override
