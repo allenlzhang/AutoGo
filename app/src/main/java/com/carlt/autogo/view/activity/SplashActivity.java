@@ -5,7 +5,6 @@ import com.carlt.autogo.base.BaseMvpActivity;
 
 public class SplashActivity extends BaseMvpActivity {
 
-
     @Override
     protected int getContentView() {
         return R.layout.activity_splash;
