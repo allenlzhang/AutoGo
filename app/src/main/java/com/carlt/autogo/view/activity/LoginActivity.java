@@ -12,7 +12,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
 
 
-
     @Override
     protected int getContentView() {
         return R.layout.activity_login;

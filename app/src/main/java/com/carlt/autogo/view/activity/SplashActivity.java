@@ -10,6 +10,7 @@ public class SplashActivity extends BaseMvpActivity {
         return R.layout.activity_splash;
     }
 
+
     @Override
     public void init() {
 
