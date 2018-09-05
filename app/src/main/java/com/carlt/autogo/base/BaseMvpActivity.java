@@ -1,30 +1,32 @@
 package com.carlt.autogo.base;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.basemvp.BaseMvpView;
 import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.basemvp.PresenterDispatch;
 import com.carlt.autogo.basemvp.PresenterProviders;
 
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 
 public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompatActivity implements BaseMvpView {
 
     private PresenterProviders mPresenterProviders;
     private PresenterDispatch  mPresenterDispatch;
-    private Unbinder           unbinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(getContentView());
         mPresenterProviders = PresenterProviders.inject(this);
         mPresenterDispatch = new PresenterDispatch(mPresenterProviders);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         mPresenterDispatch.attachView(this, this);
         mPresenterDispatch.onCreatePresenter(savedInstanceState);
         init();
@@ -63,10 +65,15 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
 
     }
 
+    protected void showToast(String txt) {
+        ToastUtils.setGravity(Gravity.CENTER, 0, 0);
+        ToastUtils.showShort(txt);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenterDispatch.detachView();
-        unbinder.unbind();
+        //        unbinder.unbind();
     }
 }

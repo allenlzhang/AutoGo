@@ -37,7 +37,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends Fragment 
 
     private PresenterProviders mPresenterProviders;
     private PresenterDispatch  mPresenterDispatch;
-    private Unbinder unbinder;
+    private Unbinder           unbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -170,7 +170,8 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends Fragment 
     public void onDestroyView() {
         super.onDestroyView();
         mPresenterDispatch.detachView();
-        unbinder.unbind();
+        //            unbinder.unbind();
+
     }
 
     @Override

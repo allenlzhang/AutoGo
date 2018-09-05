@@ -25,6 +25,7 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
         return R.layout.activity_register;
     }
 
+
     @Override
     public void init() {
         mRegisterPresenter.register();
@@ -35,7 +36,6 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
         // TODO: 2018/9/4
         tv.setText("注册成功");
     }
-
 
 
 }

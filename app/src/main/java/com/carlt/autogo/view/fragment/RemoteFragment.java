@@ -13,18 +13,18 @@ import butterknife.BindView;
  * Author     : zhanglei
  * Date       : 2018/9/4 17:42
  */
-public class HomeFragment extends BaseMvpFragment {
+public class RemoteFragment extends BaseMvpFragment {
     @BindView(R.id.tv)
     TextView tv;
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_home;
+        return R.layout.fragment_remote;
     }
 
     @Override
     protected void init() {
-        tv.setText("首页");
+
     }
 
 
