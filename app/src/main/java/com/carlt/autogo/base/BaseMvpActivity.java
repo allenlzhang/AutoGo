@@ -1,6 +1,7 @@
 package com.carlt.autogo.base;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -112,6 +113,10 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     }
 
 
+    public void setBaseBackStyle(Drawable drawable){
+        ivBaseBack.setClickable(true);
+        ivBaseBack.setImageDrawable(drawable);
+    }
 
 
 }

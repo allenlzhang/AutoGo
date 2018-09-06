@@ -6,4 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".view.activity.login.OtherActivity">
 
+
+    <ImageView
+        android:id="@+id/login_payment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/login_payment_select"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/middle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.7"
+        android:clickable="true"
+        />
+
+    <TextView
+        android:id="@+id/middle"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        style="@style/ConstraintLayoutCommon"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+    <ImageView
+        android:id="@+id/login_wechat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ConstraintLayoutCommon"
+        android:src="@drawable/login_wechat_select"
+        app:layout_constraintTop_toBottomOf="@+id/middle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:clickable="true"
+        app:layout_constraintVertical_bias="0.3"
+        />
 </android.support.constraint.ConstraintLayout>

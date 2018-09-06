@@ -23,7 +23,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 @CreatePresenter(presenter = LoginPresenter.class)
-public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements ILoginView, View.OnClickListener {
+public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements ILoginView {
 
     @BindView(R.id.version_code)
     TextView versionCode;
@@ -58,6 +58,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     @Override
     public void init() {
         setTitleText("登录");
+        setBaseBackStyle(getResources().getDrawable(R.drawable.common_close_select));
 
     }
 
@@ -108,15 +109,9 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
         } else {
             userPWd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             passwdToggle.setImageDrawable(getResources().getDrawable(R.mipmap.ic_login_pwd_show));
-            ;
             passwdToggle.setTag("on");
         }
 
     }
 
-
-    @Override
-    public void onClick(View view) {
-
-    }
 }

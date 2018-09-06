@@ -7,11 +7,32 @@
     android:layout_height="match_parent"
     tools:context=".view.activity.RegisterActivity">
 
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="hello"/>
+    <LinearLayout
+        android:id="@+id/head"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        style="@style/ConstraintLayoutCommon"
+        >
+        <EditText
+            android:id="@+id/regist_user_phone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        style="@style/ConstraintLayoutCommon"
+
+        >
+
+        <EditText
+            android:id="@+id/regist_user_code"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
