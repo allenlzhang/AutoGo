@@ -2,6 +2,7 @@ package com.carlt.autogo.net.base;
 
 import android.util.Log;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.BuildConfig;
 import com.carlt.autogo.global.GlobalUrl;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -15,9 +16,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 //网络配置类
 public abstract class BaseRestClient implements Iservice {
     OkHttpClient.Builder okBuilder = new OkHttpClient.Builder();
-    static Retrofit.Builder builder = new Retrofit.Builder();
+    Retrofit.Builder builder = new Retrofit.Builder();
+    Retrofit retrofit ;
 
-    public BaseRestClient() {
+    protected BaseRestClient() {
         //请求 超时 时间为5秒
         okBuilder.connectTimeout(15, TimeUnit.SECONDS);
         okBuilder.readTimeout(15, TimeUnit.SECONDS);
@@ -30,5 +32,16 @@ public abstract class BaseRestClient implements Iservice {
 
     abstract void creat();
 
+    @Override
+    public <T> T getService(Class<T> service) {
+        return retrofit.create(service);
+    }
 
+    protected static Iservice getDefual(){
+        return DefulatClient.getInstace();
+    }
+
+    protected static Iservice getDefual2(){
+        return DefulatClient2.getInstance();
+    }
 }

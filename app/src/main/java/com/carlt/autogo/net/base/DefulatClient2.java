@@ -14,22 +14,17 @@ public class DefulatClient2 extends BaseRestClient {
 
     @Override
     void creat() {
-    }
-
-    @Override
-    public <T> T getService(Class<T> service) {
-        return SingletonHolder.retrofit.create(service);
+      //  builder.baseUrl(GlobalUrl.BASE_URL2);
+        retrofit = builder.build();
     }
 
     private static class SingletonHolder{
-        private static DefulatClient2 instace = new DefulatClient2();
-        private static Retrofit retrofit = builder.build();
-
+        private static DefulatClient2 instance = new DefulatClient2();
 
     }
 
-    public static  DefulatClient2 newInstance () {
-        return SingletonHolder.instace;
+    protected static DefulatClient2 getInstance(){
 
+        return  SingletonHolder.instance ;
     }
 }
