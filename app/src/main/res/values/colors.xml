@@ -12,4 +12,8 @@
     <!-- 浅灰 -->
     <color name="textColorGray">#999999</color>
     <color name="transparent">#00000000</color>
+    <color name="colorLoginCommitBgNormal">#478cea</color>
+    <color name="colorLoginCommitBgPress">#305ec1</color>
+    <color name="colorForgotPasswd">#4a8eea</color>
+    <color name="colorEdtext">#333333</color>
 </resources>
