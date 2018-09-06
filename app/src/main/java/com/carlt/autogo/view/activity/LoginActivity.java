@@ -1,16 +1,11 @@
 package com.carlt.autogo.view.activity;
 
 
-import android.view.View;
-import android.widget.Button;
-
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.presenter.login.ILoginView;
 import com.carlt.autogo.presenter.login.LoginPresenter;
-
-import butterknife.BindView;
 
 @CreatePresenter(presenter = LoginPresenter.class)
 public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements ILoginView {
@@ -23,7 +18,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     @Override
     public void init() {
-
+        setTitleText("登录");
         getPresenter().login();
     }
 

@@ -2,6 +2,7 @@ package com.carlt.autogo.view.activity;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 
 import com.carlt.autogo.R;
 
@@ -37,6 +38,7 @@ public class MainActivity extends BaseMvpActivity {
 
     @Override
     public void init() {
+        rlTitle.setVisibility(View.GONE);
         initBottomTabs();
     }
 

@@ -28,6 +28,7 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
 
     @Override
     public void init() {
+        setTitleText("注册");
         mRegisterPresenter.register();
     }
 
