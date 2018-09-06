@@ -68,7 +68,7 @@ public class MainActivity extends BaseMvpActivity {
                     default:
                         break;
                 }
-                ft.commit();
+                ft.commitAllowingStateLoss();
             }
 
             @Override
@@ -87,7 +87,7 @@ public class MainActivity extends BaseMvpActivity {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.fl_content, FragmentFactory.getFragment(0));
-        ft.commit();
+        ft.commitAllowingStateLoss();
     }
 
 }
