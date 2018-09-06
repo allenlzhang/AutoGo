@@ -7,4 +7,153 @@
     android:layout_height="match_parent"
     tools:context=".view.activity.LoginActivity">
 
+    <ImageView
+        android:id="@+id/ic_car"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ConstraintLayoutCommon"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@mipmap/ic_login_car_logo"
+        app:layout_constraintVertical_bias="0.15"
+        />
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="应用名称"
+        android:textSize="25dp"
+        style="@style/ConstraintLayoutCommon"
+        app:layout_constraintTop_toBottomOf="@+id/ic_car"
+        app:layout_constraintVertical_bias="0.05"
+        />
+
+    <TextView
+        android:id="@+id/version_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="V 1.0.0"
+        android:textSize="16dp"
+        style="@style/ConstraintLayoutCommon"
+        app:layout_constraintTop_toBottomOf="@+id/app_name"
+        app:layout_constraintVertical_bias="0.03"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="@style/ConstraintLayoutCommon"
+        app:layout_constraintTop_toBottomOf="@+id/version_code"
+        app:layout_constraintVertical_bias="0.05"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        >
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/ic_login_phone"/>
+
+        <EditText
+            android:id="@+id/user_phone"
+            style="@style/usercenter_edit1"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="0dip"
+            android:layout_marginRight="0dip"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="请输入手机号码"
+            android:inputType="number"
+            android:maxLength="11"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorBottomTabUnSelect"
+        style="@style/ConstraintLayoutCommon"
+        app:layout_constraintTop_toBottomOf="@+id/ll_phone"
+        app:layout_constraintVertical_bias="0"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="@style/ConstraintLayoutCommon"
+        app:layout_constraintTop_toBottomOf="@+id/line1"
+        app:layout_constraintVertical_bias="0.05"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        >
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/ic_login_pwd"/>
+
+        <EditText
+            android:id="@+id/user_pwd"
+            style="@style/usercenter_edit1"
+            android:layout_width="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="0dip"
+            android:layout_marginRight="0dip"
+            android:layout_weight="1"
+            android:background="@null"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+            android:hint="请输入密码"
+            android:inputType="textPassword"
+            android:maxLength="32"
+            android:selectAllOnFocus="true"/>
+
+        <ImageView
+            android:id="@+id/passwd_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dip"
+            android:src="@mipmap/ic_login_pwd_hide"
+            android:tag="off"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorBottomTabUnSelect"
+        style="@style/ConstraintLayoutCommon"
+        app:layout_constraintTop_toBottomOf="@+id/ll_pwd"
+        app:layout_constraintVertical_bias="0"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        style="@style/ConstraintLayoutCommon"
+
+        />
+
+    <TextView
+        android:id="@+id/forgot_passwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        />
+
 </android.support.constraint.ConstraintLayout>
