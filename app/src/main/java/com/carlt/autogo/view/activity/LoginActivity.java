@@ -19,6 +19,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     @Override
     public void init() {
+
         getPresenter().login();
     }
 
