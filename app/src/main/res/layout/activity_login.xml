@@ -42,7 +42,7 @@
     <LinearLayout
         android:id="@+id/ll_phone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:orientation="horizontal"
         style="@style/ConstraintLayoutCommon"
         app:layout_constraintTop_toBottomOf="@+id/version_code"
@@ -60,14 +60,8 @@
 
         <EditText
             android:id="@+id/user_phone"
-            style="@style/usercenter_edit1"
-            android:layout_marginBottom="0dp"
-            android:layout_marginLeft="0dip"
-            android:layout_marginRight="0dip"
-            android:background="@null"
-            android:gravity="center_vertical"
+            style="@style/EdCommonLoginAndRegister"
             android:hint="请输入手机号码"
-            android:inputType="number"
             android:maxLength="11"/>
     </LinearLayout>
 
@@ -86,7 +80,7 @@
     <LinearLayout
         android:id="@+id/ll_pwd"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:orientation="horizontal"
         style="@style/ConstraintLayoutCommon"
         app:layout_constraintTop_toBottomOf="@+id/line1"
@@ -104,16 +98,9 @@
 
         <EditText
             android:id="@+id/user_pwd"
-            style="@style/usercenter_edit1"
-            android:layout_width="0dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginLeft="0dip"
-            android:layout_marginRight="0dip"
-            android:layout_weight="1"
-            android:background="@null"
+            style="@style/EdCommonLoginAndRegister"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:gravity="center_vertical"
             android:hint="请输入密码"
             android:inputType="textPassword"
             android:maxLength="32"
@@ -146,16 +133,11 @@
         android:id="@+id/login_commit"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        style="@style/ConstraintLayoutCommon"
+        style="@style/BtnCommonCommit"
         app:layout_constraintTop_toBottomOf="@+id/line2"
         app:layout_constraintVertical_bias="0.2"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:textSize="25dp"
         android:text="登录"
-        android:gravity="center"
-        android:textColor="@color/colorWhite"
-        android:background="@drawable/login_commit_bg_select"
 
         />
 

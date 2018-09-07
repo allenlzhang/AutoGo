@@ -16,4 +16,5 @@
     <color name="colorLoginCommitBgPress">#305ec1</color>
     <color name="colorForgotPasswd">#4a8eea</color>
     <color name="colorEdtext">#333333</color>
+    <color name="colorRegistBg">#F0F0F0</color>
 </resources>
