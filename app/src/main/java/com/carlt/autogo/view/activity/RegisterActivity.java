@@ -179,6 +179,7 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
         params.put("move_deviceid", "");
         params.put("move_device_name", "");
         params.put("originate","");
+
         doRegiste(params);
 
     }
@@ -199,8 +200,8 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
 
     private void doRegiste(Map<String, Object> params) {
 
-
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

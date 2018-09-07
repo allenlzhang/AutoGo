@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
@@ -19,8 +20,17 @@ import com.carlt.autogo.presenter.login.ILoginView;
 import com.carlt.autogo.presenter.login.LoginPresenter;
 import com.carlt.autogo.view.activity.login.ForgotActivity;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 @CreatePresenter(presenter = LoginPresenter.class)
 public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements ILoginView {
@@ -41,7 +51,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     @BindView(R.id.btn_more) Button btnMore;
 
-
+    int time =20 ;
+     Disposable disposable ;
     @Override
     protected int getContentView() {
         return R.layout.activity_login;
@@ -62,6 +73,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
                 BaseDialog baseDialog = new LoginMoreDialog(this);
                 baseDialog.show();
+
 
                 break;
             case R.id.user_regist:

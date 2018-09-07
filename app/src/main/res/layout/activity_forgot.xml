@@ -53,10 +53,10 @@
         app:layout_constraintVertical_bias="0.02">
 
         <EditText
-            android:id="@+id/ed_reset_pwd"
+            android:id="@+id/ed_forgot_pwd"
             style="@style/EdCommonLoginAndRegister"
             android:hint="请输入密码"
-            android:inputType="number"
+            android:inputType="textPassword"
             android:maxLength="11" />
 
         <ImageView
@@ -66,7 +66,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="10dip"
             android:src="@mipmap/ic_login_pwd_hide"
-            android:tag="off" />
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -79,10 +79,10 @@
         >
 
         <EditText
-            android:id="@+id/ed_reset_pwd_d"
+            android:id="@+id/ed_forgot_pwd_d"
             style="@style/EdCommonLoginAndRegister"
             android:hint="请输确认密码"
-
+            android:inputType="textPassword"
             />
 
         <ImageView
@@ -92,7 +92,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="10dip"
             android:src="@mipmap/ic_login_pwd_hide"
-            android:tag="off" />
+            />
     </LinearLayout>
 
     <Button
