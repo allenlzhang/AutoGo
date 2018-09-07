@@ -30,6 +30,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.carlt.autogo.view.activity.RegisterActivity.CheckValues;
+
 public class ForgotActivity extends BaseMvpActivity {
 
     @BindView(R.id.ed_forgot_user_phone)EditText edForgotUserPhone;
@@ -52,42 +54,19 @@ public class ForgotActivity extends BaseMvpActivity {
         return R.layout.activity_forgot;
     }
 
-
-
     @OnClick({R.id.btn_send_code})
     public void onClick(View view){
         doSendCode();
     }
+
     @OnClick(R.id.btn_forgot_commit)
     public void forgotCommit(){
         String phoneNum = edForgotUserPhone.getText().toString().trim();
-        boolean  checkOk =  RegexUtils.isMobileExact(phoneNum) ;
-        if(!checkOk){
-            ToastUtils.showShort("请输入正确手机号!");
-            return;
-        }
-
-        if( StringUtils.isEmpty(edForgotUserCode.getText())){
-            ToastUtils.showShort("验证码为空");
-            return;
-        }
-
-        String regex = "^[A-Za-z0-9]{6,11}+$";
-
         String pwd = edForgotPwd.getText().toString().toString();
         String pwdD = edForgotPwdD.getText().toString().toString();
+        String code =edForgotUserCode.getText().toString().trim() ;
 
-        if (!RegexUtils.isMatch(regex, pwd) || !RegexUtils.isMatch(regex, pwd)) {
-            ToastUtils.setMsgTextSize(15);
-            ToastUtils.showLong("密码有误,输入数字或者字母,长度6到10");
-
-            return;
-        }
-
-        if (!pwd.equals(pwdD)) {
-            ToastUtils.showShort("两次密码不一致");
-            return;
-        }
+        CheckValues(phoneNum,pwd,pwdD,code);
 
         Map<String, Object> params = new HashMap<>();
         params.put("mobile", "");

@@ -86,8 +86,6 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
         view.setSelected(!view.isSelected());
     }
 
-
-
     @SuppressLint("CheckResult")
     private void doSendCode() {
 
@@ -141,36 +139,11 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
     public void registeCommit() {
 
         String phoneNum = registUserPhone.getText().toString().trim();
-        boolean  checkOk =  RegexUtils.isMobileExact(phoneNum) ;
-        if(!checkOk){
-            ToastUtils.showShort("请输入正确手机号!");
-            return;
-        }
-
-        if( StringUtils.isEmpty(registUserCode.getText())){
-            ToastUtils.showShort("验证码为空");
-            return;
-        }
-
-        String regex = "^[A-Za-z0-9]{5,11}+$";
-
         String pwd = edRegisterPwd.getText().toString().toString();
         String pwdD = edRegisterPwdD.getText().toString().toString();
+        String code =registUserCode.getText().toString().trim() ;
 
-        if (!RegexUtils.isMatch(regex, pwd) || !RegexUtils.isMatch(regex, pwd)) { ;
-            ToastUtils.showLong("密码有误,输入数字或者字母,长度6到10");
-            return;
-        }
-
-        if (!pwd.equals(pwdD)) {
-            ToastUtils.showShort("两次密码不一致");
-            return;
-        }
-
-        if (!cbLaw.isChecked()) {
-            ToastUtils.showShort("您未同意服务条款");
-            return;
-        }
+        CheckValues(phoneNum,pwd,pwdD,code);
 
         Map<String, Object> params = new HashMap<>();
         params.put("mobile", "");
@@ -202,6 +175,35 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
 
     }
 
+
+    public static void CheckValues( String phoneNum ,String pwd ,String pwdD ,String code ){
+        String regex = "^[A-Za-z0-9]{5,11}+$";
+        if(!phoneNum.equals("-")){
+            boolean  checkOk =  RegexUtils.isMobileExact(phoneNum) ;
+            if(!checkOk){
+                ToastUtils.showShort("请输入正确手机号!");
+                return;
+            }
+        }
+        if(!code.equals("-")){
+            if( StringUtils.isEmpty(code)){
+                ToastUtils.showShort("验证码为空");
+                return;
+            }
+        }
+        if(!pwd.equals("-") || !pwdD.equals("-")){
+            if (!RegexUtils.isMatch(regex, pwd) || !RegexUtils.isMatch(regex, pwd)) {
+                ToastUtils.setMsgTextSize(15);
+                ToastUtils.showLong("密码有误,输入数字或者字母,长度6到10");
+                return;
+            }
+        }
+
+        if (!pwd.equals(pwdD)) {
+            ToastUtils.showShort("两次密码不一致");
+            return;
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
