@@ -25,29 +25,21 @@ import butterknife.OnClick;
 @CreatePresenter(presenter = LoginPresenter.class)
 public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements ILoginView {
 
-    @BindView(R.id.version_code)
-    TextView versionCode;
+    @BindView(R.id.version_code) TextView versionCode;
 
-    @BindView(R.id.user_phone)
-    EditText userPhone;
+    @BindView(R.id.user_phone) EditText userPhone;
 
-    @BindView(R.id.user_pwd)
-    EditText userPWd;
+    @BindView(R.id.user_pwd) EditText userPWd;
 
-    @BindView(R.id.passwd_toggle)
-    ImageView passwdToggle;
+    @BindView(R.id.passwd_toggle) ImageView passwdToggle;
 
-    @BindView(R.id.login_commit)
-    Button loginCommit;
+    @BindView(R.id.login_commit) Button loginCommit;
 
-    @BindView(R.id.forgot_passwd)
-    TextView forgotPasswd;
+    @BindView(R.id.forgot_passwd) TextView forgotPasswd;
 
-    @BindView(R.id.user_regist)
-    TextView userRegist;
+    @BindView(R.id.user_regist) TextView userRegist;
 
-    @BindView(R.id.btn_more)
-    Button btnMore;
+    @BindView(R.id.btn_more) Button btnMore;
 
 
     @Override

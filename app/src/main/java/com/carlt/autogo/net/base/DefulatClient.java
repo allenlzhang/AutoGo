@@ -17,11 +17,12 @@ public class DefulatClient  extends BaseRestClient {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-                LogUtils.d(message);
+                LogUtils.e(message);
             }
         });
-        loggingInterceptor.setLevel(BuildConfig.DEBUG? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
+        loggingInterceptor.setLevel(BuildConfig.DEBUG_MODE? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
          okBuilder.addInterceptor(loggingInterceptor);
+         builder.baseUrl(GlobalUrl.BASE_URL_TEST_YEMA);
          retrofit = builder.build();
     }
 

@@ -8,7 +8,7 @@
     tools:context=".view.activity.RegisterActivity">
 
     <LinearLayout
-        android:id="@+id/head"
+        android:id="@+id/headl1"
         style="@style/BgCommonLoginAndRegister"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,11 +24,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/head2"
+        android:id="@+id/headl2"
         style="@style/BgCommonLoginAndRegister"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/head"
-        app:layout_constraintVertical_bias="0.1">
+        app:layout_constraintTop_toBottomOf="@+id/headl1"
+        app:layout_constraintVertical_bias="0.05">
 
         <EditText
             android:id="@+id/regist_user_code"
@@ -47,12 +47,109 @@
             />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_register_next"
-        style="@style/BtnCommonCommit"
-        android:text="下一步"
-        android:textSize="20dp"
+    <LinearLayout
+        android:id="@+id/head"
+        style="@style/BgCommonLoginAndRegister"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/headl2"
+        app:layout_constraintVertical_bias="0.05">
+
+        <EditText
+            android:id="@+id/ed_register_pwd"
+            style="@style/EdCommonLoginAndRegister"
+            android:hint="请输入登录密码"
+            android:inputType="textPassword"
+            android:maxLength="32"
+            android:selectAllOnFocus="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            />
+
+        <ImageView
+            android:id="@+id/img_passwd_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dip"
+            android:src="@mipmap/ic_login_pwd_hide"
+            android:tag="off"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/head2"
+        style="@style/BgCommonLoginAndRegister"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/head"
+        app:layout_constraintVertical_bias="0.05">
+
+        <EditText
+            android:id="@+id/ed_register_pwd_d"
+            style="@style/EdCommonLoginAndRegister"
+            android:hint="请输再次输入密码"
+            android:inputType="textPassword"
+            android:maxLength="32"
+            android:selectAllOnFocus="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+
+            />
+        <ImageView
+            android:id="@+id/img_passwd_toggle_d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dip"
+            android:src="@mipmap/ic_login_pwd_hide"
+            android:tag="off"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/head3"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="@+id/head2"
         app:layout_constraintTop_toBottomOf="@+id/head2"
+        app:layout_constraintVertical_bias="0">
+
+        <CheckBox
+            android:id="@+id/cb_law"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_register_img_level_select"
+            android:button="@null"
+            android:checked="true"
+
+            />
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/cb_law"
+            android:text="已经阅读并同意" />
+
+        <TextView
+            android:id="@+id/tv_law"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv1"
+            android:text="@string/app_law"
+            android:textColor="@color/colorForgotPasswd" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_register_commit"
+        style="@style/BtnCommonCommit"
+        android:text="注册"
+        android:textSize="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/head3"
         app:layout_constraintVertical_bias="0.1" />
 
 </android.support.constraint.ConstraintLayout>
