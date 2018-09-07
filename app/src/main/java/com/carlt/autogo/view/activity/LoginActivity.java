@@ -1,7 +1,6 @@
 package com.carlt.autogo.view.activity;
 
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.text.InputType;
 import android.view.View;

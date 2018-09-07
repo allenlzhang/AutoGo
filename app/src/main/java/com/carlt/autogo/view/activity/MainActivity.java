@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import com.carlt.autogo.R;
-
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.model.TabEntity;
@@ -38,6 +37,7 @@ public class MainActivity extends BaseMvpActivity {
 
     @Override
     public void init() {
+        //        setTitleText("主页");
         rlTitle.setVisibility(View.GONE);
         initBottomTabs();
     }

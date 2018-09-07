@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlTitle"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/baseTitleHeight"
+    android:background="@color/colorTitleBg"
+    android:paddingBottom="2dp"
+    android:paddingTop="2dp">
+
+    <TextView
+        android:id="@+id/tv_base_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="会员登录"
+        android:textColor="@color/colorTitleTxt"
+        android:textSize="@dimen/baseTitleTxtSize"/>
+
+    <ImageView
+        android:id="@+id/iv_base_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:padding="@dimen/item_margin"
+        android:src="@drawable/back_arrow_selector"/>
+</RelativeLayout>
