@@ -1,8 +1,6 @@
 package com.carlt.autogo.view.activity.login;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -11,11 +9,10 @@ import android.widget.ImageView;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.RegexUtils;
-import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
-import com.carlt.autogo.net.base.RestClientFactory;
+import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 
 import java.util.HashMap;
@@ -112,23 +109,23 @@ public class ForgotActivity extends BaseMvpActivity {
             return;
         }
 
-        RestClientFactory.creatDef().getService(UserService.class).getValidate(phoneNum)
-                .subscribeOn(Schedulers.newThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        ToastUtils.showShort("下发成功");
-                        btnSendCode .setClickable(false);
-                        notifSendValidate();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        LogUtils.e(throwable.getMessage());
-                        ToastUtils.showShort("下发失败");
-                    }
-                });
+//        ClientFactory.defaultService(UserService.class).getValidate(phoneNum)
+//                .subscribeOn(Schedulers.newThread())
+//                .subscribeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<Object>() {
+//                    @Override
+//                    public void accept(Object o) throws Exception {
+//                        ToastUtils.showShort("下发成功");
+//                        btnSendCode .setClickable(false);
+//                        notifSendValidate();
+//                    }
+//                }, new Consumer<Throwable>() {
+//                    @Override
+//                    public void accept(Throwable throwable) throws Exception {
+//                        LogUtils.e(throwable.getMessage());
+//                        ToastUtils.showShort("下发失败");
+//                    }
+//                });
     }
 
     private void notifSendValidate() {

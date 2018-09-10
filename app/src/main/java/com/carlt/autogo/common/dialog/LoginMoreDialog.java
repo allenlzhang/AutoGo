@@ -41,6 +41,12 @@ public class LoginMoreDialog extends BaseDialog  {
         return R.layout.dialog_login_more;
     }
 
+    @Override
+    void init() {
+
+    }
+
+
     @OnClick({R.id.cancle ,R.id.login_by_face ,R.id.login_by_normal,R.id.login_by_other })
     public void onClick(View view){
         switch (view.getId()){

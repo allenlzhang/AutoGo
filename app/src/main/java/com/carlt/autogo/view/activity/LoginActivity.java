@@ -9,27 +9,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.BaseDialog;
 import com.carlt.autogo.common.dialog.LoginMoreDialog;
+import com.carlt.autogo.net.base.BaseRestClient;
+import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.presenter.login.ILoginView;
 import com.carlt.autogo.presenter.login.LoginPresenter;
 import com.carlt.autogo.view.activity.login.ForgotActivity;
 
-import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 @CreatePresenter(presenter = LoginPresenter.class)
 public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements ILoginView {
@@ -50,7 +43,11 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     @BindView(R.id.btn_more) Button btnMore;
 
-    int time =20 ;
+    @BindView(R.id.btn_changeUrl) Button btnChangeUrl;
+
+    String [] tag = {"测试服","正式服","预发布"};
+    int next ;
+
      Disposable disposable ;
     @Override
     protected int getContentView() {
@@ -97,7 +94,17 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
         }
     }
 
+    @OnClick(R.id.btn_changeUrl)
+    public void changeUrl(){
 
+        btnChangeUrl.setText(tag[next]);
+        ClientFactory.defChangeUrl(next);
+        next ++ ;
+        if(next == tag.length){
+            next = 0;
+        }
+
+    }
     @Override
     public void loginFinish() {
 
@@ -108,11 +115,9 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
         if (selected) {
             userPWd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             passwdToggle.setImageDrawable(getResources().getDrawable(R.mipmap.ic_login_pwd_hide));
-            passwdToggle.setTag("off");
         } else {
             userPWd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             passwdToggle.setImageDrawable(getResources().getDrawable(R.mipmap.ic_login_pwd_show));
-            passwdToggle.setTag("on");
         }
 
     }

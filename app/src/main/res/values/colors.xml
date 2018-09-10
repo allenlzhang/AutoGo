@@ -17,4 +17,6 @@
     <color name="colorForgotPasswd">#4a8eea</color>
     <color name="colorEdtext">#333333</color>
     <color name="colorRegistBg">#F0F0F0</color>
+    <!-- 页面背景色 -->
+    <color name="layout_background">#F0F0F0</color>
 </resources>

@@ -17,11 +17,14 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
-import com.carlt.autogo.net.base.RestClientFactory;
+import com.carlt.autogo.entry.user.User;
+import com.carlt.autogo.net.base.BaseRestClient;
+import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.register.IRegisterView;
 import com.carlt.autogo.presenter.register.RegisterPresenter;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +36,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 @CreatePresenter(presenter = RegisterPresenter.class)
 public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
@@ -52,7 +58,7 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
     Disposable disposable ;
 
     @PresenterVariable
-    private RegisterPresenter mRegisterPresenter;
+    private RegisterPresenter presenter;
 
     @Override
     protected int getContentView() {
@@ -62,7 +68,7 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
     @Override
     public void init() {
         setTitleText("注册");
-        mRegisterPresenter.register();
+
     }
 
     @Override
@@ -95,24 +101,9 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
             ToastUtils.showShort("请输入正确手机号!");
             return;
         }
+        presenter.register(phoneNum);
 
-        RestClientFactory.creatDef().getService(UserService.class).getValidate(phoneNum)
-                .subscribeOn(Schedulers.newThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        ToastUtils.showShort("下发成功");
-                        sendCode .setClickable(false);
-                        notifSendValidate();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        LogUtils.e(throwable.getMessage());
-                        ToastUtils.showShort("下发失败");
-                    }
-                });
+
     }
 
     private void notifSendValidate() {

@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".view.activity.LoginActivity">
 
+    <Button
+        android:id="@+id/btn_changeUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ConstraintLayoutCommon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintHorizontal_bias="0"
+        android:background="@color/transparent"
+        android:text="测试服"
+        />
     <ImageView
         android:id="@+id/ic_car"
         android:layout_width="wrap_content"

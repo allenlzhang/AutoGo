@@ -11,6 +11,11 @@ public class DefulatClient2 extends BaseRestClient {
         retrofit = builder.build();
     }
 
+    @Override
+    public void changeUri(int id) {
+
+    }
+
     private static class SingletonHolder{
         private static DefulatClient2 instance = new DefulatClient2();
 

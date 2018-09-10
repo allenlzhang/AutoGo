@@ -24,11 +24,13 @@ public abstract  class BaseDialog extends Dialog  {
     Context context ;
     WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
     Unbinder unbinder ;
+
     public BaseDialog(@NonNull Context context) {
         super(context, R.style.dialog_login_more);
         setWindowParams();
         getWindow().setAttributes(layoutParams);
         this.context = context;
+
     }
 
     @Override
@@ -39,7 +41,11 @@ public abstract  class BaseDialog extends Dialog  {
         }
         setContentView(setRes());
         unbinder = ButterKnife.bind(this);
+
+        init();
     }
     abstract  void  setWindowParams();
     abstract  int setRes();
+    abstract  void init();
+
 }

@@ -5,6 +5,7 @@ import com.carlt.autogo.entry.user.User;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -25,4 +26,5 @@ public interface UserService {
 
     @GET("api/data/Android/10/1")
     Observable<User> getTest();
+
 }
