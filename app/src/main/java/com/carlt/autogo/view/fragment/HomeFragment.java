@@ -8,7 +8,7 @@ import com.carlt.autogo.base.BaseMvpFragment;
 import butterknife.BindView;
 
 /**
- * Description:
+ * Description: 首页fragment
  * Company    : carlt
  * Author     : zhanglei
  * Date       : 2018/9/4 17:42

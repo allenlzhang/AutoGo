@@ -33,7 +33,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-
+ /**
+  * Description : 注册页面
+  * @Author     : zhanglei
+  * @Date       : 2018/9/10
+  */
 @CreatePresenter(presenter = RegisterPresenter.class)
 public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
 

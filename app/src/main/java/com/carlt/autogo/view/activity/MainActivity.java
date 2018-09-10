@@ -16,7 +16,11 @@ import com.flyco.tablayout.listener.OnTabSelectListener;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-
+/**
+ * Description : 主页面
+ * @Author     : zhanglei
+ * @Date       : 2018/9/10
+ */
 public class MainActivity extends BaseMvpActivity {
 
     @BindView(R.id.bottomTabs)

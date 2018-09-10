@@ -21,7 +21,7 @@ public interface UserService {
     //用户注册
     @FormUrlEncoded
     @POST
-    Observable<Object>userRegister(@FieldMap Map<String ,Object> param);
+    Observable<Object> userRegister(@FieldMap Map<String, Object> param);
 
     @GET("api/data/Android/10/1")
     Observable<User> getTest();
