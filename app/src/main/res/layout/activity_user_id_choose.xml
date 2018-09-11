@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.activity.user.accept.UserIdChooseActivity"
+    android:background="@color/colorRegistBg"
+    >
+    <RelativeLayout
+        android:id="@+id/rl_payment_accept"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/colorWhite"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/img_payment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="12dp"
+            android:src="@mipmap/ic_accept_paymnet"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_toRightOf="@+id/img_payment"
+            android:layout_toLeftOf="@+id/line1"
+            android:layout_marginLeft="10dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/user_id_accept_payment"
+                android:gravity="bottom|left"
+                android:textSize="16dp"
+                android:textColor="@color/colorEdtext"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/user_id_accept_payment_info"
+                android:gravity="center|left"
+                android:textColor="@color/textColorGray"
+                android:textSize="13dp"
+
+                />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/line1"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/ic_back_right"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_idcard_accept"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_below="@+id/rl_payment_accept"
+        android:background="@color/colorWhite"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/img_idcard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="12dp"
+            android:src="@mipmap/ic_accept_idcard"
+
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_toRightOf="@+id/img_idcard"
+            android:layout_toLeftOf="@+id/line2"
+            android:layout_marginLeft="10dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/user_id_accept_idcard"
+                android:gravity="bottom|left"
+                android:textSize="16dp"
+                android:textColor="@color/colorEdtext"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/user_id_accept_idcard_info"
+                android:gravity="center|left"
+                android:textColor="@color/textColorGray"
+                android:textSize="13dp"
+
+                />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/line2"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/ic_back_right"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
+
+
+</RelativeLayout>

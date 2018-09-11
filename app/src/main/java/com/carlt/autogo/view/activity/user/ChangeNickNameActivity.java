@@ -49,4 +49,5 @@ public class ChangeNickNameActivity extends BaseMvpActivity {
 
     }
 
+
 }
