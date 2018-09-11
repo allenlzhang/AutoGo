@@ -68,8 +68,7 @@ public class LoginMoreDialog extends BaseDialog  {
     }
 
     private void DialogDismiss() {
-        unbinder.unbind();
         dismiss();
-        context = null ;
+
     }
 }

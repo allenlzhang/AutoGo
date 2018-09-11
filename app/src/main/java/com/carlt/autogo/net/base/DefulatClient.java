@@ -53,11 +53,10 @@ public class DefulatClient  extends BaseRestClient {
                  .client(okBuilder.build());
          retrofit = builder.build();
     }
-    
 
     @Override
     public void changeUri(int id) {
-        if (id > 0 && id < URL_NEXT.length){
+        if ( id > 0 && id < URL_NEXT.length ){
             retrofit = null ;
             builder.baseUrl(URL_NEXT [ id ]);
             retrofit = builder.build();

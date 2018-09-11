@@ -13,8 +13,7 @@ import butterknife.BindView;
  * @Date       : 2018/9/10
  */
 public class MoreFragment extends BaseMvpFragment {
-    @BindView(R.id.tv)
-    TextView tv;
+
 
     @Override
     public int getLayoutId() {

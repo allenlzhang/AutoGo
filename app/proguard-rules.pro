@@ -19,3 +19,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Glide 混淆
+-keeppublicclass *implements com.bumptech.glide.module.GlideModule
+
+-keeppublic enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+
+**[] $VALUES;
+
+public *;
+}

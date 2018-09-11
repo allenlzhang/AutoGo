@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.IntentUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
@@ -108,6 +109,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     @Override
     public void loginFinish() {
 
+       Intent maninI = new Intent(this,MainActivity.class);
+       startActivity(maninI);
     }
 
     private void passwdToggle(boolean selected) {

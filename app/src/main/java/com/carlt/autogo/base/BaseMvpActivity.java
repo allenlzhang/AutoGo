@@ -1,6 +1,7 @@
 package com.carlt.autogo.base;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     protected RelativeLayout rlTitle;
     @BindView(R.id.flContent)
     FrameLayout flContent;
+    @BindView(R.id.tv_base_right)TextView tvBaseRight;
     private PresenterProviders mPresenterProviders;
     private PresenterDispatch  mPresenterDispatch;
 
@@ -118,5 +120,30 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
         ivBaseBack.setImageDrawable(drawable);
     }
 
+    //设置Header背景颜色,字体颜色
+    public void setHeadColor (int pColor, int tettleColor ,int righthColor ,int leftColor  ){
+
+        if(pColor != 0){
+            rlTitle.setBackgroundColor(pColor);
+        }
+        if(tettleColor != 0){
+            tvBaseTitle.setTextColor(tettleColor);
+        }
+
+        if(righthColor != 0){
+            tvBaseRight.setTextColor(righthColor);
+        }
+
+        if(leftColor != 0){
+            ivBaseBack.setBackgroundColor(leftColor);
+        }
+
+    }
+
+    //展示头部右边样式
+    public void showHeaderRight(String text){
+
+        tvBaseRight.setText(text);
+    }
 
 }
