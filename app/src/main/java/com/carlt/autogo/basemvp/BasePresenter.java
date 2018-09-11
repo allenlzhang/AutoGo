@@ -60,12 +60,13 @@ public class BasePresenter<V> {
     }
 
 
-    public class CommonThrowable<T> implements Consumer<T>{
+    public class CommonThrowable<Throwable> implements Consumer<Throwable>{
 
         @Override
-        public void accept(T t) throws Exception {
+        public void accept(Throwable t) throws Exception {
             uuDialog.dismiss();
             LogUtils.e(t.toString());
         }
+
     }
 }

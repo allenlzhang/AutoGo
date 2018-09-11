@@ -29,7 +29,6 @@ public abstract class BaseRestClient implements Iservice {
         okBuilder.connectTimeout(15, TimeUnit.SECONDS);
         okBuilder.readTimeout(15, TimeUnit.SECONDS);
         builder.baseUrl(GlobalUrl.BASE_URL)
-                .client(okBuilder.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
 

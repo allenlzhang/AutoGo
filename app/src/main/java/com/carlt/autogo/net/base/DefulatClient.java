@@ -1,10 +1,22 @@
 package com.carlt.autogo.net.base;
 
+import android.util.Log;
+
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.BuildConfig;
 import com.carlt.autogo.global.GlobalUrl;
+import com.flyco.tablayout.widget.MsgView;
+
+import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.http.Headers;
 
 public class DefulatClient  extends BaseRestClient {
 
@@ -15,18 +27,33 @@ public class DefulatClient  extends BaseRestClient {
 
     @Override
     void creat() {
+
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-                LogUtils.e(message);
+               LogUtils.d(message);
             }
         });
-
-        loggingInterceptor.setLevel(BuildConfig.DEBUG_MODE? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
+        loggingInterceptor.setLevel(BuildConfig.DEBUG_MODE? HttpLoggingInterceptor.Level.HEADERS : HttpLoggingInterceptor.Level.NONE);
          okBuilder.addInterceptor(loggingInterceptor);
-         builder.baseUrl(GlobalUrl.BASE_URL_TEST_YEMA);
+
+        okBuilder.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request original = chain.request();
+                Request request = original.newBuilder()
+                        .header("Content-Type", "application/json")
+                        .header("Carlt-Access-Id", "19877415356991399877")
+                        .method(original.method(), original.body())
+                        .build();
+                return chain.proceed(request);
+            }
+        });
+         builder.baseUrl(GlobalUrl.BASE_URL)
+                 .client(okBuilder.build());
          retrofit = builder.build();
     }
+    
 
     @Override
     public void changeUri(int id) {

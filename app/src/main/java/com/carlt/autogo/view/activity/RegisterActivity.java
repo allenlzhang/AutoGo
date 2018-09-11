@@ -8,8 +8,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -17,18 +15,12 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
-import com.carlt.autogo.entry.user.User;
-import com.carlt.autogo.net.base.BaseRestClient;
-import com.carlt.autogo.net.base.ClientFactory;
-import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.entry.user.requsetbody.RequestBodyLogin;
 import com.carlt.autogo.presenter.register.IRegisterView;
 import com.carlt.autogo.presenter.register.RegisterPresenter;
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -36,9 +28,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
+ /**
+  * Description : 注册页面
+  * @Author     : zhanglei
+  * @Date       : 2018/9/10
+  */
 
 @CreatePresenter(presenter = RegisterPresenter.class)
 public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
@@ -101,7 +96,15 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
             ToastUtils.showShort("请输入正确手机号!");
             return;
         }
-        presenter.register(phoneNum);
+
+        Map<String ,Object> param =new HashMap<>();
+
+        param.put("mobile", "15655655698");
+        param.put("passwrod", "32323");
+        param.put("move_device_name", "iPhone5-10.3.3");
+        param.put("move_model", "wqeqweqwe");
+
+        presenter.register(param);
 
 
     }
