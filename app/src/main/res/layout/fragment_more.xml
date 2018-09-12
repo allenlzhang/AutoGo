@@ -1,12 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.activity.RegisterActivity">
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/view_more_bg"
+        android:layout_width="match_parent"
+        android:layout_height="252dp"
+        android:background="@mipmap/iv_more_bg"
+        />
+    <RelativeLayout
+        android:id="@+id/rl_more_head_sculpture"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="51dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view_more_bg"
+        >
+        <ImageView
+            android:id="@+id/iv_more_head_sculpture"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/iv_more_head_sculpture_def"
+            tools:ignore="ContentDescription" />
+        <ImageView
+            android:id="@+id/iv_more_sex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_sex_men"
+            tools:ignore="ContentDescription,RtlHardcoded"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            />
+    </RelativeLayout>
 
 
 
+
+    <TextView
+        android:id="@+id/tv_more_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/more_nickname"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/view_more_bg"
+        app:layout_constraintStart_toStartOf="@+id/view_more_bg"
+        app:layout_constraintTop_toBottomOf="@+id/rl_more_head_sculpture" />
+    <TextView
+        android:id="@+id/tv_more_edit_profile"
+        android:layout_width="76dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="33dp"
+        android:background="@drawable/more_edit_profile_bg"
+        android:gravity="center"
+        android:text="@string/more_edit_profile"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view_more_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_more_accounts_and_security"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/view_more_bg">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:src="@mipmap/ic_accounts_and_security"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/more_accounts_and_security"
+            android:textColor="@color/colorEdtext"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_weight="0"
+            android:src="@mipmap/ic_right_arrow"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_more_setting"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/ll_more_accounts_and_security">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:src="@mipmap/ic_setting"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/more_setting"
+            android:textColor="@color/colorEdtext"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_weight="0"
+            android:src="@mipmap/ic_right_arrow"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

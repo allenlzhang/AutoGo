@@ -32,7 +32,9 @@
         <activity android:name=".view.activity.user.PersonAvatarActivity" />
         <activity android:name=".view.activity.user.accept.UserIdChooseActivity"/>
         <activity android:name=".view.activity.user.accept.IdCardAcceptActivity"/>
-        <activity android:name=".view.activity.user.accept.UploadIdCardPhotoActivity"></activity>
+        <activity android:name=".view.activity.user.accept.UploadIdCardPhotoActivity"/>
+        <activity android:name=".view.activity.more.safety.SafetyActivity"/>
+        <activity android:name=".view.activity.more.safety.LoginPwdManagementActivity"/>
     </application>
 
 </manifest>

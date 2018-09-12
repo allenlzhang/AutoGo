@@ -1,8 +1,27 @@
 <resources>
     <string name="app_name">AutoGo</string>
+    <string name="app_def_txt">--</string>
     <string name="app_law"> 服务条款及免费声明  </string>
     <string name="user_id_accept_payment">个人支付宝</string>
     <string name="user_id_accept_payment_info">若支付宝已实名,只需一键授权</string>
     <string name="user_id_accept_idcard">身份证认证</string>
     <string name="user_id_accept_idcard_info">本过程需要你本人完成,准备好身份证</string>
+
+    <!-- 更多页面  -->
+    <string name="more_nickname">车主昵称</string>
+    <string name="more_edit_profile">编辑资料</string>
+    <string name="more_accounts_and_security">账号与安全</string>
+    <string name="more_setting">设置</string>
+    <!-- 账号与安全  -->
+    <string name="safety_identity_authentication">身份认证</string>
+    <string name="safety_face_recognition">人脸识别</string>
+    <string name="safety_binding_phone">绑定手机</string>
+    <string name="safety_login_pwd_management">登录密码管理</string>
+    <string name="safety_remote_pwd_management">远程控制密码管理</string>
+    <string name="safety_login_device_management">登录设备管理</string>
+    <string name="safety_frozen_account">冻结账户</string>
+    <string name="safety_cancellation_account">注销账户</string>
+    <!-- 登录密码管理 -->
+    <string name="management_remember_old_pwd">记得原登录密码</string>
+    <string name="management_forget_old_pwd">忘记原登录密码</string>
 </resources>
