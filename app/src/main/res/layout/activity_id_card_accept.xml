@@ -12,7 +12,6 @@
         android:id="@+id/rl_rule1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
         >
 
         <TextView
@@ -78,6 +77,8 @@
                 android:layout_centerVertical="true"
                 android:hint="请填写真实姓名"
                 android:layout_marginLeft="10dp"
+                android:inputType="text"
+
                 />
 
         </RelativeLayout>
@@ -135,6 +136,7 @@
                 android:layout_centerVertical="true"
                 android:hint="请填写证件号码"
                 android:layout_marginLeft="10dp"
+                android:maxLength="18"
                 />
 
         </RelativeLayout>
@@ -150,11 +152,12 @@
             />
     </RelativeLayout>
 
-
     <RelativeLayout
         android:id="@+id/rl_rule2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
 
         <TextView
             android:id="@+id/tv_r2_head"
@@ -167,7 +170,7 @@
             android:textColor="@color/colorEdtext"
             />
         <TextView
-            android:id="@+id/tv_username"
+            android:id="@+id/tv_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_r2_head"
@@ -179,13 +182,14 @@
             android:id="@+id/img_face"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_username"
+            android:layout_below="@+id/tv_user_name"
             android:layout_centerHorizontal="true"
             android:src="@mipmap/accept_from_face"
             android:layout_marginTop="40dp"
             />
 
         <Button
+            android:id="@+id/btn_accept_face"
             android:layout_width="match_parent"
             style="@style/BtnCommonCommit"
             android:layout_below="@+id/img_face"

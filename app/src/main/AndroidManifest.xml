@@ -17,12 +17,12 @@
         android:theme="@style/AppTheme">
         <activity android:name=".view.activity.MainActivity" />
         <activity android:name=".view.activity.LoginActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity android:name=".view.activity.RegisterActivity" />
         <activity android:name=".view.activity.SplashActivity" />
@@ -31,10 +31,11 @@
         <activity android:name=".view.activity.user.EditUserInfoActivity" />
         <activity android:name=".view.activity.user.ChangeNickNameActivity" />
         <activity android:name=".view.activity.user.PersonAvatarActivity" />
-        <activity android:name=".view.activity.user.accept.UserIdChooseActivity">
+        <activity android:name=".view.activity.user.accept.UserIdChooseActivity"></activity>
+        <activity android:name=".view.activity.user.accept.IdCardAcceptActivity">
 
         </activity>
-        <activity android:name=".view.activity.user.accept.IdCardAcceptActivity"></activity>
+        <activity android:name=".view.activity.user.accept.UploadIdCardPhotoActivity"></activity>
     </application>
 
 </manifest>
