@@ -74,23 +74,32 @@
         </FrameLayout>
 
 
-        <ImageView
-            android:id="@+id/img_person_c"
+        <RelativeLayout
+            android:id="@+id/rl_center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_camera"
-            android:layout_centerVertical="true"
+            android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            />
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_below="@+id/img_person_c"
-               android:layout_centerHorizontal="true"
-               android:layout_marginTop="10dp"
-               android:text="拍摄人像"
-               android:textColor="@color/textColorGray"
-               />
+            >
+            <ImageView
+                android:id="@+id/img_person_c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_camera"
+                android:layout_centerInParent="true"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/img_person_c"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="拍摄人像"
+                android:textColor="@color/textColorGray"
+                />
+        </RelativeLayout>
+
+
     </RelativeLayout>
 
 
@@ -137,27 +146,34 @@
 
         </FrameLayout>
 
-
-
-        <ImageView
-            android:id="@+id/img_idcard_back_c"
+        <RelativeLayout
+            android:id="@+id/rl_center2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_camera"
-            android:layout_centerVertical="true"
+            android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            />
+            >
+            <ImageView
+                android:id="@+id/img_idcard_back_c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_camera"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/img_idcard_back_c"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:text="拍摄国徽页"
-            android:textColor="@color/textColorGray"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/img_idcard_back_c"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="拍摄国徽页"
+                android:textColor="@color/textColorGray"
 
-            />
+                />
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
 

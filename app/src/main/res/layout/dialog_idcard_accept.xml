@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="300dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
+    >
+
+    <LinearLayout
+        android:id="@+id/ll_show"
+        android:layout_width="250dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/ConstraintLayoutCommon"
+        android:background="@color/colorWhite"
+        android:visibility="visible"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:src="@mipmap/dialog_idaccept_example_bg"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_horizontal"
+            />
+        <TextView
+            android:id="@+id/tv_ok"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="知道了"
+            android:gravity="center_horizontal"
+            android:textSize="16dp"
+            android:textColor="@color/colorLoginCommitBgNormal"
+            android:layout_marginBottom="15dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        style="@style/ConstraintLayoutCommon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="@color/transparent"
+        android:visibility="gone"
+        >
+        <TextView
+            android:id="@+id/tv_by_carmera"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="18dp"
+            android:text="相机"
+            android:gravity="center"
+            android:textColor="@color/colorLoginCommitBgNormal"
+            android:background="@drawable/dialog_login_more_bg"
+            />
+
+        <TextView
+            android:id="@+id/tv_by_ablun"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="18dp"
+            android:text="从相机选择"
+            android:gravity="center"
+            android:textColor="@color/colorLoginCommitBgNormal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/dialog_login_more_bg"
+            />
+
+        <TextView
+            android:id="@+id/tv_cancle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="取消"
+            android:textSize="18dp"
+            android:textColor="@color/colorDialogIdcardAccepte"
+            android:gravity="center"
+            android:background="@drawable/dialog_login_more_bg"
+            android:layout_marginTop="10dp"
+            />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
