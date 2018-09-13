@@ -5,6 +5,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -18,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ImageUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
 import com.carlt.autogo.R;
@@ -234,15 +240,28 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     }
 
     public void setPicToView(Bitmap picToView) {
+
+        Bitmap  firstBitmap = picToView;
+        Bitmap  secondBitmap = ( (BitmapDrawable)imgPersonWatermark.getDrawable()).getBitmap();
+        LogUtils.e(secondBitmap.getRowBytes() * secondBitmap.getHeight());
+        Bitmap bitmap = Bitmap.createBitmap(firstBitmap.getWidth(), firstBitmap.getHeight(),firstBitmap.getConfig());
+        Canvas canvas = new Canvas(bitmap);
+        float w = firstBitmap.getWidth();
+        float h = firstBitmap.getHeight();
+        Matrix m = new Matrix();
+        //确定secondBitmap大小比例
+        m.setScale(w / imgPerson.getWidth(), h / imgPerson.getHeight());
+        canvas.drawBitmap(firstBitmap, 0,0, null);
+        canvas.drawBitmap(secondBitmap, m, null);
+
         if(carmeraTag == 0){
-            imgPerson.setImageBitmap(picToView);
-            imgPersonWatermark.setVisibility(View.VISIBLE);
+            imgPerson.setImageBitmap(bitmap);
             rlCenter1.setVisibility(View.GONE);
             imgDeletPersonPhoto.setVisibility(View.VISIBLE);
         }
         if(carmeraTag == 1){
-            imgIdcardBack.setImageBitmap(picToView);
-            imgBackWatermark.setVisibility(View.VISIBLE);
+            imgIdcardBack.setImageBitmap(bitmap);
+           // imgBackWatermark.setVisibility(View.VISIBLE);
             rlCenter2.setVisibility(View.GONE);
             imgDeletBackPhoto.setVisibility(View.VISIBLE);
         }
