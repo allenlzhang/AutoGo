@@ -15,7 +15,6 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
-import com.carlt.autogo.entry.user.requsetbody.RequestBodyLogin;
 import com.carlt.autogo.presenter.register.IRegisterView;
 import com.carlt.autogo.presenter.register.RegisterPresenter;
 import java.util.HashMap;
@@ -99,12 +98,9 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
 
         Map<String ,Object> param =new HashMap<>();
 
-        param.put("mobile", "15655655698");
-        param.put("passwrod", "32323");
-        param.put("move_device_name", "iPhone5-10.3.3");
-        param.put("move_model", "wqeqweqwe");
-
-        presenter.register(param);
+        param.put("mobile", phoneNum);
+        param.put("password", "32323");
+        param.put("validate", "iPhone5-10.3.3");
 
 
     }
@@ -137,17 +133,20 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
         String pwdD = edRegisterPwdD.getText().toString().toString();
         String code =registUserCode.getText().toString().trim() ;
 
-        CheckValues(phoneNum,pwd,pwdD,code);
+       if( CheckValues(phoneNum,pwd,pwdD,code)){
+           if(!cbLaw.isChecked()){
+               ToastUtils.showShort("您未同意服务条款!");
+               return;
+           }
+           Map<String, Object> params = new HashMap<>();
+           params.put("mobile", phoneNum);
+           params.put("password", pwd);
+           params.put("validate", code);
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("mobile", "");
-        params.put("password", "");
-        params.put("validate", "");
-        params.put("move_deviceid", "");
-        params.put("move_device_name", "");
-        params.put("originate","");
+           doRegiste(params);
+       }
 
-        doRegiste(params);
+
 
     }
 
@@ -166,37 +165,38 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
     }
 
     private void doRegiste(Map<String, Object> params) {
-
+        presenter.register(params);
     }
 
 
-    public static void CheckValues( String phoneNum ,String pwd ,String pwdD ,String code ){
+    public static boolean CheckValues( String phoneNum ,String pwd ,String pwdD ,String code ){
         String regex = "^[A-Za-z0-9]{5,11}+$";
         if(!phoneNum.equals("-")){
             boolean  checkOk =  RegexUtils.isMobileExact(phoneNum) ;
             if(!checkOk){
                 ToastUtils.showShort("请输入正确手机号!");
-                return;
+                return false;
             }
         }
         if(!code.equals("-")){
             if( StringUtils.isEmpty(code)){
                 ToastUtils.showShort("验证码为空");
-                return;
+                return false;
             }
         }
         if(!pwd.equals("-") || !pwdD.equals("-")){
             if (!RegexUtils.isMatch(regex, pwd) || !RegexUtils.isMatch(regex, pwd)) {
                 ToastUtils.setMsgTextSize(15);
                 ToastUtils.showLong("密码有误,输入数字或者字母,长度6到10");
-                return;
+                return false;
+            }
+            if (!pwd.equals(pwdD)) {
+                ToastUtils.showShort("两次密码不一致");
+                return false;
             }
         }
 
-        if (!pwd.equals(pwdD)) {
-            ToastUtils.showShort("两次密码不一致");
-            return;
-        }
+        return  true;
     }
     @Override
     protected void onDestroy() {

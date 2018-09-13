@@ -2,31 +2,24 @@ package com.carlt.autogo.presenter.register;
 
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.basemvp.BasePresenter;
-import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.user.User;
-import com.carlt.autogo.entry.user.requsetbody.RequestBodyLogin;
+import com.carlt.autogo.entry.user.UserRegister;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.Map;
 
-import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.Nullable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import okio.BufferedSink;
 
 /**
  * Description:
@@ -35,23 +28,40 @@ import okio.BufferedSink;
  * Date       : 2018/9/3 16:53
  */
 public class RegisterPresenter extends BasePresenter<IRegisterView> {
+
     @SuppressLint("CheckResult")
-    public void register(Map params) {
+    public void register(Map<String,Object> params) {
         // TODO: 2018/9/3 注册逻辑
 
         uuDialog.show();
 
-        Disposable disposable = ClientFactory.def(UserService.class).getValidate(params)
+        Disposable disposable =  ClientFactory.def(UserService.class).userRegister(params)
+                .filter(new Predicate<UserRegister>() {
+                    @Override
+                    public boolean test(UserRegister userRegister) throws Exception {
+                        return userRegister != null;
+                    }
+                })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<User>() {
+                .subscribe(new Consumer<UserRegister>() {
                     @Override
-                    public void accept(User user) throws Exception {
-
+                    public void accept(UserRegister userRegister) throws Exception {
                         uuDialog.dismiss();
-
+                        if(userRegister.code == 0){
+                            ToastUtils.showShort("注册成功");
+                        }else {
+                            ToastUtils.showShort(userRegister.msg);
+                        }
+                        LogUtils.e(userRegister.toString());
                     }
-                }, new CommonThrowable<Throwable>());
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        uuDialog.dismiss();
+                        LogUtils.e(throwable.getMessage());
+                    }
+                });
 
         disposables.add(disposable);
 

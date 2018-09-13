@@ -28,8 +28,6 @@ public class UUDialog extends BaseDialog {
 
 	protected TextView title;
 
-
-
 	public UUDialog(@NonNull Context context) {
 		super(context);
 	}

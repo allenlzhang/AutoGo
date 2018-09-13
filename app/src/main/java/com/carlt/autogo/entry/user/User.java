@@ -1,10 +1,8 @@
 package com.carlt.autogo.entry.user;
 
 public class User {
-
-
     /**
-     * err : {"code":1002,"msg":"用户密码不符合规则"}
+     * err : {"code":2010,"msg":"用户名或密码错误"}
      */
 
     public ErrBean err;
@@ -12,8 +10,8 @@ public class User {
 
     public static class ErrBean {
         /**
-         * code : 1002
-         * msg : 用户密码不符合规则
+         * code : 2010
+         * msg : 用户名或密码错误
          */
 
         public int code;
@@ -28,6 +26,11 @@ public class User {
         }
     }
 
+    public String token;
+    /**
+     * code : 2008
+     * msg : 验证码错误
+     */
     @Override
     public String toString() {
         return "User{" +
