@@ -30,11 +30,25 @@
         <activity android:name=".view.activity.user.EditUserInfoActivity" />
         <activity android:name=".view.activity.user.ChangeNickNameActivity" />
         <activity android:name=".view.activity.user.PersonAvatarActivity" />
-        <activity android:name=".view.activity.user.accept.UserIdChooseActivity"/>
-        <activity android:name=".view.activity.user.accept.IdCardAcceptActivity"/>
-        <activity android:name=".view.activity.user.accept.UploadIdCardPhotoActivity"/>
-        <activity android:name=".view.activity.more.safety.SafetyActivity"/>
-        <activity android:name=".view.activity.more.safety.LoginPwdManagementActivity"/>
+        <activity android:name=".view.activity.user.accept.UserIdChooseActivity" />
+        <activity android:name=".view.activity.user.accept.IdCardAcceptActivity" />
+        <activity android:name=".view.activity.user.accept.UploadIdCardPhotoActivity" />
+        <activity android:name=".view.activity.more.safety.SafetyActivity" />
+        <activity android:name=".view.activity.more.safety.LoginPwdManagementActivity" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.carlt.autogo.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <!-- 提供共享路径 -->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity android:name=".view.activity.user.accept.IdfCompleteActivity"></activity>
     </application>
 
 </manifest>

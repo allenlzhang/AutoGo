@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -91,6 +92,8 @@ public class SafetyActivity extends BaseMvpActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_safety_identity_authentication:
+                Intent safety_identity = new Intent(this,UserIdChooseActivity.class);
+                startActivity(safety_identity);
                 break;
             case R.id.ll_safety_face_recognition:
                 break;

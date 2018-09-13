@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.view.activity.more.safety.SafetyActivity;
+import com.carlt.autogo.view.activity.user.EditUserInfoActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,6 +77,8 @@ public class MoreFragment extends BaseMvpFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_more_edit_profile:
+                Intent edit_profile =new Intent(mContext,EditUserInfoActivity.class);
+                startActivity(edit_profile);
                 break;
             case R.id.ll_more_accounts_and_security:
                 Intent intent = new Intent(getContext(), SafetyActivity.class);
@@ -85,5 +88,4 @@ public class MoreFragment extends BaseMvpFragment {
                 break;
         }
     }
-
 }

@@ -1,39 +1,38 @@
 package com.carlt.autogo.view.activity.user.accept;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.DialogIdcardAccept;
 import com.carlt.autogo.utils.PhotoUtils;
-import com.carlt.autogo.view.activity.user.PersonAvatarActivity;
-
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author wsq
@@ -42,7 +41,7 @@ import butterknife.OnClick;
  */
 public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     private int  requestCodeCarmera = 1001;
-    String[] mPermission = {Manifest.permission.CAMERA ,Manifest.permission.READ_EXTERNAL_STORAGE ,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    String[] mPermission = {Manifest.permission.CAMERA ,Manifest.permission.READ_EXTERNAL_STORAGE };
     @BindView(R.id.tv_name)TextView tvName;
     @BindView(R.id.img_delet_person_photo)ImageView imgDeletPersonPhoto;
     @BindView(R.id.img_person)ImageView imgPerson;
@@ -69,6 +68,7 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     private String idCardNum;
 
     private int carmeraTag = -1;
+    private  int carmeraOrPhoto = -1 ;
 
     DialogIdcardAccept dialogIdcardAccept;
     @Override
@@ -81,30 +81,34 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
         setTitleText("上传身份证件");
         name = getIntent().getStringExtra("name");
         idCardNum = getIntent().getStringExtra("idcard");
-        tvName.setText(name + "\t" +idCardNum);
+        tvName.setText(name + "\t" + idCardNum);
         dialogIdcardAccept = new DialogIdcardAccept(this);
         dialogIdcardAccept.setListner(new DialogIdcardAccept.ItemOnclickListner() {
             @Override
             public void byCermera() {
-
-                if (ActivityCompat.checkSelfPermission(UploadIdCardPhotoActivity.this,
-                        Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
-                {
-                    ActivityCompat.requestPermissions(UploadIdCardPhotoActivity.this, mPermission, requestCodeCarmera);
-                    return;
-                }
+                carmeraOrPhoto =0 ;
+                checkPermission();
+                doCarmera();
             }
 
             @Override
             public void byAblum() {
-
-                imageUri = Uri.fromFile(fileUri);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                    //通过FileProvider创建一个content类型的Uri
-                    imageUri = FileProvider.getUriForFile(UploadIdCardPhotoActivity.this, "com.carlt.autogo.fileprovider", fileUri);
-                PhotoUtils.takePicture(UploadIdCardPhotoActivity.this, imageUri, CODE_CAMERA_REQUEST);
+                carmeraOrPhoto = 1;
+                checkPermission();
+                doPhoto();
             }
         });
+    }
+
+    private void checkPermission() {
+        if (ActivityCompat.checkSelfPermission(UploadIdCardPhotoActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
+                ActivityCompat.checkSelfPermission(UploadIdCardPhotoActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED
+                )
+        {
+            ActivityCompat.requestPermissions(UploadIdCardPhotoActivity.this, mPermission, requestCodeCarmera);
+            return;
+
+        }
     }
 
     @Override
@@ -145,9 +149,24 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     }
 
     //提交
+    @SuppressLint("CheckResult")
     @OnClick(R.id.idcard_upload_commit)
     public void commit(){
-
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                emitter.onNext("11");
+            }
+        }).delay(3, TimeUnit.SECONDS)
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Intent intent =new Intent(UploadIdCardPhotoActivity.this ,IdfCompleteActivity.class);
+                        intent.putExtra("name",tvName.getText().toString());
+                        intent.putExtra("idcard",true);
+                        startActivity(intent);
+                    }
+                });
 
     }
 
@@ -155,14 +174,20 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == requestCodeCarmera) {
-          if(grantResults[0] != PackageManager.PERMISSION_DENIED){
-              doCarmera();
-          }
+          boolean denied = false;
+
           for(int i=1 ; i<grantResults.length ;i++){
               if(grantResults[i] == PackageManager.PERMISSION_DENIED){
-
+                  denied = true;
                   ToastUtils.showShort("部分权限获取失败，正常功能受到影响");
+              }
+          }
 
+          if(!denied){
+              if(carmeraOrPhoto == 0){
+                  doCarmera();
+              }else if(carmeraOrPhoto == 1){
+                  doPhoto();
               }
           }
 
@@ -175,6 +200,11 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
             //通过FileProvider创建一个content类型的Uri
             imageUri = FileProvider.getUriForFile(UploadIdCardPhotoActivity.this, "com.carlt.autogo.fileprovider", fileUri);
         PhotoUtils.takePicture(UploadIdCardPhotoActivity.this, imageUri, CODE_CAMERA_REQUEST);
+    }
+
+    public void doPhoto(){
+        PhotoUtils.openPic(UploadIdCardPhotoActivity.this, CODE_GALLERY_REQUEST);
+
     }
 
     @Override
@@ -204,7 +234,6 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     }
 
     public void setPicToView(Bitmap picToView) {
-        LogUtils.e( fileUri.getAbsolutePath() +">>>>>>>>>>>>>");
         if(carmeraTag == 0){
             imgPerson.setImageBitmap(picToView);
             imgPersonWatermark.setVisibility(View.VISIBLE);
