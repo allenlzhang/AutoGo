@@ -104,8 +104,12 @@ public class SafetyActivity extends BaseMvpActivity {
                 startActivity(intent);
                 break;
             case R.id.ll_safety_remote_pwd_management:
+                Intent intent1 = new Intent(SafetyActivity.this,RemotePwdManagementActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.ll_safety_login_device_management:
+                Intent intentDecide = new Intent(SafetyActivity.this,LoginDeviceManagementActivity.class);
+                startActivity(intentDecide);
                 break;
             case R.id.ll_safety_frozen_account:
                 break;

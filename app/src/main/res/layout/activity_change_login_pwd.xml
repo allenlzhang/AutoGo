@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <EditText
+        android:id="@+id/edit_management_phone"
+        style="@style/baseEditStyle"
+        android:hint="@string/management_edit_phone_num"
+        android:layout_marginTop="10dp"
+        tools:ignore="TextFields" />
+
+    <RelativeLayout
+        android:id="@+id/rl_management_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        >
+        <EditText
+            android:id="@+id/edit_management_code"
+            style="@style/baseEditStyle"
+            android:hint="@string/management_edit_verification_code"
+            tools:ignore="TextFields" />
+        <Button
+            android:id="@+id/btn_management_code"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            style="@style/BtnSendCodeBg"
+            android:text="@string/management_send_verification_code"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            tools:ignore="RtlHardcoded" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/edit_management_old_pwd"
+        style="@style/baseEditStyle"
+        android:hint="@string/management_edit_old_pwd"
+        tools:ignore="TextFields"
+        android:layout_marginTop="10dp"
+        />
+    <EditText
+        android:id="@+id/edit_management_new_pwd"
+        style="@style/baseEditStyle"
+        android:hint="@string/management_edit_new_pwd"
+        tools:ignore="TextFields"
+        android:layout_marginTop="10dp"/>
+    <EditText
+        android:id="@+id/edit_management_new_pwd_again"
+        style="@style/baseEditStyle"
+        android:hint="@string/management_edit_new_pwd_again"
+        tools:ignore="TextFields"
+        android:layout_marginTop="10dp"/>
+    <Button
+        android:id="@+id/edit_management_confirm"
+        style="@style/BtnCommonCommit"
+        android:text="@string/management_confirm_the_change"
+        android:layout_marginTop="40dp"
+        />
+</LinearLayout>

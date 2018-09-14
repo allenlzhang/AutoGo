@@ -46,7 +46,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:background="@color/colorTitleTxt"
+        android:background="@color/color_c"
         />
     <LinearLayout
         android:id="@+id/ll_safety_face_recognition"
@@ -167,7 +167,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:background="@color/colorTitleTxt"
+        android:background="@color/color_c"
         />
     <LinearLayout
         android:id="@+id/ll_safety_remote_pwd_management"
@@ -248,7 +248,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:background="@color/colorTitleTxt"
+        android:background="@color/color_c"
         />
     <LinearLayout
         android:id="@+id/ll_safety_cancellation_account"

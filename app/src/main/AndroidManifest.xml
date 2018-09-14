@@ -35,9 +35,13 @@
         <activity android:name=".view.activity.user.accept.UserIdChooseActivity" />
         <activity android:name=".view.activity.user.accept.IdCardAcceptActivity" />
         <activity android:name=".view.activity.user.accept.UploadIdCardPhotoActivity" />
+        <activity android:name=".view.activity.user.accept.IdfCompleteActivity"/>
         <activity android:name=".view.activity.more.safety.SafetyActivity" />
         <activity android:name=".view.activity.more.safety.LoginPwdManagementActivity" />
-
+        <activity android:name=".view.activity.more.safety.ChangeLoginPwdActivity"/>
+        <activity android:name=".view.activity.more.safety.ChangeRemotePwdActivity"/>
+        <activity android:name=".view.activity.more.safety.RemotePwdManagementActivity"/>
+        <activity android:name=".view.activity.more.safety.LoginDeviceManagementActivity"/>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.carlt.autogo.fileprovider"
@@ -50,14 +54,13 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".view.activity.user.accept.IdfCompleteActivity"></activity>
+
 
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
-
 
     </application>
 

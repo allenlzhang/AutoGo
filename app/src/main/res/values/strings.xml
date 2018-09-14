@@ -6,6 +6,7 @@
     <string name="user_id_accept_payment_info">若支付宝已实名,只需一键授权</string>
     <string name="user_id_accept_idcard">身份证认证</string>
     <string name="user_id_accept_idcard_info">本过程需要你本人完成,准备好身份证</string>
+    <string name="make_sure">确定</string>
 
     <!-- 更多页面  -->
     <string name="more_nickname">车主昵称</string>
@@ -22,6 +23,31 @@
     <string name="safety_frozen_account">冻结账户</string>
     <string name="safety_cancellation_account">注销账户</string>
     <!-- 登录密码管理 -->
+    <string name="management_change_login_pwd">修改登录密码</string>
+    <string name="management_forget_login_pwd">忘记登录密码</string>
     <string name="management_remember_old_pwd">记得原登录密码</string>
     <string name="management_forget_old_pwd">忘记原登录密码</string>
+    <string name="management_edit_old_pwd">请输入原登录密码</string>
+    <string name="management_edit_new_pwd">请输入新登录密码</string>
+    <string name="management_edit_new_pwd_again">请再次输入密码</string>
+    <string name="management_edit_phone_num">请输入手机号</string>
+    <string name="management_edit_verification_code">请输入验证码</string>
+    <string name="management_send_verification_code">发送验证码</string>
+    <string name="management_confirm_the_change">确认修改</string>
+    <!-- 远程密码管理 -->
+    <string name="management_remote_pwd">远程密码管理</string>
+    <string name="management_set_remote_pwd">设置远程密码</string>
+    <string name="management_change_pwd">修改密码</string>
+    <string name="management_reset_remote_pwd">修改远程密码</string>
+    <string name="management_forget_remote_pwd">忘记远程密码</string>
+    <string name="management_set_remote_control_pwd">设置远程控制密码</string>
+    <string name="management_remember_remote_old_pwd">记得原远程控制密码</string>
+    <string name="management_forget_remote_old_pwd">忘记原远程控制密码</string>
+    <string name="management_without_encryption">远程控制免密</string>
+    <string name="management_without_encryption_date">远程密码控制免密时间</string>
+    <string name="management_edit_remote_old_pwd">输入原远程操作密码</string>
+    <string name="management_edit_remote_new_pwd">输入新密码</string>
+    <string name="management_edit_remote_new_pwd_again">再次输入密码</string>
+    <!-- 登录设备管理 -->
+    <string name="management_login_device">登录设备管理</string>
 </resources>
