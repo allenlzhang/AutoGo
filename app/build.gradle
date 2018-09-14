@@ -21,11 +21,13 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             buildConfigField "boolean", "DEBUG_MODE", "false"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             debuggable true
+            signingConfig signingConfigs.release
             buildConfigField "boolean", "DEBUG_MODE", "true"
 
         }
