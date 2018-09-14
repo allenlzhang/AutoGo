@@ -35,7 +35,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:background="@color/colorTitleTxt"
+        android:background="@color/color_c"
         />
     <LinearLayout
         android:id="@+id/ll_management_forget_old_pwd"

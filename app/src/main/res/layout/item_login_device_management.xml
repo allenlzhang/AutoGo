@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/colorWhite"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:id="@+id/tv_management_item_login_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/colorEdtext"
+        android:layout_marginTop="10dp"
+        />
+    <TextView
+        android:id="@+id/tv_management_item_login_device_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColorGray"
+        android:textSize="13sp"
+        android:layout_marginTop="8dp"
+        />
+</LinearLayout>

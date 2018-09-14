@@ -87,14 +87,39 @@
     <style name="BtnCommonCommit">
         <item name="android:background">@drawable/login_commit_bg_select</item>
         <item name="android:textColor">@color/colorWhite</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">45dp</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
         <item name="layout_constraintBottom_toBottomOf">parent</item>
 
     </style>
 
+    <!-- 公用输入框 -->
+    <style name="baseEditStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorEdtext</item>
+        <item name="android:textColorHint">@color/textColorGray</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/base_edit_bg</item>
+    </style>
+
+    <style name="BtnSendCodeBg">
+        <item name="android:width">80dp</item>
+        <item name="android:height">30dp</item>
+        <item name="android:layout_marginRight">22dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/color_send_code_txt</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/btn_send_code_bg</item>
+    </style>
 </resources>
