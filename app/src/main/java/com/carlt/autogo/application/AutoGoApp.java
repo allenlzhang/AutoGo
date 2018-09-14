@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
+import com.mob.MobSDK;
 
 /**
  * Description:
@@ -16,6 +17,8 @@ public class AutoGoApp extends Application {
     public void onCreate() {
         super.onCreate();
         initUtils();
+        //shareSdk配置
+        MobSDK.init(this);
 
     }
 

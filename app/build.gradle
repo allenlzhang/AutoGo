@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin:'com.mob.sdk'
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -21,16 +21,48 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             buildConfigField "boolean", "DEBUG_MODE", "false"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             debuggable true
+            signingConfig signingConfigs.release
             buildConfigField "boolean", "DEBUG_MODE", "true"
 
         }
     }
     buildToolsVersion '27.0.3'
+}
+
+
+MobSDK {
+    appKey "27bd87c6a9b00"
+    appSecret "319adad9d050a7b3a1daca891fc259ff"
+
+    ShareSDK {
+        devInfo {
+            Wechat {
+                id 1
+                sortId 1
+                appId "wx7e1afc25b03bee90"
+                appSecret "732993d7732b4b00a4dd448dfcdeeb90"
+                enable true
+
+            }
+            QQ {
+                id 7
+                sortId 7
+                appId "100371282"
+                appKey "aed9b0303e3ed1e27bae87c33761161d"
+                enable true
+            }
+
+        }
+
+
+    }
+
 }
 
 dependencies {
