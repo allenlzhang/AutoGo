@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.alipay.sdk.app.AuthTask;
 import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
@@ -63,7 +64,8 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
             case R.id.login_payment:
 
                 otherRegisterPresenter.paymentLogin();
-
+                AuthTask task = new AuthTask(this);
+               // task.authV2()
                 break;
 
             case R.id.login_wechat:
