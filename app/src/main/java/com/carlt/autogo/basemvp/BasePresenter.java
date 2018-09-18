@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.common.dialog.UUDialog;
 
 
@@ -28,6 +29,7 @@ public class BasePresenter<V> {
     protected V       mView;
     public UUDialog uuDialog  ;
     public    List<Disposable> disposables = new ArrayList<>();
+    public String errorMsg = "登录失败";
     protected void onCleared() {
 
     }
@@ -65,6 +67,7 @@ public class BasePresenter<V> {
         @Override
         public void accept(Throwable t) throws Exception {
             uuDialog.dismiss();
+            ToastUtils.showShort(errorMsg);
             LogUtils.e(t.toString());
         }
 

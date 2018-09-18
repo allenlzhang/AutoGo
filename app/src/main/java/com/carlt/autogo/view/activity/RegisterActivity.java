@@ -1,6 +1,7 @@
 package com.carlt.autogo.view.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -68,7 +69,9 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
     @Override
     public void onRegisterFinish() {
         // TODO: 2018/9/4
-      setTitleText("注册");
+
+        Intent intent =new Intent(this,LoginActivity.class);
+        startActivity(intent);
     }
 
     @OnClick({R.id.send_code})

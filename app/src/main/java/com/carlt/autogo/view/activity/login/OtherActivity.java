@@ -1,7 +1,5 @@
 package com.carlt.autogo.view.activity.login;
 
-import android.content.Context;
-import android.telecom.Call;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -25,9 +23,7 @@ import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShareThemeImpl;
-import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.wechat.friends.Wechat;
+
 
 @CreatePresenter(presenter = OtherRegisterPresenter.class)
 public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView {
@@ -82,7 +78,6 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
     private void doAuthorize() {
 
 
-        plat.showUser(null);
         plat.setPlatformActionListener((new MyPlatformActionListener()));
         plat.removeAccount(true);
         plat.SSOSetting(false);

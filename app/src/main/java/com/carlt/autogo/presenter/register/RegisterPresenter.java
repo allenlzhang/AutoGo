@@ -50,6 +50,7 @@ public class RegisterPresenter extends BasePresenter<IRegisterView> {
                         uuDialog.dismiss();
                         if(userRegister.code == 0){
                             ToastUtils.showShort("注册成功");
+                            mView.onRegisterFinish();
                         }else {
                             ToastUtils.showShort(userRegister.msg);
                         }
@@ -65,6 +66,6 @@ public class RegisterPresenter extends BasePresenter<IRegisterView> {
 
         disposables.add(disposable);
 
-        mView.onRegisterFinish();
+
     }
 }
