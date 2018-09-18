@@ -58,6 +58,7 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                             return null;
                         }else {
                             SharepUtil.<UserInfo>putByBean("user", userInfo) ;
+                            SharepUtil.put("headurl","http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLDx6ZPo7iak6rDRsiaDK4JYhMYfUzbWicUsqTS97xGcCZqXD4OEbFfFLo5rI5icsUdXASrRk50I2ZJ9g/132");
                         }
                         return "登录成功";
                     }

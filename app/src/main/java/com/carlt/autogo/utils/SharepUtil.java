@@ -12,6 +12,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Observable;
+
+import retrofit2.http.GET;
 
 public class SharepUtil {
   public   static SharedPreferences  preferences = AutoGoApp.mAppContext.getSharedPreferences("autoGo", Context.MODE_PRIVATE);
@@ -81,4 +84,15 @@ public class SharepUtil {
     editor.commit();
   }
 
+  public static SharedPreferences getPreferences(){
+
+    return preferences;
+  }
+
+  public static void  cleanUser(){
+    SharedPreferences.Editor editor = preferences.edit() ;
+    editor.remove("token");
+    editor.remove("user");
+    editor.commit();
+  }
 }

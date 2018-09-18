@@ -17,10 +17,12 @@ import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.BaseDialog;
 import com.carlt.autogo.common.dialog.LoginMoreDialog;
+import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.net.base.BaseRestClient;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.presenter.login.ILoginView;
 import com.carlt.autogo.presenter.login.LoginPresenter;
+import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.login.ForgotActivity;
 
 import java.util.HashMap;
@@ -67,6 +69,15 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UserInfo userInfo  = SharepUtil.getBeanFromSp("user") ;
+        if(userInfo != null){
+            userPhone.setText(userInfo.mobile);
+            userPWd.setText(userInfo.password);
+        }
+    }
 
     @OnClick({R.id.btn_more, R.id.user_regist, R.id.login_commit, R.id.passwd_toggle, R.id.forgot_passwd})
     public void OnClick(View view) {
@@ -100,15 +111,14 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                 Map<String,Object> params =new HashMap<>();
                 params.put("mobile",uPhone);
                 params.put("password",pwd);
-
                 getPresenter().login(params);
 
                 break;
             case R.id.passwd_toggle:
 
-                passwdToggle.setSelected(!passwdToggle.isSelected());
-                passwdToggle(passwdToggle.isSelected());
 
+                passwdToggle(passwdToggle.isSelected());
+                passwdToggle.setSelected(!passwdToggle.isSelected());
                 break;
             case R.id.forgot_passwd:
                 Intent intentForgot = new Intent(this, ForgotActivity.class);

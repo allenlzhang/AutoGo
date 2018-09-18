@@ -12,6 +12,9 @@ import butterknife.OnClick;
 
 public class DialogChangeSex  extends LoginMoreDialog {
     ItemOnclickListner listner ;
+    static  int MAN = 1 ;
+    static  int WOMAN = 2 ;
+    static  int UNKONW = 3;
 
     public DialogChangeSex(@NonNull Context context) {
         super(context);
@@ -38,21 +41,21 @@ public class DialogChangeSex  extends LoginMoreDialog {
             case R.id.login_by_face:
 
                 if(listner != null){
-                    listner.getText(loginByFace.getText().toString());
+                    listner.getText(loginByFace.getText().toString(),MAN);
                 }
                 DialogDismiss();
                 break;
             case R.id.login_by_normal:
 
                 if(listner != null){
-                    listner.getText(loginByNormal.getText().toString());
+                    listner.getText(loginByNormal.getText().toString() ,WOMAN);
                 }
                 DialogDismiss();
                 break;
             case R.id.login_by_other:
 
                 if(listner != null){
-                    listner.getText(loginByOther.getText().toString());
+                    listner.getText(loginByOther.getText().toString(),UNKONW);
                 }
                 DialogDismiss();
                 break;
@@ -68,7 +71,7 @@ public class DialogChangeSex  extends LoginMoreDialog {
     }
     public   interface ItemOnclickListner {
 
-        void getText(String text);
+        void getText(String text ,int sex);
 
     }
 }

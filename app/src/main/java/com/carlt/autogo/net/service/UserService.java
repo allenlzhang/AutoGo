@@ -34,5 +34,7 @@ public interface UserService {
     @POST("User/GetUserInfo")
     Observable<UserInfo>getUserInfo(@Body Map<String,String> token);
 
-
+    //编辑用户资料
+    @POST("User/Edit")
+    Observable<BaseError>userEditInfi(@Body Map<String,Object> params) ;
 }

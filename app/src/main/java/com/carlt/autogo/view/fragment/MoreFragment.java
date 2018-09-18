@@ -9,8 +9,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpFragment;
+import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.more.safety.SafetyActivity;
 import com.carlt.autogo.view.activity.user.EditUserInfoActivity;
 
@@ -18,6 +22,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import jp.wasabeef.glide.transformations.BlurTransformation;
+
 
 /**
  * Description : 更多fragment
@@ -63,6 +69,7 @@ public class MoreFragment extends BaseMvpFragment {
     TextView tvMoreNickname;
 
 
+    private UserInfo userInfo;
     @Override
     public int getLayoutId() {
         return R.layout.fragment_more;
@@ -71,6 +78,23 @@ public class MoreFragment extends BaseMvpFragment {
     @Override
     protected void init() {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        userInfo = SharepUtil.getBeanFromSp("user");
+        tvMoreNickname.setText(userInfo.realName +"");
+
+        if(userInfo.gender ==1 ){
+            mIvSex.setImageDrawable(getResources().getDrawable(R.mipmap.ic_sex_men));
+        }else {
+            mIvSex.setImageDrawable(getResources().getDrawable(R.mipmap.ic_sex_women));
+        }
+
+        Glide.with(this)
+                .load(SharepUtil.getPreferences().getString("headurl",""))
+                .into(mIvSex);
     }
 
     @OnClick({R.id.tv_more_edit_profile, R.id.ll_more_accounts_and_security, R.id.ll_more_setting})

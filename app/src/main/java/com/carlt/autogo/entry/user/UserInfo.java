@@ -20,6 +20,9 @@ public class UserInfo implements  Serializable {
     public int gender;
     public String realName;
     public String token;
-    public BaseError err;
+    public BaseError err ;
+    public String sex ;
+    public String password;
+    public String headUrl;
 
 }
