@@ -6,26 +6,28 @@ import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+
 import com.carlt.autogo.R;
+import com.carlt.autogo.view.activity.login.FaceLoginActivity;
 import com.carlt.autogo.view.activity.login.OtherActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class LoginMoreDialog extends BaseDialog  {
+public class LoginMoreDialog extends BaseDialog {
 
     @BindView(R.id.login_by_face)
     TextView loginByFace;
 
 
     @BindView(R.id.login_by_normal)
-    TextView loginByNormal ;
+    TextView loginByNormal;
 
     @BindView(R.id.login_by_other)
-    TextView loginByOther ;
+    TextView loginByOther;
 
     @BindView(R.id.cancle)
-    TextView cancle ;
+    TextView cancle;
 
     public LoginMoreDialog(@NonNull Context context) {
         super(context);
@@ -47,27 +49,32 @@ public class LoginMoreDialog extends BaseDialog  {
     }
 
 
-    @OnClick({R.id.cancle ,R.id.login_by_face ,R.id.login_by_normal,R.id.login_by_other })
-    public void onClick(View view){
-        switch (view.getId()){
-            case  R.id.cancle:
-                DialogDismiss();
+    @OnClick({R.id.cancle, R.id.login_by_face, R.id.login_by_normal, R.id.login_by_other})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.cancle:
+//                DialogDismiss();
                 break;
-            case R.id.login_by_face :
+            case R.id.login_by_face:
+                //                人脸登录
+                context.startActivity(new Intent(context, FaceLoginActivity.class));
+                break;
+            case R.id.login_by_normal:
+                //                DialogDismiss();
+                break;
+            case R.id.login_by_other:
+                Intent intentOhther = new Intent(context, OtherActivity.class);
+                context.startActivity(intentOhther);
 
                 break;
-            case R.id.login_by_normal :
-                DialogDismiss();
+            default:
                 break;
-            case R.id.login_by_other :
-                Intent intentOhther = new Intent(context,OtherActivity.class);
-                context.startActivity(intentOhther);
-                DialogDismiss();
-                break;
+
         }
+        dialogDismiss();
     }
 
-    private void DialogDismiss() {
+    private void dialogDismiss() {
         dismiss();
 
     }
