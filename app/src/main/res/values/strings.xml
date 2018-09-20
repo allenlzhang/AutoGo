@@ -48,6 +48,8 @@
     <string name="management_edit_remote_old_pwd">输入原远程操作密码</string>
     <string name="management_edit_remote_new_pwd">输入新密码</string>
     <string name="management_edit_remote_new_pwd_again">再次输入密码</string>
+    <string name="face_login_activity_title1">人脸登录</string>
+    <string name="face_login_activity_title2">人脸识别</string>
     <!-- 登录设备管理 -->
     <string name="management_login_device">登录设备管理</string>
 </resources>

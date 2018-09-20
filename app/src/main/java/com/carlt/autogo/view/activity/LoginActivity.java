@@ -1,7 +1,11 @@
 package com.carlt.autogo.view.activity;
 
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.IntentUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
@@ -18,7 +21,6 @@ import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.BaseDialog;
 import com.carlt.autogo.common.dialog.LoginMoreDialog;
 import com.carlt.autogo.entry.user.UserInfo;
-import com.carlt.autogo.net.base.BaseRestClient;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.presenter.login.ILoginView;
 import com.carlt.autogo.presenter.login.LoginPresenter;
@@ -66,7 +68,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     public void init() {
         setTitleText("登录");
         setBaseBackStyle(getResources().getDrawable(R.drawable.common_close_select));
-
+        requestPermissions(99, Manifest.permission.CAMERA);
     }
 
     @Override

@@ -2,8 +2,6 @@ package com.carlt.autogo.view.activity.user.accept;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +13,8 @@ import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.global.GlobalKey;
+import com.carlt.autogo.view.activity.login.FaceLoginActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,23 +29,29 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author wsq
- * @time 17:42  2018/9/11/011
- * @describe 身份认证 界面
  */
 public class IdCardAcceptActivity extends BaseMvpActivity {
 
-    @BindView(R.id.rl_rule1) RelativeLayout rlRule1;
-    @BindView(R.id.rl_rule2) RelativeLayout rlRule2;
-    @BindView(R.id.ed_id_accept_name) EditText edIdAcceptName;
-    @BindView(R.id.ed_idcard_accept_num) EditText edIdcardAcceptNum;
-    @BindView(R.id.btn_idcard_accepte) Button btnIdcardAccepte;
-    @BindView(R.id.tv_user_name) TextView tvUserName;
-    @BindView(R.id.btn_accept_face) Button btnAcceptFace;
+    @BindView(R.id.rl_rule1)
+    RelativeLayout rlRule1;
+    @BindView(R.id.rl_rule2)
+    RelativeLayout rlRule2;
+    @BindView(R.id.ed_id_accept_name)
+    EditText       edIdAcceptName;
+    @BindView(R.id.ed_idcard_accept_num)
+    EditText       edIdcardAcceptNum;
+    @BindView(R.id.btn_idcard_accepte)
+    Button         btnIdcardAccepte;
+    @BindView(R.id.tv_user_name)
+    TextView       tvUserName;
+    @BindView(R.id.btn_accept_face)
+    Button         btnAcceptFace;
 
     String name; // 姓名
-    String  idCardNum;  //身份证号
-    String hideName ;
-    String hideIdNume ;
+    String idCardNum;  //身份证号
+    String hideName;
+    String hideIdNume;
+
     @Override
     protected int getContentView() {
         return R.layout.activity_id_card_accept;
@@ -58,16 +64,16 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
 
     @SuppressLint("CheckResult")
     @OnClick(R.id.btn_idcard_accepte)
-    public void onClick(){
-         name = edIdAcceptName.getText().toString().trim();
-         idCardNum = edIdcardAcceptNum.getText().toString().trim();
+    public void onClick() {
+        name = edIdAcceptName.getText().toString().trim();
+        idCardNum = edIdcardAcceptNum.getText().toString().trim();
 
-        if(TextUtils.isEmpty(name)){
+        if (TextUtils.isEmpty(name)) {
             ToastUtils.showShort("姓名为空");
             return;
         }
 
-        if(!RegexUtils.isIDCard18(idCardNum) || RegexUtils.isIDCard15(idCardNum)  ){
+        if (!RegexUtils.isIDCard18(idCardNum) || RegexUtils.isIDCard15(idCardNum)) {
             ToastUtils.showShort("身份证号码不正确");
             return;
         }
@@ -97,8 +103,8 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
         rlRule1.setVisibility(View.GONE);
         rlRule2.setVisibility(View.VISIBLE);
 
-         hideName = encrypt(name);
-         hideIdNume = encrypt(idCardNum);
+        hideName = encrypt(name);
+        hideIdNume = encrypt(idCardNum);
 
         tvUserName.setText(hideName + "\t" + hideIdNume);
 
@@ -107,43 +113,49 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
 
 
     private String encrypt(String str) {
-        StringBuilder  n = new StringBuilder();
+        StringBuilder n = new StringBuilder();
         int len = str.length();
-        if( len <=2){
+        if (len <= 2) {
             n.append(str.charAt(0) + "*");
-            return  n.toString();
+            return n.toString();
         }
         n.append(str.charAt(0));
-        for(int i = 1 ; i <= len -2 ; i++){
+        for (int i = 1; i <= len - 2; i++) {
             n.append("*");
         }
-        n.append(str.charAt(len -1));
-        return  n.toString();
+        n.append(str.charAt(len - 1));
+        return n.toString();
     }
 
     //人脸识别认证
     @SuppressLint("CheckResult")
     @OnClick(R.id.btn_accept_face)
-    public void commitFaceAccept(){
-        Observable.create(new ObservableOnSubscribe<Integer>() {
-            @Override
-            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                emitter.onNext(1);
-            }
-        })
-                .delay(3, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        ToastUtils.showShort("采集成功");
-                        Intent intent =new Intent(IdCardAcceptActivity.this, UploadIdCardPhotoActivity.class);
-                        intent.putExtra("name",hideName);
-                        intent.putExtra("idcard",hideIdNume);
-                        startActivity(intent);
-                    }
-                });
+    public void commitFaceAccept() {
+        //        Observable.create(new ObservableOnSubscribe<Integer>() {
+        //            @Override
+        //            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+        //                emitter.onNext(1);
+        //            }
+        //        })
+        //                .delay(3, TimeUnit.SECONDS)
+        //                .subscribeOn(Schedulers.newThread())
+        //                .observeOn(AndroidSchedulers.mainThread())
+        //                .subscribe(new Consumer<Integer>() {
+        //                    @Override
+        //                    public void accept(Integer integer) throws Exception {
+        //                        ToastUtils.showShort("采集成功");
+        //                        Intent intent =new Intent(IdCardAcceptActivity.this, UploadIdCardPhotoActivity.class);
+        //                        intent.putExtra("name",hideName);
+        //                        intent.putExtra("idcard",hideIdNume);
+        //                        startActivity(intent);
+        //                    }
+        //                });
+        Intent intent = new Intent(this, FaceLoginActivity.class);
+        intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLoginActivity.FROM_ID_CARDACCEPT_ACTIVITY);
+        intent.putExtra("name", hideName);
+        intent.putExtra("idcard", hideIdNume);
+        startActivity(intent);
+        finish();
 
     }
 }

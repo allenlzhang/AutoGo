@@ -1,8 +1,11 @@
 package com.carlt.autogo.base;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -145,5 +148,38 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
 
         tvBaseRight.setText(text);
     }
+    public void requestPermissions(int requestCode, String permission) {
+        if (permission != null && permission.length() > 0) {
+            try {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    // 检查是否有权限
+                    int hasPer = checkSelfPermission(permission);
+                    if (hasPer != PackageManager.PERMISSION_GRANTED) {
+                        // 是否应该显示权限请求
+                        boolean isShould = shouldShowRequestPermissionRationale(permission);
+                        requestPermissions(new String[]{permission}, requestCode);
+                    }
+                } else {
 
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        boolean flag = false;
+        for (int i = 0; i < permissions.length; i++) {
+            if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
+                flag = true;
+            }
+        }
+        if (!flag) {
+            requestPermissions(99, Manifest.permission.CAMERA);
+        }
+    }
 }

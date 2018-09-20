@@ -76,6 +76,7 @@
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
                 android:hint="请填写真实姓名"
+                android:text="李四"
                 android:layout_marginLeft="10dp"
                 android:inputType="text"
 
@@ -135,6 +136,7 @@
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
                 android:hint="请填写证件号码"
+                android:text="612321198910082315"
                 android:layout_marginLeft="10dp"
                 android:maxLength="18"
                 />
