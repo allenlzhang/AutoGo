@@ -41,9 +41,9 @@ public class PersonAvatarActivity extends BaseMvpActivity {
     private static final int CODE_GALLERY_REQUEST = 0xa0;
     private static final int CODE_CAMERA_REQUEST = 0xa1;
     private static final int CODE_RESULT_REQUEST = 0xa2;
-    private File Aotugo =new File(Environment.getExternalStorageDirectory().getPath()+"/Aotugo/");
-    private File fileUri = new File(Aotugo + "/photo.jpg");
-    private File fileCropUri = new File(Aotugo + "/crop_photo.jpg");
+    private File AotugoImage =new File(Environment.getExternalStorageDirectory().getPath()+"/Aotugo/Image");
+    private File fileUri = new File(AotugoImage + "/photo.jpg");
+    private File fileCropUri = new File(AotugoImage + "/crop_photo.jpg");
     private Uri imageUri;
     private Uri cropImageUri;
     private int requestCodePermsiision= 121;
@@ -66,11 +66,9 @@ public class PersonAvatarActivity extends BaseMvpActivity {
 
         showHeaderRight("修改");
      //   checkPermission(mPermission);
-        if(  !Aotugo.exists()){
-             Aotugo.mkdirs();
+        if(  !AotugoImage.exists()){
+            AotugoImage.mkdirs();
         }
-        LogUtils.e(Aotugo.exists());
-
 
     }
 

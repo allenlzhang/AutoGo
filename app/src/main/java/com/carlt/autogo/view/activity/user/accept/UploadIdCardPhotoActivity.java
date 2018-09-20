@@ -226,7 +226,7 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
                     cropImageUri = Uri.fromFile(fileCropUri);
                     Uri newUri = Uri.parse(PhotoUtils.getPath(this, data.getData()));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                        newUri = FileProvider.getUriForFile(this, "com.carlt.yema.fileprovider", new File(newUri.getPath()));
+                        newUri = FileProvider.getUriForFile(this, "com.carlt.autogo.fileprovider", new File(newUri.getPath()));
                     PhotoUtils.cropImageUri(this, newUri, cropImageUri, 1, 1, output_X, output_Y, CODE_RESULT_REQUEST);
                     break;
                 case CODE_RESULT_REQUEST:
