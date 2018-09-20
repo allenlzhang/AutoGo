@@ -7,6 +7,7 @@ import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.entry.user.UserRegister;
 
 import java.util.Map;
+import java.util.jar.Manifest;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -37,4 +38,13 @@ public interface UserService {
     //编辑用户资料
     @POST("User/Edit")
     Observable<BaseError>userEditInfi(@Body Map<String,Object> params) ;
+
+    //三方登录
+    @POST("User/LoginByOpenApi")
+    Observable<UserInfo> loginByOpenApi(@Body Map<String,Object> params);
+
+    //手机短信登录
+    @POST("User/LoginByCaptcha")
+    Observable<User>loginByPhone(@Body Map<String,Object> params);
+
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.carlt.autogo.R;
 import com.carlt.autogo.view.activity.login.FaceLoginActivity;
 import com.carlt.autogo.view.activity.login.OtherActivity;
+import com.carlt.autogo.view.activity.login.loginByPhoneActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -18,7 +19,6 @@ public class LoginMoreDialog extends BaseDialog {
 
     @BindView(R.id.login_by_face)
     TextView loginByFace;
-
 
     @BindView(R.id.login_by_normal)
     TextView loginByNormal;
@@ -61,6 +61,9 @@ public class LoginMoreDialog extends BaseDialog {
                 break;
             case R.id.login_by_normal:
                 //                DialogDismiss();
+
+                Intent intentPhone = new Intent(context, loginByPhoneActivity.class);
+                context.startActivity(intentPhone);
                 break;
             case R.id.login_by_other:
                 Intent intentOhther = new Intent(context, OtherActivity.class);
