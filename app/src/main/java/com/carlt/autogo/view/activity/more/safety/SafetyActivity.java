@@ -112,6 +112,8 @@ public class SafetyActivity extends BaseMvpActivity {
                 startActivity(intentDecide);
                 break;
             case R.id.ll_safety_frozen_account:
+                Intent intentFreeze =new Intent(this,FreezeActivity.class);
+                startActivity(intentFreeze);
                 break;
             case R.id.ll_safety_cancellation_account:
                 break;

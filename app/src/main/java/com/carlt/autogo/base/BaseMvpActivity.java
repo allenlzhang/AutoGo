@@ -17,18 +17,27 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.basemvp.BaseMvpView;
 import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.basemvp.PresenterDispatch;
 import com.carlt.autogo.basemvp.PresenterProviders;
+import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.view.activity.user.PersonAvatarActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 
+/**
+ * @param <P>
+ */
 public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompatActivity implements BaseMvpView {
 
     @BindView(R.id.tv_base_title)
@@ -44,7 +53,10 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     private PresenterDispatch  mPresenterDispatch;
     private int requestCodePermsiision = 1020;
     public PremissoinLisniter lisniter ;
-
+    //请求Loding
+    public UUDialog dialog;
+    //用于取消每个网络请求
+    public List<Disposable> disposables = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +83,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
             }
         });
         flContent.addView(getLayoutInflater().inflate(getContentView(), null));
+        dialog = new UUDialog(this);
     }
 
     protected void setTitleText(String text) {
@@ -115,11 +128,26 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
         ToastUtils.showShort(txt);
     }
 
+    /**
+     * 调用生命周期,终止还未完成的异步请求
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        for(Disposable disposable : disposables){
+            if(!disposable.isDisposed()){
+                disposable.dispose();
+            }
+        }
+        disposables.clear();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenterDispatch.detachView();
         //        unbinder.unbind();
+
     }
 
 

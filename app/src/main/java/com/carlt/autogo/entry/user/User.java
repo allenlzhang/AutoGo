@@ -13,4 +13,11 @@ public class User  {
     public BaseError err;
 
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "token='" + token + '\'' +
+                ", err=" + err +
+                '}';
+    }
 }

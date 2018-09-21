@@ -47,4 +47,8 @@ public interface UserService {
     @POST("User/LoginByCaptcha")
     Observable<User>loginByPhone(@Body Map<String,Object> params);
 
+    //修改密码
+    @POST("User/ResetPwd")
+    Observable<User>userResetPwd(@Body Map<String,Object> params);
+
 }
