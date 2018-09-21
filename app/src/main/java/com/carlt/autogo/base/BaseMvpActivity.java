@@ -1,9 +1,11 @@
 package com.carlt.autogo.base;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -151,6 +153,25 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
 
         tvBaseRight.setText(text);
     }
+    public void requestPermissions(int requestCode, String permission) {
+        if (permission != null && permission.length() > 0) {
+            try {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    // 检查是否有权限
+                    int hasPer = checkSelfPermission(permission);
+                    if (hasPer != PackageManager.PERMISSION_GRANTED) {
+                        // 是否应该显示权限请求
+                        boolean isShould = shouldShowRequestPermissionRationale(permission);
+                        requestPermissions(new String[]{permission}, requestCode);
+                    }
+                } else {
+
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 
     /** 6.0 检查权限检查
      * @param mPermissions   需要申请的检查项
@@ -162,6 +183,11 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     public void checkPermissions(String[] mPermissions , PremissoinLisniter lisniter) {
         this.lisniter = lisniter ;
         boolean created = true ;
+
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            lisniter.createred();
+            return;
+        }
 
         for(int  i = 0 ;i < mPermissions.length ; i++ ){
             if(ActivityCompat.checkSelfPermission(BaseMvpActivity.this, mPermissions[i])  == PackageManager.PERMISSION_DENIED){
@@ -198,5 +224,6 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
      */
     public interface PremissoinLisniter {
       void createred();
+
     }
 }

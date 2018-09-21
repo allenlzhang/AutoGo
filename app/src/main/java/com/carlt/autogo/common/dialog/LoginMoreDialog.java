@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.carlt.autogo.R;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.view.activity.login.FaceLoginActivity;
 import com.carlt.autogo.view.activity.login.OtherActivity;
 import com.carlt.autogo.view.activity.login.loginByPhoneActivity;
@@ -53,11 +54,13 @@ public class LoginMoreDialog extends BaseDialog {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.cancle:
-//                DialogDismiss();
+                //                DialogDismiss();
                 break;
             case R.id.login_by_face:
                 //                人脸登录
-                context.startActivity(new Intent(context, FaceLoginActivity.class));
+                Intent intent = new Intent(context, FaceLoginActivity.class);
+                intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLoginActivity.FROM_LOGIN_ACTIVITY);
+                context.startActivity(intent);
                 break;
             case R.id.login_by_normal:
                 //                DialogDismiss();

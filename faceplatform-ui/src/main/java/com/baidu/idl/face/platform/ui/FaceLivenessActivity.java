@@ -82,7 +82,7 @@ public class FaceLivenessActivity extends Activity implements
     protected Drawable mTipsIcon;
     // 状态标识
     protected volatile boolean mIsEnableSound = true;
-    protected HashMap<String, String> mBase64ImageMap = new HashMap<String, String>();
+    protected HashMap<String, String> mBase64ImageMap = new HashMap<>();
     protected boolean mIsCreateSurface = false;
     protected boolean mIsCompletion = false;
     // 相机
@@ -94,6 +94,7 @@ public class FaceLivenessActivity extends Activity implements
     protected int mPreviewDegree;
     // 监听系统音量广播
     protected BroadcastReceiver mVolumeReceiver;
+    protected TextView tvFaceTitle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -138,7 +139,7 @@ public class FaceLivenessActivity extends Activity implements
                 onBackPressed();
             }
         });
-
+        tvFaceTitle = (TextView) findViewById(R.id.tvFaceTitle);
         mFaceDetectRoundView = (FaceDetectRoundView) mRootView.findViewById(R.id.liveness_face_round);
         mCloseView = (ImageView) mRootView.findViewById(R.id.liveness_close);
         mSoundView = (ImageView) mRootView.findViewById(R.id.liveness_sound);
