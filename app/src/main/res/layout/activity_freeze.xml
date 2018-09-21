@@ -4,6 +4,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/layout_background"
     tools:context=".view.activity.more.safety.FreezeActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_user_freeze"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/ConstraintLayoutCommon"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <ImageView
+            android:id="@+id/img_freeze_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="15dp"
+            android:src="@mipmap/ic_freeze"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:id="@+id/tv_freeze_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_freeze_head"
+            android:gravity="center"
+            android:textColor="@color/colorBlack"
+            android:text="@string/freeze_tv_status_free"
+            android:textSize="18dp"
+            android:layout_marginTop="10dp"
+            />
+        <TextView
+            android:id="@+id/tv_freeze_status_ino"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/textColorGray"
+            android:layout_below="@+id/tv_freeze_status"
+            android:layout_marginTop="7dp"
+            />
+
+        <Button
+            android:id="@+id/btn_freeze_commit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/BtnCommonCommit"
+            android:text="@string/freeze_btn_free"
+            android:layout_below="@+id/tv_freeze_status_ino"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            />
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -83,7 +83,8 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
             }
         });
         flContent.addView(getLayoutInflater().inflate(getContentView(), null));
-        dialog = new UUDialog(this);
+        dialog = new UUDialog(this,R.style.DialogCommon);
+
     }
 
     protected void setTitleText(String text) {

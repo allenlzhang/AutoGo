@@ -68,7 +68,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
         if(list != null){
             plat =list[0];
         }
-        dialog = new UUDialog(this);
+    //    dialog = new UUDialog(this);
     }
 
     @OnClick({R.id.login_payment ,R.id.login_wechat })

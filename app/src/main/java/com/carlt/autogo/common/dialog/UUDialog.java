@@ -3,6 +3,8 @@ package com.carlt.autogo.common.dialog;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -14,7 +16,9 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
+
 
 import butterknife.BindView;
 
@@ -27,11 +31,12 @@ public class UUDialog extends BaseDialog {
 	protected TextView content;
 
 	protected TextView title;
+	 ;
+	public ObjectAnimator 	animator ;
 
-	public UUDialog(@NonNull Context context) {
-		super(context);
+	public UUDialog(@NonNull Context context, int style) {
+		super(context, style);
 	}
-
 
 	@Override
 	void setWindowParams() {
@@ -45,9 +50,11 @@ public class UUDialog extends BaseDialog {
 
 	@Override
 	void init() {
-		ObjectAnimator animator = ObjectAnimator.ofFloat(progressImgAnimate, "rotation", 0f, 360f, 0f);
+		animator = ObjectAnimator.ofFloat(progressImgAnimate, "rotation", 0f, 359f);
+		animator.setRepeatCount(-1);
 		animator.setDuration(500);
 		animator.start();
+
 	}
 
 	public void setContentText(String t) {
@@ -62,4 +69,21 @@ public class UUDialog extends BaseDialog {
 		}
 	}
 
+	@Override
+	public void show() {
+		super.show();
+		animator.start();
+	}
+
+	@Override
+	public void dismiss() {
+		super.dismiss();
+
+		new Handler(Looper.getMainLooper()).post(new Runnable() {
+			@Override
+			public void run() {
+				animator.cancel();
+			}
+		});
+	}
 }

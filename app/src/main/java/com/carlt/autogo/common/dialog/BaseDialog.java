@@ -32,7 +32,13 @@ public abstract  class BaseDialog extends Dialog  {
         this.context = context;
 
     }
+    public BaseDialog(@NonNull Context context ,int style) {
+        super(context,style);
+        setWindowParams();
+        getWindow().setAttributes(layoutParams);
+        this.context = context;
 
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

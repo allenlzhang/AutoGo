@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
+    android:layout_height="130dp"
+    android:background="@drawable/common_edtext_bg">
+
+    <TextView
+        android:id="@+id/tv_freeze_tittle"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:gravity="center"
+        android:text="确定冻结账号"
+        android:textColor="@color/colorBlack"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tv_freeze_tittle"
+        android:background="@color/colorBlack" />
+
+    <TextView
+        android:id="@+id/tv_freeze_cancle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/tv_line"
+        android:layout_toLeftOf="@+id/tv_middle"
+        android:gravity="center"
+        android:text="取消"
+        android:textColor="@color/colorForgotPasswd"
+        android:textSize="16dp"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_middle"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tv_line"
+        android:layout_centerHorizontal="true"
+        android:background="@color/textColorGray" />
+
+    <TextView
+        android:id="@+id/tv_freeze_commit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/tv_line"
+        android:layout_toRightOf="@+id/tv_middle"
+        android:gravity="center"
+        android:text="确定"
+        android:textColor="@color/colorForgotPasswd"
+        android:textSize="16dp"
+
+        />
+
+</RelativeLayout>

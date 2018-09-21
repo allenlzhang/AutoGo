@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.carlt.autogo.R;
 import com.carlt.autogo.common.dialog.UUDialog;
 
 
@@ -37,7 +38,7 @@ public class BasePresenter<V> {
     public void attachView(Context context, V view) {
         this.mContext = context;
         this.mView = view;
-        uuDialog  =new UUDialog(mContext);
+        uuDialog  =new UUDialog(mContext, R.style.DialogCommon);
     }
 
     public void detachView() {

@@ -52,4 +52,13 @@
     <string name="face_login_activity_title2">人脸识别</string>
     <!-- 登录设备管理 -->
     <string name="management_login_device">登录设备管理</string>
+    <!-- 冻结账户 -->
+    <string name="freeze_tv_status_free">瞬间保护账号安全 </string>
+    <string name="freeze_tv_status_unfree">账号已经冻结 </string>
+    <string name="freeze_tv_free_info">账号冻结解除前任何人都无法使用应用 </string>
+    <string name="freeze_tv_unfree_info">账号冻结解除前任何人都无法使用应用 </string>
+    <string name="freeze_btn_free">立即冻结</string>
+    <string name="freeze_btn_unfree">解冻账号</string>
+    <string name="freeze_tv_status_cancle"> 解除账号冻结</string>
+
 </resources>

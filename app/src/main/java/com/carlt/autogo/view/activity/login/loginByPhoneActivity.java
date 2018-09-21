@@ -64,7 +64,7 @@ public class loginByPhoneActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("短信登录");
-        uuDialog =new UUDialog(this);
+     //   uuDialog =new UUDialog(this);
     }
 
 
