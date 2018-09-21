@@ -58,7 +58,6 @@ public class PersonAvatarActivity extends BaseMvpActivity {
     public void init() {
 
         setTitleText("用户个人头像");
-
         setHeadColor(getResources().getColor(R.color.colorBlack),
                 getResources().getColor(R.color.colorWhite),
                 getResources().getColor(R.color.colorWhite)
@@ -147,4 +146,5 @@ public class PersonAvatarActivity extends BaseMvpActivity {
 
         return denied ;
     }
+
 }

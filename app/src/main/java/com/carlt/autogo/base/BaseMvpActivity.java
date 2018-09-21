@@ -1,9 +1,12 @@
 package com.carlt.autogo.base;
 
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -18,6 +21,7 @@ import com.carlt.autogo.basemvp.BaseMvpView;
 import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.basemvp.PresenterDispatch;
 import com.carlt.autogo.basemvp.PresenterProviders;
+import com.carlt.autogo.view.activity.user.PersonAvatarActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +40,8 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     @BindView(R.id.tv_base_right)TextView tvBaseRight;
     private PresenterProviders mPresenterProviders;
     private PresenterDispatch  mPresenterDispatch;
+    private int requestCodePermsiision = 1020;
+    public PremissoinLisniter lisniter ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,4 +152,51 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
         tvBaseRight.setText(text);
     }
 
+    /** 6.0 检查权限检查
+     * @param mPermissions   需要申请的检查项
+     * @param lisniter  回调接口,只有成功 才回调
+     * @return ture  验证通过直接返回  , false 未授权,请求授权
+     *
+     */
+
+    public void checkPermissions(String[] mPermissions , PremissoinLisniter lisniter) {
+        this.lisniter = lisniter ;
+        boolean created = true ;
+
+        for(int  i = 0 ;i < mPermissions.length ; i++ ){
+            if(ActivityCompat.checkSelfPermission(BaseMvpActivity.this, mPermissions[i])  == PackageManager.PERMISSION_DENIED){
+                created =false ;
+            }
+        }
+        if(created && lisniter!= null) {
+            lisniter.createred();
+        }else {
+            ActivityCompat.requestPermissions(BaseMvpActivity.this, mPermissions, requestCodePermsiision);
+        }
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == requestCodePermsiision) {
+            boolean created = true ;
+            for(int i= 0 ; i < grantResults.length ; i++){
+                if(grantResults[i] == PackageManager.PERMISSION_DENIED){
+                    created = false ;
+                    ToastUtils.showShort("部分权限获取失败，正常功可能受到影响");
+                }
+            }
+            if(created && lisniter!= null){
+                lisniter.createred();
+            }
+        }
+    }
+
+
+    /**
+     * 授权监听
+     * createred 为授权成功 回调
+     */
+    public interface PremissoinLisniter {
+      void createred();
+    }
 }

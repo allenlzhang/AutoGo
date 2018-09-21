@@ -65,8 +65,9 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     private static final int CODE_GALLERY_REQUEST = 0xa0;
     private static final int CODE_CAMERA_REQUEST = 0xa1;
     private static final int CODE_RESULT_REQUEST = 0xa2;
-    private File fileUri = new File(Environment.getExternalStorageDirectory().getPath() + "/photo.jpg");
-    private File fileCropUri = new File(Environment.getExternalStorageDirectory().getPath() + "/crop_photo.jpg");
+    private File AotugoImage =new File(Environment.getExternalStorageDirectory().getPath()+"/Aotugo/Image");
+    private File fileUri = new File(AotugoImage + "/photo.jpg");
+    private File fileCropUri = new File(AotugoImage + "/crop_photo.jpg");
     private Uri imageUri;
     private Uri cropImageUri;
 
@@ -89,33 +90,35 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
         idCardNum = getIntent().getStringExtra("idcard");
         tvName.setText(name + "\t" + idCardNum);
         dialogIdcardAccept = new DialogIdcardAccept(this);
+        if(  !AotugoImage.exists()){
+            AotugoImage.mkdirs();
+        }
         dialogIdcardAccept.setListner(new DialogIdcardAccept.ItemOnclickListner() {
             @Override
             public void byCermera() {
-                carmeraOrPhoto =0 ;
-                checkPermission();
-                doCarmera();
+
+                checkPermissions(mPermission, new PremissoinLisniter() {
+                    @Override
+                    public void createred() {
+                        doCarmera();
+                    }
+                });
             }
 
             @Override
             public void byAblum() {
-                carmeraOrPhoto = 1;
-                checkPermission();
-                doPhoto();
+
+                checkPermissions(mPermission, new PremissoinLisniter() {
+                    @Override
+                    public void createred() {
+                        doPhoto();
+                    }
+                });
+
             }
         });
     }
 
-    private void checkPermission() {
-        if (ActivityCompat.checkSelfPermission(UploadIdCardPhotoActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
-                ActivityCompat.checkSelfPermission(UploadIdCardPhotoActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED
-                )
-        {
-            ActivityCompat.requestPermissions(UploadIdCardPhotoActivity.this, mPermission, requestCodeCarmera);
-            return;
-
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -176,35 +179,13 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
 
     }
 
-    //6.0 权限
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == requestCodeCarmera) {
-          boolean denied = false;
-
-          for(int i=1 ; i<grantResults.length ;i++){
-              if(grantResults[i] == PackageManager.PERMISSION_DENIED){
-                  denied = true;
-                  ToastUtils.showShort("部分权限获取失败，正常功能受到影响");
-              }
-          }
-
-          if(!denied){
-              if(carmeraOrPhoto == 0){
-                  doCarmera();
-              }else if(carmeraOrPhoto == 1){
-                  doPhoto();
-              }
-          }
-
-        }
-    }
 
     private void doCarmera() {
         imageUri = Uri.fromFile(fileUri);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
             //通过FileProvider创建一个content类型的Uri
             imageUri = FileProvider.getUriForFile(UploadIdCardPhotoActivity.this, "com.carlt.autogo.fileprovider", fileUri);
+        }
         PhotoUtils.takePicture(UploadIdCardPhotoActivity.this, imageUri, CODE_CAMERA_REQUEST);
     }
 
@@ -225,8 +206,10 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
                 case CODE_GALLERY_REQUEST://访问相册完成回调
                     cropImageUri = Uri.fromFile(fileCropUri);
                     Uri newUri = Uri.parse(PhotoUtils.getPath(this, data.getData()));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
                         newUri = FileProvider.getUriForFile(this, "com.carlt.autogo.fileprovider", new File(newUri.getPath()));
+                    }
+
                     PhotoUtils.cropImageUri(this, newUri, cropImageUri, 1, 1, output_X, output_Y, CODE_RESULT_REQUEST);
                     break;
                 case CODE_RESULT_REQUEST:
