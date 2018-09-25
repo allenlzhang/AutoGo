@@ -36,7 +36,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-public class loginByPhoneActivity extends BaseMvpActivity {
+public class LoginByPhoneActivity extends BaseMvpActivity {
 
     @BindView(R.id.app_name)
     TextView appName;
@@ -136,7 +136,7 @@ public class loginByPhoneActivity extends BaseMvpActivity {
                     public void accept(String s) throws Exception {
                         uuDialog.dismiss();
                         ToastUtils.showShort(s);
-                        Intent intent = new Intent(loginByPhoneActivity.this,MainActivity.class);
+                        Intent intent = new Intent(LoginByPhoneActivity.this,MainActivity.class);
                         startActivity(intent);
                     }
                 }, new Consumer<Throwable>() {

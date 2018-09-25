@@ -10,8 +10,9 @@ import android.widget.TextView;
 import com.carlt.autogo.R;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.view.activity.login.FaceLoginActivity;
+import com.carlt.autogo.view.activity.login.LoginByPhoneActivity;
 import com.carlt.autogo.view.activity.login.OtherActivity;
-import com.carlt.autogo.view.activity.login.loginByPhoneActivity;
+
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -65,7 +66,7 @@ public class LoginMoreDialog extends BaseDialog {
             case R.id.login_by_normal:
                 //                DialogDismiss();
 
-                Intent intentPhone = new Intent(context, loginByPhoneActivity.class);
+                Intent intentPhone = new Intent(context, LoginByPhoneActivity.class);
                 context.startActivity(intentPhone);
                 break;
             case R.id.login_by_other:

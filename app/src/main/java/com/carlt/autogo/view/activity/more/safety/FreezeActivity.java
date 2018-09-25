@@ -1,7 +1,9 @@
 package com.carlt.autogo.view.activity.more.safety;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -12,12 +14,9 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.FreezeCommitDialog;
-import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.utils.SharepUtil;
 
-
-import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -44,13 +43,35 @@ public class FreezeActivity extends BaseMvpActivity {
     TextView tvFreezeStatus;
     @BindView(R.id.tv_freeze_status_ino)
     TextView tvFreezeStatusIno;
+
+    /**
+     * 冻结账户提交按钮
+     */
     @BindView(R.id.btn_freeze_commit)
     Button btnFreezeCommit;
+    /**
+     * 冻结账户父控件
+     */
     @BindView(R.id.rl_user_freeze)
     RelativeLayout rlUserFreeze;
 
+    /**
+     * 解冻账户
+     */
+    @BindView(R.id.btn_unfreeze_commit)
+    Button btnUnfreezeCommit;
 
-    private FreezeCommitDialog freezeCommitDialog ;
+    /**
+     * 解冻账户界面 父控件
+     */
+    @BindView(R.id.rl_user_unfreeze)
+    RelativeLayout rlUserUnfreeze;
+
+
+    private FreezeCommitDialog freezeCommitDialog;
+
+    private boolean typeFreeze = true;
+
     @Override
     protected int getContentView() {
         return R.layout.activity_freeze;
@@ -59,10 +80,19 @@ public class FreezeActivity extends BaseMvpActivity {
     @Override
     public void init() {
 
-        setTitleText("冻结账户");
-        freezeCommitDialog =new FreezeCommitDialog(this,R.style.DialogCommon);
 
-        tvFreezeStatusIno.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
+        if(typeFreeze){
+            setTitleText("冻结账户");
+            rlUserFreeze.setVisibility(View.VISIBLE);
+            rlUserUnfreeze.setVisibility(View.GONE);
+            freezeCommitDialog = new FreezeCommitDialog(this, R.style.DialogCommon);
+            tvFreezeStatusIno.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
+        }else {
+            setTitleText("解冻账户");
+            rlUserFreeze.setVisibility(View.GONE);
+            rlUserUnfreeze.setVisibility(View.VISIBLE);
+        }
+
 
     }
 
@@ -70,14 +100,16 @@ public class FreezeActivity extends BaseMvpActivity {
     /**
      * 账户冻结提交
      */
-    @OnClick(R.id.btn_freeze_commit)
+    @OnClick({R.id.btn_freeze_commit})
     public void onViewClicked() {
+
         freezeCommitDialog.setLisniter(new FreezeCommitDialog.FreezeCommitDialogClickLisniter() {
             @SuppressLint("CheckResult")
             @Override
             public void commit() {
                 dialog.show();
 
+                LogUtils.e(SharepUtil.getPreferences().getString("token", ""));
                 Observable.create(new ObservableOnSubscribe<Integer>() {
                     @Override
                     public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
@@ -92,7 +124,9 @@ public class FreezeActivity extends BaseMvpActivity {
                             public void accept(Integer integer) throws Exception {
                                 dialog.dismiss();
                                 ToastUtils.showShort("冻结成功");
-
+                                //解冻状态
+                                typeFreeze = false;
+                                init();
                             }
                         }, new Consumer<Throwable>() {
                             @Override
@@ -103,5 +137,18 @@ public class FreezeActivity extends BaseMvpActivity {
             }
         });
         freezeCommitDialog.show();
+    }
+
+
+    /**
+     * 解除账号冻结提交
+     */
+    @OnClick(R.id.btn_unfreeze_commit)
+    public void onUnFreeze(){
+
+        Intent intent = new Intent(this,UnFreeezeActivity.class );
+        startActivity( intent );
+        finish();
+
     }
 }

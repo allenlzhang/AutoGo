@@ -166,7 +166,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     LogUtils.e(hashMap);
 
                     HashMap<String,Object> params = new HashMap<>();
-                    params.put("openId",hashMap.get("openid"));
+                    params.put("openId",hashMap.get("unionid"));
                     params.put("type",2);
 
                 }
@@ -273,7 +273,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 .subscribe(new Consumer<AuthResult>() {
                     @Override
                     public void accept(AuthResult authResult) throws Exception {
-                        LogUtils.e(authResult.authCode +"\n" +authResult.alipayOpenId);
+                        LogUtils.e(authResult.toString());
                     }
                 }, new Consumer<Throwable>() {
                     @Override

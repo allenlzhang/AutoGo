@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/layout_background"
+    tools:context=".view.activity.more.safety.UnFreeezeActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_user_unfreeze"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/ConstraintLayoutCommon"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="visible"
+        >
+
+        <ImageView
+            android:id="@+id/img_unfreeze_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="15dp"
+            android:src="@mipmap/ic_cancle_freeze"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:id="@+id/tv_unfreeze_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_unfreeze_head"
+            android:gravity="center"
+            android:textColor="@color/colorBlack"
+            android:text="@string/freeze_tv_status_cancle"
+            android:textSize="18dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_unfreeze_status_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/textColorGray"
+            android:layout_below="@+id/tv_unfreeze_status"
+            android:layout_marginTop="7dp"
+            android:text="@string/freeze_tv_status_cancle_info"
+            />
+
+        <TextView
+            android:id="@+id/tv_user_unfreeze"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_unfreeze_status_info"
+            android:textColor="@color/textColorGray"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="7dp"
+            android:text="asddasdasdasas"
+            />
+        <LinearLayout
+            android:id="@+id/ll_unfreeze_pwd"
+            style="@style/BgCommonLoginAndRegister"
+            android:orientation="horizontal"
+            android:layout_below="@+id/tv_user_unfreeze"
+            android:layout_marginTop="15dp"
+            >
+
+            <EditText
+                android:id="@+id/ed_unfreeze_pwd"
+                style="@style/EdCommonLoginAndRegister"
+                android:hint="请输入登录密码"
+                android:inputType="textPassword"
+                android:maxLength="32"
+                android:selectAllOnFocus="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingLeft="15dp"
+                />
+
+            <ImageView
+                android:id="@+id/img_passwd_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dip"
+                android:src="@mipmap/ic_login_pwd_hide"
+                android:tag="off"/>
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_unfreeze_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/BtnCommonCommit"
+            android:text="下一步"
+            android:layout_below="@+id/ll_unfreeze_pwd"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_head2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/ConstraintLayoutCommon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        android:visibility="gone"
+        >
+        <ImageView
+            android:id="@+id/img_unfreeze_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="15dp"
+            android:src="@mipmap/ic_freeze_commited"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:id="@+id/tv_unfreeze_complete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_unfreeze_complete"
+            android:gravity="center"
+            android:textColor="@color/colorBlack"
+            android:text="操作成功"
+            android:textSize="18dp"
+            android:layout_marginTop="10dp"
+            />
+        <TextView
+            android:id="@+id/tv_unfreeze_status_complete_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/textColorGray"
+            android:layout_below="@+id/tv_unfreeze_complete"
+            android:layout_marginTop="15dp"
+            android:text="@string/unfreeze_tv_status_complete_info"
+
+            />
+        <Button
+            android:id="@+id/btn_commit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/BtnCommonCommit"
+            android:text="确定"
+            android:layout_below="@+id/tv_unfreeze_status_complete_info"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
