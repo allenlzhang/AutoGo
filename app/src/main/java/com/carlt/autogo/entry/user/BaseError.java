@@ -10,7 +10,7 @@ public class BaseError implements Parcelable {
      * err : {"code":1006,"msg":"用户登录Token不能为空"}
      */
 
-    public int code;
+    public int    code;
     public String msg;
 
 

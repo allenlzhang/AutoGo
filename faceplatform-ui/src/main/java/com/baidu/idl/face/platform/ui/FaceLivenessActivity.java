@@ -46,6 +46,7 @@ import com.baidu.idl.face.platform.utils.CameraPreviewUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 /**
  * 活体检测接口
  */
@@ -59,42 +60,42 @@ public class FaceLivenessActivity extends Activity implements
     public static final String TAG = FaceLivenessActivity.class.getSimpleName();
 
     // View
-    protected View mRootView;
-    protected FrameLayout mFrameLayout;
-    protected SurfaceView mSurfaceView;
-    protected SurfaceHolder mSurfaceHolder;
-    protected ImageView mCloseView;
-    protected ImageView mSoundView;
-    protected ImageView mSuccessView;
-    protected TextView mTipsTopView;
-    protected TextView mTipsBottomView;
+    protected View                mRootView;
+    protected FrameLayout         mFrameLayout;
+    protected SurfaceView         mSurfaceView;
+    protected SurfaceHolder       mSurfaceHolder;
+    protected ImageView           mCloseView;
+    protected ImageView           mSoundView;
+    protected ImageView           mSuccessView;
+    protected TextView            mTipsTopView;
+    protected TextView            mTipsBottomView;
     protected FaceDetectRoundView mFaceDetectRoundView;
-    protected LinearLayout mImageLayout;
+    protected LinearLayout        mImageLayout;
     // 人脸信息
-    protected FaceConfig mFaceConfig;
-    protected ILivenessStrategy mILivenessStrategy;
+    protected FaceConfig          mFaceConfig;
+    protected ILivenessStrategy   mILivenessStrategy;
     // 显示Size
-    private Rect mPreviewRect = new Rect();
-    protected int mDisplayWidth = 0;
-    protected int mDisplayHeight = 0;
-    protected int mSurfaceWidth = 0;
-    protected int mSurfaceHeight = 0;
+    private   Rect mPreviewRect   = new Rect();
+    protected int  mDisplayWidth  = 0;
+    protected int  mDisplayHeight = 0;
+    protected int  mSurfaceWidth  = 0;
+    protected int  mSurfaceHeight = 0;
     protected Drawable mTipsIcon;
     // 状态标识
-    protected volatile boolean mIsEnableSound = true;
-    protected HashMap<String, String> mBase64ImageMap = new HashMap<>();
-    protected boolean mIsCreateSurface = false;
-    protected boolean mIsCompletion = false;
+    protected volatile boolean                 mIsEnableSound   = true;
+    protected          HashMap<String, String> mBase64ImageMap  = new HashMap<>();
+    protected          boolean                 mIsCreateSurface = false;
+    protected          boolean                 mIsCompletion    = false;
     // 相机
-    protected Camera mCamera;
+    protected Camera            mCamera;
     protected Camera.Parameters mCameraParam;
-    protected int mCameraId;
-    protected int mPreviewWidth;
-    protected int mPreviewHight;
-    protected int mPreviewDegree;
+    protected int               mCameraId;
+    protected int               mPreviewWidth;
+    protected int               mPreviewHight;
+    protected int               mPreviewDegree;
     // 监听系统音量广播
     protected BroadcastReceiver mVolumeReceiver;
-    protected TextView tvFaceTitle;
+    protected TextView          tvFaceTitle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -508,12 +509,27 @@ public class FaceLivenessActivity extends Activity implements
         Set<Map.Entry<String, String>> sets = imageMap.entrySet();
         Bitmap bmp = null;
         mImageLayout.removeAllViews();
-        for (Map.Entry<String, String> entry : sets) {
-            bmp = base64ToBitmap(entry.getValue());
+//        String bestImage0 = imageMap.get("bestImage0");
+        if (imageMap.containsKey("bestImage0")) {
+            String bestImage = imageMap.get("bestImage0");
+//            if (imageMap.containsKey("Eye")) {
+//            String bestImage = imageMap.get("Eye");
+            //            byte2File(base64ToByte(bestImage0), faceImagePath, faceImageName);
+            bmp = base64ToBitmap(bestImage);
             ImageView iv = new ImageView(this);
             iv.setImageBitmap(bmp);
             mImageLayout.addView(iv, new LinearLayout.LayoutParams(300, 300));
+
         }
+        //        for (Map.Entry<String, String> entry : sets) {
+        //            if (entry.getKey().equals("bestImage0")) {
+        //                bmp = base64ToBitmap(entry.getValue());
+        //                ImageView iv = new ImageView(this);
+        //                iv.setImageBitmap(bmp);
+        //                mImageLayout.addView(iv, new LinearLayout.LayoutParams(300, 300));
+        //            }
+        //
+        //        }
     }
 
     private static Bitmap base64ToBitmap(String base64Data) {
