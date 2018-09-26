@@ -29,8 +29,13 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.DialogIdcardAccept;
+import com.carlt.autogo.entry.user.UpdateImageResultInfo;
+import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.PhotoUtils;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -38,7 +43,12 @@ import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * @author wsq
@@ -160,21 +170,39 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     @SuppressLint("CheckResult")
     @OnClick(R.id.idcard_upload_commit)
     public void commit(){
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                emitter.onNext("11");
-            }
-        }).delay(3, TimeUnit.SECONDS)
-                .subscribe(new Consumer<String>() {
+
+//        Intent intent =new Intent(UploadIdCardPhotoActivity.this ,IdfCompleteActivity.class);
+//        intent.putExtra("name",tvName.getText().toString());
+//        intent.putExtra("idcard",true);
+//        startActivity(intent);
+
+
+
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("type", "autogo/face")
+                .addFormDataPart("fileOwner","face")
+                .addFormDataPart("uid", "9999999999")
+                .addFormDataPart("name", "faceImage")
+                .addFormDataPart("faceImage", fileCropUri.getName(), RequestBody.create(MediaType.parse("image/*"), fileCropUri))
+                .build();
+
+
+        ClientFactory.getUpdateImageService(UserService.class).updateImageFile(requestBody)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<UpdateImageResultInfo>() {
                     @Override
-                    public void accept(String s) throws Exception {
-                        Intent intent =new Intent(UploadIdCardPhotoActivity.this ,IdfCompleteActivity.class);
-                        intent.putExtra("name",tvName.getText().toString());
-                        intent.putExtra("idcard",true);
-                        startActivity(intent);
+                    public void accept(UpdateImageResultInfo updateImageResultInfo) throws Exception {
+
+                        LogUtils.e(updateImageResultInfo.toString());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable.toString());
                     }
                 });
+
 
     }
 

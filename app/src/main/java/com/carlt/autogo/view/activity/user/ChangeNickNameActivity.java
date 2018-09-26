@@ -1,8 +1,6 @@
 package com.carlt.autogo.view.activity.user;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,7 +10,6 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.user.BaseError;
-import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;

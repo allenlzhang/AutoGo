@@ -5,6 +5,8 @@ package com.carlt.autogo.global;
  */
 public interface GlobalUrl {
     public static final String BASE_URL = "http://test.linewin.cc:8888/app/";
+    public static final String UPDATE_IMG_TEST_URL = "http://tmanageadmin.linewin.cc";
+    public static final String UPDATE_IMG_FORMAL_URL = "http://manageadmin.geni4s.com";
 
     //开发阶段先介入 大乘接口
     public static final String BASE_URL_TEST_YEMA = "http://dorideapi.linewin.cc/110/";

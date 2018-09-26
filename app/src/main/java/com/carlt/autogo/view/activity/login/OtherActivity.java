@@ -3,36 +3,23 @@ package com.carlt.autogo.view.activity.login;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.alipay.sdk.app.AuthTask;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
-import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
 import com.carlt.autogo.common.dialog.UUDialog;
-import com.carlt.autogo.entry.user.User;
-import com.carlt.autogo.entry.user.UserInfo;
-import com.carlt.autogo.entry.user.alipay.AuthResult;
-import com.carlt.autogo.net.base.ClientFactory;
-import com.carlt.autogo.net.service.UserService;
-import com.carlt.autogo.presenter.login.LoginPresenter;
+import com.carlt.autogo.entry.alipay.AuthResult;
 import com.carlt.autogo.presenter.register.IOtherRegisterView;
 import com.carlt.autogo.presenter.register.OtherRegisterPresenter;
-import com.carlt.autogo.presenter.register.RegisterPresenter;
-import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.alipay.OrderInfoUtil2_0;
 import com.google.gson.Gson;
-import com.mob.MobSDK;
-
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,10 +32,8 @@ import cn.sharesdk.framework.ShareSDK;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 

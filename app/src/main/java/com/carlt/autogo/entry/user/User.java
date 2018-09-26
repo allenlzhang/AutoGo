@@ -1,9 +1,6 @@
 package com.carlt.autogo.entry.user;
 
-import android.annotation.SuppressLint;
-
-
-public class User  {
+public class User {
     /**
      * err : {"code":2010,"msg":"用户名或密码错误"}
      */

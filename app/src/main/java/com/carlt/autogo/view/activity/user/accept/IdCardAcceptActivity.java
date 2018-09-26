@@ -150,7 +150,7 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
         //                        startActivity(intent);
         //                    }
         //                });
-        Intent intent = new Intent(this, FaceLoginActivity.class);
+        Intent intent = new Intent(this, UploadIdCardPhotoActivity.class);
         intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLoginActivity.FROM_ID_CARDACCEPT_ACTIVITY);
         intent.putExtra("name", hideName);
         intent.putExtra("idcard", hideIdNume);

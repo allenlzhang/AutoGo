@@ -2,10 +2,9 @@ package com.carlt.autogo.view.activity;
 
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
@@ -37,45 +37,67 @@ import io.reactivex.disposables.Disposable;
 @CreatePresenter(presenter = LoginPresenter.class)
 public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements ILoginView {
 
-    @BindView(R.id.version_code) TextView versionCode;
+    @BindView(R.id.version_code)
+    TextView versionCode;
 
-    @BindView(R.id.user_phone) EditText userPhone;
+    @BindView(R.id.user_phone)
+    EditText userPhone;
 
-    @BindView(R.id.user_pwd) EditText userPWd;
+    @BindView(R.id.user_pwd)
+    EditText userPWd;
 
-    @BindView(R.id.passwd_toggle) ImageView passwdToggle;
+    @BindView(R.id.passwd_toggle)
+    ImageView passwdToggle;
 
-    @BindView(R.id.login_commit) Button loginCommit;
+    @BindView(R.id.login_commit)
+    Button loginCommit;
 
-    @BindView(R.id.forgot_passwd) TextView forgotPasswd;
+    @BindView(R.id.forgot_passwd)
+    TextView forgotPasswd;
 
-    @BindView(R.id.user_regist) TextView userRegist;
+    @BindView(R.id.user_regist)
+    TextView userRegist;
 
-    @BindView(R.id.btn_more) Button btnMore;
+    @BindView(R.id.btn_more)
+    Button btnMore;
 
-    @BindView(R.id.btn_changeUrl) Button btnChangeUrl;
+    @BindView(R.id.btn_changeUrl)
+    Button btnChangeUrl;
 
-    String [] tag = {"测试服","正式服","预发布"};
-    int next ;
+    String[] tag = {"测试服", "正式服", "预发布"};
+    int next;
 
-     Disposable disposable ;
+    Disposable disposable;
+
     @Override
     protected int getContentView() {
         return R.layout.activity_login;
     }
 
+    protected String[] needPermissions = {
+            Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+            //            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            //            Manifest.permission.READ_EXTERNAL_STORAGE,
+            //            Manifest.permission.READ_PHONE_STATE
+    };
+
     @Override
     public void init() {
         setTitleText("登录");
         setBaseBackStyle(getResources().getDrawable(R.drawable.common_close_select));
-        requestPermissions(99, Manifest.permission.CAMERA);
+        checkPermissions(needPermissions, new PremissoinLisniter() {
+            @Override
+            public void createred() {
+
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        UserInfo userInfo  = SharepUtil.getBeanFromSp("user") ;
-        if(userInfo != null){
+        UserInfo userInfo = SharepUtil.getBeanFromSp("user");
+        if (userInfo != null) {
             userPhone.setText(userInfo.mobile);
             userPWd.setText(userInfo.password);
         }
@@ -100,19 +122,19 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
                 String uPhone = userPhone.getText().toString().trim();
                 String pwd = userPWd.getText().toString().trim();
-                if(TextUtils.isEmpty(uPhone)){
+                if (TextUtils.isEmpty(uPhone)) {
                     ToastUtils.showShort("请输入手机号");
-                   return;
+                    return;
                 }
 
-                if(TextUtils.isEmpty(pwd)){
+                if (TextUtils.isEmpty(pwd)) {
                     ToastUtils.showShort("请输入密码");
                     return;
                 }
 
-                Map<String,Object> params =new HashMap<>();
-                params.put("mobile",uPhone);
-                params.put("password",pwd);
+                Map<String, Object> params = new HashMap<>();
+                params.put("mobile", uPhone);
+                params.put("password", pwd);
                 getPresenter().login(params);
 
                 break;
@@ -131,22 +153,23 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     }
 
     @OnClick(R.id.btn_changeUrl)
-    public void changeUrl(){
+    public void changeUrl() {
 
         btnChangeUrl.setText(tag[next]);
         ClientFactory.defChangeUrl(next);
-        next ++ ;
-        if(next == tag.length){
+        next++;
+        if (next == tag.length) {
             next = 0;
         }
 
     }
+
     @Override
     public void loginFinish() {
 
-       Intent maninI = new Intent(this,MainActivity.class);
-       startActivity(maninI);
-       finish();
+        Intent maninI = new Intent(this, MainActivity.class);
+        startActivity(maninI);
+        finish();
     }
 
     private void passwdToggle(boolean selected) {

@@ -2,11 +2,8 @@ package com.carlt.autogo.presenter.login;
 
 import android.annotation.SuppressLint;
 
-import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.basemvp.BasePresenter;
-import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.net.base.ClientFactory;
@@ -20,7 +17,6 @@ import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 

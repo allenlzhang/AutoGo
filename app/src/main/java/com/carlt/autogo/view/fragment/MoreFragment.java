@@ -1,10 +1,7 @@
 package com.carlt.autogo.view.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,10 +16,7 @@ import com.carlt.autogo.view.activity.more.safety.SafetyActivity;
 import com.carlt.autogo.view.activity.user.EditUserInfoActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
-import jp.wasabeef.glide.transformations.BlurTransformation;
 
 
 /**

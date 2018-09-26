@@ -1,11 +1,8 @@
 package com.carlt.autogo.entry.user;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
-public class UserInfo implements  Serializable {
+public class UserInfo implements Serializable {
 
 
     /**
@@ -15,14 +12,14 @@ public class UserInfo implements  Serializable {
      * realName : c3miv32wrb
      */
 
-    public int id;
-    public String mobile;
-    public int gender;
-    public String realName;
-    public String token;
-    public BaseError err ;
-    public String sex ;
-    public String password;
-    public String headUrl;
+    public int       id;
+    public String    mobile;
+    public int       gender;
+    public String    realName;
+    public String    token;
+    public BaseError err;
+    public String    sex;
+    public String    password;
+    public String    headUrl;
 
 }
