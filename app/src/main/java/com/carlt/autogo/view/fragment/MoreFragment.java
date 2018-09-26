@@ -22,8 +22,8 @@ import butterknife.OnClick;
 /**
  * Description : 更多fragment
  *
- * @Author : zhanglei
- * @Date : 2018/9/10
+ * Author : zhanglei
+ * Date : 2018/9/10
  */
 public class MoreFragment extends BaseMvpFragment {
     /**

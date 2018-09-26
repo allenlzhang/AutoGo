@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="280dp"
-                android:layout_height="130dp"
+                android:layout_height="120dp"
                 android:background="@drawable/common_dialog_bg">
 
     <TextView
@@ -9,9 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:gravity="center"
-        android:text="确定冻结账号"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="注销账号是一项非常危险的行为，请您务必确认好。不注销给你发糖吃，你同意吗？"
         android:textColor="@color/colorBlack"
-        android:textSize="16dp"/>
+        android:textSize="13dp"/>
 
     <TextView
         android:id="@+id/tv_line"
@@ -30,7 +32,7 @@
         android:gravity="center"
         android:text="取消"
         android:textColor="@color/colorForgotPasswd"
-        android:textSize="16dp"
+        android:textSize="14dp"
 
         />
 
@@ -50,9 +52,9 @@
         android:layout_below="@+id/tv_line"
         android:layout_toRightOf="@+id/tv_middle"
         android:gravity="center"
-        android:text="确定"
+        android:text="同意"
         android:textColor="@color/colorForgotPasswd"
-        android:textSize="16dp"
+        android:textSize="14dp"
 
         />
 

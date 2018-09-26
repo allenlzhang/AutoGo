@@ -2,23 +2,13 @@ package com.carlt.autogo.common.dialog;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
-
 
 import butterknife.BindView;
 
@@ -31,7 +21,6 @@ public class UUDialog extends BaseDialog {
 	protected TextView content;
 
 	protected TextView title;
-	 ;
 	public ObjectAnimator 	animator ;
 
 	public UUDialog(@NonNull Context context, int style) {

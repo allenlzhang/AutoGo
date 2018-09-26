@@ -28,17 +28,19 @@ public class FaceDetectRoundView extends View {
 
     public static final float SURFACE_HEIGHT    = 1000f;
     public static final float SURFACE_RATIO     = 0.75f;
-    public static final float WIDTH_SPACE_RATIO = 0.33f;
+    public static final float WIDTH_SPACE_RATIO = 0.43f;
     public static final float HEIGHT_RATIO      = 0.1f;
     public static final float HEIGHT_EXT_RATIO  = 0.2f;
-    public static final int   CIRCLE_SPACE      = 5;
+    //设置外层圆环与相机区域的距离
+    public static final int   CIRCLE_SPACE      = 10;
     public static final int   PATH_SPACE        = 16;
     public static final int   PATH_SMALL_SPACE  = 12;
+    //    设置外层圆环的宽度
     public static final int   PATH_WIDTH        = 4;
 
     public static final int COLOR_BG    = Color.parseColor("#FFFFFF");  //设置背景色
     public static final int COLOR_RECT  = Color.parseColor("#FF4081");
-    public static final int COLOR_ROUND = Color.parseColor("#3F51B5");  //设置圆环默认颜色
+    public static final int COLOR_ROUND = Color.parseColor("#91BFFF");  //设置圆环默认颜色
 
     private PathEffect mFaceRoundPathEffect = null;
     // new DashPathEffect(new float[]{PATH_SPACE, PATH_SPACE}, 1);
@@ -142,14 +144,17 @@ public class FaceDetectRoundView extends View {
         super.onDraw(canvas);
         canvas.drawColor(Color.TRANSPARENT);
         canvas.drawPaint(mBGPaint);
-        if (mIsDrawDash) {
-            //            设置外层圆环的为虚线
-            //            mPathPaint.setPathEffect(mFaceRoundPathEffect);
-            mPathPaint.setColor(COLOR_RECT);
-        } else {
-            mPathPaint.setColor(COLOR_ROUND);
-        }
-//        canvas.drawCircle(mX, mY, mR + CIRCLE_SPACE, mPathPaint);
+        //        if (mIsDrawDash) {
+        //            //            设置外层圆环的为虚线
+        //            //            mPathPaint.setPathEffect(mFaceRoundPathEffect);
+        //            mPathPaint.setColor(COLOR_RECT);
+        //        } else {
+        //            mPathPaint.setColor(COLOR_ROUND);
+        //        }
+        Log.e("ondraw=====", mR + "");
+        mPathPaint.setColor(COLOR_ROUND);
+//        canvas.drawArc();
+        canvas.drawCircle(mX, mY, mR + CIRCLE_SPACE, mPathPaint);
         canvas.drawCircle(mX, mY, mR, mFaceRoundPaint);
         //        if (mFaceRect != null) {
         //            canvas.drawRect(mFaceRect, mFaceRectPaint);
