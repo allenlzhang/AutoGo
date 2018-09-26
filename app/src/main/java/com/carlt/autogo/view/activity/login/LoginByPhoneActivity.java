@@ -3,12 +3,14 @@ package com.carlt.autogo.view.activity.login;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
@@ -64,7 +66,7 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("短信登录");
-     //   uuDialog =new UUDialog(this);
+        uuDialog =new UUDialog(this,R.style.DialogCommon);
     }
 
 
@@ -130,7 +132,7 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
                     }
                 })
                 .subscribeOn(Schedulers.newThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {
@@ -146,7 +148,6 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
                         uuDialog.dismiss();
                     }
                 });
-
     }
 
 

@@ -37,6 +37,7 @@ public abstract  class BaseDialog extends Dialog  {
         setWindowParams();
         getWindow().setAttributes(layoutParams);
         this.context = context;
+        init();
 
     }
     @Override

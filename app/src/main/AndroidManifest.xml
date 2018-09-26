@@ -64,7 +64,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".view.activity.login.FaceLoginActivity" />
-        <activity android:name=".view.activity.login.loginByPhoneActivity" />
+        <activity android:name=".view.activity.login.LoginByPhoneActivity" />
         <activity android:name=".view.activity.more.safety.FreezeActivity" />
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"

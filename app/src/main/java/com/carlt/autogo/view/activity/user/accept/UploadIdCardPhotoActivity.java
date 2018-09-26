@@ -75,7 +75,6 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     private String idCardNum;
 
     private int carmeraTag = -1;
-    private  int carmeraOrPhoto = -1 ;
 
     DialogIdcardAccept dialogIdcardAccept;
     @Override

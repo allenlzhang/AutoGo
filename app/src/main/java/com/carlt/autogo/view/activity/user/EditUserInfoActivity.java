@@ -56,7 +56,7 @@ public class EditUserInfoActivity extends BaseMvpActivity{
 
         setTitleText("修改资料");
         dialogChangeSex = new DialogChangeSex(this);
-     //   dialog =new UUDialog(this) ;
+        dialog =new UUDialog(this,R.style.DialogCommon) ;
 
         Glide.with(this).load(SharepUtil.getPreferences().getString("headurl",""))
                 .into(imgEdHeader);

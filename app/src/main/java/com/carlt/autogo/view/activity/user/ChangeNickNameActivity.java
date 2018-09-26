@@ -49,7 +49,7 @@ public class ChangeNickNameActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("修改昵称");
-     //   dialog = new UUDialog(this);
+        dialog = new UUDialog(this,R.style.DialogCommon);
     }
 
     @SuppressLint("CheckResult")
