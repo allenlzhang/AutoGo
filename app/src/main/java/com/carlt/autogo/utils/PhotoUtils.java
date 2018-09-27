@@ -57,7 +57,7 @@ public class PhotoUtils {
      * @param height      剪裁图片高度
      * @param requestCode 剪裁图片的请求码
      */
-    public static void cropImageUri(Activity activity, Uri orgUri, Uri desUri, int aspectX, int aspectY, int width, int height, int requestCode) {
+    public static void cropImageUri(Activity activity, Uri orgUri, Uri desUri, double aspectX, double aspectY, int width, int height, int requestCode) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

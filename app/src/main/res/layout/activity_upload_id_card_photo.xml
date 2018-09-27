@@ -43,15 +43,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="5dp"
             android:src="@drawable/upload_idcard_img_delet_select"
             android:clickable="true"
             android:visibility="gone"
             />
 
         <FrameLayout
-            android:layout_width="260dp"
-            android:layout_height="160dp"
+            android:layout_width="280dp"
+            android:layout_height="180dp"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             >
@@ -60,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@mipmap/idcard_person_bg"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 />
 
             <ImageView
@@ -116,15 +116,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="5dp"
             android:src="@drawable/upload_idcard_img_delet_select"
             android:clickable="true"
             android:visibility="gone"
             />
 
         <FrameLayout
-            android:layout_width="260dp"
-            android:layout_height="160dp"
+            android:layout_width="280dp"
+            android:layout_height="180dp"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             >

@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 
@@ -29,22 +30,26 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.DialogIdcardAccept;
+import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.PhotoUtils;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -56,7 +61,7 @@ import okhttp3.RequestBody;
  * @describe  上传身份证照片 页面
  */
 public class UploadIdCardPhotoActivity extends BaseMvpActivity {
-    private int  requestCodeCarmera = 1001;
+
     String[] mPermission = {Manifest.permission.CAMERA ,Manifest.permission.READ_EXTERNAL_STORAGE };
     @BindView(R.id.tv_name)TextView tvName;
     @BindView(R.id.img_delet_person_photo)ImageView imgDeletPersonPhoto;
@@ -77,7 +82,8 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     private static final int CODE_RESULT_REQUEST = 0xa2;
     private File AotugoImage =new File(Environment.getExternalStorageDirectory().getPath()+"/Aotugo/Image");
     private File fileUri = new File(AotugoImage + "/photo.jpg");
-    private File fileCropUri = new File(AotugoImage + "/crop_photo.jpg");
+    private File fileCropUriface = new File(AotugoImage + "/crop_photo_face.jpg");
+    private File fileCropUriBalce = new File(AotugoImage + "/crop_photo_back.jpg");
     private Uri imageUri;
     private Uri cropImageUri;
 
@@ -87,6 +93,9 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     private int carmeraTag = -1;
 
     DialogIdcardAccept dialogIdcardAccept;
+
+    MultipartBody.Builder MultipartBodyBuilder =   new MultipartBody.Builder().setType(MultipartBody.FORM);
+
     @Override
     protected int getContentView() {
         return R.layout.activity_upload_id_card_photo;
@@ -176,34 +185,6 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
 //        intent.putExtra("idcard",true);
 //        startActivity(intent);
 
-
-
-        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("type", "autogo/face")
-                .addFormDataPart("fileOwner","face")
-                .addFormDataPart("uid", "9999999999")
-                .addFormDataPart("name", "faceImage")
-                .addFormDataPart("faceImage", fileCropUri.getName(), RequestBody.create(MediaType.parse("image/*"), fileCropUri))
-                .build();
-
-
-        ClientFactory.getUpdateImageService(UserService.class).updateImageFile(requestBody)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<UpdateImageResultInfo>() {
-                    @Override
-                    public void accept(UpdateImageResultInfo updateImageResultInfo) throws Exception {
-
-                        LogUtils.e(updateImageResultInfo.toString());
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        LogUtils.e(throwable.toString());
-                    }
-                });
-
-
     }
 
 
@@ -223,21 +204,30 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int output_X = 480, output_Y = 480;
+        int output_X = 480, output_Y = 310;
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case CODE_CAMERA_REQUEST://拍照完成回调
-                    cropImageUri = Uri.fromFile(fileCropUri);
-                    PhotoUtils.cropImageUri(this, imageUri, cropImageUri, 1, 1, output_X, output_Y, CODE_RESULT_REQUEST);
+                    if(carmeraTag == 0){
+                        cropImageUri = Uri.fromFile(fileCropUriface);
+                    }else {
+                        cropImageUri = Uri.fromFile(fileCropUriBalce);
+                    }
+
+                    PhotoUtils.cropImageUri(this, imageUri, cropImageUri, 1.5, 1, output_X, output_Y, CODE_RESULT_REQUEST);
                     break;
-                case CODE_GALLERY_REQUEST://访问相册完成回调
-                    cropImageUri = Uri.fromFile(fileCropUri);
+                case CODE_GALLERY_REQUEST://访问相册完成回调 ;
+                    if(carmeraTag == 0){
+                        cropImageUri = Uri.fromFile(fileCropUriface);
+                    }else {
+                        cropImageUri = Uri.fromFile(fileCropUriBalce);
+                    }
                     Uri newUri = Uri.parse(PhotoUtils.getPath(this, data.getData()));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
                         newUri = FileProvider.getUriForFile(this, "com.carlt.autogo.fileprovider", new File(newUri.getPath()));
                     }
 
-                    PhotoUtils.cropImageUri(this, newUri, cropImageUri, 1, 1, output_X, output_Y, CODE_RESULT_REQUEST);
+                    PhotoUtils.cropImageUri(this, newUri, cropImageUri, 1.5, 1, output_X, output_Y, CODE_RESULT_REQUEST);
                     break;
                 case CODE_RESULT_REQUEST:
                     Bitmap bitmap = PhotoUtils.getBitmapFromUri(cropImageUri, this);
@@ -249,21 +239,108 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void setPicToView(Bitmap picToView) {
+    @SuppressLint("CheckResult")
+    public void setPicToView(final Bitmap picToView) {
+        dialog.show();
+     Disposable disposableImage = Observable.create(new ObservableOnSubscribe<Bitmap>() {
+            @Override
+            public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
+                emitter.onNext(picToView);
+            }
+        })
+                .map(new Function<Bitmap, Bitmap>() {
+                    @Override
+                    public Bitmap apply(Bitmap bitmap) throws Exception {
+                        return creatWaterMarkBitmap(bitmap);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Function<Bitmap, Bitmap>() {
+                    @Override
+                    public Bitmap apply(Bitmap bitmap) throws Exception {
+                        showImg(bitmap);
+                        return bitmap;
+                    }
+                })
+                .observeOn(Schedulers.newThread())
+                .map(new Function<Bitmap, File>() {
+                    @Override
+                    public File apply(Bitmap bitmap) throws Exception {
+                        File filePic = saveWaterMarkBitmap(bitmap);
+                        if (filePic == null) return null;
+                        return filePic;
+                    }
+                })
+                .flatMap(new Function<File, ObservableSource<UpdateImageResultInfo>>() {
+                    @Override
+                    public ObservableSource<UpdateImageResultInfo> apply(File file) throws Exception {
+                        return getUpdateImageResultInfoObservableSource(file);
+                    }
+                })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<UpdateImageResultInfo>() {
+                               @Override
+                               public void accept(UpdateImageResultInfo updateImageResultInfo) throws Exception {
+                                   ToastUtils.showShort("上传成功");
+                                   dialog.dismiss();
+                                   LogUtils.e(updateImageResultInfo.toString());
+                               }
+                           }
+                        , new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                dialog.dismiss();
+                                ToastUtils.showShort("上传失败");
+                                LogUtils.e(throwable.toString());
+                            }
+                        });
+        disposables.add(disposableImage);
+    }
 
-        Bitmap  firstBitmap = picToView;
-        Bitmap  secondBitmap = ( (BitmapDrawable)imgPersonWatermark.getDrawable()).getBitmap();
-        LogUtils.e(secondBitmap.getRowBytes() * secondBitmap.getHeight());
-        Bitmap bitmap = Bitmap.createBitmap(firstBitmap.getWidth(), firstBitmap.getHeight(),firstBitmap.getConfig());
-        Canvas canvas = new Canvas(bitmap);
-        float w = firstBitmap.getWidth();
-        float h = firstBitmap.getHeight();
-        Matrix m = new Matrix();
-        //确定secondBitmap大小比例
-        m.setScale(w / imgPerson.getWidth(), h / imgPerson.getHeight());
-        canvas.drawBitmap(firstBitmap, 0,0, null);
-        canvas.drawBitmap(secondBitmap, m, null);
+    /**
+     * @param file 要上传的图片文件
+     * @return 返回请求图片上传接口的回调结果
+     */
+    private ObservableSource<UpdateImageResultInfo> getUpdateImageResultInfoObservableSource(File file) {
+        RequestBody requestBody = MultipartBodyBuilder
+                .addFormDataPart("type", "autogo/face")
+                .addFormDataPart("fileOwner","face")
+                .addFormDataPart("uid", "9999999999")
+                .addFormDataPart("name", "faceImage")
+                .addFormDataPart("faceImage", file.getName(), RequestBody.create(MediaType.parse("image/*"), file))
+                .build();
+        //图片上传
+        return ClientFactory.getUpdateImageService(UserService.class).updateImageFile(requestBody);
+    }
 
+
+    /**
+     * @param bitmap 水印bitmap
+     * @return 返回水印图片保存地址
+     */
+    @Nullable
+    private File saveWaterMarkBitmap(Bitmap bitmap) {
+        File filePic;
+        if(carmeraTag == 0){
+            filePic = (fileCropUriface);
+        }else {
+            filePic = (fileCropUriBalce);
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(filePic);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+        return filePic;
+    }
+
+    private void showImg(Bitmap bitmap) {
         if(carmeraTag == 0){
             imgPerson.setImageBitmap(bitmap);
             rlCenter1.setVisibility(View.GONE);
@@ -271,10 +348,34 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
         }
         if(carmeraTag == 1){
             imgIdcardBack.setImageBitmap(bitmap);
-           // imgBackWatermark.setVisibility(View.VISIBLE);
+            // imgBackWatermark.setVisibility(View.VISIBLE);
             rlCenter2.setVisibility(View.GONE);
             imgDeletBackPhoto.setVisibility(View.VISIBLE);
         }
+    }
 
+    /**
+     * @param bitmap
+     * @return
+     *
+     * 利用canvas 叠加两种图片(加水印)
+     */
+    @NonNull
+    private Bitmap creatWaterMarkBitmap(Bitmap bitmap) {
+        Bitmap firstBitmap = bitmap ;
+        Bitmap  secondBitmap = ( (BitmapDrawable)imgPersonWatermark.getDrawable()).getBitmap();
+        Bitmap b = Bitmap.createBitmap(firstBitmap.getWidth(), firstBitmap.getHeight(),firstBitmap.getConfig());
+        Canvas canvas = new Canvas(b);
+        float w = b.getWidth();
+        float h = b.getHeight();
+        LogUtils.e(secondBitmap.getWidth() + "========" + secondBitmap.getHeight());
+        Matrix m = new Matrix();
+        //确定secondBitmap大小比例
+      //  m.setScale(w / imgPerson.getWidth(), h / imgPerson.getHeight());
+      //  m.setScale(w / secondBitmap.getWidth(), h / secondBitmap.getHeight());
+        canvas.drawBitmap(firstBitmap, 0,0, null);
+        canvas.drawBitmap(secondBitmap, (w-secondBitmap.getWidth())/2,(h-secondBitmap.getHeight())/2, null);
+        firstBitmap.recycle();
+        return b;
     }
 }

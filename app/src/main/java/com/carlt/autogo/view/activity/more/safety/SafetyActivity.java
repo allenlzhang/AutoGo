@@ -6,8 +6,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 
 import butterknife.BindView;
@@ -112,6 +115,7 @@ public class SafetyActivity extends BaseMvpActivity {
                 startActivity(intentDecide);
                 break;
             case R.id.ll_safety_frozen_account:
+
                 Intent intentFreeze =new Intent(this,FreezeActivity.class);
                 startActivity(intentFreeze);
                 break;

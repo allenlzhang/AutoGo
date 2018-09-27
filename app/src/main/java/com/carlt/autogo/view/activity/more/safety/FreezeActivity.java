@@ -14,9 +14,14 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.FreezeCommitDialog;
+import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -70,30 +75,51 @@ public class FreezeActivity extends BaseMvpActivity {
 
     private FreezeCommitDialog freezeCommitDialog;
 
-    private boolean typeFreeze = true;
-
     @Override
     protected int getContentView() {
         return R.layout.activity_freeze;
     }
 
+
     @Override
     public void init() {
+        freezeCommitDialog = new FreezeCommitDialog(this, R.style.DialogCommon);
+        getUserInfo();
 
+    }
 
-        if(typeFreeze){
-            setTitleText("冻结账户");
-            rlUserFreeze.setVisibility(View.VISIBLE);
-            rlUserUnfreeze.setVisibility(View.GONE);
-            freezeCommitDialog = new FreezeCommitDialog(this, R.style.DialogCommon);
-            tvFreezeStatusIno.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
-        }else {
-            setTitleText("解冻账户");
-            rlUserFreeze.setVisibility(View.GONE);
-            rlUserUnfreeze.setVisibility(View.VISIBLE);
-        }
+    @SuppressLint("CheckResult")
+    private void getUserInfo() {
+        dialog.show();
+        Map<String,String> params = new HashMap<>();
+        params.put("token", SharepUtil.getPreferences().getString("token",""));
+        ClientFactory.def(UserService.class).getUserInfo(params)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<UserInfo>() {
+                    @Override
+                    public void accept(UserInfo userInfo) throws Exception {
+                        dialog.dismiss();
+                        if(userInfo.userFreeze == 0){
+                            setTitleText("冻结账户");
+                            rlUserFreeze.setVisibility(View.VISIBLE);
+                            rlUserUnfreeze.setVisibility(View.GONE);
 
+                            tvFreezeStatusIno.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
+                        }else {
+                            setTitleText("解冻账户");
+                            rlUserFreeze.setVisibility(View.GONE);
+                            rlUserUnfreeze.setVisibility(View.VISIBLE);
+                        }
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
+                        LogUtils.e(throwable.toString());
+                    }
+                });
     }
 
 
@@ -125,7 +151,6 @@ public class FreezeActivity extends BaseMvpActivity {
                                 dialog.dismiss();
                                 ToastUtils.showShort("冻结成功");
                                 //解冻状态
-                                typeFreeze = false;
                                 init();
                             }
                         }, new Consumer<Throwable>() {
