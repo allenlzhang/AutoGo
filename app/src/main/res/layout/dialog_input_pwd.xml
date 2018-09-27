@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/common_dialog_bg"
+              android:orientation="vertical">
+
+    <!-- 内容部分 -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="135dp">
+
+        <TextView
+            android:id="@+id/tvTitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:text="请输入登录密码"
+            android:textColor="@color/colorEdtext"
+            android:textSize="16dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvTitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTitle1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="首次设置人脸识别需要验证登录密码"
+            android:textColor="@color/colorEdtext"
+            android:textSize="14dp"
+            />
+        首次设置人脸识别需要验证
+
+        <LinearLayout
+            android:id="@+id/head"
+            style="@style/BgCommonLoginAndRegister"
+            android:layout_below="@+id/tvTitle2"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etLogoutPhone"
+                style="@style/EdCommonLoginAndRegister"
+                android:hint="密码"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#d6d6d6"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="43dip"
+        android:visibility="visible">
+
+        <View
+            android:id="@+id/line_v"
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:background="#d6d6d6"/>
+
+        <TextView
+            android:id="@+id/tvCancel"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_toLeftOf="@+id/line_v"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="#478CEA"
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/tvConfirm"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_toRightOf="@+id/line_v"
+            android:gravity="center"
+            android:text="确认"
+            android:textColor="#478CEA"
+            android:textSize="14sp"
+            />
+    </RelativeLayout>
+</LinearLayout>

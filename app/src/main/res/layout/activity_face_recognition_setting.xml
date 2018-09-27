@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorRegistBg"
+    android:orientation="vertical"
+    tools:context=".view.activity.more.safety.FaceRecognitionSettingActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="60dp"
+        android:src="@mipmap/iv_face_def"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="95dp"
+        android:gravity="center_horizontal"
+        android:text="账号更安全"
+        android:textColor="@color/colorEdtext"
+        android:textSize="14dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="身份验证后支持人脸识别"
+        android:textColor="@color/textColorGray"
+        android:textSize="13dp"/>
+    <RelativeLayout
+        android:id="@+id/llFaceSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/colorWhite"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="人脸识别登录"
+            android:textColor="@color/colorEdtext"
+            android:layout_centerVertical="true"
+            android:textSize="14dp"
+            />
+
+        <CheckBox
+            style="@style/CheckBoxStyles"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_c"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:background="@color/colorWhite"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="流程安全认证"
+            android:textColor="@color/colorEdtext"
+            android:layout_centerVertical="true"
+            android:textSize="14dp"
+            />
+
+        <CheckBox
+            style="@style/CheckBoxStyles"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+</LinearLayout>

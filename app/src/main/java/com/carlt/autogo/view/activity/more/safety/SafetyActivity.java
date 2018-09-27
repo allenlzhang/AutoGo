@@ -9,8 +9,8 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
-import com.carlt.autogo.entry.user.UserInfo;
-import com.carlt.autogo.utils.SharepUtil;
+
+import com.carlt.autogo.common.dialog.LogoutTipDialog;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 
 import butterknife.BindView;
@@ -79,6 +79,7 @@ public class SafetyActivity extends BaseMvpActivity {
      */
     @BindView(R.id.ll_safety_cancellation_account)
     LinearLayout mLlCancellationAccount;
+    private LogoutTipDialog mTipDialog;
 
     @Override
     protected int getContentView() {
@@ -88,6 +89,13 @@ public class SafetyActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText(getResources().getString(R.string.more_accounts_and_security));
+        mTipDialog = new LogoutTipDialog(this, R.style.DialogCommon);
+        mTipDialog.setLisniter(new LogoutTipDialog.LogoutTipDialogClickLisniter() {
+            @Override
+            public void commit() {
+                startActivity(new Intent(SafetyActivity.this, LogoutAccountActivityFirst.class));
+            }
+        });
     }
 
 
@@ -95,31 +103,33 @@ public class SafetyActivity extends BaseMvpActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_safety_identity_authentication:
-                Intent safety_identity = new Intent(this,UserIdChooseActivity.class);
+                Intent safety_identity = new Intent(this, UserIdChooseActivity.class);
                 startActivity(safety_identity);
                 break;
             case R.id.ll_safety_face_recognition:
+                startActivity(new Intent(this, FaceRecognitionSettingFirstActivity.class));
                 break;
             case R.id.ll_safety_binding_phone:
                 break;
             case R.id.ll_safety_login_pwd_management:
-                Intent intent = new Intent(SafetyActivity.this,LoginPwdManagementActivity.class);
+                Intent intent = new Intent(SafetyActivity.this, LoginPwdManagementActivity.class);
                 startActivity(intent);
                 break;
             case R.id.ll_safety_remote_pwd_management:
-                Intent intent1 = new Intent(SafetyActivity.this,RemotePwdManagementActivity.class);
+                Intent intent1 = new Intent(SafetyActivity.this, RemotePwdManagementActivity.class);
                 startActivity(intent1);
                 break;
             case R.id.ll_safety_login_device_management:
-                Intent intentDecide = new Intent(SafetyActivity.this,LoginDeviceManagementActivity.class);
+                Intent intentDecide = new Intent(SafetyActivity.this, LoginDeviceManagementActivity.class);
                 startActivity(intentDecide);
                 break;
             case R.id.ll_safety_frozen_account:
 
-                Intent intentFreeze =new Intent(this,FreezeActivity.class);
+                Intent intentFreeze = new Intent(this, FreezeActivity.class);
                 startActivity(intentFreeze);
                 break;
             case R.id.ll_safety_cancellation_account:
+                mTipDialog.show();
                 break;
         }
     }

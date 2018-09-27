@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
@@ -71,7 +70,7 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
         switch (view.getId()) {
             case R.id.send_code:
 
-             ;    String PhoneNum = userPhone.getText().toString();
+                 String PhoneNum = userPhone.getText().toString();
                 if( TextUtils.isEmpty(PhoneNum) ){
                     ToastUtils.showShort("手机号为空");
                     return;

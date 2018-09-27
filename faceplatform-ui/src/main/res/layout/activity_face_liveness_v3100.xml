@@ -16,7 +16,13 @@
         android:id="@+id/liveness_face_round"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-
+    <ImageView
+        android:layout_width="222dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:layout_marginTop="165dp"
+        android:src="@mipmap/iv_face_circle_bg"/>
     <LinearLayout
         android:id="@+id/liveness_surface_overlay_layout"
         android:layout_width="match_parent"
@@ -76,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:src="@mipmap/ic_close"/>
+        android:src="@mipmap/ic_close_blue"/>
 
     <ImageView
         android:id="@+id/liveness_sound"
