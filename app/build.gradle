@@ -89,4 +89,5 @@ dependencies {
     //人脸识别
     implementation project(':faceplatform-ui')
     compile 'com.lzy.net:okgo:3.0.4'
+    implementation 'com.yanzhenjie:permission:2.0.0-rc12'
 }

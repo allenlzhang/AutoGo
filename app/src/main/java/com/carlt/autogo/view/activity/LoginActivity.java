@@ -2,9 +2,8 @@ package com.carlt.autogo.view.activity;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -26,13 +25,23 @@ import com.carlt.autogo.presenter.login.ILoginView;
 import com.carlt.autogo.presenter.login.LoginPresenter;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.login.ForgotActivity;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 @CreatePresenter(presenter = LoginPresenter.class)
 public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements ILoginView {
@@ -75,22 +84,55 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     }
 
     protected String[] needPermissions = {
-            Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
-            //            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            //            Manifest.permission.READ_EXTERNAL_STORAGE,
-            //            Manifest.permission.READ_PHONE_STATE
+            Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_PHONE_STATE
     };
 
     @Override
     public void init() {
         setTitleText("登录");
         setBaseBackStyle(getResources().getDrawable(R.drawable.common_close_select));
-        checkPermissions(needPermissions, new PremissoinLisniter() {
-            @Override
-            public void createred() {
+        AndPermission.with(this)
+                .runtime()
+                .permission(needPermissions)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        LogUtils.e(data.toString());
+                    }
+                })
+                .onDenied(new Action<List<String>>() {
+                    @SuppressLint("CheckResult")
+                    @Override
+                    public void onAction(List<String> data) {
+                        LogUtils.e(data.toString());
+                        ToastUtils.showShort("部分权限获取失败，应用即将退出");
+                        Observable.create(new ObservableOnSubscribe<Integer>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                                emitter.onNext(1);
+                            }
+                        }).delay(2, TimeUnit.SECONDS)
+                                .subscribeOn(Schedulers.newThread())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<Integer>() {
+                                    @Override
+                                    public void accept(Integer integer) throws Exception {
+                                        finish();
+                                    }
+                                })
+                        ;
 
-            }
-        });
+                    }
+                }).start();
+        //        checkPermissions(needPermissions, new PremissoinLisniter() {
+        //            @Override
+        //            public void createred() {
+        //
+        //            }
+        //        });
     }
 
     @Override

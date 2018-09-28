@@ -11,7 +11,7 @@
         style="@style/baseEditStyle"
         android:hint="@string/management_edit_phone_num"
         android:layout_marginTop="10dp"
-        tools:ignore="TextFields" />
+        tools:ignore="TextFields"/>
 
     <RelativeLayout
         android:id="@+id/rl_management_code"

@@ -33,21 +33,14 @@
             android:textColor="@color/colorEdtext"
             android:textSize="14dp"
             />
-        首次设置人脸识别需要验证
 
-        <LinearLayout
-            android:id="@+id/head"
-            style="@style/BgCommonLoginAndRegister"
+        <EditText
+            android:id="@+id/edit_management_phone"
+            style="@style/baseEditStyle"
+            android:layout_height="40dp"
+            android:hint="密码"
             android:layout_below="@+id/tvTitle2"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/etLogoutPhone"
-                style="@style/EdCommonLoginAndRegister"
-                android:hint="密码"/>
-
-        </LinearLayout>
+            android:layout_marginTop="10dp"/>
     </RelativeLayout>
 
     <View
