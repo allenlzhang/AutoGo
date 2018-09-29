@@ -27,9 +27,9 @@ public class LoginPwdManagementActivity extends BaseMvpActivity {
     @BindView(R.id.ll_management_forget_old_pwd)
     LinearLayout llManagementForgetOldPwd;
 
-    public static final int remember = 0;   //记得原密码
+    public static final int REMEMBER = 0;   //记得原密码
 
-    public static final int forget = 1; //忘记原密码
+    public static final int FORGET = 1; //忘记原密码
 
     @Override
     protected int getContentView() {
@@ -46,10 +46,10 @@ public class LoginPwdManagementActivity extends BaseMvpActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_management_remember_old_pwd:
-                startActivity(remember);
+                startActivity(REMEMBER);
                 break;
             case R.id.ll_management_forget_old_pwd:
-                startActivity(forget);
+                startActivity(FORGET);
                 break;
         }
     }

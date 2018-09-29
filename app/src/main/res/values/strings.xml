@@ -7,12 +7,14 @@
     <string name="user_id_accept_idcard">身份证认证</string>
     <string name="user_id_accept_idcard_info">本过程需要你本人完成,准备好身份证</string>
     <string name="make_sure">确定</string>
-
+    <string name="cancel">取消</string>
     <!-- 更多页面  -->
     <string name="more_nickname">车主昵称</string>
     <string name="more_edit_profile">编辑资料</string>
     <string name="more_accounts_and_security">账号与安全</string>
     <string name="more_setting">设置</string>
+    <string name="more_log_out">退出</string>
+
     <!-- 账号与安全  -->
     <string name="safety_identity_authentication">身份认证</string>
     <string name="safety_face_recognition">人脸识别</string>
@@ -50,6 +52,8 @@
     <string name="management_edit_remote_new_pwd_again">再次输入密码</string>
     <string name="face_login_activity_title1">人脸登录</string>
     <string name="face_login_activity_title2">人脸识别</string>
+    <string name="management_remote_without_code">远程免密时间范围5~60min</string>
+    <string name="management_edit_without_code">请输入远程免密时间</string>
     <!-- 登录设备管理 -->
     <string name="management_login_device">登录设备管理</string>
     <!-- 冻结账户 -->

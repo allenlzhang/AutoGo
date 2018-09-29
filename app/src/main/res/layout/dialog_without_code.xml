@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/common_dialog_bg"
+    android:orientation="vertical">
+
+    <!-- 内容部分 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        >
+
+        <TextView
+            android:id="@+id/tv_dialog_without_code_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/management_remote_without_code"
+            android:textColor="@color/colorEdtext"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/edit_dialog_without_code"
+            style="@style/baseEditStyle"
+            android:layout_height="40dp"
+            android:hint="@string/management_edit_without_code"
+            android:layout_marginTop="20dp"
+            android:digits="0123456789"
+            android:inputType="number"
+            />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#d6d6d6"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="43dip"
+        android:visibility="visible">
+
+        <View
+            android:id="@+id/line_v"
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:background="#d6d6d6"/>
+
+        <TextView
+            android:id="@+id/edit_dialog_without_code_cancel"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_toLeftOf="@+id/line_v"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="#478CEA"
+            android:textSize="14sp"
+            android:layout_toStartOf="@+id/line_v" />
+
+        <TextView
+            android:id="@+id/edit_dialog_without_code_confirm"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_toRightOf="@+id/line_v"
+            android:gravity="center"
+            android:text="@string/make_sure"
+            android:textColor="#478CEA"
+            android:textSize="14sp"
+            android:layout_toEndOf="@+id/line_v" />
+    </RelativeLayout>
+</LinearLayout>

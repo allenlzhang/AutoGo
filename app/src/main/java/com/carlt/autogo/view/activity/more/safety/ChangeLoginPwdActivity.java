@@ -120,13 +120,13 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
 
     private void loadTypeView(int type){
         switch (type){
-            case LoginPwdManagementActivity.remember:
+            case LoginPwdManagementActivity.REMEMBER:
                 editManagementPhone.setVisibility(View.GONE);
                 rlManagementCode.setVisibility(View.GONE);
                 editManagementOldPwd.setVisibility(View.VISIBLE);
                 setTitleText(getResources().getString(R.string.management_change_login_pwd));
                 break;
-            case LoginPwdManagementActivity.forget:
+            case LoginPwdManagementActivity.FORGET:
                 editManagementPhone.setVisibility(View.VISIBLE);
                 rlManagementCode.setVisibility(View.VISIBLE);
                 editManagementOldPwd.setVisibility(View.GONE);

@@ -62,7 +62,7 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
 
     private void loadTypeView(int type) {
         switch (type) {
-            case RemotePwdManagementActivity.SETREMOTEPED:
+            case RemotePwdManagementActivity.SETREMOTEPWD:
                 editManagementRemotePhone.setVisibility(View.GONE);
                 rlManagementRemoteCode.setVisibility(View.GONE);
                 tvManagementEditRemoteOldPwd.setVisibility(View.GONE);
