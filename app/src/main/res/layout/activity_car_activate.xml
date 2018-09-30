@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/layout_background"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
+              android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/iv_activate_bg"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="激活后就能使用大乘智享全部功能"
+        android:textColor="@color/colorEdtext"
+        android:textSize="14dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="激活过程可能需要2-5分钟，请耐心等待"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/color_c"
+        android:textSize="14dp"/>
+
+
+
+    <EditText
+        android:id="@+id/etFrameNum"
+        style="@style/baseEditStyle"
+        android:layout_marginTop="10dp"
+        android:hint="请输入设备号"
+        tools:ignore="TextFields"/>
+
+
+    <EditText
+        android:id="@+id/etEngineNum"
+        style="@style/baseEditStyle"
+        android:layout_marginTop="10dp"
+        android:hint="请输入车辆PIN码"
+        tools:ignore="TextFields"
+        />
+
+
+    <Button
+        android:id="@+id/btnNext"
+        style="@style/BtnCommonCommit"
+        android:layout_marginTop="20dp"
+        android:text="激活"
+        />
+</LinearLayout>

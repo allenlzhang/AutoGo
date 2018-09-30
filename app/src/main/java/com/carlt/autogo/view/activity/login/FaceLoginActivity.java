@@ -46,6 +46,7 @@ public class FaceLoginActivity extends FaceLivenessActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Intent intent = getIntent();
         isFrom = intent.getIntExtra(GlobalKey.FROM_ACTIVITY, -1);
         switch (isFrom) {

@@ -4,16 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AbsListView;
-import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 
 import butterknife.ButterKnife;
@@ -53,6 +45,7 @@ public abstract  class BaseDialog extends Dialog  {
     }
     abstract  void  setWindowParams();
     abstract  int setRes();
+//    abstract View setView();
     abstract  void init();
 
 }
