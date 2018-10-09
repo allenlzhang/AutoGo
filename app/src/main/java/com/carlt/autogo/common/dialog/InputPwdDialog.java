@@ -3,9 +3,7 @@ package com.carlt.autogo.common.dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
-
 import com.carlt.autogo.R;
-
 import butterknife.OnClick;
 
 public class InputPwdDialog extends BaseDialog {
@@ -29,7 +27,6 @@ public class InputPwdDialog extends BaseDialog {
 
     @Override
     void init() {
-
     }
 
     @OnClick({R.id.tvCancel, R.id.tvConfirm})

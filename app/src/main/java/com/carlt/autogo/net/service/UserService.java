@@ -2,6 +2,7 @@ package com.carlt.autogo.net.service;
 
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.RetrievePassword;
+import com.carlt.autogo.entry.user.SmsToken;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
@@ -10,15 +11,9 @@ import com.carlt.autogo.entry.user.UserRegister;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
-import retrofit2.http.FieldMap;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
-import retrofit2.http.PartMap;
 
 public interface UserService {
 
@@ -59,5 +54,11 @@ public interface UserService {
     @POST("image/uploadOssImage")
     Observable<UpdateImageResultInfo> updateImageFile(@Body  RequestBody params);
 
+    //获取短信验证码token
+    @POST("User/GetSmsToken")
+    Observable<SmsToken> getSmsToken(@Body Map<String,String> params);
 
+    //发送短信验证码
+    @POST("User/SendSmsCode")
+    Observable<BaseError> SendSmsCode(@Body Map<String,Object> params);
 }
