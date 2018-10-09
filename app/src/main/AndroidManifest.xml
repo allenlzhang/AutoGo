@@ -84,11 +84,15 @@
         <activity android:name=".view.activity.more.safety.FaceRecognitionSettingFirstActivity"/>
         <activity android:name=".view.activity.more.safety.FaceRecognitionSettingActivity">
         </activity>
-        <activity android:name=".view.activity.car.CarCertificationActivity"
-                  android:windowSoftInputMode="stateHidden|adjustPan">
+        <activity
+            android:name=".view.activity.car.CarCertificationActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
-        <activity android:name=".view.activity.car.CarActivateActivity"
-                  android:windowSoftInputMode="stateHidden|adjustPan">
+        <activity
+            android:name=".view.activity.car.CarActivateActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+        </activity>
+        <activity android:name=".view.activity.more.safety.FaceAuthSettingActivity">
         </activity>
     </application>
 

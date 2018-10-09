@@ -12,9 +12,11 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
+import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.user.accept.UploadIdCardPhotoActivity;
 
 import java.io.BufferedOutputStream;
@@ -24,8 +26,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -39,6 +43,7 @@ import okhttp3.RequestBody;
 public class FaceLoginActivity extends FaceLivenessActivity {
     public static final int FROM_LOGIN_ACTIVITY         = 11;
     public static final int FROM_ID_CARDACCEPT_ACTIVITY = 12;
+    public static final int FROM_ALIPAY_AUTH            = 13;
     private int    isFrom;
     private String name;
     private String idcard;
@@ -57,6 +62,10 @@ public class FaceLoginActivity extends FaceLivenessActivity {
                 tvFaceTitle.setText(getString(R.string.face_login_activity_title2));
                 name = intent.getStringExtra("name");
                 idcard = intent.getStringExtra("idcard");
+                break;
+            case FROM_ALIPAY_AUTH:
+                tvFaceTitle.setText(getString(R.string.face_login_activity_title2));
+
                 break;
             default:
                 break;
@@ -119,27 +128,47 @@ public class FaceLoginActivity extends FaceLivenessActivity {
 
                 RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                         .addFormDataPart("type", "autogo/face")
-                        .addFormDataPart("fileOwner","face")
+                        .addFormDataPart("fileOwner", "face")
                         .addFormDataPart("uid", "9999999999")
                         .addFormDataPart("name", "faceImage")
                         .addFormDataPart("faceImage", file.getName(), RequestBody.create(MediaType.parse("image/*"), file))
                         .build();
 
                 ClientFactory.getUpdateImageService(UserService.class).updateImageFile(requestBody)
+                        .flatMap(new Function<UpdateImageResultInfo, ObservableSource<User>>() {
+                            @Override
+                            public ObservableSource<User> apply(UpdateImageResultInfo updateImageResultInfo) throws Exception {
+                                int id = updateImageResultInfo.message.id;
+                                Map<String, String> map = new HashMap<>();
+                                map.put("token", SharepUtil.preferences.getString("token", ""));
+                                map.put("faceId ", id + "");
+                                return ClientFactory.def(UserService.class).setFace(map);
+                            }
+                        })
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<UpdateImageResultInfo>() {
+                        .subscribe(new Consumer<User>() {
                             @Override
-                            public void accept(UpdateImageResultInfo updateImageResultInfo) throws Exception {
-
-                                LogUtils.e(updateImageResultInfo.toString());
-                            }
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                LogUtils.e(throwable.toString());
+                            public void accept(User user) throws Exception {
+                                if (user.err == null) {
+                                    ToastUtils.showShort("设置成功");
+                                } else {
+                                    ToastUtils.showShort("设置失败");
+                                }
                             }
                         });
+                //                        .subscribe(new Consumer<UpdateImageResultInfo>() {
+                //                            @Override
+                //                            public void accept(UpdateImageResultInfo updateImageResultInfo) throws Exception {
+                //
+                //                                LogUtils.e(updateImageResultInfo.toString());
+                //                            }
+                //                        }, new Consumer<Throwable>() {
+                //                            @Override
+                //                            public void accept(Throwable throwable) throws Exception {
+                //                                LogUtils.e(throwable.toString());
+                //                            }
+                //                        });
 
 
             }

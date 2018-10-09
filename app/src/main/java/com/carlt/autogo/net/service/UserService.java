@@ -57,6 +57,12 @@ public interface UserService {
     //获取短信验证码token
     @POST("User/GetSmsToken")
     Observable<SmsToken> getSmsToken(@Body Map<String,String> params);
+    //支付宝授权
+    @POST("User/AlipayAuth")
+    Observable<User> authAliPay(@Body Map<String, String> params);
+    //上传图片id
+    @POST("User/SetFace")
+    Observable<User> setFace (@Body Map<String, String> params);
 
     //发送短信验证码
     @POST("User/SendSmsCode")
