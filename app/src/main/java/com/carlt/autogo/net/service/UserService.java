@@ -31,7 +31,7 @@ public interface UserService {
     @POST("User/LoginByPwd")
     Observable<User> userLogin(@Body Map<String, Object> param);
 
-    //修改密码
+    //找回密码
     @POST("User/RetrievePassword")
     Observable<RetrievePassword> userRetrievePassword(@Body Map<String, Object> param);
 

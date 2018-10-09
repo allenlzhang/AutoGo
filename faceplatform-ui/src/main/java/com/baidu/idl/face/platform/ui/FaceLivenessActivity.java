@@ -102,6 +102,22 @@ public class FaceLivenessActivity extends Activity implements
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_face_liveness_v3100);
+//        AndPermission.with(this)
+//                .runtime()
+//                .permission(Manifest.permission.CAMERA)
+//                .onGranted(new Action<List<String>>() {
+//                    @Override
+//                    public void onAction(List<String> data) {
+//
+//                    }
+//                })
+//                .onDenied(new Action<List<String>>() {
+//                    @Override
+//                    public void onAction(List<String> data) {
+//                        Toast.makeText(FaceLivenessActivity.this, "未获取到相机权限", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .start();
         DisplayMetrics dm = new DisplayMetrics();
         Display display = this.getWindowManager().getDefaultDisplay();
         display.getMetrics(dm);
@@ -425,7 +441,7 @@ public class FaceLivenessActivity extends Activity implements
 
         if (status == FaceStatusEnum.OK) {
             mIsCompletion = true;
-            saveImage(base64ImageMap);
+            //            saveImage(base64ImageMap);
         }
         Ast.getInstance().faceHit("liveness");
     }
@@ -509,11 +525,11 @@ public class FaceLivenessActivity extends Activity implements
         Set<Map.Entry<String, String>> sets = imageMap.entrySet();
         Bitmap bmp = null;
         mImageLayout.removeAllViews();
-//        String bestImage0 = imageMap.get("bestImage0");
+        //        String bestImage0 = imageMap.get("bestImage0");
         if (imageMap.containsKey("bestImage0")) {
             String bestImage = imageMap.get("bestImage0");
-//            if (imageMap.containsKey("Eye")) {
-//            String bestImage = imageMap.get("Eye");
+            //            if (imageMap.containsKey("Eye")) {
+            //            String bestImage = imageMap.get("Eye");
             //            byte2File(base64ToByte(bestImage0), faceImagePath, faceImageName);
             bmp = base64ToBitmap(bestImage);
             ImageView iv = new ImageView(this);

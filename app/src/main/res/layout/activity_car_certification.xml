@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
+              android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:text="*车辆信息"
+        android:textSize="14dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        >
+
+        <EditText
+            android:id="@+id/etAddCar"
+            style="@style/baseEditStyle"
+            android:enabled="true"
+            android:focusable="false"
+            android:hint="请添加爱车"
+            tools:ignore="TextFields"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="18dp"
+            android:src="@mipmap/ic_right_arrow"
+            tools:ignore="RtlHardcoded"/>
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/etFrameNum"
+        style="@style/baseEditStyle"
+        android:layout_marginTop="10dp"
+        android:hint="请输入车辆车架号（VIN码）"
+        tools:ignore="TextFields"/>
+
+
+    <EditText
+        android:id="@+id/etEngineNum"
+        style="@style/baseEditStyle"
+        android:layout_marginTop="10dp"
+        android:hint="请输入发动机号"
+        tools:ignore="TextFields"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="15dp"
+        android:text="*购车凭证"
+        android:textSize="14dp"/>
+
+    <ImageView
+        android:id="@+id/ivCarProof"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="5dp"
+        android:src="@mipmap/iv_face_def"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="15dp"
+        android:text="行驶证或购车发票"
+        android:textSize="14dp"/>
+
+    <Button
+        android:id="@+id/btnNext"
+        style="@style/BtnCommonCommit"
+        android:layout_marginTop="20dp"
+        android:text="下一步"
+        />
+</LinearLayout>

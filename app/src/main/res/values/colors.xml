@@ -21,6 +21,13 @@
     <color name="colorForgotPasswd">#4a8eea</color>
     <color name="colorEdtext">#333333</color>
     <color name="colorRegistBg">#F0F0F0</color>
+    <color name="colorFirstTxtColor1">#8d9199</color>
+    <color name="colorFirstTxtColor2">#4e5a73</color>
+    <color name="colorFirstItemPressed1">#3778d0</color>
+    <color name="colorFirstItemPressed2">#434c60</color>
+    <color name="colorFirstItemNormal1">#478cea</color>
+    <color name="colorFirstItemNormal2">#4e5a73</color>
+    <color name="colorFirstItemLine">#455068</color>
     <!-- 页面背景色 -->
     <color name="layout_background">#F0F0F0</color>
     <color name="colorBlack">#000000</color>

@@ -1,7 +1,5 @@
 package com.carlt.autogo.base;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -17,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.basemvp.BaseMvpView;
@@ -25,7 +22,6 @@ import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.basemvp.PresenterDispatch;
 import com.carlt.autogo.basemvp.PresenterProviders;
 import com.carlt.autogo.common.dialog.UUDialog;
-import com.carlt.autogo.view.activity.user.PersonAvatarActivity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -135,4 +135,41 @@
             android:src="@mipmap/ic_right_arrow"
             tools:ignore="ContentDescription" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_more_log_out"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:src="@mipmap/ic_log_out"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/more_log_out"
+            android:textColor="@color/colorEdtext"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_weight="0"
+            android:src="@mipmap/ic_right_arrow"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
