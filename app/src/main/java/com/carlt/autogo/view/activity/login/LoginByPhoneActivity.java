@@ -8,14 +8,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.UUDialog;
+import com.carlt.autogo.entry.user.BaseError;
+import com.carlt.autogo.entry.user.SmsToken;
 import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.presenter.UserPresenter;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.MainActivity;
 
@@ -47,8 +51,6 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
     Button sendCode;
     @BindView(R.id.login_commit)
     Button loginCommit;
-
-
     int count  = 60;
     Disposable disposable ;
     UUDialog uuDialog ;
@@ -62,12 +64,16 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
     public void init() {
         setTitleText("短信登录");
         uuDialog =new UUDialog(this,R.style.DialogCommon);
+        UserInfo userInfo = SharepUtil.getBeanFromSp("user");
+        if (userInfo != null) {
+            userPhone.setText(userInfo.mobile);
+        }
     }
-
 
     @OnClick({R.id.send_code, R.id.login_commit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            // 发送验证码
             case R.id.send_code:
 
                  String PhoneNum = userPhone.getText().toString();
@@ -76,12 +82,42 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
                     return;
                 }
                 sendCode.setClickable(false);
-                notifSendValidate();
+                Map<String,String> params = new HashMap<>();
+                params.put("mobile",PhoneNum);
+                sendValidate(PhoneNum ,params);
                 break;
+
             case R.id.login_commit:
                 doCommit();
                 break;
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private void sendValidate(final String phoneNum, Map<String, String> params) {
+
+        Observable<BaseError> observable = UserPresenter.sendValidate(phoneNum,params, 11);
+
+        observable.subscribe(new Consumer<BaseError>() {
+            @Override
+            public void accept(BaseError baseError) throws Exception {
+                if(baseError.msg != null){
+                    ToastUtils.showShort(baseError.msg );
+                    sendCode.setClickable(true);
+                    sendCode.setText("发送验证码");
+                    count =60;
+                }else {
+                    notifSendValidate();
+                    ToastUtils.showShort("短信下发成功" );
+                }
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                LogUtils.e(throwable.getMessage());
+            }
+        });
+
     }
 
     @SuppressLint("CheckResult")
@@ -99,9 +135,9 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
         params.put("validate",code);
 
         ClientFactory.def(UserService.class).loginByPhone(params)
-                .flatMap(new Function<User, ObservableSource<UserInfo>>() {
+                .flatMap(new Function<User, ObservableSource<String>>() {
                     @Override
-                    public ObservableSource<UserInfo> apply(User user) throws Exception {
+                    public ObservableSource<String> apply(User user) throws Exception {
                         if(user.err != null){
                             errorMsg = user.err.msg ;
                             return  null;
@@ -109,21 +145,8 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
                             Map<String, String> token =   new HashMap<String, String>();
                             token.put("token",user.token);
                             SharepUtil.put("token",user.token);
-                            return ClientFactory.def(UserService.class).getUserInfo(token);
+                            return UserPresenter.getUserInfoByToken(token);
                         }
-                    }
-                })
-                .map(new Function<UserInfo, String>() {
-                    @Override
-                    public String apply(UserInfo userInfo) throws Exception {
-                        if(userInfo.err != null){
-                            errorMsg = userInfo.err.msg ;
-                            return null;
-                        }else {
-                            SharepUtil.<UserInfo>putByBean("user", userInfo) ;
-                            SharepUtil.put("headurl","http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLDx6ZPo7iak6rDRsiaDK4JYhMYfUzbWicUsqTS97xGcCZqXD4OEbFfFLo5rI5icsUdXASrRk50I2ZJ9g/132");
-                        }
-                        return "登录成功";
                     }
                 })
                 .subscribeOn(Schedulers.newThread())
@@ -133,8 +156,8 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
                     public void accept(String s) throws Exception {
                         uuDialog.dismiss();
                         ToastUtils.showShort(s);
-                        Intent intent = new Intent(LoginByPhoneActivity.this,MainActivity.class);
-                        startActivity(intent);
+                        startActivity(MainActivity.class);
+
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -144,8 +167,6 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
                     }
                 });
     }
-
-
 
     private void notifSendValidate() {
         disposable  =  Observable.interval(1, TimeUnit.SECONDS)

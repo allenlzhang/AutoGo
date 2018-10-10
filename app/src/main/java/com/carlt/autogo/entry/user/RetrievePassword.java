@@ -6,4 +6,5 @@ package com.carlt.autogo.entry.user;
  * @describe v 修改密码 实体类
  */
 public class RetrievePassword {
+   public BaseError err;
 }

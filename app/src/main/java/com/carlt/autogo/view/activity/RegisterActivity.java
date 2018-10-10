@@ -9,6 +9,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -16,6 +18,8 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
+import com.carlt.autogo.entry.user.BaseError;
+import com.carlt.autogo.presenter.UserPresenter;
 import com.carlt.autogo.presenter.register.IRegisterView;
 import com.carlt.autogo.presenter.register.RegisterPresenter;
 import java.util.HashMap;
@@ -69,9 +73,7 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
     @Override
     public void onRegisterFinish() {
         // TODO: 2018/9/4
-
-        Intent intent =new Intent(this,LoginActivity.class);
-        startActivity(intent);
+        startActivity(LoginActivity.class);
     }
 
     @OnClick({R.id.send_code})
@@ -98,13 +100,31 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
             ToastUtils.showShort("请输入正确手机号!");
             return;
         }
-
-        Map<String ,Object> param =new HashMap<>();
-
+        Map<String ,String> param =new HashMap<>();
         param.put("mobile", phoneNum);
-        param.put("password", "32323");
-        param.put("validate", "iPhone5-10.3.3");
 
+        Observable<BaseError> observable = UserPresenter.sendValidate(phoneNum,param,1);
+
+        observable.subscribe(new Consumer<BaseError>() {
+            @Override
+            public void accept(BaseError baseError) throws Exception {
+                if(baseError.msg != null){
+                    ToastUtils.showShort(baseError.msg );
+                    sendCode.setClickable(true);
+                    sendCode.setText("发送验证码");
+                    count =60;
+                }else {
+                    notifSendValidate();
+                    ToastUtils.showShort("短信下发成功" );
+                    sendCode.setClickable(false);
+                }
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                LogUtils.e(throwable.getMessage());
+            }
+        });
 
     }
 
@@ -145,11 +165,8 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
            params.put("mobile", phoneNum);
            params.put("password", pwd);
            params.put("validate", code);
-
            doRegiste(params);
        }
-
-
 
     }
 
@@ -170,7 +187,6 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
     private void doRegiste(Map<String, Object> params) {
         presenter.register(params);
     }
-
 
     public static boolean CheckValues( String phoneNum ,String pwd ,String pwdD ,String code ){
         String regex = "^[A-Za-z0-9]{5,11}+$";

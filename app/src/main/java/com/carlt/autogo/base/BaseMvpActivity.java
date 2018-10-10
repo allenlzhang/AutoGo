@@ -255,8 +255,14 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
 
     }
 
-    public void startActivity( Class activity){
+    public void startActivity(Class activity){
+        startActivity(activity,true);
+    }
+    public void startActivity( Class activity ,Boolean finish ){
         Intent intent = new Intent(this, activity);
         startActivity(intent);
+        if(finish){
+            finish();
+        }
     }
 }

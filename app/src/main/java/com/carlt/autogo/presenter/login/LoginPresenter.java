@@ -9,6 +9,7 @@ import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.presenter.UserPresenter;
 import com.carlt.autogo.utils.SharepUtil;
 
 import java.util.HashMap;
@@ -33,9 +34,9 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
         uuDialog.show();
 
         ClientFactory.def(UserService.class).userLogin(params)
-                .flatMap(new Function<User, ObservableSource<UserInfo>>() {
+                .flatMap(new Function<User, ObservableSource<String>>() {
                     @Override
-                    public ObservableSource<UserInfo> apply(User user) throws Exception {
+                    public ObservableSource<String> apply(User user) throws Exception {
                         if(user.err != null){
                             errorMsg = user.err.msg ;
                             return  null;
@@ -43,21 +44,8 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                             Map<String, String> token =   new HashMap<String, String>();
                             token.put("token",user.token);
                             SharepUtil.put("token",user.token);
-                            return ClientFactory.def(UserService.class).getUserInfo(token);
+                            return UserPresenter.getUserInfoByToken(token);
                         }
-                    }
-                })
-                .map(new Function<UserInfo, String>() {
-                    @Override
-                    public String apply(UserInfo userInfo) throws Exception {
-                        if(userInfo.err != null){
-                            errorMsg = userInfo.err.msg ;
-                            return null;
-                        }else {
-                            SharepUtil.<UserInfo>putByBean("user", userInfo) ;
-                            SharepUtil.put("headurl","http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLDx6ZPo7iak6rDRsiaDK4JYhMYfUzbWicUsqTS97xGcCZqXD4OEbFfFLo5rI5icsUdXASrRk50I2ZJ9g/132");
-                        }
-                        return "登录成功";
                     }
                 })
                 .subscribeOn(Schedulers.newThread())

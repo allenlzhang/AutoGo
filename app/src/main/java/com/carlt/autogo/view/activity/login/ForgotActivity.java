@@ -12,8 +12,12 @@ import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.entry.user.BaseError;
+import com.carlt.autogo.entry.user.RetrievePassword;
+import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.presenter.UserPresenter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,18 +70,39 @@ public class ForgotActivity extends BaseMvpActivity {
         CheckValues(phoneNum,pwd,pwdD,code);
 
         Map<String, Object> params = new HashMap<>();
-        params.put("mobile", "");
-        params.put("password", "");
-        params.put("validate", "");
-        params.put("move_deviceid", "");
-        params.put("move_device_name", "");
-        params.put("originate","");
+        params.put("mobile", phoneNum);
+        params.put("newPassword", pwd);
+        params.put("validate", code);
 
         doForgotCommit(params);
     }
 
+    @SuppressLint("CheckResult")
     private void doForgotCommit(Map<String, Object> params) {
 
+        dialog.show();
+        ClientFactory.def(UserService.class).userRetrievePassword(params)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<RetrievePassword>() {
+                    @Override
+                    public void accept(RetrievePassword retrievePassword) throws Exception {
+                        dialog.dismiss();
+                        if(retrievePassword.err == null){
+                            ToastUtils.showShort("修改成功");
+                            finish();
+                        }else {
+                            ToastUtils.showShort(retrievePassword.err.msg);
+                        }
+                        LogUtils.e(retrievePassword.toString());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
+                        LogUtils.e(throwable.toString());
+                    }
+                });
 
     }
 
@@ -96,8 +121,8 @@ public class ForgotActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("忘记密码");
-    }
 
+    }
 
     @SuppressLint("CheckResult")
     private void doSendCode() {
@@ -109,23 +134,31 @@ public class ForgotActivity extends BaseMvpActivity {
             return;
         }
 
-//        ClientFactory.defaultService(UserService.class).getValidate(phoneNum)
-//                .subscribeOn(Schedulers.newThread())
-//                .subscribeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<Object>() {
-//                    @Override
-//                    public void accept(Object o) throws Exception {
-//                        ToastUtils.showShort("下发成功");
-//                        btnSendCode .setClickable(false);
-//                        notifSendValidate();
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        LogUtils.e(throwable.getMessage());
-//                        ToastUtils.showShort("下发失败");
-//                    }
-//                });
+
+        Map<String ,String> param =new HashMap<>();
+        param.put("mobile", phoneNum);
+        Observable<BaseError> observable = UserPresenter.sendValidate(phoneNum,param,2);
+
+        observable.subscribe(new Consumer<BaseError>() {
+            @Override
+            public void accept(BaseError baseError) throws Exception {
+                if(baseError.msg != null){
+                    ToastUtils.showShort(baseError.msg );
+                    btnSendCode.setClickable(true);
+                    btnSendCode.setText("发送验证码");
+                    count =60;
+                }else {
+                    notifSendValidate();
+                    ToastUtils.showShort("短信下发成功" );
+                    btnSendCode.setClickable(false);
+                }
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                LogUtils.e(throwable.getMessage());
+            }
+        });
     }
 
     private void notifSendValidate() {

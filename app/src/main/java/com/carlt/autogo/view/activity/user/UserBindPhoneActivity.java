@@ -17,6 +17,7 @@ import com.carlt.autogo.entry.user.SmsToken;
 import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.presenter.UserPresenter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -113,15 +114,15 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
         final String phoneNum = bindUserPhone.getText().toString().trim();
         String code = bindUserCode.getText().toString().trim();
         boolean  checkOk =  RegexUtils.isMobileExact(phoneNum) ;
-//        if(!checkOk){
-//            ToastUtils.showShort("请输入正确手机号!");
-//            return;
-//        }
-//
-//        if(TextUtils.isEmpty(code)){
-//            ToastUtils.showShort("验证码不能为空!");
-//            return;
-//        }
+        if(!checkOk){
+            ToastUtils.showShort("请输入正确手机号!");
+            return;
+        }
+
+        if(TextUtils.isEmpty(code)){
+            ToastUtils.showShort("验证码不能为空!");
+            return;
+        }
 
         Map<String ,Object> parmas = new HashMap<>();
         parmas.put("openId",openId);
@@ -182,23 +183,7 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
 //        @POST("User/GetSmsToken")
 //        Observable<SmsToken> getSmsToken(@Body Map<String,String> params);
 
-        Disposable disposableSend =    ClientFactory.def(UserService.class).getSmsToken(param)
-                .flatMap(new Function<SmsToken, ObservableSource<BaseError>>() {
-                    @Override
-                    public ObservableSource<BaseError> apply(SmsToken smsToken) throws Exception {
-                        if (smsToken.msg != null){
-                            ToastUtils.showShort(smsToken.msg.msg);
-                            return null;
-                        }else {
-                            String token = smsToken.token;
-                            Map<String, Object> map = new HashMap();
-                            map.put("mobile", phoneNum);
-                            map.put("type", 1);
-                            map.put("smsToken", token);
-                            return ClientFactory.def(UserService.class).SendSmsCode(map);
-                        }
-                    }
-                })
+        Disposable disposableSend = UserPresenter.sendValidate(phoneNum,param,1)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<BaseError>() {
@@ -214,7 +199,6 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
                             ToastUtils.showShort("短信下发成功" );
 
                         }
-
                     }
                 }, new Consumer<Throwable>() {
                     @Override

@@ -61,9 +61,15 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     @BindView(R.id.login_commit)
     Button loginCommit;
 
+    /**
+     * 忘记密码
+     */
     @BindView(R.id.forgot_passwd)
     TextView forgotPasswd;
 
+    /**
+     * 注册
+     */
     @BindView(R.id.user_regist)
     TextView userRegist;
 
@@ -190,8 +196,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                 passwdToggle.setSelected(!passwdToggle.isSelected());
                 break;
             case R.id.forgot_passwd:
-                Intent intentForgot = new Intent(this, ForgotActivity.class);
-                startActivity(intentForgot);
+                startActivity(ForgotActivity.class,false);
                 break;
 
         }
@@ -211,10 +216,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     @Override
     public void loginFinish() {
-
-        Intent maninI = new Intent(this, MainActivity.class);
-        startActivity(maninI);
-        finish();
+        startActivity(MainActivity.class);
     }
 
     private void passwdToggle(boolean selected) {

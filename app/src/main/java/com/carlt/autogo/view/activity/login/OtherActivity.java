@@ -22,6 +22,7 @@ import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.presenter.UserPresenter;
 import com.carlt.autogo.presenter.register.IOtherRegisterView;
 import com.carlt.autogo.presenter.register.OtherRegisterPresenter;
 import com.carlt.autogo.utils.SharepUtil;
@@ -165,46 +166,8 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     HashMap<String,Object> params = new HashMap<>();
                     params.put("openId",unionid);
                     params.put("openType",2);
-
-                    ClientFactory.def(UserService.class).loginByOpenApi(params)
-                            .flatMap(new Function<User, ObservableSource<UserInfo>>() {
-                                @Override
-                                public ObservableSource<UserInfo> apply(User user) throws Exception {
-                                    dialog.dismiss();
-                                    if(user.err != null){
-                                        ToastUtils.showShort(user.err.msg);
-                                        Intent  intent  = new Intent(OtherActivity.this,UserBindPhoneActivity.class);
-                                        intent.putExtra("openId",unionid);
-                                        intent.putExtra("openType",2);
-                                        startActivity(intent);
-                                        return  null ;
-                                    }else {
-
-                                        Map<String, String> token =   new HashMap<String, String>();
-                                        token.put("token",user.token);
-                                        SharepUtil.put("token",user.token);
-                                        return ClientFactory.def(UserService.class).getUserInfo(token);
-
-                                    }
-                                }
-                            })
-                            .map(new Function<UserInfo, String>() {
-                                @Override
-                                public String apply(UserInfo userInfo) throws Exception {
-                                    if(userInfo.err != null){
-                                        errorMsg = userInfo.err.msg ;
-                                        return null;
-                                    }else {
-                                        SharepUtil.<UserInfo>putByBean("user", userInfo) ;
-                                        SharepUtil.put("headurl","http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLDx6ZPo7iak6rDRsiaDK4JYhMYfUzbWicUsqTS97xGcCZqXD4OEbFfFLo5rI5icsUdXASrRk50I2ZJ9g/132");
-                                        return "登录成功";
-                                    }
-
-                                }
-                            })
-                            .subscribeOn(Schedulers.newThread())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Consumer<String>() {
+                    Observable<String> observable =   UserPresenter.loginByOpenApi(params,OtherActivity.this);
+                    observable.subscribe(new Consumer<String>() {
                                 @Override
                                 public void accept(String s) throws Exception {
                                     dialog.dismiss();
@@ -214,10 +177,10 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                             }, new Consumer<Throwable>() {
                                 @Override
                                 public void accept(Throwable throwable) throws Exception {
-                                    Logger.getAnonymousLogger(throwable.toString());
+                                    ToastUtils.showShort(UserPresenter.errorMsg);
+                                    LogUtils.e(throwable.toString());
                                 }
                             });
-
                 }
 
                 @Override
@@ -252,7 +215,6 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
             dialog.dismiss();
         }
     }
-
 
     /**
      * 支付宝账户授权业务
@@ -320,49 +282,14 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     }
                 })
 
-                .flatMap(new Function<AuthResult, ObservableSource<User>>() {
+                .flatMap(new Function<AuthResult, ObservableSource<String>>() {
                     @Override
-                    public ObservableSource<User> apply(AuthResult authResult) throws Exception {
+                    public ObservableSource<String> apply(AuthResult authResult) throws Exception {
 
                         params.put("openId",authResult.user_id);
                         params.put("openType",1);
                         LogUtils.e(authResult.user_id );
-                        return ClientFactory.def(UserService.class).loginByOpenApi(params);
-                    }
-                })
-                .flatMap(new Function<User, ObservableSource<UserInfo>>() {
-                    @Override
-                    public ObservableSource<UserInfo> apply(User user) throws Exception {
-                        if(user.err != null){
-                            ToastUtils.showShort(user.err.msg);
-                            String uId  = (String) params.get("openId");
-                            Intent  intent  = new Intent(OtherActivity.this,UserBindPhoneActivity.class);
-                            intent.putExtra("openId",uId);
-                            intent.putExtra("openType",1);
-                            startActivity(intent);
-                            return  null ;
-                        }else {
-
-                            Map<String, String> token =   new HashMap<String, String>();
-                            token.put("token",user.token);
-                            SharepUtil.put("token",user.token);
-                            return ClientFactory.def(UserService.class).getUserInfo(token);
-
-                        }
-                    }
-                })
-                .map(new Function<UserInfo, String>() {
-                    @Override
-                    public String apply(UserInfo userInfo) throws Exception {
-                        if(userInfo.err != null){
-                            errorMsg = userInfo.err.msg ;
-                            return null;
-                        }else {
-                            SharepUtil.<UserInfo>putByBean("user", userInfo) ;
-                            SharepUtil.put("headurl","http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLDx6ZPo7iak6rDRsiaDK4JYhMYfUzbWicUsqTS97xGcCZqXD4OEbFfFLo5rI5icsUdXASrRk50I2ZJ9g/132");
-                            return "登录成功";
-                        }
-
+                        return UserPresenter.loginByOpenApi(params,OtherActivity.this);
                     }
                 })
                 .subscribeOn(Schedulers.newThread())
