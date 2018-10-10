@@ -1,6 +1,7 @@
 package com.carlt.autogo.view.activity.more.safety;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -22,6 +23,7 @@ import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.LoginActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +71,8 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
     private Timer timer = new Timer();
 
     private TimerTask task;
+
+
     @Override
     protected int getContentView() {
         return R.layout.activity_change_login_pwd;
@@ -145,7 +149,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                             Map<String, Object> map = new HashMap();
                             map.put("mobile", phone);
                             map.put("type", 2);
-                            map.put("token", token);
+                            map.put("smsToken", token);
                             return ClientFactory.def(UserService.class).SendSmsCode(map);
                         }
                     }
@@ -155,14 +159,14 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                 .subscribe(new Consumer<BaseError>() {
                     @Override
                     public void accept(BaseError s) throws Exception {
-                        if (timer != null) {
-                            if (task != null) {
-                                task.cancel();
-                            }
-                        }
-                        btnManagementCode.setEnabled(true);
-                        btnManagementCode.setText("重发验证码");
                         if (s.msg != null){
+                            if (timer != null) {
+                                if (task != null) {
+                                    task.cancel();
+                                }
+                            }
+                            btnManagementCode.setEnabled(true);
+                            btnManagementCode.setText("重发验证码");
                             ToastUtils.showShort(s.msg);
                         }
                     }
@@ -237,23 +241,24 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
     private void doRememberPwdConfirm(String oldPwd,String newPwd){
         HashMap<String ,Object> params =new HashMap<>();
         params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN ,"'"));
-        params.put("oldPassword",oldPwd);
-        params.put("newPassword",newPwd);
+        params.put("oldPassword",CipherUtils.md5(oldPwd));
+        params.put("newPassword",CipherUtils.md5(newPwd));
         params.put("isMd5",true);
         dialog.show();
         Disposable dispRememberPwd = ClientFactory.def(UserService.class).userResetPwd(params)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .delay(5, TimeUnit.SECONDS)
-                .subscribe(new Consumer<User>() {
+                .subscribe(new Consumer<BaseError>() {
                     @Override
-                    public void accept(User user) throws Exception {
+                    public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
-                        if(user.err== null){
+                        if(baseError.msg== null){
                             ToastUtils.showShort("修改成功");
-                            finish();
+                            Intent intent = new Intent(ChangeLoginPwdActivity.this,LoginActivity.class);
+                            startActivity(intent);
                         }else {
-                            ToastUtils.showShort(user.err.msg);
+                            ToastUtils.showShort(baseError.msg);
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -284,9 +289,16 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .delay(2,TimeUnit.SECONDS)
-                .subscribe(new Consumer<RetrievePassword>() {
+                .subscribe(new Consumer<BaseError>() {
                     @Override
-                    public void accept(RetrievePassword retrievePassword) throws Exception {
+                    public void accept(BaseError baseError) throws Exception {
+                        if (baseError.msg == null){
+                            ToastUtils.showShort("修改成功");
+                            Intent intent = new Intent(ChangeLoginPwdActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        }else{
+                            ToastUtils.showShort(baseError.msg);
+                        }
                         dialog.dismiss();
                     }
                 }, new Consumer<Throwable>() {

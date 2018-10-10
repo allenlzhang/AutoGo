@@ -1,7 +1,6 @@
 package com.carlt.autogo.net.service;
 
 import com.carlt.autogo.entry.user.BaseError;
-import com.carlt.autogo.entry.user.RetrievePassword;
 import com.carlt.autogo.entry.user.SmsToken;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.entry.user.User;
@@ -28,7 +27,7 @@ public interface UserService {
 
     //找回密码
     @POST("User/RetrievePassword")
-    Observable<RetrievePassword> userRetrievePassword(@Body Map<String, Object> param);
+    Observable<BaseError> userRetrievePassword(@Body Map<String, Object> param);
 
     //获取用户信息
     @POST("User/GetUserInfo")
@@ -48,7 +47,7 @@ public interface UserService {
 
     //修改密码
     @POST("User/ResetPwd")
-    Observable<User> userResetPwd(@Body Map<String, Object> params);
+    Observable<BaseError> userResetPwd(@Body Map<String, Object> params);
 
     //上传图片
     @POST("image/uploadOssImage")
@@ -68,7 +67,19 @@ public interface UserService {
 
     //发送短信验证码
     @POST("User/SendSmsCode")
-    Observable<BaseError> SendSmsCode(@Body Map<String, Object> params);
+    Observable<BaseError> SendSmsCode(@Body Map<String,Object> params);
+
+    //设置远程密码
+    @POST("User/SetRemotePassword")
+    Observable<BaseError> SetRemotePassword(@Body Map<String,String> params);
+
+    //修改远程密码
+    @POST("User/ModifyRemotePassword")
+    Observable<BaseError> modifyRemotePassword(@Body Map<String,String> params);
+
+    //重置远程密码
+    @POST("User/ResetRemotePassword")
+    Observable<BaseError> resetRemotePassword(@Body Map<String,Object> params);
 
     //三方注册
     @POST("User/RegisterByOpenApi")

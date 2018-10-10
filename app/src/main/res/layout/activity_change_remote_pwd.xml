@@ -101,7 +101,7 @@
         android:cursorVisible="false"
         android:maxLength="6"/>
     <Button
-        android:id="@+id/edit_management_remote_confirm"
+        android:id="@+id/btn_management_remote_confirm"
         style="@style/BtnCommonCommit"
         android:text="@string/management_confirm_the_change"
         android:layout_marginTop="40dp"
