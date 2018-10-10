@@ -1,5 +1,6 @@
 package com.carlt.autogo.base;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -22,6 +23,8 @@ import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.basemvp.PresenterDispatch;
 import com.carlt.autogo.basemvp.PresenterProviders;
 import com.carlt.autogo.common.dialog.UUDialog;
+import com.carlt.autogo.view.activity.MainActivity;
+import com.carlt.autogo.view.activity.login.OtherActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -250,5 +253,10 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     public interface PremissoinLisniter {
       void createred();
 
+    }
+
+    public void startActivity( Class activity){
+        Intent intent = new Intent(this, activity);
+        startActivity(intent);
     }
 }

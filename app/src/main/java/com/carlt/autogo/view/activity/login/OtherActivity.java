@@ -3,6 +3,7 @@ package com.carlt.autogo.view.activity.login;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,17 +13,26 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
 import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.alipay.AuthResult;
+import com.carlt.autogo.entry.user.User;
+import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.register.IOtherRegisterView;
 import com.carlt.autogo.presenter.register.OtherRegisterPresenter;
+import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.alipay.OrderInfoUtil2_0;
+import com.carlt.autogo.view.activity.MainActivity;
+import com.carlt.autogo.view.activity.user.UserBindPhoneActivity;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -32,8 +42,10 @@ import cn.sharesdk.framework.ShareSDK;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
@@ -147,12 +159,64 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
             platform.setPlatformActionListener(new PlatformActionListener() {
                 @SuppressLint("CheckResult")
                 @Override
-                public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+                public void onComplete(Platform platform, final int i , HashMap<String, Object> hashMap) {
                     LogUtils.e(hashMap);
-
+                    final  String unionid = (String) hashMap.get("unionid");
                     HashMap<String,Object> params = new HashMap<>();
-                    params.put("openId",hashMap.get("unionid"));
-                    params.put("type",2);
+                    params.put("openId",unionid);
+                    params.put("openType",2);
+
+                    ClientFactory.def(UserService.class).loginByOpenApi(params)
+                            .flatMap(new Function<User, ObservableSource<UserInfo>>() {
+                                @Override
+                                public ObservableSource<UserInfo> apply(User user) throws Exception {
+                                    dialog.dismiss();
+                                    if(user.err != null){
+                                        ToastUtils.showShort(user.err.msg);
+                                        Intent  intent  = new Intent(OtherActivity.this,UserBindPhoneActivity.class);
+                                        intent.putExtra("openId",unionid);
+                                        intent.putExtra("openType",2);
+                                        startActivity(intent);
+                                        return  null ;
+                                    }else {
+
+                                        Map<String, String> token =   new HashMap<String, String>();
+                                        token.put("token",user.token);
+                                        SharepUtil.put("token",user.token);
+                                        return ClientFactory.def(UserService.class).getUserInfo(token);
+
+                                    }
+                                }
+                            })
+                            .map(new Function<UserInfo, String>() {
+                                @Override
+                                public String apply(UserInfo userInfo) throws Exception {
+                                    if(userInfo.err != null){
+                                        errorMsg = userInfo.err.msg ;
+                                        return null;
+                                    }else {
+                                        SharepUtil.<UserInfo>putByBean("user", userInfo) ;
+                                        SharepUtil.put("headurl","http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLDx6ZPo7iak6rDRsiaDK4JYhMYfUzbWicUsqTS97xGcCZqXD4OEbFfFLo5rI5icsUdXASrRk50I2ZJ9g/132");
+                                        return "登录成功";
+                                    }
+
+                                }
+                            })
+                            .subscribeOn(Schedulers.newThread())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Consumer<String>() {
+                                @Override
+                                public void accept(String s) throws Exception {
+                                    dialog.dismiss();
+                                    ToastUtils.showShort(s);
+                                    startActivity(MainActivity.class);
+                                }
+                            }, new Consumer<Throwable>() {
+                                @Override
+                                public void accept(Throwable throwable) throws Exception {
+                                    Logger.getAnonymousLogger(throwable.toString());
+                                }
+                            });
 
                 }
 
@@ -197,12 +261,13 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
      */
     @SuppressLint("CheckResult")
     public void authV2() {
-        if (TextUtils.isEmpty(PID) || TextUtils.isEmpty(APPID)
-                || (TextUtils.isEmpty(RSA2_PRIVATE) && TextUtils.isEmpty(RSA_PRIVATE))
-                || TextUtils.isEmpty(TARGET_ID)) {
+        if (TextUtils.isEmpty(PID) || TextUtils.isEmpty(APPID) || (TextUtils.isEmpty(RSA2_PRIVATE) && TextUtils.isEmpty(RSA_PRIVATE)) || TextUtils.isEmpty(TARGET_ID)) {
             new AlertDialog.Builder(this).setTitle("警告").setMessage("需要配置PARTNER |APP_ID| RSA_PRIVATE| TARGET_ID")
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialoginterface, int i) {
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialoginterface, int i)
+                        {
+
                         }
                     }).show();
             return;
@@ -223,6 +288,8 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
         String sign = OrderInfoUtil2_0.getSign(authInfoMap, privateKey, rsa2);
         final String authInfo = info + "&" + sign;
 
+        final HashMap<String,Object> params = new HashMap<>();
+
         Observable.create(new ObservableOnSubscribe<AuthResult>() {
             @Override
             public void subscribe(ObservableEmitter<AuthResult> emitter) throws Exception {
@@ -237,7 +304,6 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 .filter(new Predicate<AuthResult>() {
                     @Override
                     public boolean test(AuthResult authResult) throws Exception {
-
                         String resultStatus = authResult.getResultStatus();
                         // 判断resultStatus 为“9000”且result_code
                         // 为“200”则代表授权成功，具体状态码代表含义可参考授权接口文档
@@ -253,12 +319,60 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
 
                     }
                 })
+
+                .flatMap(new Function<AuthResult, ObservableSource<User>>() {
+                    @Override
+                    public ObservableSource<User> apply(AuthResult authResult) throws Exception {
+
+                        params.put("openId",authResult.userId);
+                        params.put("openType",1);
+                        LogUtils.e(authResult.userId );
+                        return ClientFactory.def(UserService.class).loginByOpenApi(params);
+                    }
+                })
+                .flatMap(new Function<User, ObservableSource<UserInfo>>() {
+                    @Override
+                    public ObservableSource<UserInfo> apply(User user) throws Exception {
+                        if(user.err != null){
+                            ToastUtils.showShort(user.err.msg);
+                            String uId  = (String) params.get("openId");
+                            Intent  intent  = new Intent(OtherActivity.this,UserBindPhoneActivity.class);
+                            intent.putExtra("openId",uId);
+                            intent.putExtra("openType",1);
+                            startActivity(intent);
+                            return  null ;
+                        }else {
+
+                            Map<String, String> token =   new HashMap<String, String>();
+                            token.put("token",user.token);
+                            SharepUtil.put("token",user.token);
+                            return ClientFactory.def(UserService.class).getUserInfo(token);
+
+                        }
+                    }
+                })
+                .map(new Function<UserInfo, String>() {
+                    @Override
+                    public String apply(UserInfo userInfo) throws Exception {
+                        if(userInfo.err != null){
+                            errorMsg = userInfo.err.msg ;
+                            return null;
+                        }else {
+                            SharepUtil.<UserInfo>putByBean("user", userInfo) ;
+                            SharepUtil.put("headurl","http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLDx6ZPo7iak6rDRsiaDK4JYhMYfUzbWicUsqTS97xGcCZqXD4OEbFfFLo5rI5icsUdXASrRk50I2ZJ9g/132");
+                            return "登录成功";
+                        }
+
+                    }
+                })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<AuthResult>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void accept(AuthResult authResult) throws Exception {
-                        LogUtils.e(authResult.toString());
+                    public void accept(String s) throws Exception {
+                        dialog.dismiss();
+                        ToastUtils.showShort(s);
+                        startActivity(MainActivity.class);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

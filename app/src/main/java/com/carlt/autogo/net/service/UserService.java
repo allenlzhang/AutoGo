@@ -40,7 +40,7 @@ public interface UserService {
 
     //三方登录
     @POST("User/LoginByOpenApi")
-    Observable<UserInfo> loginByOpenApi(@Body Map<String, Object> params);
+    Observable<User> loginByOpenApi(@Body Map<String, Object> params);
 
     //手机短信登录
     @POST("User/LoginByCaptcha")
@@ -61,4 +61,8 @@ public interface UserService {
     //发送短信验证码
     @POST("User/SendSmsCode")
     Observable<BaseError> SendSmsCode(@Body Map<String,Object> params);
+
+    //三方注册
+    @POST("User/RegisterByOpenApi")
+    Observable<BaseError> registerByOpenApi(@Body Map<String, Object> params);;
 }
