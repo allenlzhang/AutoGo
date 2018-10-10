@@ -1,17 +1,13 @@
 package com.carlt.autogo.view.activity.user.accept;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
-import com.carlt.autogo.view.activity.more.safety.SafetyActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -54,8 +50,8 @@ public class IdfCompleteActivity extends BaseMvpActivity {
 
     @OnClick(R.id.btn_back)
     public void onViewClicked() {
-        Intent intent =new Intent(this, SafetyActivity.class);
-        startActivity(intent);
+//        Intent intent =new Intent(this, SafetyActivity.class);
+//        startActivity(intent);
         finish();
     }
 }

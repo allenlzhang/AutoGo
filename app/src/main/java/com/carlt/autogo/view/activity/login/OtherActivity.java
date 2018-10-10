@@ -3,7 +3,6 @@ package com.carlt.autogo.view.activity.login;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,27 +12,19 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
-import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
 import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.alipay.AuthResult;
-import com.carlt.autogo.entry.user.User;
-import com.carlt.autogo.entry.user.UserInfo;
-import com.carlt.autogo.net.base.ClientFactory;
-import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.UserPresenter;
 import com.carlt.autogo.presenter.register.IOtherRegisterView;
 import com.carlt.autogo.presenter.register.OtherRegisterPresenter;
-import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.alipay.OrderInfoUtil2_0;
 import com.carlt.autogo.view.activity.MainActivity;
-import com.carlt.autogo.view.activity.user.UserBindPhoneActivity;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -60,24 +51,32 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
     @BindView(R.id.login_wechat)
     ImageView loginWechat;
     private Platform plat;
-    UUDialog dialog ;
+    UUDialog dialog;
 
-    /** 支付宝支付业务：入参app_id */
+    /**
+     * 支付宝支付业务：入参app_id
+     */
     public static final String APPID = "2018090661230641";
 
-    /** 支付宝账户登录授权业务：入参pid值 */
-    public static final String PID = "2088131979649430";
-    /** 支付宝账户登录授权业务：入参target_id值 */
-    public static final String TARGET_ID = System.currentTimeMillis() +"";
+    /**
+     * 支付宝账户登录授权业务：入参pid值
+     */
+    public static final String PID       = "2088131979649430";
+    /**
+     * 支付宝账户登录授权业务：入参target_id值
+     */
+    public static final String TARGET_ID = System.currentTimeMillis() + "";
     Gson gson = new Gson();
     /** 商户私钥，pkcs8格式 */
     /** 如下私钥，RSA2_PRIVATE 或者 RSA_PRIVATE 只需要填入一个 */
     /** 如果商户两个都设置了，优先使用 RSA2_PRIVATE */
     /** RSA2_PRIVATE 可以保证商户交易在更加安全的环境下进行，建议使用 RSA2_PRIVATE */
     /** 获取 RSA2_PRIVATE，建议使用支付宝提供的公私钥生成工具生成， */
-    /** 工具地址：https://doc.open.alipay.com/docs/doc.htm?treeId=291&articleId=106097&docType=1 */
+    /**
+     * 工具地址：https://doc.open.alipay.com/docs/doc.htm?treeId=291&articleId=106097&docType=1
+     */
     public static final String RSA2_PRIVATE = "";
-    public static final String RSA_PRIVATE = "MIIEowIBAAKCAQEA1LUwhOyN1hOnrV3g2COyqpcUax8Fq1/0Xuy74ZphNpszZ21c\n" +
+    public static final String RSA_PRIVATE  = "MIIEowIBAAKCAQEA1LUwhOyN1hOnrV3g2COyqpcUax8Fq1/0Xuy74ZphNpszZ21c\n" +
             "2CnzXjzbD54kyW8EOOGeDPJvNsWrjyas9VsSxE0nXVARz3yyMBMtNEq42+o8Sd+F\n" +
             "l2PWHOc/uH3BjXM80kmqvonD5sGCYR4wRcThXKuZR9t0ahEZkiH5WNFghSyQEWXH\n" +
             "xvoNNfR5sElArZLS86Ey1R7U5Z0BX9GcRyfXldER61oA71EfOnLoh/XXjtr78ja4\n" +
@@ -106,7 +105,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
 
     @PresenterVariable
     private OtherRegisterPresenter otherRegisterPresenter;
-    private String errorMsg;
+    private String                 errorMsg;
 
     @Override
     protected int getContentView() {
@@ -118,16 +117,16 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
         setTitleText("第三方登录");
         setBaseBackStyle(getResources().getDrawable(R.drawable.common_close_select));
         Platform[] list = ShareSDK.getPlatformList();
-        if(list != null){
-            plat =list[0];
+        if (list != null) {
+            plat = list[0];
         }
 
-        dialog = new UUDialog(this,R.style.DialogCommon);
+        dialog = new UUDialog(this, R.style.DialogCommon);
     }
 
-    @OnClick({R.id.login_payment ,R.id.login_wechat })
-    public void onClick (View view ){
-        switch (view.getId()){
+    @OnClick({R.id.login_payment, R.id.login_wechat})
+    public void onClick(View view) {
+        switch (view.getId()) {
 
             case R.id.login_payment:
                 otherRegisterPresenter.paymentLogin();
@@ -160,27 +159,27 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
             platform.setPlatformActionListener(new PlatformActionListener() {
                 @SuppressLint("CheckResult")
                 @Override
-                public void onComplete(Platform platform, final int i , HashMap<String, Object> hashMap) {
+                public void onComplete(Platform platform, final int i, HashMap<String, Object> hashMap) {
                     LogUtils.e(hashMap);
-                    final  String unionid = (String) hashMap.get("unionid");
-                    HashMap<String,Object> params = new HashMap<>();
-                    params.put("openId",unionid);
-                    params.put("openType",2);
-                    Observable<String> observable =   UserPresenter.loginByOpenApi(params,OtherActivity.this);
+                    final String unionid = (String) hashMap.get("unionid");
+                    HashMap<String, Object> params = new HashMap<>();
+                    params.put("openId", unionid);
+                    params.put("openType", 2);
+                    Observable<String> observable = UserPresenter.loginByOpenApi(params, OtherActivity.this);
                     observable.subscribe(new Consumer<String>() {
-                                @Override
-                                public void accept(String s) throws Exception {
-                                    dialog.dismiss();
-                                    ToastUtils.showShort(s);
-                                    startActivity(MainActivity.class);
-                                }
-                            }, new Consumer<Throwable>() {
-                                @Override
-                                public void accept(Throwable throwable) throws Exception {
-                                    ToastUtils.showShort(UserPresenter.errorMsg);
-                                    LogUtils.e(throwable.toString());
-                                }
-                            });
+                        @Override
+                        public void accept(String s) throws Exception {
+                            dialog.dismiss();
+                            ToastUtils.showShort(s);
+                            startActivity(MainActivity.class);
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            ToastUtils.showShort(UserPresenter.errorMsg);
+                            LogUtils.e(throwable.toString());
+                        }
+                    });
                 }
 
                 @Override
@@ -218,17 +217,14 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
 
     /**
      * 支付宝账户授权业务
-     *
      * @param
      */
     @SuppressLint("CheckResult")
     public void authV2() {
         if (TextUtils.isEmpty(PID) || TextUtils.isEmpty(APPID) || (TextUtils.isEmpty(RSA2_PRIVATE) && TextUtils.isEmpty(RSA_PRIVATE)) || TextUtils.isEmpty(TARGET_ID)) {
             new AlertDialog.Builder(this).setTitle("警告").setMessage("需要配置PARTNER |APP_ID| RSA_PRIVATE| TARGET_ID")
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialoginterface, int i)
-                        {
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialoginterface, int i) {
 
                         }
                     }).show();
@@ -250,7 +246,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
         String sign = OrderInfoUtil2_0.getSign(authInfoMap, privateKey, rsa2);
         final String authInfo = info + "&" + sign;
 
-        final HashMap<String,Object> params = new HashMap<>();
+        final HashMap<String, Object> params = new HashMap<>();
 
         Observable.create(new ObservableOnSubscribe<AuthResult>() {
             @Override
@@ -258,7 +254,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 AuthTask authTask = new AuthTask(OtherActivity.this);
                 // 调用授权接口，获取授权结果
                 Map<String, String> result = authTask.authV2(authInfo, true);
-                AuthResult authResult = new AuthResult(result,true);
+                AuthResult authResult = new AuthResult(result, true);
                 emitter.onNext(authResult);
 
             }
@@ -272,7 +268,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                         if (TextUtils.equals(resultStatus, "9000") && TextUtils.equals(authResult.getResultCode(), "200")) {
                             // 获取alipay_open_id，调支付时作为参数extern_token 的value
                             // 传入，则支付账户为该授权账户
-                            return  true ;
+                            return true;
                         } else {
                             // 其他状态值则为授权失败
                             ToastUtils.showShort("登录失败");
@@ -286,10 +282,10 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     @Override
                     public ObservableSource<String> apply(AuthResult authResult) throws Exception {
 
-                        params.put("openId",authResult.user_id);
-                        params.put("openType",1);
-                        LogUtils.e(authResult.user_id );
-                        return UserPresenter.loginByOpenApi(params,OtherActivity.this);
+                        params.put("openId", authResult.user_id);
+                        params.put("openType", 1);
+                        LogUtils.e(authResult.user_id);
+                        return UserPresenter.loginByOpenApi(params, OtherActivity.this);
                     }
                 })
                 .subscribeOn(Schedulers.newThread())

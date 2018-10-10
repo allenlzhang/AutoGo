@@ -52,23 +52,29 @@ public interface UserService {
 
     //上传图片
     @POST("image/uploadOssImage")
-    Observable<UpdateImageResultInfo> updateImageFile(@Body  RequestBody params);
+    Observable<UpdateImageResultInfo> updateImageFile(@Body RequestBody params);
 
     //获取短信验证码token
     @POST("User/GetSmsToken")
-    Observable<SmsToken> getSmsToken(@Body Map<String,String> params);
+    Observable<SmsToken> getSmsToken(@Body Map<String, String> params);
+
     //支付宝授权
     @POST("User/AlipayAuth")
     Observable<User> authAliPay(@Body Map<String, String> params);
+
     //上传图片id
     @POST("User/SetFace")
-    Observable<User> setFace (@Body Map<String, String> params);
+    Observable<User> setFace(@Body Map<String, Object> params);
 
     //发送短信验证码
     @POST("User/SendSmsCode")
-    Observable<BaseError> SendSmsCode(@Body Map<String,Object> params);
+    Observable<BaseError> SendSmsCode(@Body Map<String, Object> params);
 
     //三方注册
     @POST("User/RegisterByOpenApi")
-    Observable<BaseError> registerByOpenApi(@Body Map<String, Object> params);;
+    Observable<BaseError> registerByOpenApi(@Body Map<String, Object> params);
+
+    //人脸登录
+    @POST("User/LoginByFace")
+    Observable<User> LoginByFace(@Body Map<String, Object> params);
 }

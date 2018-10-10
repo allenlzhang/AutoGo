@@ -21,13 +21,13 @@ public class UserInfo implements Serializable {
     public String    sex;
     public String    password;
     public String    headUrl;
-    public int userFreeze;            // 用户冻结
-    public int accountState;         // 账户状态，车联网平台　１正常，２冻结
-    public String avatarFile ;        // 用户头像文件路径
-    public int alipayAuth;           // 支付宝实名认证状态  1-未认证  2-已认证
-    public String faceFile ;          // 人脸图片文件路径
-    public  int logoutState ;
-
+    public int       userFreeze;            // 用户冻结
+    public int       accountState;         // 账户状态，车联网平台　１正常，２冻结
+    public String    avatarFile;        // 用户头像文件路径
+    public int       alipayAuth;           // 支付宝实名认证状态  1-未认证  2-已认证
+    public String    faceFile;          // 人脸图片文件路径
+    public int       faceId;          // 人脸图片文件路径
+    public int       logoutState;
 
     @Override
     public String toString() {
@@ -46,6 +46,7 @@ public class UserInfo implements Serializable {
                 ", avatarFile='" + avatarFile + '\'' +
                 ", alipayAuth=" + alipayAuth +
                 ", faceFile='" + faceFile + '\'' +
+                ", faceId=" + faceId +
                 ", logoutState=" + logoutState +
                 '}';
     }

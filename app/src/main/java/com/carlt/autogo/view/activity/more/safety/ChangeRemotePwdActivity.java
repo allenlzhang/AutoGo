@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
-import com.carlt.autogo.view.view.PwdEditText;
+import com.carlt.autogo.widget.PwdEditText;
 
 import butterknife.BindView;
 import butterknife.OnClick;

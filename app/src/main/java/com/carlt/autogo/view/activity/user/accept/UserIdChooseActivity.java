@@ -206,7 +206,7 @@ public class UserIdChooseActivity extends BaseMvpActivity {
                         if (success) {
                             LogUtils.e("-------授权成功");
                             startActivity(new Intent(UserIdChooseActivity.this, FaceAuthSettingActivity.class));
-
+                             finish();
                         } else {
                             LogUtils.e("-------授权失败");
                         }

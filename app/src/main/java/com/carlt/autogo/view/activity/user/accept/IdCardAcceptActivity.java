@@ -14,7 +14,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.global.GlobalKey;
-import com.carlt.autogo.view.activity.login.FaceLoginActivity;
+import com.carlt.autogo.view.activity.login.FaceLiveCheckActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -151,7 +151,7 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
         //                    }
         //                });
         Intent intent = new Intent(this, UploadIdCardPhotoActivity.class);
-        intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLoginActivity.FROM_ID_CARDACCEPT_ACTIVITY);
+        intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.FROM_ID_CARDACCEPT_ACTIVITY);
         intent.putExtra("name", hideName);
         intent.putExtra("idcard", hideIdNume);
         startActivity(intent);

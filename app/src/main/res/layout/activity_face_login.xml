@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.activity.LoginActivity">
+
+    <Button
+        android:id="@+id/btn_changeUrl"
+        style="@style/ConstraintLayoutCommon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:text="测试服"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        />
+
+    <ImageView
+        android:id="@+id/ic_car"
+        style="@style/ConstraintLayoutCommon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_login_car_logo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1"
+        />
+
+    <TextView
+        android:id="@+id/app_name"
+        style="@style/ConstraintLayoutCommon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="应用名称"
+        android:textSize="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/ic_car"
+        app:layout_constraintVertical_bias="0.03"
+        />
+
+    <TextView
+        android:id="@+id/version_code"
+        style="@style/ConstraintLayoutCommon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="V 1.0.0"
+        android:textSize="14dp"
+        app:layout_constraintTop_toBottomOf="@+id/app_name"
+        app:layout_constraintVertical_bias="0.01"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_phone"
+        style="@style/ConstraintLayoutCommon"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/version_code"
+        app:layout_constraintVertical_bias="0.02"
+        >
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/ic_login_phone"/>
+
+        <EditText
+            android:id="@+id/user_phone"
+            style="@style/EdCommonLoginAndRegister"
+            android:enabled="false"
+            android:focusable="false"
+            android:gravity="center"
+            android:hint="13659889465465"
+            android:maxLength="11"/>
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/login_commit"
+        style="@style/BtnCommonCommit"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="人脸识别登录"
+        android:textSize="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/ll_phone"
+        app:layout_constraintVertical_bias="0.1"/>
+
+    <TextView
+        android:id="@+id/forgot_passwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="密码登录"
+        android:textColor="@color/colorForgotPasswd"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/login_commit"
+        app:layout_constraintTop_toBottomOf="@+id/login_commit"
+        app:layout_constraintVertical_bias="0.1"
+        />
+
+    <TextView
+        android:id="@+id/user_regist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="注册新用户"
+        android:textColor="@color/colorForgotPasswd"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/login_commit"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="@id/login_commit"
+        app:layout_constraintTop_toBottomOf="@+id/login_commit"
+        app:layout_constraintVertical_bias="0.1"
+        />
+
+    <Button
+        android:id="@+id/btn_more"
+        style="@style/ConstraintLayoutCommon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:text="更多"
+        android:textColor="@color/colorForgotPasswd"
+        android:textSize="16dp"
+        app:layout_constraintTop_toTopOf="@id/login_commit"
+        app:layout_constraintVertical_bias="0.9"
+        />
+
+</android.support.constraint.ConstraintLayout>
