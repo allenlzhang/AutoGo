@@ -79,6 +79,7 @@
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
+
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".view.activity.more.safety.UnFreeezeActivity" />
         <activity android:name=".view.activity.more.safety.FaceRecognitionSettingFirstActivity" />
@@ -90,6 +91,8 @@
             android:name=".view.activity.car.CarActivateActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"></activity>
         <activity android:name=".view.activity.user.UserBindPhoneActivity"></activity>
+        <activity android:name=".view.activity.more.safety.FaceAuthSettingActivity">
+        </activity>
     </application>
 
 </manifest>

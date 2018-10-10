@@ -324,9 +324,9 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     @Override
                     public ObservableSource<User> apply(AuthResult authResult) throws Exception {
 
-                        params.put("openId",authResult.userId);
+                        params.put("openId",authResult.user_id);
                         params.put("openType",1);
-                        LogUtils.e(authResult.userId );
+                        LogUtils.e(authResult.user_id );
                         return ClientFactory.def(UserService.class).loginByOpenApi(params);
                     }
                 })

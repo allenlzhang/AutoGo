@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:id="@+id/tv_r2_head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:text="拍摄您本人人脸,请确保正对手机,光纤充足"
+        android:textColor="@color/colorEdtext"
+        />
+
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_r2_head"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/textColorGray"
+        />
+
+    <ImageView
+        android:id="@+id/img_face"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_user_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:src="@mipmap/accept_from_face"
+        />
+
+    <Button
+        android:id="@+id/tvCollectFace"
+        style="@style/BtnCommonCommit"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/img_face"
+        android:layout_marginTop="60dp"
+        android:text="采集本人人脸"
+        android:textSize="17dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="信息仅用于身份认证"
+        android:textColor="@color/textColorGray"
+
+        />
+</RelativeLayout>
