@@ -51,7 +51,6 @@ public class UserPresenter {
                    if(index>=0 && index < sexs.length){
                        userInfo.sex = sexs[index];
                    }
-                   LogUtils.e(userInfo.sex);
                    SharepUtil.<UserInfo>putByBean("user", userInfo) ;
                }
                errorMsg = "";
