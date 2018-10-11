@@ -8,7 +8,7 @@
  * 变更说明：
  * -------------------------------------------------- */
 
-package com.carlt.autogo.view.view;
+package com.carlt.autogo.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;

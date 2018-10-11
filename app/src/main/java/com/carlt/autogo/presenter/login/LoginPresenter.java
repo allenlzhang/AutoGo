@@ -2,11 +2,10 @@ package com.carlt.autogo.presenter.login;
 
 import android.annotation.SuppressLint;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.entry.user.User;
-import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.UserPresenter;
@@ -37,13 +36,13 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                 .flatMap(new Function<User, ObservableSource<String>>() {
                     @Override
                     public ObservableSource<String> apply(User user) throws Exception {
-                        if(user.err != null){
-                            errorMsg = user.err.msg ;
-                            return  null;
-                        }else {
-                            Map<String, String> token =   new HashMap<String, String>();
-                            token.put("token",user.token);
-                            SharepUtil.put("token",user.token);
+                        if (user.err != null) {
+                            errorMsg = user.err.msg;
+                            return null;
+                        } else {
+                            Map<String, String> token = new HashMap<String, String>();
+                            token.put("token", user.token);
+                            SharepUtil.put(GlobalKey.USER_TOKEN, user.token);
                             return UserPresenter.getUserInfoByToken(token);
                         }
                     }
@@ -57,6 +56,6 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                         ToastUtils.showShort(s);
                         mView.loginFinish();
                     }
-                },new CommonThrowable<Throwable>());
+                }, new CommonThrowable<Throwable>());
     }
 }

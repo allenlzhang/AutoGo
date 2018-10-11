@@ -1,6 +1,5 @@
 package com.carlt.autogo.view.activity.more.safety;
 
-import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -55,7 +54,7 @@ public class LogoutAccountActivityFirst extends BaseMvpActivity {
                 notifSendValidate();
                 break;
             case R.id.btnLogoutNext:
-                startActivity(new Intent(this, LogoutAccountActivitySecond.class));
+//                startActivity(new Intent(this, LogoutAccountActivitySecond.class));
                 break;
         }
     }

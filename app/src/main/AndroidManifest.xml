@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.carlt.autogo">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.carlt.autogo">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:name=".application.AutoGoApp"
@@ -20,33 +20,35 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:name">
-        <activity android:name=".view.activity.MainActivity" />
-        <activity android:name=".view.activity.LoginActivity">
+        <activity android:name=".view.activity.MainActivity"/>
+        <activity
+            android:name=".view.activity.LoginActivity"
+            android:launchMode="singleTask">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.RegisterActivity" />
-        <activity android:name=".view.activity.SplashActivity" />
-        <activity android:name=".view.activity.login.ForgotActivity" />
-        <activity android:name=".view.activity.login.OtherActivity" />
-        <activity android:name=".view.activity.user.EditUserInfoActivity" />
-        <activity android:name=".view.activity.user.ChangeNickNameActivity" />
-        <activity android:name=".view.activity.user.PersonAvatarActivity" />
-        <activity android:name=".view.activity.user.accept.UserIdChooseActivity" />
-        <activity android:name=".view.activity.user.accept.IdCardAcceptActivity" />
-        <activity android:name=".view.activity.user.accept.UploadIdCardPhotoActivity" />
-        <activity android:name=".view.activity.user.accept.IdfCompleteActivity" />
-        <activity android:name=".view.activity.more.safety.SafetyActivity" />
-        <activity android:name=".view.activity.more.safety.LoginPwdManagementActivity" />
-        <activity android:name=".view.activity.more.safety.ChangeLoginPwdActivity" />
-        <activity android:name=".view.activity.more.safety.ChangeRemotePwdActivity" />
-        <activity android:name=".view.activity.more.safety.RemotePwdManagementActivity" />
-        <activity android:name=".view.activity.more.safety.LoginDeviceManagementActivity" />
-        <activity android:name=".view.activity.more.safety.LogoutAccountActivityFirst" />
-        <activity android:name=".view.activity.more.safety.LogoutAccountActivitySecond" />
+        <activity android:name=".view.activity.RegisterActivity"/>
+        <activity android:name=".view.activity.SplashActivity"/>
+        <activity android:name=".view.activity.login.ForgotActivity"/>
+        <activity android:name=".view.activity.login.OtherActivity"/>
+        <activity android:name=".view.activity.user.EditUserInfoActivity"/>
+        <activity android:name=".view.activity.user.ChangeNickNameActivity"/>
+        <activity android:name=".view.activity.user.PersonAvatarActivity"/>
+        <activity android:name=".view.activity.user.accept.UserIdChooseActivity"/>
+        <activity android:name=".view.activity.user.accept.IdCardAcceptActivity"/>
+        <activity android:name=".view.activity.user.accept.UploadIdCardPhotoActivity"/>
+        <activity android:name=".view.activity.user.accept.IdfCompleteActivity"/>
+        <activity android:name=".view.activity.more.safety.SafetyActivity"/>
+        <activity android:name=".view.activity.more.safety.LoginPwdManagementActivity"/>
+        <activity android:name=".view.activity.more.safety.ChangeLoginPwdActivity"/>
+        <activity android:name=".view.activity.more.safety.ChangeRemotePwdActivity"/>
+        <activity android:name=".view.activity.more.safety.RemotePwdManagementActivity"/>
+        <activity android:name=".view.activity.more.safety.LoginDeviceManagementActivity"/>
+        <activity android:name=".view.activity.more.safety.LogoutAccountActivityFirst"/>
+        <activity android:name=".view.activity.more.safety.LogoutAccountActivitySecond"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -57,41 +59,44 @@
             <!-- 提供共享路径 -->
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/file_paths"/>
         </provider>
 
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".view.activity.login.FaceLoginActivity" />
-        <activity android:name=".view.activity.login.LoginByPhoneActivity" />
-        <activity android:name=".view.activity.more.safety.FreezeActivity" />
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name=".view.activity.login.FaceLiveCheckActivity"/>
+        <activity android:name=".view.activity.login.LoginByPhoneActivity"/>
+        <activity android:name=".view.activity.more.safety.FreezeActivity"/>
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name="com.alipay.sdk.app.H5AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
-
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity android:name=".view.activity.more.safety.UnFreeezeActivity" />
-        <activity android:name=".view.activity.more.safety.FaceRecognitionSettingFirstActivity" />
-        <activity android:name=".view.activity.more.safety.FaceRecognitionSettingActivity"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity android:name=".view.activity.more.safety.UnFreeezeActivity"/>
+        <activity android:name=".view.activity.more.safety.FaceRecognitionSettingFirstActivity"/>
+        <activity android:name=".view.activity.more.safety.FaceRecognitionSettingActivity"/>
         <activity
             android:name=".view.activity.car.CarCertificationActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity
             android:name=".view.activity.car.CarActivateActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
-        <activity android:name=".view.activity.user.UserBindPhoneActivity"></activity>
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity android:name=".view.activity.user.UserBindPhoneActivity"/>
         <activity android:name=".view.activity.more.safety.FaceAuthSettingActivity">
+        </activity>
+        <activity android:name=".view.activity.login.FaceLoginActivity">
+        </activity>
+        <activity android:name=".view.activity.more.safety.LogoutNoticeActivity">
         </activity>
     </application>
 

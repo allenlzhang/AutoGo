@@ -41,19 +41,24 @@
         android:hint="@string/management_edit_old_pwd"
         tools:ignore="TextFields"
         android:layout_marginTop="10dp"
+        android:inputType="textPassword"
         />
     <EditText
         android:id="@+id/edit_management_new_pwd"
         style="@style/baseEditStyle"
         android:hint="@string/management_edit_new_pwd"
         tools:ignore="TextFields"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:inputType="textPassword"
+        />
     <EditText
         android:id="@+id/edit_management_new_pwd_again"
         style="@style/baseEditStyle"
         android:hint="@string/management_edit_new_pwd_again"
         tools:ignore="TextFields"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:inputType="textPassword"
+        />
     <Button
         android:id="@+id/edit_management_confirm"
         style="@style/BtnCommonCommit"

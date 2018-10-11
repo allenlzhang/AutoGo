@@ -33,54 +33,63 @@
         android:text="身份验证后支持人脸识别"
         android:textColor="@color/textColorGray"
         android:textSize="13dp"/>
+
     <RelativeLayout
         android:id="@+id/llFaceSwitch"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/colorWhite"
         android:gravity="center_vertical"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        android:layout_marginTop="40dp"
-        android:background="@color/colorWhite"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:text="人脸识别登录"
             android:textColor="@color/colorEdtext"
-            android:layout_centerVertical="true"
             android:textSize="14dp"
             />
 
         <CheckBox
+            android:id="@+id/cbFaceLogin"
             style="@style/CheckBoxStyles"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:checked="false"/>
     </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/color_c"
         />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:background="@color/colorWhite"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        android:background="@color/colorWhite"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:text="流程安全认证"
             android:textColor="@color/colorEdtext"
-            android:layout_centerVertical="true"
             android:textSize="14dp"
             />
 
         <CheckBox
+            android:id="@+id/cbSafe"
             style="@style/CheckBoxStyles"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:checked="false"/>
     </RelativeLayout>
 </LinearLayout>

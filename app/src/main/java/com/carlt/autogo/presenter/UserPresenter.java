@@ -3,17 +3,16 @@ package com.carlt.autogo.presenter;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.SmsToken;
 import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
-import com.carlt.autogo.view.activity.login.OtherActivity;
 import com.carlt.autogo.view.activity.user.UserBindPhoneActivity;
 
 import java.util.HashMap;
@@ -22,11 +21,8 @@ import java.util.Map;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-
-import static com.blankj.utilcode.util.ActivityUtils.startActivity;
 
 /**
  * @author wsq
@@ -118,7 +114,7 @@ public class UserPresenter {
 
                             Map<String, String> token =   new HashMap<String, String>();
                             token.put("token",user.token);
-                            SharepUtil.put("token",user.token);
+                            SharepUtil.put(GlobalKey.USER_TOKEN,user.token);
                             return ClientFactory.def(UserService.class).getUserInfo(token);
 
                         }

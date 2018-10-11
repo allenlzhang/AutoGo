@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    tools:context=".view.activity.more.safety.LogoutNoticeActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1，账号处于安全状态：最近一个月内无绑定手机/修改手机、无找回密码/修改密码等操作"
+        android:textColor="@color/colorTitleTxt"
+        android:textSize="14dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_c"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="2，账号处于安全状态：最近一个月内无绑定手机/修改手机、无找回密码/修改密码等操作"
+        android:textColor="@color/colorTitleTxt"
+        android:textSize="14dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_c"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="3，账号处于安全状态：最近一个月内无绑定手机/修改手机、无找回密码/修改密码等操作"
+        android:textColor="@color/colorTitleTxt"
+        android:textSize="14dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_c"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="4，账号处于安全状态：最近一个月内无绑定手机/修改手机、无找回密码/修改密码等操作"
+        android:textColor="@color/colorTitleTxt"
+        android:textSize="14dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_c"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:gravity="center">
+
+        <CheckBox
+            android:id="@+id/cb_law"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_register_img_level_select"
+            android:button="@null"
+            android:checked="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6dp"
+            android:text="我已经阅读并同意"/>
+
+        <TextView
+            android:id="@+id/tv_law"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="注销协议"
+            android:textColor="@color/colorForgotPasswd"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnNext"
+        style="@style/BtnCommonCommit"
+        android:layout_marginTop="15dp"
+        android:text="下一步"
+        android:textSize="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/head2"
+        app:layout_constraintVertical_bias="0.1"/>
+</LinearLayout>

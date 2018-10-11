@@ -9,8 +9,10 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
-
-import com.carlt.autogo.common.dialog.LogoutTipDialog;
+import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
+import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.user.accept.IdfCompleteActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 
 import butterknife.BindView;
@@ -79,7 +81,7 @@ public class SafetyActivity extends BaseMvpActivity {
      */
     @BindView(R.id.ll_safety_cancellation_account)
     LinearLayout mLlCancellationAccount;
-    private LogoutTipDialog mTipDialog;
+//    private LogoutTipDialog mTipDialog;
 
     @Override
     protected int getContentView() {
@@ -89,25 +91,51 @@ public class SafetyActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText(getResources().getString(R.string.more_accounts_and_security));
-        mTipDialog = new LogoutTipDialog(this, R.style.DialogCommon);
-        mTipDialog.setLisniter(new LogoutTipDialog.LogoutTipDialogClickLisniter() {
-            @Override
-            public void commit() {
-                startActivity(new Intent(SafetyActivity.this, LogoutAccountActivityFirst.class));
-            }
-        });
+//        mTipDialog = new LogoutTipDialog(this, R.style.DialogCommon);
+//        mTipDialog.setLisniter(new LogoutTipDialog.LogoutTipDialogClickLisniter() {
+//            @Override
+//            public void commit() {
+//                startActivity(new Intent(SafetyActivity.this, LogoutAccountActivityFirst.class));
+//            }
+//        });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //        String isIdentity = SharepUtil.getPreferences().getString(GlobalKey.IDENTITY_AUTH, "");
+        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        LogUtils.e("----" + user.toString());
+        if (user.alipayAuth != 0 && user.faceId != 0) {
+            mTvIdentityAuthentication.setText("已认证");
+            mTvIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent safety_identity = new Intent(SafetyActivity.this, IdfCompleteActivity.class);
+                    safety_identity.putExtra("idcard", false);
+                    startActivity(safety_identity);
+                }
+            });
+        } else {
+            mTvIdentityAuthentication.setText("未认证");
+            mTvIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent safety_identity = new Intent(SafetyActivity.this, UserIdChooseActivity.class);
+                    startActivity(safety_identity);
+                }
+            });
+        }
+    }
 
     @OnClick({R.id.ll_safety_identity_authentication, R.id.ll_safety_face_recognition, R.id.ll_safety_binding_phone, R.id.ll_safety_login_pwd_management, R.id.ll_safety_remote_pwd_management, R.id.ll_safety_login_device_management, R.id.ll_safety_frozen_account, R.id.ll_safety_cancellation_account})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_safety_identity_authentication:
-                Intent safety_identity = new Intent(this, UserIdChooseActivity.class);
-                startActivity(safety_identity);
+
                 break;
             case R.id.ll_safety_face_recognition:
-                startActivity(new Intent(this, FaceRecognitionSettingFirstActivity.class));
+                startActivity(new Intent(this, FaceRecognitionSettingActivity.class));
                 break;
             case R.id.ll_safety_binding_phone:
                 break;
@@ -129,7 +157,8 @@ public class SafetyActivity extends BaseMvpActivity {
                 startActivity(intentFreeze);
                 break;
             case R.id.ll_safety_cancellation_account:
-                mTipDialog.show();
+//                mTipDialog.show();
+                startActivity(new Intent(this, LogoutNoticeActivity.class));
                 break;
         }
     }
