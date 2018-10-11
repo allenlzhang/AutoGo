@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.carlt.autogo.R;
@@ -39,12 +41,14 @@ public class EditUserInfoActivity extends BaseMvpActivity{
     @BindView(R.id.img_back1) ImageView imgBack1;
     @BindView(R.id.tv_sex) TextView tvSex;
     @BindView(R.id.img_back2) ImageView imgBack2;
+    @BindView(R.id.rl_ed_head1) RelativeLayout rlEdHead1;
     DialogChangeSex dialogChangeSex ;
 
     UUDialog dialog ;
+
+    private UserInfo userInfo;
     @Override
     protected int getContentView() {
-
 
         return R.layout.activity_edit_user_info;
     }
@@ -56,22 +60,23 @@ public class EditUserInfoActivity extends BaseMvpActivity{
         dialogChangeSex = new DialogChangeSex(this);
         dialog =new UUDialog(this,R.style.DialogCommon) ;
 
-        Glide.with(this).load(SharepUtil.getPreferences().getString("headurl",""))
-                .into(imgEdHeader);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onResume() {
         super.onResume();
-        UserInfo info = SharepUtil.<UserInfo>getBeanFromSp("user");
-        tvUserCarName.setText("" +  info.realName);
-        tvSex.setText("" + info.sex);
+         userInfo = SharepUtil.<UserInfo>getBeanFromSp("user");
+        tvUserCarName.setText("" +  userInfo.realName);
+        tvSex.setText("" + userInfo.sex);
+        Glide.with(this)
+                .load(userInfo.avatarFile)
+                .into(imgEdHeader);
     }
 
     @OnClick({R.id.img_back1 ,R.id.img_back2})
     public void function(View view){
-        if(view.getId() == R.id.img_back1){
+        if(view.getId() == R.id.rl_ed_head1){
             // 修改昵称
             Intent intentNickName = new Intent(this,ChangeNickNameActivity.class);
             startActivity(intentNickName);
@@ -92,7 +97,7 @@ public class EditUserInfoActivity extends BaseMvpActivity{
     }
 
     @SuppressLint("CheckResult")
-    private void commitEdUerSex(final String text, int sex) {
+    private void commitEdUerSex(final String text, final int sex) {
         Map<String,Object> params = new HashMap<>();
         params.put("token", SharepUtil.getPreferences().getString("token",""));
         params.put("gender",sex );
@@ -107,10 +112,12 @@ public class EditUserInfoActivity extends BaseMvpActivity{
                         if(baseError.msg != null){
                             ToastUtils.showLong(baseError.msg);
                         }else {
-                            ToastUtils.showLong("编辑成功");
+                            ToastUtils.showLong("编辑成功" );
                             UserInfo userInfo =   SharepUtil.<UserInfo>getBeanFromSp("user");
                             userInfo.sex = text ;
+                            userInfo.gender = sex;
                             SharepUtil.putByBean("user",userInfo);
+                            LogUtils.e(SharepUtil.<UserInfo>getBeanFromSp("user").gender );
                             tvSex.setText(text);
                         }
                     }
@@ -124,11 +131,12 @@ public class EditUserInfoActivity extends BaseMvpActivity{
     }
 
 
-    @OnClick(R.id.img_edheader)
+    /**
+     * 修改头像
+     */
+    @OnClick(R.id.rl_ed_head1)
     public void edHeader(){
 
-        Intent userAvatar = new Intent(this,PersonAvatarActivity.class);
-
-        startActivity(userAvatar);
+        startActivity(PersonAvatarActivity.class,false);
     }
 }

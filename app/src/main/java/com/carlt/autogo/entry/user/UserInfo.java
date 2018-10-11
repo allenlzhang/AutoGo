@@ -18,7 +18,7 @@ public class UserInfo implements Serializable {
     public String    realName;
     public String    token;
     public BaseError err;
-    public String    sex;
+    public String    sex = "保密";
     public String    password;
     public String    headUrl;
     public int userFreeze;            // 用户冻结

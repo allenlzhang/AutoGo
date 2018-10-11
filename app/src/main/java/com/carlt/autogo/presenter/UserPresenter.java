@@ -36,7 +36,7 @@ import static com.blankj.utilcode.util.ActivityUtils.startActivity;
 public class UserPresenter {
 
    public static  String errorMsg ;
-
+    static String[] sexs = {"男","女","保密"};
     /**
      * 根据token 获取用户信息
      */
@@ -50,8 +50,13 @@ public class UserPresenter {
                    errorMsg = userInfo.err.msg ;
                    return null;
                }else {
+                   int index = userInfo.gender-1;
+
+                   if(index>=0 && index < sexs.length){
+                       userInfo.sex = sexs[index];
+                   }
+                   LogUtils.e(userInfo.sex);
                    SharepUtil.<UserInfo>putByBean("user", userInfo) ;
-                   SharepUtil.put("headurl","http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLDx6ZPo7iak6rDRsiaDK4JYhMYfUzbWicUsqTS97xGcCZqXD4OEbFfFLo5rI5icsUdXASrRk50I2ZJ9g/132");
                }
                errorMsg = "";
                return "登录成功";
@@ -127,7 +132,6 @@ public class UserPresenter {
                             return null;
                         }else {
                             SharepUtil.<UserInfo>putByBean("user", userInfo) ;
-                            SharepUtil.put("headurl","http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLDx6ZPo7iak6rDRsiaDK4JYhMYfUzbWicUsqTS97xGcCZqXD4OEbFfFLo5rI5icsUdXASrRk50I2ZJ9g/132");
                             errorMsg = "" ;
                             return "登录成功";
                         }

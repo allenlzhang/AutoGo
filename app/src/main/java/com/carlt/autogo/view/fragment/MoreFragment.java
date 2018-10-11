@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 import com.carlt.autogo.R;
 import com.carlt.autogo.application.AutoGoApp;
@@ -18,6 +19,8 @@ import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.more.safety.SafetyActivity;
 import com.carlt.autogo.view.activity.user.EditUserInfoActivity;
+
+import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,13 +101,13 @@ public class MoreFragment extends BaseMvpFragment implements LogoutTipDialog.Log
 
         if (userInfo.gender == 1) {
             mIvSex.setImageDrawable(getResources().getDrawable(R.mipmap.ic_sex_men));
-        } else {
+        } else if (userInfo.gender == 2) {
             mIvSex.setImageDrawable(getResources().getDrawable(R.mipmap.ic_sex_women));
         }
 
         Glide.with(this)
-                .load(SharepUtil.getPreferences().getString("headurl", ""))
-                .into(mIvSex);
+                .load(userInfo.avatarFile)
+                .into(ivMoreHeadSculpture);
     }
 
     @OnClick({R.id.tv_more_edit_profile, R.id.ll_more_accounts_and_security, R.id.ll_more_setting,R.id.ll_more_log_out})

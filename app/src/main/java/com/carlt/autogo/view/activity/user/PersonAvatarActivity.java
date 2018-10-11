@@ -1,6 +1,7 @@
 package com.carlt.autogo.view.activity.user;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -21,13 +23,29 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.entry.user.BaseError;
+import com.carlt.autogo.entry.user.UpdateImageResultInfo;
+import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.PhotoUtils;
+import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.user.accept.UploadIdCardPhotoActivity;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * @author wsq
@@ -48,7 +66,9 @@ public class PersonAvatarActivity extends BaseMvpActivity {
     private Uri cropImageUri;
     private int requestCodePermsiision= 121;
 
+    MultipartBody.Builder MultipartBodyBuilder =   new MultipartBody.Builder().setType(MultipartBody.FORM);
 
+    private String avatarPath ;
     @Override
     protected int getContentView() {
         return R.layout.activity_person_avatar;
@@ -115,8 +135,64 @@ public class PersonAvatarActivity extends BaseMvpActivity {
         userAvatar.setImageBitmap(picToView);
         //上传图片
 
+        getUpdateImageResultInfoObservableSource(fileCropUri);
     }
 
+    /**
+     * @param file 要上传的图片文件
+     * @return 返回请求图片上传接口的回调结果
+     */
+    @SuppressLint("CheckResult")
+    private void getUpdateImageResultInfoObservableSource(File file) {
+        RequestBody requestBody = MultipartBodyBuilder
+                .addFormDataPart("type", "autogo/face")
+                .addFormDataPart("fileOwner","face")
+                .addFormDataPart("uid", "9999999999")
+                .addFormDataPart("name", "faceImage")
+                .addFormDataPart("faceImage", file.getName(), RequestBody.create(MediaType.parse("image/*"), file))
+                .build();
+        //图片上传
+        ClientFactory.getUpdateImageService(UserService.class).updateImageFile(requestBody)
+                .flatMap(new Function<UpdateImageResultInfo, ObservableSource<BaseError>> () {
+                    @Override
+                    public ObservableSource<BaseError> apply(UpdateImageResultInfo updateImageResultInfo) throws Exception {
+                        if(updateImageResultInfo.message != null){
+                            Map<String,Object> params = new HashMap<>();
+                            params.put("token", SharepUtil.getPreferences().getString("token",""));
+                            params.put("avatarId",updateImageResultInfo.message.id );
+
+                            avatarPath = updateImageResultInfo.message.imageUrl;
+                            return ClientFactory.def(UserService.class).userEditInfi(params);
+
+                        }else {
+                            return null;
+                        }
+
+                    }
+                })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseError>() {
+                    @Override
+                    public void accept(BaseError baseError) throws Exception {
+                        dialog.dismiss();
+                        if(baseError.msg != null){
+                            ToastUtils.showLong(baseError.msg);
+                        }else {
+                            ToastUtils.showLong("编辑成功");
+                            UserInfo userInfo =   SharepUtil.<UserInfo>getBeanFromSp("user");
+                            userInfo.avatarFile = avatarPath;
+
+                            SharepUtil.putByBean("user",userInfo);
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable.toString());
+                    }
+                });
+    }
     //6.0 权限
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -130,21 +206,6 @@ public class PersonAvatarActivity extends BaseMvpActivity {
 
         }
     }
-    private boolean  checkPermission(String[] mPermission ) {
 
-        boolean denied = false;
-        for (int i = 0; i < mPermission.length; i++) {
-
-            if (ActivityCompat.checkSelfPermission(PersonAvatarActivity.this, mPermission[i]) == PackageManager.PERMISSION_DENIED)
-            {
-                denied =true ;
-                ActivityCompat.requestPermissions(PersonAvatarActivity.this, mPermission, requestCodePermsiision);
-
-            }
-
-        }
-
-        return denied ;
-    }
 
 }
