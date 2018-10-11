@@ -18,7 +18,9 @@ import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.presenter.UserPresenter;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.user.accept.IdfCompleteActivity;
 import com.carlt.autogo.view.activity.user.accept.UploadIdCardPhotoActivity;
 
@@ -29,8 +31,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -204,15 +208,31 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
         map.put("mobile", mobile);
         map.put("faceId", id);
         ClientFactory.def(UserService.class).LoginByFace(map)
+                .flatMap(new Function<User, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(User user) throws Exception {
+                        LogUtils.e("---" + user.toString());
+                        if (user.err != null) {
+                            //                            errorMsg = user.err.msg;
+                            ToastUtils.showShort("登录失败");
+                            return null;
+                        } else {
+                            Map<String, String> token = new HashMap<String, String>();
+                            token.put("token", user.token);
+                            SharepUtil.put(GlobalKey.USER_TOKEN, user.token);
+                            return UserPresenter.getUserInfoByToken(token);
+                        }
+                    }
+                })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<User>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void accept(User user) throws Exception {
-                        LogUtils.e("---" + user.toString());
+                    public void accept(String s) throws Exception {
                         dialog.dismiss();
+                        ToastUtils.showShort(s);
+                        go2Activity();
                     }
-
                 });
     }
 
@@ -259,6 +279,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
             case FROM_LOGIN_ACTIVITY:
                 //                    tvFaceTitle.setText(getString(R.string.face_login_activity_title1));
                 //                finish();
+                startActivity(new Intent(this, MainActivity.class));
                 break;
             case FROM_ID_CARDACCEPT_ACTIVITY:
                 //                    tvFaceTitle.setText(getString(R.string.face_login_activity_title2));
