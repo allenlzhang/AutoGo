@@ -42,7 +42,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     @BindView(R.id.tv_base_title)
     TextView  tvBaseTitle;
     @BindView(R.id.iv_base_back)
-    ImageView ivBaseBack;
+    public ImageView ivBaseBack;
     @BindView(R.id.rlTitle)
     protected RelativeLayout rlTitle;
     @BindView(R.id.flContent)

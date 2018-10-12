@@ -1,6 +1,7 @@
 package com.carlt.autogo.net.service;
 
 import com.carlt.autogo.entry.user.BaseError;
+import com.carlt.autogo.entry.user.RetrievePassword;
 import com.carlt.autogo.entry.user.SmsToken;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.entry.user.User;
@@ -27,7 +28,7 @@ public interface UserService {
 
     //找回密码
     @POST("User/RetrievePassword")
-    Observable<BaseError> userRetrievePassword(@Body Map<String, Object> param);
+    Observable<RetrievePassword> userRetrievePassword(@Body Map<String, Object> param);
 
     //获取用户信息
     @POST("User/GetUserInfo")
@@ -88,4 +89,12 @@ public interface UserService {
     //人脸登录
     @POST("User/LoginByFace")
     Observable<User> LoginByFace(@Body Map<String, Object> params);
+
+    //免密开关
+    @POST("User/ModifyRemoteSwitch")
+    Observable<BaseError> modifyRemoteSwitch(@Body Map<String,Object> params);
+
+    // 用户冻结、解冻
+    @POST("User/Freeze")
+    Observable<BaseError> freeze(@Body Map<String,Object> params);
 }

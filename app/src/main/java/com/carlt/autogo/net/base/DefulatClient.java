@@ -34,7 +34,7 @@ public class DefulatClient  extends BaseRestClient {
                LogUtils.d(message);
             }
         });
-        loggingInterceptor.setLevel(BuildConfig.DEBUG_MODE? HttpLoggingInterceptor.Level.HEADERS : HttpLoggingInterceptor.Level.NONE);
+        loggingInterceptor.setLevel(BuildConfig.DEBUG_MODE? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
          okBuilder.addInterceptor(loggingInterceptor);
 
         okBuilder.addInterceptor(new Interceptor() {

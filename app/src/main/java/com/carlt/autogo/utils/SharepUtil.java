@@ -98,4 +98,5 @@ public class SharepUtil {
         editor.remove("user");
         editor.commit();
     }
+
 }

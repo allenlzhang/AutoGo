@@ -84,15 +84,15 @@ public class ForgotActivity extends BaseMvpActivity {
         ClientFactory.def(UserService.class).userRetrievePassword(params)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseError>() {
+                .subscribe(new Consumer<RetrievePassword>() {
                     @Override
-                    public void accept(BaseError baseError) throws Exception {
+                    public void accept(RetrievePassword baseError) throws Exception {
                         dialog.dismiss();
-                        if(baseError.msg == null){
+                        if(baseError.err.msg == null){
                             ToastUtils.showShort("修改成功");
                             finish();
                         }else {
-                            ToastUtils.showShort(baseError.msg);
+                            ToastUtils.showShort(baseError.err.msg);
                         }
                     }
                 }, new Consumer<Throwable>() {
