@@ -38,7 +38,7 @@ public class CommonDialog {
             tvTitle2.setVisibility(View.GONE);
         } else {
             tvTitle2.setVisibility(View.VISIBLE);
-            tvTitle2.setText(title1);
+            tvTitle2.setText(title2);
         }
         tvRight.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +51,7 @@ public class CommonDialog {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
+                click.onLeftClick();
             }
         });
 
@@ -63,7 +64,7 @@ public class CommonDialog {
 
     public interface DialogWithTitleClick {
 
-        //        public void onLeftClick();
+        void onLeftClick();
 
         void onRightClick();
     }

@@ -45,4 +45,11 @@ public class BaseError implements Parcelable {
         this.msg = in.readString();
     }
 
+    @Override
+    public String toString() {
+        return "BaseError{" +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                '}';
+    }
 }

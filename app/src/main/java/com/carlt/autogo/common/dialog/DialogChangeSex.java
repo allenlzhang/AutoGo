@@ -1,23 +1,21 @@
 package com.carlt.autogo.common.dialog;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.carlt.autogo.R;
-import com.carlt.autogo.view.activity.login.OtherActivity;
 
 import butterknife.OnClick;
 
-public class DialogChangeSex  extends LoginMoreDialog {
-    ItemOnclickListner listner ;
-    static  int MAN = 1 ;
-    static  int WOMAN = 2 ;
-    static  int UNKONW = 3;
+public class DialogChangeSex extends LoginMoreDialog {
+    ItemOnclickListner listner;
+    static int MAN    = 1;
+    static int WOMAN  = 2;
+    static int UNKONW = 3;
 
     public DialogChangeSex(@NonNull Context context) {
-        super(context);
+        super(context, false);
     }
 
     @Override
@@ -40,22 +38,22 @@ public class DialogChangeSex  extends LoginMoreDialog {
                 break;
             case R.id.login_by_face:
 
-                if(listner != null){
-                    listner.getText(loginByFace.getText().toString(),MAN);
+                if (listner != null) {
+                    listner.getText(loginByFace.getText().toString(), MAN);
                 }
                 DialogDismiss();
                 break;
             case R.id.login_by_normal:
 
-                if(listner != null){
-                    listner.getText(loginByNormal.getText().toString() ,WOMAN);
+                if (listner != null) {
+                    listner.getText(loginByNormal.getText().toString(), WOMAN);
                 }
                 DialogDismiss();
                 break;
             case R.id.login_by_other:
 
-                if(listner != null){
-                    listner.getText(loginByOther.getText().toString(),UNKONW);
+                if (listner != null) {
+                    listner.getText(loginByOther.getText().toString(), UNKONW);
                 }
                 DialogDismiss();
                 break;
@@ -66,12 +64,14 @@ public class DialogChangeSex  extends LoginMoreDialog {
         dismiss();
 
     }
-    public void setListner(ItemOnclickListner listner){
-        this.listner = listner ;
-    }
-    public   interface ItemOnclickListner {
 
-        void getText(String text ,int sex);
+    public void setListner(ItemOnclickListner listner) {
+        this.listner = listner;
+    }
+
+    public interface ItemOnclickListner {
+
+        void getText(String text, int sex);
 
     }
 }

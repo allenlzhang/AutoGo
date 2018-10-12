@@ -95,7 +95,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.READ_PHONE_STATE ,
+            Manifest.permission.READ_PHONE_STATE,
 
     };
 
@@ -159,7 +159,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
         switch (view.getId()) {
             case R.id.btn_more:
 
-                BaseDialog baseDialog = new LoginMoreDialog(this);
+                BaseDialog baseDialog = new LoginMoreDialog(this, false);
                 baseDialog.show();
 
 
@@ -196,7 +196,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                 passwdToggle.setSelected(!passwdToggle.isSelected());
                 break;
             case R.id.forgot_passwd:
-                startActivity(ForgotActivity.class,false);
+                startActivity(ForgotActivity.class, false);
                 break;
 
         }
