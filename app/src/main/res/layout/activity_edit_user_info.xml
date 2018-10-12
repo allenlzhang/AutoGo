@@ -49,6 +49,7 @@
         >
 
         <RelativeLayout
+            android:id="@+id/rl_user_car_name"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
@@ -93,6 +94,7 @@
             android:layout_marginLeft="15dp"
             />
         <RelativeLayout
+            android:id="@+id/rl_sex"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

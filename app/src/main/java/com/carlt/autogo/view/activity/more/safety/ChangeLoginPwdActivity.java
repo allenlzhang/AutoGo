@@ -248,7 +248,6 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
         Disposable dispRememberPwd = ClientFactory.def(UserService.class).userResetPwd(params)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .delay(5, TimeUnit.SECONDS)
                 .subscribe(new Consumer<BaseError>() {
                     @Override
                     public void accept(BaseError baseError) throws Exception {
@@ -288,16 +287,15 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
         Disposable disposableForgetPwd = ClientFactory.def(UserService.class).userRetrievePassword(params)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .delay(2,TimeUnit.SECONDS)
-                .subscribe(new Consumer<BaseError>() {
+                .subscribe(new Consumer<RetrievePassword>() {
                     @Override
-                    public void accept(BaseError baseError) throws Exception {
-                        if (baseError.msg == null){
+                    public void accept(RetrievePassword baseError) throws Exception {
+                        if (baseError.err == null){
                             ToastUtils.showShort("修改成功");
                             Intent intent = new Intent(ChangeLoginPwdActivity.this, LoginActivity.class);
                             startActivity(intent);
                         }else{
-                            ToastUtils.showShort(baseError.msg);
+                            ToastUtils.showShort(baseError.err.msg);
                         }
                         dialog.dismiss();
                     }

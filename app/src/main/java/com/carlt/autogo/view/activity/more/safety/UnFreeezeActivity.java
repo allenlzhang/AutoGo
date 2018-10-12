@@ -1,5 +1,6 @@
 package com.carlt.autogo.view.activity.more.safety;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -15,9 +16,15 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
+import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.SharepUtil;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -69,11 +76,6 @@ public class UnFreeezeActivity extends BaseMvpActivity {
     RelativeLayout rlHead2;
 
 
-    /**
-     * 是否完成解冻
-     */
-    private boolean unfreezeCommpeleted = false;
-
     @Override
     protected int getContentView() {
         return R.layout.activity_un_freeeze;
@@ -82,15 +84,9 @@ public class UnFreeezeActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("解冻账户");
-        if(!unfreezeCommpeleted){
-            rlUserUnfreeze.setVisibility(View.VISIBLE);
-            rlHead2.setVisibility(View.GONE);
-            tvUserUnfreeze.setText( "当前账号:"+ SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
-        }else {
-
-            rlUserUnfreeze.setVisibility(View.GONE);
-            rlHead2.setVisibility(View.VISIBLE);
-        }
+        rlUserUnfreeze.setVisibility(View.VISIBLE);
+        rlHead2.setVisibility(View.GONE);
+        tvUserUnfreeze.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
 
     }
 
@@ -103,41 +99,56 @@ public class UnFreeezeActivity extends BaseMvpActivity {
                 break;
             case R.id.btn_unfreeze_next:
                 String pwd = edUnfreezePwd.getText().toString().trim();
-                if(TextUtils.isEmpty(pwd)){
+                if (TextUtils.isEmpty(pwd)) {
                     ToastUtils.showShort("密码为空");
-                   return;
+                    return;
                 }
-
-                Observable.create(new ObservableOnSubscribe<Integer>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                        emitter.onNext(1);
-
-                    }
-                })
-                        .delay(4, TimeUnit.SECONDS)
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Integer>() {
-                            @Override
-                            public void accept(Integer integer) throws Exception {
-                                unfreezeCommpeleted = true;
-                                init();
-                            }
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                LogUtils.e(throwable.getMessage());
-                            }
-                        });
-
+                unFreeze(pwd);
                 break;
             case R.id.btn_commit:
-                Intent intent = new Intent(this,SafetyActivity.class);
+                Intent intent = new Intent(this, SafetyActivity.class);
                 startActivity(intent);
                 finish();
                 break;
         }
+    }
+
+    /**
+     * 解除冻结
+     * userFreeze 1正常 2冻结
+     *
+     * @param pwd
+     */
+    @SuppressLint("CheckResult")
+    private void unFreeze(String pwd) {
+        dialog.show();
+        HashMap<String, Object> params = new HashMap<>();
+        params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_INFO, ""));
+        params.put("password", CipherUtils.md5(pwd));
+        params.put("isMd5", true);
+        params.put("userFreeze", 1);
+        ClientFactory.def(UserService.class).freeze(params)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseError>() {
+                    @Override
+                    public void accept(BaseError baseError) throws Exception {
+                        dialog.dismiss();
+                        if (baseError == null) {
+                            rlUserUnfreeze.setVisibility(View.GONE);
+                            rlHead2.setVisibility(View.VISIBLE);
+                        } else {
+                            ToastUtils.showShort(baseError.msg);
+                        }
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
+                        LogUtils.e(throwable.getMessage());
+                    }
+                });
     }
 
     private void passwdToggle(boolean selected, EditText editText, ImageView imageView) {

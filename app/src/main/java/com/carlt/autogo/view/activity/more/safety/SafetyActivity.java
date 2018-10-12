@@ -1,6 +1,7 @@
 package com.carlt.autogo.view.activity.more.safety;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -125,6 +126,27 @@ public class SafetyActivity extends BaseMvpActivity {
                     startActivity(safety_identity);
                 }
             });
+        }
+        showBindingPhone(user.mobile);
+
+    }
+
+    /**
+     * 手机号中间*展示
+     * @param mobile
+     */
+    private void showBindingPhone(String mobile){
+        if (!TextUtils.isEmpty(mobile)&&mobile.length()>6){
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i <mobile.length() ; i++) {
+                char c = mobile.charAt(i);
+                if (i>=3&&i<=6){
+                    sb.append('*');
+                }else {
+                    sb.append(c);
+                }
+            }
+            mTvBindingPhone.setText(sb.toString());
         }
     }
 

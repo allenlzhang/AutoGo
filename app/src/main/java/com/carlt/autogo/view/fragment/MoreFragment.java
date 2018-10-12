@@ -1,5 +1,6 @@
 package com.carlt.autogo.view.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,9 +15,12 @@ import com.bumptech.glide.Glide;
 import com.carlt.autogo.R;
 import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.base.BaseMvpFragment;
+import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.common.dialog.LogoutTipDialog;
 import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.LoginActivity;
 import com.carlt.autogo.view.activity.more.safety.SafetyActivity;
 import com.carlt.autogo.view.activity.user.EditUserInfoActivity;
 
@@ -34,7 +38,7 @@ import butterknife.Unbinder;
  * Author : zhanglei
  * Date : 2018/9/10
  */
-public class MoreFragment extends BaseMvpFragment implements LogoutTipDialog.LogoutTipDialogClickLisniter{
+public class MoreFragment extends BaseMvpFragment implements CommonDialog.DialogWithTitleClick{
     /**
      * 性别
      */
@@ -80,8 +84,6 @@ public class MoreFragment extends BaseMvpFragment implements LogoutTipDialog.Log
 
     private UserInfo userInfo;
 
-    private LogoutTipDialog mDialog;
-
     @Override
     public int getLayoutId() {
         return R.layout.fragment_more;
@@ -89,9 +91,9 @@ public class MoreFragment extends BaseMvpFragment implements LogoutTipDialog.Log
 
     @Override
     protected void init() {
-        mDialog = new LogoutTipDialog(getContext(),R.style.DialogCommon);
-        mDialog.setLisniter(this);
+
     }
+
 
     @Override
     public void onResume() {
@@ -103,6 +105,8 @@ public class MoreFragment extends BaseMvpFragment implements LogoutTipDialog.Log
             mIvSex.setImageDrawable(getResources().getDrawable(R.mipmap.ic_sex_men));
         } else if (userInfo.gender == 2) {
             mIvSex.setImageDrawable(getResources().getDrawable(R.mipmap.ic_sex_women));
+        }else{
+            mIvSex.setImageDrawable(getResources().getDrawable(R.mipmap.ic_sex_secrecy));
         }
 
         Glide.with(this)
@@ -118,19 +122,22 @@ public class MoreFragment extends BaseMvpFragment implements LogoutTipDialog.Log
                 startActivity(edit_profile);
                 break;
             case R.id.ll_more_accounts_and_security:
-                Intent intent = new Intent(getContext(), SafetyActivity.class);
+                Intent intent = new Intent(mContext, SafetyActivity.class);
                 startActivity(intent);
                 break;
             case R.id.ll_more_setting:
                 break;
             case R.id.ll_more_log_out:
-                mDialog.show();
+                CommonDialog.createDialogNotitle(mContext, "确定退出登录？", "", "取消", "确定",this);
                 break;
         }
     }
 
     @Override
-    public void commit() {
-        //TODO 退出登录
+    public void onRightClick() {
+        SharepUtil.put(GlobalKey.USER_TOKEN,"");
+        Intent intent = new Intent(mContext, LoginActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 }

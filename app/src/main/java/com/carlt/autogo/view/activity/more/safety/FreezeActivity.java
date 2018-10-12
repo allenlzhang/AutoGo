@@ -2,6 +2,7 @@ package com.carlt.autogo.view.activity.more.safety;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +16,9 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.FreezeCommitDialog;
 import com.carlt.autogo.common.dialog.UUDialog;
+import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
@@ -84,8 +87,18 @@ public class FreezeActivity extends BaseMvpActivity {
     @Override
     public void init() {
         freezeCommitDialog = new FreezeCommitDialog(this, R.style.DialogCommon);
-        getUserInfo();
+        UserInfo userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        if(userInfo.userFreeze == 1){
+            setTitleText("冻结账户");
+            rlUserFreeze.setVisibility(View.VISIBLE);
+            rlUserUnfreeze.setVisibility(View.GONE);
 
+            tvFreezeStatusIno.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
+        }else {
+            setTitleText("解冻账户");
+            rlUserFreeze.setVisibility(View.GONE);
+            rlUserUnfreeze.setVisibility(View.VISIBLE);
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -100,7 +113,7 @@ public class FreezeActivity extends BaseMvpActivity {
                     @Override
                     public void accept(UserInfo userInfo) throws Exception {
                         dialog.dismiss();
-                        if(userInfo.userFreeze == 0){
+                        if(userInfo.userFreeze == 1){
                             setTitleText("冻结账户");
                             rlUserFreeze.setVisibility(View.VISIBLE);
                             rlUserUnfreeze.setVisibility(View.GONE);
@@ -125,6 +138,7 @@ public class FreezeActivity extends BaseMvpActivity {
 
     /**
      * 账户冻结提交
+     * userFreeze 1正常 2冻结
      */
     @OnClick({R.id.btn_freeze_commit})
     public void onViewClicked() {
@@ -134,29 +148,34 @@ public class FreezeActivity extends BaseMvpActivity {
             @Override
             public void commit() {
                 dialog.show();
-
-                LogUtils.e(SharepUtil.getPreferences().getString("token", ""));
-                Observable.create(new ObservableOnSubscribe<Integer>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                        emitter.onNext(1);
-                    }
-                })
-                        .delay(4, TimeUnit.SECONDS)
+                HashMap<String,Object> params = new HashMap<>();
+                params.put(GlobalKey.USER_TOKEN,SharepUtil.getPreferences().getString(GlobalKey.USER_INFO,""));
+                params.put("password","");
+                params.put("isMd5",true);
+                params.put("userFreeze",2);
+                ClientFactory.def(UserService.class).freeze(params)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Integer>() {
+                        .subscribe(new Consumer<BaseError>() {
                             @Override
-                            public void accept(Integer integer) throws Exception {
+                            public void accept(BaseError baseError) throws Exception {
                                 dialog.dismiss();
-                                ToastUtils.showShort("冻结成功");
-                                //解冻状态
-                                init();
+                                if (baseError == null){
+                                    ToastUtils.showShort("冻结成功");
+                                    ivBaseBack.setVisibility(View.GONE);
+                                    setTitleText("解冻账户");
+                                    rlUserFreeze.setVisibility(View.GONE);
+                                    rlUserUnfreeze.setVisibility(View.VISIBLE);
+                                }else {
+                                    ToastUtils.showShort(baseError.msg);
+                                }
+
                             }
                         }, new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
                                 dialog.dismiss();
+                                LogUtils.e(throwable.getMessage());
                             }
                         });
             }
