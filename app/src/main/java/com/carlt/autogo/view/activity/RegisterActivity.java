@@ -1,7 +1,6 @@
 package com.carlt.autogo.view.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +18,7 @@ import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
 import com.carlt.autogo.entry.user.BaseError;
-import com.carlt.autogo.presenter.UserPresenter;
+import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.presenter.register.IRegisterView;
 import com.carlt.autogo.presenter.register.RegisterPresenter;
 import java.util.HashMap;
@@ -103,7 +102,7 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
         Map<String ,String> param =new HashMap<>();
         param.put("mobile", phoneNum);
 
-        Observable<BaseError> observable = UserPresenter.sendValidate(phoneNum,param,1);
+        Observable<BaseError> observable = ObservableHelper.sendValidate(phoneNum,param,1);
 
         observable.subscribe(new Consumer<BaseError>() {
             @Override

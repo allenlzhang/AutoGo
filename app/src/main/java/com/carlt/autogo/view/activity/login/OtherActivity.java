@@ -16,7 +16,7 @@ import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
 import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.alipay.AuthResult;
-import com.carlt.autogo.presenter.UserPresenter;
+import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.presenter.register.IOtherRegisterView;
 import com.carlt.autogo.presenter.register.OtherRegisterPresenter;
 import com.carlt.autogo.utils.alipay.OrderInfoUtil2_0;
@@ -165,7 +165,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("openId", unionid);
                     params.put("openType", 2);
-                    Observable<String> observable = UserPresenter.loginByOpenApi(params, OtherActivity.this);
+                    Observable<String> observable = ObservableHelper.loginByOpenApi(params, OtherActivity.this);
                     observable.subscribe(new Consumer<String>() {
                         @Override
                         public void accept(String s) throws Exception {
@@ -176,7 +176,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(Throwable throwable) throws Exception {
-                            ToastUtils.showShort(UserPresenter.errorMsg);
+                            ToastUtils.showShort(ObservableHelper.errorMsg);
                             LogUtils.e(throwable.toString());
                         }
                     });
@@ -285,7 +285,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                         params.put("openId", authResult.user_id);
                         params.put("openType", 1);
                         LogUtils.e(authResult.user_id);
-                        return UserPresenter.loginByOpenApi(params, OtherActivity.this);
+                        return ObservableHelper.loginByOpenApi(params, OtherActivity.this);
                     }
                 })
                 .subscribeOn(Schedulers.newThread())

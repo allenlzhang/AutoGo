@@ -13,11 +13,9 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
-import com.carlt.autogo.entry.user.RetrievePassword;
-import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
-import com.carlt.autogo.presenter.UserPresenter;
+import com.carlt.autogo.presenter.ObservableHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -136,7 +134,7 @@ public class ForgotActivity extends BaseMvpActivity {
 
         Map<String ,String> param =new HashMap<>();
         param.put("mobile", phoneNum);
-        Observable<BaseError> observable = UserPresenter.sendValidate(phoneNum,param,2);
+        Observable<BaseError> observable = ObservableHelper.sendValidate(phoneNum,param,2);
 
         observable.subscribe(new Consumer<BaseError>() {
             @Override

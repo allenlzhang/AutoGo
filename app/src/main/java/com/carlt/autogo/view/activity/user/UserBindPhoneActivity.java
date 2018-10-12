@@ -1,9 +1,7 @@
 package com.carlt.autogo.view.activity.user;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -13,28 +11,21 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
-import com.carlt.autogo.entry.user.SmsToken;
-import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
-import com.carlt.autogo.presenter.UserPresenter;
+import com.carlt.autogo.presenter.ObservableHelper;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
 
 /**
  * @author wsq
@@ -183,7 +174,7 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
 //        @POST("User/GetSmsToken")
 //        Observable<SmsToken> getSmsToken(@Body Map<String,String> params);
 
-        Disposable disposableSend = UserPresenter.sendValidate(phoneNum,param,1)
+        Disposable disposableSend = ObservableHelper.sendValidate(phoneNum,param,1)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<BaseError>() {

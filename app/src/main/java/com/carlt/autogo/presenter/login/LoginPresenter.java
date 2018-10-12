@@ -8,7 +8,7 @@ import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
-import com.carlt.autogo.presenter.UserPresenter;
+import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.SharepUtil;
 
 import java.util.HashMap;
@@ -43,7 +43,7 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                             Map<String, String> token = new HashMap<String, String>();
                             token.put("token", user.token);
                             SharepUtil.put(GlobalKey.USER_TOKEN, user.token);
-                            return UserPresenter.getUserInfoByToken(token);
+                            return ObservableHelper.getUserInfoByToken(token);
                         }
                     }
                 })

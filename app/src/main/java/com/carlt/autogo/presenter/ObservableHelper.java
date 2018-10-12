@@ -15,6 +15,7 @@ import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.user.UserBindPhoneActivity;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,10 +30,11 @@ import io.reactivex.schedulers.Schedulers;
  * @time 14:27  2018/10/10/010
  * @describe  主要是提取用户相关的常用重复接口
  */
-public class UserPresenter {
+public class ObservableHelper {
 
-   public static  String errorMsg ;
+    public static  String errorMsg ;
     static String[] sexs = {"男","女","保密"};
+
     /**
      * 根据token 获取用户信息
      */

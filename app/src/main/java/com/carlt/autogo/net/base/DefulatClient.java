@@ -7,14 +7,21 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.BuildConfig;
 import com.carlt.autogo.global.GlobalUrl;
 import com.flyco.tablayout.widget.MsgView;
+import com.google.gson.internal.bind.MapTypeAdapterFactory;
 
 import java.io.IOException;
 
+import io.reactivex.annotations.Nullable;
+import okhttp3.FormBody;
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okio.BufferedSink;
 import retrofit2.Retrofit;
 import retrofit2.http.Headers;
 

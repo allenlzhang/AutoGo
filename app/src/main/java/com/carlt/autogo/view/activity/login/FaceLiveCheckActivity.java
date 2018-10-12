@@ -18,7 +18,7 @@ import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
-import com.carlt.autogo.presenter.UserPresenter;
+import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.user.accept.IdfCompleteActivity;
@@ -220,7 +220,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                             Map<String, String> token = new HashMap<String, String>();
                             token.put("token", user.token);
                             SharepUtil.put(GlobalKey.USER_TOKEN, user.token);
-                            return UserPresenter.getUserInfoByToken(token);
+                            return ObservableHelper.getUserInfoByToken(token);
                         }
                     }
                 })

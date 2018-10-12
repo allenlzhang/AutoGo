@@ -1,7 +1,6 @@
 package com.carlt.autogo.view.activity.login;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -14,12 +13,11 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.user.BaseError;
-import com.carlt.autogo.entry.user.SmsToken;
 import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
-import com.carlt.autogo.presenter.UserPresenter;
+import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.MainActivity;
 
@@ -96,7 +94,7 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
     @SuppressLint("CheckResult")
     private void sendValidate(final String phoneNum, Map<String, String> params) {
 
-        Observable<BaseError> observable = UserPresenter.sendValidate(phoneNum,params, 11);
+        Observable<BaseError> observable = ObservableHelper.sendValidate(phoneNum,params, 11);
 
         observable.subscribe(new Consumer<BaseError>() {
             @Override
@@ -145,7 +143,7 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
                             Map<String, String> token =   new HashMap<String, String>();
                             token.put("token",user.token);
                             SharepUtil.put("token",user.token);
-                            return UserPresenter.getUserInfoByToken(token);
+                            return ObservableHelper.getUserInfoByToken(token);
                         }
                     }
                 })
