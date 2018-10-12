@@ -158,7 +158,7 @@ public class PersonAvatarActivity extends BaseMvpActivity {
                     public ObservableSource<BaseError> apply(UpdateImageResultInfo updateImageResultInfo) throws Exception {
                         if(updateImageResultInfo.message != null){
                             Map<String,Object> params = new HashMap<>();
-                            params.put("token", SharepUtil.getPreferences().getString("token",""));
+        //                    params.put("token", SharepUtil.getPreferences().getString("token",""));
                             params.put("avatarId",updateImageResultInfo.message.id );
 
                             avatarPath = updateImageResultInfo.message.imageUrl;
