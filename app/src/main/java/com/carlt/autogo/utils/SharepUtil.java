@@ -78,7 +78,7 @@ public class SharepUtil {
     public static void put(@NonNull final String key, final String value) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static void putBoolean(@NonNull String key, boolean value) {
@@ -96,7 +96,10 @@ public class SharepUtil {
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove("token");
         editor.remove("user");
-        editor.commit();
+        editor.apply();
     }
 
+    public static void cleanAllKey() {
+        preferences.edit().clear().apply();
+    }
 }

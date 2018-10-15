@@ -188,7 +188,7 @@ public class SafetyActivity extends BaseMvpActivity {
                 break;
             case R.id.ll_safety_cancellation_account:
                 //                mTipDialog.show();
-                startActivity(new Intent(this, LogoutNoticeActivity.class));
+                startActivity(new Intent(this, UnRegisterNoticeActivity.class));
                 break;
         }
     }

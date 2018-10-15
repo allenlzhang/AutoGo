@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="12dp"
-    tools:context=".view.activity.more.safety.LogoutNoticeActivity">
+    tools:context=".view.activity.more.safety.UnRegisterNoticeActivity">
 
     <TextView
         android:layout_width="wrap_content"
