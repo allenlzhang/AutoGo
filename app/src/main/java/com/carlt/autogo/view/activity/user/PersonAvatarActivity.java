@@ -78,10 +78,10 @@ public class PersonAvatarActivity extends BaseMvpActivity {
     public void init() {
 
         setTitleText("用户个人头像");
-        setHeadColor(getResources().getColor(R.color.colorBlack),
-                getResources().getColor(R.color.colorWhite),
-                getResources().getColor(R.color.colorWhite)
-                ,getResources().getColor(R.color.colorWhite));
+//        setHeadColor(getResources().getColor(R.color.),
+//                getResources().getColor(R.color.colorBlack),
+//                getResources().getColor(R.color.colorBlack)
+//                ,getResources().getColor(R.color.colorBlack));
 
         showHeaderRight("修改");
      //   checkPermission(mPermission);
@@ -144,6 +144,7 @@ public class PersonAvatarActivity extends BaseMvpActivity {
      */
     @SuppressLint("CheckResult")
     private void getUpdateImageResultInfoObservableSource(File file) {
+        dialog.show();
         RequestBody requestBody = MultipartBodyBuilder
                 .addFormDataPart("type", "autogo/face")
                 .addFormDataPart("fileOwner","face")
@@ -182,13 +183,13 @@ public class PersonAvatarActivity extends BaseMvpActivity {
                             ToastUtils.showLong("编辑成功");
                             UserInfo userInfo =   SharepUtil.<UserInfo>getBeanFromSp("user");
                             userInfo.avatarFile = avatarPath;
-
                             SharepUtil.putByBean("user",userInfo);
                         }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
                         LogUtils.e(throwable.toString());
                     }
                 });

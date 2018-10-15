@@ -30,9 +30,9 @@
             android:id="@+id/img_edheader"
             android:layout_width="70dp"
             android:layout_height="70dp"
+            android:src="@mipmap/ic_head_normal_bg"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/ic_login_phone"
             android:layout_marginRight="10dp"
             android:scaleType="fitXY"
             />

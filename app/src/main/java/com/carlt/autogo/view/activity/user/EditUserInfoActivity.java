@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.DialogChangeSex;
@@ -20,6 +21,7 @@ import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.utils.gildutils.GlideCircleTransform;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -78,8 +80,15 @@ public class EditUserInfoActivity extends BaseMvpActivity {
         userInfo = SharepUtil.<UserInfo>getBeanFromSp("user");
         tvUserCarName.setText("" + userInfo.realName);
         tvSex.setText("" + userInfo.sex);
+
+
         Glide.with(this)
                 .load(userInfo.avatarFile)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .skipMemoryCache(true)
+                .placeholder(R.mipmap.ic_head_normal_bg)
+                .error(R.mipmap.ic_head_normal_bg)
+                .transform(new GlideCircleTransform(this))
                 .into(imgEdHeader);
     }
 

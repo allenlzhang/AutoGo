@@ -7,11 +7,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.utils.gildutils.GlideCircleTransform;
 import com.carlt.autogo.view.activity.more.safety.SafetyActivity;
 import com.carlt.autogo.view.activity.user.EditUserInfoActivity;
 
@@ -97,8 +99,13 @@ public class MoreFragment extends BaseMvpFragment {
             mIvSex.setImageDrawable(getResources().getDrawable(R.mipmap.ic_sex_secrecy));
         }
 
-        Glide.with(this)
+        Glide.with(mContext)
                 .load(userInfo.avatarFile)
+                .placeholder(R.mipmap.ic_head_normal_bg)
+                .error(R.mipmap.ic_head_normal_bg)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .skipMemoryCache(true)
+                .transform(new GlideCircleTransform(mContext))
                 .into(ivMoreHeadSculpture);
     }
 
