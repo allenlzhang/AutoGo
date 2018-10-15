@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
+import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.BaseDialog;
@@ -189,8 +190,16 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                 }
 
                 Map<String, Object> params = new HashMap<>();
+
                 params.put("mobile", uPhone);
                 params.put("password", pwd);
+                params.put("version", 1);
+                params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
+                params.put("loginModel", AutoGoApp.MODEL);
+                params.put("loginSoftType", "Android");
+
+
+
                 getPresenter().login(params);
 
                 break;

@@ -2,6 +2,7 @@ package com.carlt.autogo.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
 
 import com.baidu.idl.face.platform.FaceConfig;
 import com.baidu.idl.face.platform.FaceEnvironment;
@@ -9,10 +10,12 @@ import com.baidu.idl.face.platform.FaceSDKManager;
 import com.baidu.idl.face.platform.LivenessTypeEnum;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
+import com.carlt.autogo.utils.CipherUtils;
 import com.mob.MobSDK;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Description:
@@ -22,6 +25,17 @@ import java.util.List;
  */
 public class AutoGoApp extends Application {
     public static Context mAppContext;
+    public static String MODEL_NAME;// 手机名称
+
+    public static String MODEL;// 手机型号
+
+    public static String ANDROID_VERSION;// 手机安卓系统版本号
+
+    public static String DISPLAY;// UI定制系统（如mi ui,Flyme OS 4.5A）
+
+    public static String NIMEI;//手机唯一标识吗 (新的)
+
+    public static String IMEI;//手机唯一标识吗 (旧的)
 
     @Override
     public void onCreate() {
@@ -31,6 +45,18 @@ public class AutoGoApp extends Application {
         //shareSdk配置
         MobSDK.init(this);
         initLib();
+        initBuild();
+    }
+
+    private void initBuild() {
+
+        MODEL_NAME = Build.MODEL;
+        ANDROID_VERSION = "android " + Build.VERSION.RELEASE;
+        MODEL = MODEL_NAME + " " + ANDROID_VERSION;
+        DISPLAY = "ui_sysinfo " + android.os.Build.DISPLAY;
+        NIMEI = getNewUniquePsuedoID();
+        IMEI=getUniquePsuedoID();
+
     }
 
     private void initUtils() {
@@ -75,4 +101,26 @@ public class AutoGoApp extends Application {
         FaceSDKManager.getInstance().setFaceConfig(config);
     }
 
+    public static String getNewUniquePsuedoID() {
+        // 主板 + CPU 类型 +
+        String m_szDevIDShort = Build.BOARD
+                + Build.CPU_ABI
+                + Build.PRODUCT
+                + Build.SERIAL
+                + Build.HARDWARE;
+
+        m_szDevIDShort = "ZT-" + UUID.nameUUIDFromBytes(m_szDevIDShort.getBytes()).toString();
+
+        return CipherUtils.md5(m_szDevIDShort);
+    }
+    public static String getUniquePsuedoID() {
+
+        String m_szDevIDShort = Build.BRAND + Build.CPU_ABI + Build.DEVICE
+                + Build.HOST + Build.MANUFACTURER + Build.MODEL + Build.PRODUCT
+                + Build.TYPE + Build.USER + Build.FINGERPRINT + Build.SERIAL
+                + Build.HARDWARE;
+        m_szDevIDShort = "ZT-"
+                + UUID.nameUUIDFromBytes(m_szDevIDShort.getBytes()).toString();
+        return CipherUtils.md5(m_szDevIDShort);
+    }
 }
