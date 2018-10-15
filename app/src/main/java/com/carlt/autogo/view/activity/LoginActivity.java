@@ -44,7 +44,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-import static java.lang.System.exit;
 
 @CreatePresenter(presenter = LoginPresenter.class)
 public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements ILoginView {

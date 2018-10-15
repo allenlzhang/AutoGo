@@ -1,8 +1,6 @@
 package com.carlt.autogo.view.activity.more.safety;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -21,19 +19,12 @@ import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.SharepUtil;
-import com.carlt.autogo.view.activity.MainActivity;
-
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -91,26 +82,8 @@ public class UnFreeezeActivity extends BaseMvpActivity {
         rlUserUnfreeze.setVisibility(View.VISIBLE);
         rlHead2.setVisibility(View.GONE);
         tvUserUnfreeze.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
-        ivBaseBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UserInfo userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-                if (userInfo.userFreeze == 2) {
-                    finish();
-                } else {
-                    commit();
-                }
-            }
-        });
     }
 
-    private void commit() {
-        if (fromMain) {
-            startActivity(MainActivity.class);
-        } else {
-            startActivity(SafetyActivity.class);
-        }
-    }
 
     @OnClick({R.id.img_passwd_toggle, R.id.btn_unfreeze_next, R.id.btn_commit})
     public void onViewClicked(View view) {
@@ -127,7 +100,7 @@ public class UnFreeezeActivity extends BaseMvpActivity {
                 unFreeze(pwd);
                 break;
             case R.id.btn_commit:
-                commit();
+                finish();
                 break;
         }
     }
@@ -154,6 +127,7 @@ public class UnFreeezeActivity extends BaseMvpActivity {
                     public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
                         if (baseError.msg == null) {
+                            ActivityControl.removeFreezeActivity();
                             UserInfo userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
                             userInfo.userFreeze = 1;
                             SharepUtil.putByBean(GlobalKey.USER_INFO,userInfo);

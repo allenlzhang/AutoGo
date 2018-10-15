@@ -2,10 +2,12 @@ package com.carlt.autogo.utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.view.activity.LoginActivity;
+import com.carlt.autogo.view.activity.more.safety.FreezeActivity;
 
 import java.util.ArrayList;
 
@@ -36,6 +38,14 @@ public class ActivityControl {
     public static void removeAll(){
         for (Activity activity : mActivityList) {
             activity.finish();
+        }
+    }
+
+    public static void removeFreezeActivity(){
+        for (Activity a : mActivityList) {
+            if (a.getLocalClassName().equals("view.activity.more.safety.FreezeActivity")){
+                a.finish();
+            }
         }
     }
 

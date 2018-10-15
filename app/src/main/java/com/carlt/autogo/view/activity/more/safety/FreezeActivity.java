@@ -22,6 +22,7 @@ import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.LoginActivity;
 
@@ -123,6 +124,7 @@ public class FreezeActivity extends BaseMvpActivity {
 
                             tvFreezeStatusIno.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
                         }else {
+
                             ivBaseBack.setVisibility(View.GONE);
                             rlUserFreeze.setVisibility(View.GONE);
                             rlUserUnfreeze.setVisibility(View.VISIBLE);
@@ -209,6 +211,7 @@ public class FreezeActivity extends BaseMvpActivity {
         UserInfo userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         if (keyCode == KeyEvent.KEYCODE_BACK&&userInfo.userFreeze == 2){
             SharepUtil.put(GlobalKey.USER_TOKEN,"");
+            ActivityControl.removeAllActivity(this);
             startActivity(LoginActivity.class);
         }
         return super.onKeyDown(keyCode, event);
