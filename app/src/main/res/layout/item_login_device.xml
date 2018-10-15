@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:paddingRight="12dp"
+    android:paddingLeft="12dp"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:id="@+id/txt_item_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/textColorGray1"
+        android:layout_marginTop="8dp"
+        />
+    <TextView
+        android:id="@+id/txt_login_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:textColor="@color/textColorGray"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/txt_item_device"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/textColorGray"
+        />
+</RelativeLayout>
