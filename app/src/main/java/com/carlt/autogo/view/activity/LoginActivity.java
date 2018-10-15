@@ -20,13 +20,12 @@ import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.BaseDialog;
 import com.carlt.autogo.common.dialog.LoginMoreDialog;
 import com.carlt.autogo.entry.user.UserInfo;
-import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.presenter.login.ILoginView;
 import com.carlt.autogo.presenter.login.LoginPresenter;
+import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.login.ForgotActivity;
-import com.carlt.autogo.view.activity.more.safety.FreezeActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 
@@ -44,6 +43,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
+import static java.lang.System.exit;
 
 @CreatePresenter(presenter = LoginPresenter.class)
 public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements ILoginView {
@@ -234,4 +235,9 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     }
 
+    @Override
+    public void onBackPressed() {
+        ActivityControl.removeAll();
+        super.onBackPressed();
+    }
 }

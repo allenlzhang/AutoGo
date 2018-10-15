@@ -254,8 +254,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                         dialog.dismiss();
                         if(baseError.msg== null){
                             ToastUtils.showShort("修改成功");
-                            Intent intent = new Intent(ChangeLoginPwdActivity.this,LoginActivity.class);
-                            startActivity(intent);
+                            startActivity(LoginActivity.class);
                         }else {
                             ToastUtils.showShort(baseError.msg);
                         }
@@ -292,8 +291,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                     public void accept(RetrievePassword baseError) throws Exception {
                         if (baseError.err == null){
                             ToastUtils.showShort("修改成功");
-                            Intent intent = new Intent(ChangeLoginPwdActivity.this, LoginActivity.class);
-                            startActivity(intent);
+                            startActivity(LoginActivity.class);
                         }else{
                             ToastUtils.showShort(baseError.err.msg);
                         }
