@@ -22,7 +22,7 @@ import butterknife.Unbinder;
 
 
 /**
- * Description :
+ * Description :fragment 基类
  */
 public abstract class BaseMvpFragment<P extends BasePresenter> extends Fragment implements BaseMvpView {
     protected View           mRootView;

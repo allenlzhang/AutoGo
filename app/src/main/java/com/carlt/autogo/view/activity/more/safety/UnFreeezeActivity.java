@@ -23,6 +23,7 @@ import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.MainActivity;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -75,6 +76,7 @@ public class UnFreeezeActivity extends BaseMvpActivity {
     @BindView(R.id.rl_head2)
     RelativeLayout rlHead2;
 
+    private boolean fromMain = false;
 
     @Override
     protected int getContentView() {
@@ -84,12 +86,31 @@ public class UnFreeezeActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("解冻账户");
+        fromMain = getIntent().getBooleanExtra("fromMain", false);
+
         rlUserUnfreeze.setVisibility(View.VISIBLE);
         rlHead2.setVisibility(View.GONE);
         tvUserUnfreeze.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
-
+        ivBaseBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserInfo userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+                if (userInfo.userFreeze == 2) {
+                    finish();
+                } else {
+                    commit();
+                }
+            }
+        });
     }
 
+    private void commit() {
+        if (fromMain) {
+            startActivity(MainActivity.class);
+        } else {
+            startActivity(SafetyActivity.class);
+        }
+    }
 
     @OnClick({R.id.img_passwd_toggle, R.id.btn_unfreeze_next, R.id.btn_commit})
     public void onViewClicked(View view) {
@@ -106,9 +127,7 @@ public class UnFreeezeActivity extends BaseMvpActivity {
                 unFreeze(pwd);
                 break;
             case R.id.btn_commit:
-                Intent intent = new Intent(this, SafetyActivity.class);
-                startActivity(intent);
-                finish();
+                commit();
                 break;
         }
     }
@@ -123,7 +142,7 @@ public class UnFreeezeActivity extends BaseMvpActivity {
     private void unFreeze(String pwd) {
         dialog.show();
         HashMap<String, Object> params = new HashMap<>();
-        params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_INFO, ""));
+        params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN, ""));
         params.put("password", CipherUtils.md5(pwd));
         params.put("isMd5", true);
         params.put("userFreeze", 1);
@@ -134,7 +153,10 @@ public class UnFreeezeActivity extends BaseMvpActivity {
                     @Override
                     public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
-                        if (baseError == null) {
+                        if (baseError.msg == null) {
+                            UserInfo userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+                            userInfo.userFreeze = 1;
+                            SharepUtil.putByBean(GlobalKey.USER_INFO,userInfo);
                             rlUserUnfreeze.setVisibility(View.GONE);
                             rlHead2.setVisibility(View.VISIBLE);
                         } else {

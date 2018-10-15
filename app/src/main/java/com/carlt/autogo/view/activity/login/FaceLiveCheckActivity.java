@@ -23,6 +23,7 @@ import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.user.accept.IdfCompleteActivity;
 import com.carlt.autogo.view.activity.user.accept.UploadIdCardPhotoActivity;
+import com.google.gson.Gson;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -194,6 +195,8 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
 
     }
 
+    public static final String faceLoginUrl = "http://test.linewin.cc:8888/app/User/LoginByFace";
+
     /**
      * Description : 人脸登录逻辑
      * Author     : zhanglei
@@ -207,22 +210,36 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
         Map<String, Object> map = new HashMap<>();
         map.put("mobile", mobile);
         map.put("faceId", id);
+        Gson gson = new Gson();
+        String json = gson.toJson(map);
+        //        OkGo.<String>post(faceLoginUrl)
+        //                .headers("Carlt-Access-Id", "19877415356991399877")
+        //                .upJson(json)
+        //                .execute(new StringCallback() {
+        //                    @Override
+        //                    public void onSuccess(Response<String> response) {
+        //                        LogUtils.e("====" + response.body());
+        //                    }
+        //                });
         ClientFactory.def(UserService.class).LoginByFace(map)
+
                 .flatMap(new Function<User, ObservableSource<String>>() {
                     @Override
                     public ObservableSource<String> apply(User user) throws Exception {
                         LogUtils.e("---" + user.toString());
+                        dialog.dismiss();
                         if (user.err != null) {
                             //                            errorMsg = user.err.msg;
                             ToastUtils.showShort("登录失败");
                             return null;
                         } else {
-                            Map<String, String> token = new HashMap<String, String>();
+                            Map<String, String> token = new HashMap<>();
                             token.put("token", user.token);
                             SharepUtil.put(GlobalKey.USER_TOKEN, user.token);
                             return ObservableHelper.getUserInfoByToken(token);
                         }
                     }
+
                 })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -232,6 +249,11 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                         dialog.dismiss();
                         ToastUtils.showShort(s);
                         go2Activity();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable.toString());
                     }
                 });
     }

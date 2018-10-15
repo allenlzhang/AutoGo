@@ -20,11 +20,13 @@ import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.BaseDialog;
 import com.carlt.autogo.common.dialog.LoginMoreDialog;
 import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.presenter.login.ILoginView;
 import com.carlt.autogo.presenter.login.LoginPresenter;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.login.ForgotActivity;
+import com.carlt.autogo.view.activity.more.safety.FreezeActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 
@@ -95,7 +97,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.READ_PHONE_STATE ,
+            Manifest.permission.READ_PHONE_STATE,
 
     };
 
@@ -159,7 +161,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
         switch (view.getId()) {
             case R.id.btn_more:
 
-                BaseDialog baseDialog = new LoginMoreDialog(this);
+                BaseDialog baseDialog = new LoginMoreDialog(this, false);
                 baseDialog.show();
 
 
@@ -196,7 +198,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                 passwdToggle.setSelected(!passwdToggle.isSelected());
                 break;
             case R.id.forgot_passwd:
-                startActivity(ForgotActivity.class,false);
+                startActivity(ForgotActivity.class, false);
                 break;
 
         }
@@ -216,6 +218,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     @Override
     public void loginFinish() {
+
         startActivity(MainActivity.class);
     }
 

@@ -1,5 +1,6 @@
 package com.carlt.autogo.view.activity;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -7,7 +8,11 @@ import android.view.View;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.base.BaseMvpFragment;
+import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.model.TabEntity;
+import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.more.safety.FreezeActivity;
 import com.carlt.autogo.view.fragment.FragmentFactory;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
@@ -96,4 +101,14 @@ public class MainActivity extends BaseMvpActivity {
         ft.commitAllowingStateLoss();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        if (info.userFreeze == 2){
+            Intent intent = new Intent(MainActivity.this,FreezeActivity.class);
+            intent.putExtra("fromMain",true);
+            startActivity(intent);
+        }
+    }
 }

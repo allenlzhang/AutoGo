@@ -106,6 +106,7 @@ public class SafetyActivity extends BaseMvpActivity {
         super.onResume();
         //        String isIdentity = SharepUtil.getPreferences().getString(GlobalKey.IDENTITY_AUTH, "");
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        boolean faceLogin = SharepUtil.getPreferences().getBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
         LogUtils.e("----" + user.toString());
         if (user.alipayAuth != 0 && user.faceId != 0) {
             mTvIdentityAuthentication.setText("已认证");
@@ -126,6 +127,13 @@ public class SafetyActivity extends BaseMvpActivity {
                     startActivity(safety_identity);
                 }
             });
+        }
+        if (faceLogin && user.alipayAuth != 0 && user.faceId != 0) {
+            mTvFaceRecognition.setText("已开启");
+            mIvFaceRecognition.setVisibility(View.VISIBLE);
+        } else {
+            mTvFaceRecognition.setText("未开启");
+            mIvFaceRecognition.setVisibility(View.GONE);
         }
         showBindingPhone(user.mobile);
 
@@ -179,7 +187,7 @@ public class SafetyActivity extends BaseMvpActivity {
                 startActivity(intentFreeze);
                 break;
             case R.id.ll_safety_cancellation_account:
-//                mTipDialog.show();
+                //                mTipDialog.show();
                 startActivity(new Intent(this, LogoutNoticeActivity.class));
                 break;
         }

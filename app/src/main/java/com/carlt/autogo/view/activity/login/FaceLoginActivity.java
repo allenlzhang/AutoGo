@@ -68,7 +68,7 @@ public class FaceLoginActivity extends BaseMvpActivity {
                 startActivity(intentRegist);
                 break;
             case R.id.btn_more:
-                BaseDialog baseDialog = new LoginMoreDialog(this);
+                BaseDialog baseDialog = new LoginMoreDialog(this, true);
                 baseDialog.show();
                 break;
         }

@@ -10,6 +10,7 @@
     <color name="colorBottomTabSelect">#2C97DE</color>
     <color name="colorBottomTabBg">#FFFFFF</color>
     <color name="colorBottomTabUnSelect">#66000000</color>
+    <color name="colorBlue">#478cea</color>
     <!-- 浅灰 -->
     <color name="textColorGray">#999999</color>
     <color name="color_c">#cccccc</color>
