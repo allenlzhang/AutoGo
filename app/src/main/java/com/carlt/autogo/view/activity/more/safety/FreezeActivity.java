@@ -80,8 +80,6 @@ public class FreezeActivity extends BaseMvpActivity {
 
     private FreezeCommitDialog freezeCommitDialog;
 
-    private int userFreeze = 0;
-
     private boolean fromMain = false;
 
     @Override
@@ -110,7 +108,6 @@ public class FreezeActivity extends BaseMvpActivity {
                     @Override
                     public void accept(UserInfo userInfo) throws Exception {
                         dialog.dismiss();
-                        userFreeze = userInfo.userFreeze;
                         if(userInfo.userFreeze == 1){
                             tvBaseRight.setText("退出登录");
                             tvBaseRight.setTextColor(getResources().getColor(R.color.colorBlue));
@@ -168,7 +165,6 @@ public class FreezeActivity extends BaseMvpActivity {
                             public void accept(BaseError baseError) throws Exception {
                                 dialog.dismiss();
                                 if (baseError.msg == null){
-                                    userFreeze = 2;
                                     UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
                                     info.userFreeze = 2;
                                     SharepUtil.putByBean(GlobalKey.USER_INFO,info);
@@ -210,7 +206,8 @@ public class FreezeActivity extends BaseMvpActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK&&userFreeze == 2){
+        UserInfo userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        if (keyCode == KeyEvent.KEYCODE_BACK&&userInfo.userFreeze == 2){
             SharepUtil.put(GlobalKey.USER_TOKEN,"");
             startActivity(LoginActivity.class);
         }

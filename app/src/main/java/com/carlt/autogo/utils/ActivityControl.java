@@ -33,6 +33,12 @@ public class ActivityControl {
         }
     }
 
+    public static void removeAll(){
+        for (Activity activity : mActivityList) {
+            activity.finish();
+        }
+    }
+
     public static void logout(final Activity context) {
 
         CommonDialog.createDialogNotitle(context, "确定退出登录？", "", "取消", "确定", new CommonDialog.DialogWithTitleClick() {

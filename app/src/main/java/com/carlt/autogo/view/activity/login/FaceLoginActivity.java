@@ -59,9 +59,7 @@ public class FaceLoginActivity extends BaseMvpActivity {
                 break;
             case R.id.forgot_passwd:
                 //                密码登录
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                startActivity(LoginActivity.class);
                 break;
             case R.id.user_regist:
                 Intent intentRegist = new Intent(this, RegisterActivity.class);
