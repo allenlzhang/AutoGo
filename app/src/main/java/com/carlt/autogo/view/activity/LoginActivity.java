@@ -20,6 +20,8 @@ import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.BaseDialog;
 import com.carlt.autogo.common.dialog.LoginMoreDialog;
 import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.layouthook.LayoutHook;
+import com.carlt.autogo.layouthook.MyPhoneLayoutInflater;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.presenter.login.ILoginView;
 import com.carlt.autogo.presenter.login.LoginPresenter;
@@ -89,6 +91,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     @Override
     protected int getContentView() {
+
         return R.layout.activity_login;
     }
 

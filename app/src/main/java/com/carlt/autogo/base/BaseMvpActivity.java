@@ -23,6 +23,8 @@ import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.basemvp.PresenterDispatch;
 import com.carlt.autogo.basemvp.PresenterProviders;
 import com.carlt.autogo.common.dialog.UUDialog;
+import com.carlt.autogo.layouthook.LayoutHook;
+import com.carlt.autogo.layouthook.MyPhoneLayoutInflater;
 import com.carlt.autogo.utils.ActivityControl;
 
 import java.util.ArrayList;
@@ -58,6 +60,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     public List<Disposable> disposables = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_base);
@@ -82,7 +85,12 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
                 finish();
             }
         });
-        flContent.addView(getLayoutInflater().inflate(getContentView(), null));
+        MyPhoneLayoutInflater layoutInflater = new MyPhoneLayoutInflater(this);
+        LayoutHook.layoutInflaterHook(layoutInflater,getContentView(),flContent);
+//       flContent.addView(getLayoutInflater().inflate(getContentView(), null));
+       // flContent.addView();
+
+
         dialog = new UUDialog(this,R.style.DialogCommon);
 
     }
