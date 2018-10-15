@@ -1,6 +1,7 @@
 package com.carlt.autogo.net.service;
 
 import com.carlt.autogo.entry.user.BaseError;
+import com.carlt.autogo.entry.user.LoginLogInfo;
 import com.carlt.autogo.entry.user.RetrievePassword;
 import com.carlt.autogo.entry.user.SmsToken;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
@@ -98,6 +99,9 @@ public interface UserService {
     @POST("User/Freeze")
     Observable<BaseError> freeze(@Body Map<String, Object> params);
 
+    // 用户登录信息
+    @POST("User/LoginLog")
+    Observable<LoginLogInfo> loginLog(@Body Map<String, Object> params);
     // 注销
     @POST("User/UnRegister")
     Observable<BaseError> unRegister(@Body Map<String, Object> params);
