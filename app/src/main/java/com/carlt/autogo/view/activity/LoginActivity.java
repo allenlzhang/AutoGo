@@ -20,11 +20,13 @@ import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.BaseDialog;
 import com.carlt.autogo.common.dialog.LoginMoreDialog;
 import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.presenter.login.ILoginView;
 import com.carlt.autogo.presenter.login.LoginPresenter;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.login.ForgotActivity;
+import com.carlt.autogo.view.activity.more.safety.FreezeActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 
@@ -216,7 +218,15 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     @Override
     public void loginFinish() {
-        startActivity(MainActivity.class);
+        UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        if (info.userFreeze == 2){
+            Intent intent = new Intent(LoginActivity.this,FreezeActivity.class);
+            intent.putExtra("fromLogin",true);
+            startActivity(intent);
+            finish();
+        }else {
+            startActivity(MainActivity.class);
+        }
     }
 
     private void passwdToggle(boolean selected) {

@@ -47,7 +47,8 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     protected RelativeLayout rlTitle;
     @BindView(R.id.flContent)
     FrameLayout flContent;
-    @BindView(R.id.tv_base_right)TextView tvBaseRight;
+    @BindView(R.id.tv_base_right)
+    public TextView tvBaseRight;
     private PresenterProviders mPresenterProviders;
     private PresenterDispatch  mPresenterDispatch;
     private int requestCodePermsiision = 1020;

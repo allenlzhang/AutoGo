@@ -23,6 +23,7 @@ import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.MainActivity;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -75,6 +76,10 @@ public class UnFreeezeActivity extends BaseMvpActivity {
     @BindView(R.id.rl_head2)
     RelativeLayout rlHead2;
 
+    /**
+     * 是否从登录跳转过来
+     */
+    private boolean fromLogin = false;
 
     @Override
     protected int getContentView() {
@@ -84,6 +89,7 @@ public class UnFreeezeActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("解冻账户");
+        fromLogin = getIntent().getBooleanExtra("fromLogin",false);
         rlUserUnfreeze.setVisibility(View.VISIBLE);
         rlHead2.setVisibility(View.GONE);
         tvUserUnfreeze.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
@@ -106,9 +112,11 @@ public class UnFreeezeActivity extends BaseMvpActivity {
                 unFreeze(pwd);
                 break;
             case R.id.btn_commit:
-                Intent intent = new Intent(this, SafetyActivity.class);
-                startActivity(intent);
-                finish();
+                if (fromLogin){
+                    startActivity(MainActivity.class);
+                }else {
+                    startActivity(SafetyActivity.class);
+                }
                 break;
         }
     }
@@ -123,7 +131,7 @@ public class UnFreeezeActivity extends BaseMvpActivity {
     private void unFreeze(String pwd) {
         dialog.show();
         HashMap<String, Object> params = new HashMap<>();
-        params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_INFO, ""));
+        params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN, ""));
         params.put("password", CipherUtils.md5(pwd));
         params.put("isMd5", true);
         params.put("userFreeze", 1);
@@ -134,7 +142,7 @@ public class UnFreeezeActivity extends BaseMvpActivity {
                     @Override
                     public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
-                        if (baseError == null) {
+                        if (baseError.msg == null) {
                             rlUserUnfreeze.setVisibility(View.GONE);
                             rlHead2.setVisibility(View.VISIBLE);
                         } else {
