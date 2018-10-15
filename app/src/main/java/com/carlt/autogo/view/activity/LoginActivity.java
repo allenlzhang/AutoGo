@@ -218,15 +218,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     @Override
     public void loginFinish() {
-        UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-        if (info.userFreeze == 2){
-            Intent intent = new Intent(LoginActivity.this,FreezeActivity.class);
-            intent.putExtra("fromLogin",true);
-            startActivity(intent);
-            finish();
-        }else {
-            startActivity(MainActivity.class);
-        }
+
+        startActivity(MainActivity.class);
     }
 
     private void passwdToggle(boolean selected) {

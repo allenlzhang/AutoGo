@@ -80,12 +80,9 @@ public class FreezeActivity extends BaseMvpActivity {
 
     private FreezeCommitDialog freezeCommitDialog;
 
-    int userFreeze = 0;
+    private int userFreeze = 0;
 
-    /**
-     * 是否从登录跳转过来
-     */
-    private boolean fromLogin = false;
+    private boolean fromMain = false;
 
     @Override
     protected int getContentView() {
@@ -95,7 +92,7 @@ public class FreezeActivity extends BaseMvpActivity {
 
     @Override
     public void init() {
-        fromLogin = getIntent().getBooleanExtra("fromLogin",false);
+        fromMain = getIntent().getBooleanExtra("fromMain",false);
         setTitleText("冻结账户");
         freezeCommitDialog = new FreezeCommitDialog(this, R.style.DialogCommon);
         getUserInfo();
@@ -171,6 +168,10 @@ public class FreezeActivity extends BaseMvpActivity {
                             public void accept(BaseError baseError) throws Exception {
                                 dialog.dismiss();
                                 if (baseError.msg == null){
+                                    userFreeze = 2;
+                                    UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+                                    info.userFreeze = 2;
+                                    SharepUtil.putByBean(GlobalKey.USER_INFO,info);
                                     ToastUtils.showShort("冻结成功");
                                     ivBaseBack.setVisibility(View.GONE);
                                     tvBaseRight.setText("");
@@ -202,7 +203,7 @@ public class FreezeActivity extends BaseMvpActivity {
     public void onUnFreeze(){
 
         Intent intent = new Intent(this,UnFreeezeActivity.class );
-        intent.putExtra("fromLogin",true);
+        intent.putExtra("fromMain",fromMain);
         startActivity( intent );
 
     }

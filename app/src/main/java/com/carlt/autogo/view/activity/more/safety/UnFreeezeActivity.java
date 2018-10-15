@@ -76,10 +76,7 @@ public class UnFreeezeActivity extends BaseMvpActivity {
     @BindView(R.id.rl_head2)
     RelativeLayout rlHead2;
 
-    /**
-     * 是否从登录跳转过来
-     */
-    private boolean fromLogin = false;
+    private boolean fromMain = false;
 
     @Override
     protected int getContentView() {
@@ -89,13 +86,31 @@ public class UnFreeezeActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("解冻账户");
-        fromLogin = getIntent().getBooleanExtra("fromLogin",false);
+        fromMain = getIntent().getBooleanExtra("fromMain", false);
+
         rlUserUnfreeze.setVisibility(View.VISIBLE);
         rlHead2.setVisibility(View.GONE);
         tvUserUnfreeze.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
-
+        ivBaseBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserInfo userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+                if (userInfo.userFreeze == 2) {
+                    finish();
+                } else {
+                    commit();
+                }
+            }
+        });
     }
 
+    private void commit() {
+        if (fromMain) {
+            startActivity(MainActivity.class);
+        } else {
+            startActivity(SafetyActivity.class);
+        }
+    }
 
     @OnClick({R.id.img_passwd_toggle, R.id.btn_unfreeze_next, R.id.btn_commit})
     public void onViewClicked(View view) {
@@ -112,11 +127,7 @@ public class UnFreeezeActivity extends BaseMvpActivity {
                 unFreeze(pwd);
                 break;
             case R.id.btn_commit:
-                if (fromLogin){
-                    startActivity(MainActivity.class);
-                }else {
-                    startActivity(SafetyActivity.class);
-                }
+                commit();
                 break;
         }
     }
@@ -143,6 +154,9 @@ public class UnFreeezeActivity extends BaseMvpActivity {
                     public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
                         if (baseError.msg == null) {
+                            UserInfo userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+                            userInfo.userFreeze = 1;
+                            SharepUtil.putByBean(GlobalKey.USER_INFO,userInfo);
                             rlUserUnfreeze.setVisibility(View.GONE);
                             rlHead2.setVisibility(View.VISIBLE);
                         } else {
