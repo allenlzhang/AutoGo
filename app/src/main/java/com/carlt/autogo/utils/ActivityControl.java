@@ -2,10 +2,12 @@ package com.carlt.autogo.utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.view.activity.LoginActivity;
+import com.carlt.autogo.view.activity.more.safety.FreezeActivity;
 
 import java.util.ArrayList;
 
@@ -39,9 +41,17 @@ public class ActivityControl {
         }
     }
 
+    public static void removeFreezeActivity(){
+        for (Activity a : mActivityList) {
+            if (a.getLocalClassName().equals("view.activity.more.safety.FreezeActivity")){
+                a.finish();
+            }
+        }
+    }
+
     public static void logout(final Activity context) {
 
-        CommonDialog.createDialogNotitle(context, "确定退出登录？", "", "取消", "确定", new CommonDialog.DialogWithTitleClick() {
+        CommonDialog.createDialogNotitle(context, "确定退出登录？", "", "取消", "确定",true, new CommonDialog.DialogWithTitleClick() {
             @Override
             public void onLeftClick() {
 

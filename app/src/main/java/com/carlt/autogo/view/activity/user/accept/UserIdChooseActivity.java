@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.alipay.sdk.app.AuthTask;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.alipay.AuthResult;
@@ -33,6 +34,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -159,57 +161,50 @@ public class UserIdChooseActivity extends BaseMvpActivity {
                 emitter.onNext(authResult);
 
             }
-        }).flatMap(new Function<AuthResult, ObservableSource<User>>() {
-            @Override
-            public ObservableSource<User> apply(AuthResult authResult) throws Exception {
-                Map<String, String> map = new HashMap<>();
-                map.put("token", SharepUtil.preferences.getString("token", ""));
-                map.put("authCode", authResult.authCode);
-                map.put("openId", authResult.user_id);
-
-                return ClientFactory.def(UserService.class).authAliPay(map);
-            }
-        }).map(new Function<User, Boolean>() {
-            @Override
-            public Boolean apply(User user) throws Exception {
-                if (user.err == null) {
-                    //授权成功
-                    return true;
-                }
-                return false;
-            }
         })
-                //                .filter(new Predicate<AuthResult>() {
-                //                    @Override
-                //                    public boolean test(AuthResult authResult) throws Exception {
-                //
-                //                        String resultStatus = authResult.getResultStatus();
-                //                        // 判断resultStatus 为“9000”且result_code
-                //                        // 为“200”则代表授权成功，具体状态码代表含义可参考授权接口文档
-                //                        if (TextUtils.equals(resultStatus, "9000") && TextUtils.equals(authResult.getResultCode(), "200")) {
-                //                            // 获取alipay_open_id，调支付时作为参数extern_token 的value
-                //                            // 传入，则支付账户为该授权账户
-                //                            return true;
-                //                        } else {
-                //                            // 其他状态值则为授权失败
-                //                            ToastUtils.showShort("登录失败");
-                //                            return false;
-                //                        }
-                //
-                //                    }
-                //                })
+                .filter(new Predicate<AuthResult>() {
+                    @Override
+                    public boolean test(AuthResult authResult) throws Exception {
+
+                        String resultStatus = authResult.getResultStatus();
+                        // 判断resultStatus 为“9000”且result_code
+                        // 为“200”则代表授权成功，具体状态码代表含义可参考授权接口文档
+                        if (TextUtils.equals(resultStatus, "9000") && TextUtils.equals(authResult.getResultCode(), "200")) {
+                            // 获取alipay_open_id，调支付时作为参数extern_token 的value
+                            // 传入，则支付账户为该授权账户
+                            return true;
+                        } else {
+                            // 其他状态值则为授权失败
+                            ToastUtils.showShort("授权失败");
+                            return false;
+                        }
+
+                    }
+                })
+                .flatMap(new Function<AuthResult, ObservableSource<User>>() {
+                    @Override
+                    public ObservableSource<User> apply(AuthResult authResult) throws Exception {
+                        LogUtils.e("======" + authResult.toString());
+                        Map<String, String> map = new HashMap<>();
+                        map.put("token", SharepUtil.preferences.getString("token", ""));
+                        map.put("authCode", authResult.authCode);
+                        map.put("openId", authResult.user_id);
+
+                        return ClientFactory.def(UserService.class).authAliPay(map);
+                    }
+                })
+
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Boolean>() {
+                .subscribe(new Consumer<User>() {
                     @Override
-                    public void accept(Boolean success) throws Exception {
-                        if (success) {
-                            LogUtils.e("-------授权成功");
-                            startActivity(new Intent(UserIdChooseActivity.this, FaceAuthSettingActivity.class));
-                             finish();
-                        } else {
-                            LogUtils.e("-------授权失败");
-                        }
+                    public void accept(User user) throws Exception {
+                        startActivity(new Intent(UserIdChooseActivity.this, FaceAuthSettingActivity.class));
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
                     }
                 });
         //                .subscribe(new Consumer<AuthResult>() {
