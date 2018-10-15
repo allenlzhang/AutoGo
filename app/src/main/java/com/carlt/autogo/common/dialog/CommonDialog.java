@@ -12,7 +12,7 @@ import com.carlt.autogo.R;
 public class CommonDialog {
 
 
-    public static void createDialogNotitle(Context context, String title1, String title2, String left, String right, final DialogWithTitleClick click) {
+    public static void createDialogNotitle(Context context, String title1, String title2, String left, String right, boolean cancelable, final DialogWithTitleClick click) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.dialog_common, null);
@@ -25,6 +25,7 @@ public class CommonDialog {
         TextView tvLeft = view.findViewById(R.id.tvDialogLeft);
         TextView tvTitle1 = view.findViewById(R.id.tvTitle1);
         TextView tvTitle2 = view.findViewById(R.id.tvTitle2);
+        alertDialog.setCancelable(cancelable);
         tvRight.setText(right);
         tvLeft.setText(left);
         tvTitle1.setText(title2);

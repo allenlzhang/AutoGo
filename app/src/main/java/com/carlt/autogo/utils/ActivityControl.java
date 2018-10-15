@@ -51,7 +51,7 @@ public class ActivityControl {
 
     public static void logout(final Activity context) {
 
-        CommonDialog.createDialogNotitle(context, "确定退出登录？", "", "取消", "确定", new CommonDialog.DialogWithTitleClick() {
+        CommonDialog.createDialogNotitle(context, "确定退出登录？", "", "取消", "确定",true, new CommonDialog.DialogWithTitleClick() {
             @Override
             public void onLeftClick() {
 

@@ -62,7 +62,7 @@ public class FaceRecognitionSettingActivity extends BaseMvpActivity {
             cbSafe.setEnabled(false);
             cbSafe.setChecked(false);
             cbFaceLogin.setChecked(false);
-            CommonDialog.createDialogNotitle(this, "温馨提示", "请进行身份认证", "取消", "确定", new CommonDialog.DialogWithTitleClick() {
+            CommonDialog.createDialogNotitle(this, "温馨提示", "请进行身份认证", "取消", "确定",false, new CommonDialog.DialogWithTitleClick() {
                 @Override
                 public void onRightClick() {
                     startActivity(new Intent(FaceRecognitionSettingActivity.this, UserIdChooseActivity.class));
