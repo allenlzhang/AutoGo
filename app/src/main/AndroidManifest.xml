@@ -47,8 +47,7 @@
         <activity android:name=".view.activity.more.safety.ChangeRemotePwdActivity"/>
         <activity android:name=".view.activity.more.safety.RemotePwdManagementActivity"/>
         <activity android:name=".view.activity.more.safety.LoginDeviceManagementActivity"/>
-        <activity android:name=".view.activity.more.safety.LogoutAccountActivityFirst"/>
-        <activity android:name=".view.activity.more.safety.LogoutAccountActivitySecond"/>
+        <activity android:name=".view.activity.more.safety.UnRegisterActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -96,7 +95,7 @@
         </activity>
         <activity android:name=".view.activity.login.FaceLoginActivity">
         </activity>
-        <activity android:name=".view.activity.more.safety.LogoutNoticeActivity">
+        <activity android:name=".view.activity.more.safety.UnRegisterNoticeActivity">
         </activity>
     </application>
 

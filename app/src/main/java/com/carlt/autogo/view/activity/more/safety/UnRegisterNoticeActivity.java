@@ -10,7 +10,7 @@ import com.carlt.autogo.base.BaseMvpActivity;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class LogoutNoticeActivity extends BaseMvpActivity {
+public class UnRegisterNoticeActivity extends BaseMvpActivity {
 
     @BindView(R.id.cb_law)
     CheckBox cbLaw;
@@ -35,7 +35,7 @@ public class LogoutNoticeActivity extends BaseMvpActivity {
                     showToast("请同意注销协议");
                     return;
                 }
-                startActivity(new Intent(this, LogoutAccountActivityFirst.class));
+                startActivity(new Intent(this, UnRegisterActivity.class));
                 finish();
                 break;
         }

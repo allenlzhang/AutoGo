@@ -68,19 +68,19 @@ public interface UserService {
 
     //发送短信验证码
     @POST("User/SendSmsCode")
-    Observable<BaseError> SendSmsCode(@Body Map<String,Object> params);
+    Observable<BaseError> SendSmsCode(@Body Map<String, Object> params);
 
     //设置远程密码
     @POST("User/SetRemotePassword")
-    Observable<BaseError> SetRemotePassword(@Body Map<String,String> params);
+    Observable<BaseError> SetRemotePassword(@Body Map<String, String> params);
 
     //修改远程密码
     @POST("User/ModifyRemotePassword")
-    Observable<BaseError> modifyRemotePassword(@Body Map<String,String> params);
+    Observable<BaseError> modifyRemotePassword(@Body Map<String, String> params);
 
     //重置远程密码
     @POST("User/ResetRemotePassword")
-    Observable<BaseError> resetRemotePassword(@Body Map<String,Object> params);
+    Observable<BaseError> resetRemotePassword(@Body Map<String, Object> params);
 
     //三方注册
     @POST("User/RegisterByOpenApi")
@@ -92,9 +92,13 @@ public interface UserService {
 
     //免密开关
     @POST("User/ModifyRemoteSwitch")
-    Observable<BaseError> modifyRemoteSwitch(@Body Map<String,Object> params);
+    Observable<BaseError> modifyRemoteSwitch(@Body Map<String, Object> params);
 
     // 用户冻结、解冻
     @POST("User/Freeze")
-    Observable<BaseError> freeze(@Body Map<String,Object> params);
+    Observable<BaseError> freeze(@Body Map<String, Object> params);
+
+    // 注销
+    @POST("User/UnRegister")
+    Observable<BaseError> unRegister(@Body Map<String, Object> params);
 }

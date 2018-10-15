@@ -19,6 +19,7 @@ import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
+import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.user.accept.IdfCompleteActivity;
@@ -58,6 +59,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityControl.addActivity(this);
         dialog = new UUDialog(this, R.style.DialogCommon);
         Intent intent = getIntent();
         isFrom = intent.getIntExtra(GlobalKey.FROM_ACTIVITY, -1);
@@ -287,6 +289,11 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                             ToastUtils.showShort("设置失败");
                         }
                         dialog.dismiss();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
                     }
                 });
     }

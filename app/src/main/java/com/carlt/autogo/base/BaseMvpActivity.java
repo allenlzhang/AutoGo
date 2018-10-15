@@ -23,8 +23,7 @@ import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.basemvp.PresenterDispatch;
 import com.carlt.autogo.basemvp.PresenterProviders;
 import com.carlt.autogo.common.dialog.UUDialog;
-import com.carlt.autogo.view.activity.MainActivity;
-import com.carlt.autogo.view.activity.login.OtherActivity;
+import com.carlt.autogo.utils.ActivityControl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +67,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
         ButterKnife.bind(this);
         mPresenterDispatch.attachView(this, this);
         mPresenterDispatch.onCreatePresenter(savedInstanceState);
+        ActivityControl.addActivity(this);
         init();
     }
 

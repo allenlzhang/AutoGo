@@ -24,6 +24,15 @@ public class ActivityControl {
         }
     }
 
+    public static void removeAllActivity(Activity currentActivity) {
+        for (Activity activity : mActivityList) {
+            if (currentActivity.equals(activity)) {
+                continue;
+            }
+            activity.finish();
+        }
+    }
+
     public static void logout(final Activity context) {
 
         CommonDialog.createDialogNotitle(context, "确定退出登录？", "", "取消", "确定", new CommonDialog.DialogWithTitleClick() {
