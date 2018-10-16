@@ -26,7 +26,7 @@
         style="@style/BgCommonLoginAndRegister"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/head"
-        app:layout_constraintVertical_bias="0.05">
+        app:layout_constraintVertical_bias="0.03">
 
         <EditText
             android:id="@+id/ed_forgot_user_code"
@@ -50,7 +50,7 @@
         style="@style/BgCommonLoginAndRegister"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/head2"
-        app:layout_constraintVertical_bias="0.02">
+        app:layout_constraintVertical_bias="0.03">
 
         <EditText
             android:id="@+id/ed_forgot_pwd"
@@ -74,14 +74,14 @@
         style="@style/BgCommonLoginAndRegister"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/head3"
-        app:layout_constraintVertical_bias="0.02"
+        app:layout_constraintVertical_bias="0.03"
 
         >
 
         <EditText
             android:id="@+id/ed_forgot_pwd_d"
             style="@style/EdCommonLoginAndRegister"
-            android:hint="请输确认密码"
+            android:hint="请再次输入密码"
             android:inputType="textPassword"
             />
 

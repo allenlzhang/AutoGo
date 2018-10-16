@@ -1,6 +1,7 @@
 package com.carlt.autogo.view.fragment;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -89,7 +90,12 @@ public class MoreFragment extends BaseMvpFragment {
     public void onResume() {
         super.onResume();
         userInfo = SharepUtil.getBeanFromSp("user");
-        tvMoreNickname.setText(userInfo.realName + "");
+        if (!TextUtils.isEmpty(userInfo.realName)) {
+            tvMoreNickname.setText(userInfo.realName + "");
+        } else {
+            tvMoreNickname.setText("--");
+        }
+
 
         if (userInfo.gender == 1) {
             mIvSex.setImageDrawable(getResources().getDrawable(R.mipmap.ic_sex_men));

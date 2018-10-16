@@ -47,7 +47,7 @@ public class ForgotActivity extends BaseMvpActivity {
     @BindView(R.id.btn_send_code)Button btnSendCode;
 
     Disposable disposable;
-    int count = 60 ; ;
+    int count = 60 ;
 
     @Override
     protected int getContentView() {

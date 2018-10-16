@@ -76,7 +76,6 @@
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
                 android:hint="请填写真实姓名"
-                android:text="李四"
                 android:layout_marginLeft="10dp"
                 android:inputType="text"
 
@@ -136,7 +135,6 @@
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
                 android:hint="请填写证件号码"
-                android:text="612321198910082315"
                 android:layout_marginLeft="10dp"
                 android:maxLength="18"
                 />
@@ -152,6 +150,16 @@
             android:text="确认并提交"
             android:layout_marginTop="40dp"
             />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/textColorGray"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:text="信息仅用于身份认证"
+
+            />
     </RelativeLayout>
 
     <RelativeLayout
@@ -165,7 +173,7 @@
             android:id="@+id/tv_r2_head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="拍摄您本人人脸,请确保正对手机,光纤充足"
+            android:text="拍摄您本人人脸,请确保正对手机,光线充足"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
            android:layout_centerHorizontal="true"

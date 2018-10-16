@@ -199,7 +199,9 @@ public class UserIdChooseActivity extends BaseMvpActivity {
                 .subscribe(new Consumer<User>() {
                     @Override
                     public void accept(User user) throws Exception {
-                        startActivity(new Intent(UserIdChooseActivity.this, FaceAuthSettingActivity.class));
+                        if (user.err.code == 0) {
+                            startActivity(new Intent(UserIdChooseActivity.this, FaceAuthSettingActivity.class));
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
