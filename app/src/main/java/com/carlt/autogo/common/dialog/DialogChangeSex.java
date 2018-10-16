@@ -2,25 +2,44 @@ package com.carlt.autogo.common.dialog;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.TextView;
 
 import com.carlt.autogo.R;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
-public class DialogChangeSex extends LoginMoreDialog {
+public class DialogChangeSex extends BaseDialog {
     ItemOnclickListner listner;
     static int MAN    = 1;
     static int WOMAN  = 2;
     static int UNKONW = 3;
+    @BindView(R.id.login_by_face)
+    TextView loginByFace;
+    @BindView(R.id.tvLine1)
+    TextView tvLine1;
+    @BindView(R.id.login_by_normal)
+    TextView loginByNormal;
 
+    @BindView(R.id.login_by_other)
+    TextView loginByOther;
+
+    @BindView(R.id.cancle)
+    TextView cancle;
     public DialogChangeSex(@NonNull Context context) {
-        super(context, false);
+        super(context);
     }
 
     @Override
     void setWindowParams() {
-        super.setWindowParams();
+        layoutParams.gravity = Gravity.BOTTOM;
+    }
+
+    @Override
+    int setRes() {
+        return R.layout.dialog_login_more;
     }
 
     @Override
