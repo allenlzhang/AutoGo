@@ -1,5 +1,6 @@
 package com.carlt.autogo.layouthook;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
@@ -15,13 +16,13 @@ public class LayoutHook {
 
 
     /**  参考 源码setcotentView 方法实现, 使用反射自定义拦截加载
-     * @param inflater  自定义 inflater
+     * @param
      * @param res  资源文件路径
      */
-    public static View layoutInflaterHook (MyPhoneLayoutInflater inflater ,int res ,ViewGroup  contentParent){
+    public static View layoutInflaterHook (Context context , int res , ViewGroup  contentParent){
 
-
-        View view = inflater.inflate(res, contentParent);
+        MyPhoneLayoutInflater layoutInflater = new MyPhoneLayoutInflater(context);
+        View view = layoutInflater.inflate(res, contentParent);
 //        Class  cl = appCompatDelegate.getClass();
 
 //        try {

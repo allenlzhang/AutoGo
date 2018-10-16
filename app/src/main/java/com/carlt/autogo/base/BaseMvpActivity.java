@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -85,8 +86,8 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
                 finish();
             }
         });
-        MyPhoneLayoutInflater layoutInflater = new MyPhoneLayoutInflater(this);
-        LayoutHook.layoutInflaterHook(layoutInflater,getContentView(),flContent);
+
+        LayoutHook.layoutInflaterHook(this,getContentView(),flContent);
 //       flContent.addView(getLayoutInflater().inflate(getContentView(), null));
        // flContent.addView();
 

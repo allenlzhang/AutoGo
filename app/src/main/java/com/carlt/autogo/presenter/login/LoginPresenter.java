@@ -47,8 +47,6 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                         }
                     }
                 })
-                .subscribeOn(Schedulers.newThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {

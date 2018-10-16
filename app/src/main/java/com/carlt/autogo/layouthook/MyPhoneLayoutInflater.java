@@ -23,6 +23,8 @@ import com.blankj.utilcode.util.LogUtils;
  * 参考 源码 ContextImpl ,PolicyManager.makeNewLayoutInflater();
  */
 public class MyPhoneLayoutInflater extends LayoutInflater {
+    LayoutInflater layoutInflater ;
+    Context context ;
 
     /**
      * 将获取的 name属性,拼接成类的全路径名,用于反射,创建view
@@ -44,6 +46,7 @@ public class MyPhoneLayoutInflater extends LayoutInflater {
      */
     public MyPhoneLayoutInflater(Context context) {
         super(context);
+        this.context = context ;
 
     }
 
@@ -60,7 +63,8 @@ public class MyPhoneLayoutInflater extends LayoutInflater {
 
         for (String prefix : sClassPrefixList) {
             try {
-                LogUtils.e(name);
+             //   LogUtils.e(name);
+             //   LayoutInflater.from(context).createView(name,prefix,attrs);
                 View view = createView(name, prefix, attrs);
                 if (view != null) {
 
@@ -101,4 +105,7 @@ public class MyPhoneLayoutInflater extends LayoutInflater {
         return new MyPhoneLayoutInflater(this, newContext);
     }
 
+    public void setLayoutInflater(LayoutInflater layoutInflater) {
+        this.layoutInflater = layoutInflater;
+    }
 }
