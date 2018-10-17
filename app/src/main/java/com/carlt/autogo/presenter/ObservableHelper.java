@@ -38,7 +38,11 @@ public class ObservableHelper {
     /**
      * 根据token 获取用户信息
      */
-   public static Observable<String> getUserInfoByToken(Map<String, String> token){
+    public static Observable<String> getUserInfoByToken(Map<String, String> token ,final  int loginState){
+
+        return getUserInfoByToken(token,loginState,"");
+    }
+   public static Observable<String> getUserInfoByToken(Map<String, String> token ,final  int loginState ,final String pwd){
 
        return  ClientFactory.def(UserService.class).getUserInfo(token)
                .map(new Function<UserInfo, String>() {
@@ -52,6 +56,8 @@ public class ObservableHelper {
 
                    if(index>=0 && index < sexs.length){
                        userInfo.sex = sexs[index];
+                       userInfo.loginState = loginState;
+                       userInfo.password = pwd;
                    }
                    SharepUtil.<UserInfo>putByBean("user", userInfo) ;
                }
@@ -126,6 +132,7 @@ public class ObservableHelper {
                             errorMsg = userInfo.err.msg ;
                             return null;
                         }else {
+                            userInfo.loginState =GlobalKey.loginStateByOther;
                             SharepUtil.<UserInfo>putByBean("user", userInfo) ;
                             errorMsg = "" ;
                             return "登录成功";

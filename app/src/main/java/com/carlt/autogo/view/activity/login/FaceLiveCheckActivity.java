@@ -238,7 +238,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                             Map<String, String> token = new HashMap<>();
                             token.put("token", user.token);
                             SharepUtil.put(GlobalKey.USER_TOKEN, user.token);
-                            return ObservableHelper.getUserInfoByToken(token);
+                            return ObservableHelper.getUserInfoByToken(token,GlobalKey.loginStateByOther);
                         }
                     }
 

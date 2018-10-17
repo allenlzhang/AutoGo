@@ -10,11 +10,13 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
+import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
@@ -132,6 +134,10 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
         params.put("mobile",PhoneNum);
         params.put("validate",code);
 
+        params.put("version", 1);
+        params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
+        params.put("loginModel", AutoGoApp.MODEL);
+        params.put("loginSoftType", "Android");
         ClientFactory.def(UserService.class).loginByPhone(params)
                 .flatMap(new Function<User, ObservableSource<String>>() {
                     @Override
@@ -143,7 +149,7 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
                             Map<String, String> token =   new HashMap<String, String>();
                             token.put("token",user.token);
                             SharepUtil.put("token",user.token);
-                            return ObservableHelper.getUserInfoByToken(token);
+                            return ObservableHelper.getUserInfoByToken(token, GlobalKey.loginStateByPhone);
                         }
                     }
                 })

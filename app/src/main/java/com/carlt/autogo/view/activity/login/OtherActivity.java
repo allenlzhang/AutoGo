@@ -11,6 +11,7 @@ import com.alipay.sdk.app.AuthTask;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
+import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
@@ -165,6 +166,10 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("openId", unionid);
                     params.put("openType", 2);
+                    params.put("version", 1);
+                    params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
+                    params.put("loginModel", AutoGoApp.MODEL);
+                    params.put("loginSoftType", "Android");
                     Observable<String> observable = ObservableHelper.loginByOpenApi(params, OtherActivity.this);
                     observable.subscribe(new Consumer<String>() {
                         @Override
@@ -296,6 +301,10 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
 
                         params.put("openId", authResult.user_id);
                         params.put("openType", 1);
+                        params.put("version", 1);
+                        params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
+                        params.put("loginModel", AutoGoApp.MODEL);
+                        params.put("loginSoftType", "Android");
                         LogUtils.e(authResult.user_id);
                         return ObservableHelper.loginByOpenApi(params, OtherActivity.this);
                     }

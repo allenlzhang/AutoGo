@@ -29,6 +29,8 @@ public class UserInfo implements Serializable {
     public int       faceId;          // 人脸图片文件路径
     public int       logoutState;
 
+    public int loginState ;    // 登录状态 0 账号密码登录， 1 短信登录，2 三方登录
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -48,6 +50,7 @@ public class UserInfo implements Serializable {
                 ", faceFile='" + faceFile + '\'' +
                 ", faceId=" + faceId +
                 ", logoutState=" + logoutState +
+                ", loginState=" + loginState +
                 '}';
     }
 }

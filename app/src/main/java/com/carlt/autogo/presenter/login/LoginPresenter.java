@@ -2,7 +2,9 @@ package com.carlt.autogo.presenter.login;
 
 import android.annotation.SuppressLint;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.global.GlobalKey;
@@ -29,7 +31,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class LoginPresenter extends BasePresenter<ILoginView> {
     @SuppressLint("CheckResult")
-    public void login(Map<String, Object> params) {
+    public void login(final Map<String, Object> params) {
         uuDialog.show();
 
         ClientFactory.def(UserService.class).userLogin(params)
@@ -43,7 +45,8 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                             Map<String, String> token = new HashMap<String, String>();
                             token.put("token", user.token);
                             SharepUtil.put(GlobalKey.USER_TOKEN, user.token);
-                            return ObservableHelper.getUserInfoByToken(token);
+                            LogUtils.e(user.token);
+                            return ObservableHelper.getUserInfoByToken(token ,GlobalKey.loginStateByPWd, (String) params.get("password"));
                         }
                     }
                 })

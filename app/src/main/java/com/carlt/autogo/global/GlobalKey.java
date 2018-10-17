@@ -17,4 +17,12 @@ public class GlobalKey {
     public static final String PROCESS_SAFE_SWITCH = "PROCESS_SAFE_SWITCH";
     public static final String IDENTITY_AUTH       = "IDENTITY_AUTH";
 
+    //正则密码验证 (字母 数字 字符 长度6~32)
+    public static final String PWD_REGEX = "^[A-Za-z0-9-+=<>;,./~!@#$%^*\\[.*\\]\\{.*\\}]{6,32}+$";
+
+    public static final int loginStateByPWd = 0;
+    public static final int loginStateByPhone = 1;
+    public static final int loginStateByOther = 2;
+
+
 }

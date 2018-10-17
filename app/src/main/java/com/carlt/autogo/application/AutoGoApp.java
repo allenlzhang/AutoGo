@@ -1,8 +1,12 @@
 package com.carlt.autogo.application;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.telephony.TelephonyManager;
 
 import com.baidu.idl.face.platform.FaceConfig;
 import com.baidu.idl.face.platform.FaceEnvironment;
@@ -55,7 +59,7 @@ public class AutoGoApp extends Application {
         MODEL = MODEL_NAME + " " + ANDROID_VERSION;
         DISPLAY = "ui_sysinfo " + android.os.Build.DISPLAY;
         NIMEI = getNewUniquePsuedoID();
-        IMEI=getUniquePsuedoID();
+    //    IMEI=getUniquePsuedoID();
 
     }
 
@@ -123,4 +127,5 @@ public class AutoGoApp extends Application {
                 + UUID.nameUUIDFromBytes(m_szDevIDShort.getBytes()).toString();
         return CipherUtils.md5(m_szDevIDShort);
     }
+
 }

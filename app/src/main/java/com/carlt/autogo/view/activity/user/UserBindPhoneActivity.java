@@ -9,6 +9,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
+import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.net.base.ClientFactory;
@@ -123,6 +124,9 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
         parmas.put("mobile",phoneNum);
         parmas.put("validate",code);
 
+        parmas.put("moveDeviceName", AutoGoApp.MODEL_NAME);
+        parmas.put("loginModel", AutoGoApp.MODEL);
+        parmas.put("loginSoftType", "Android");
         doOtherRegister(parmas);
 
     }

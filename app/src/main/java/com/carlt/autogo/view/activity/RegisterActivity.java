@@ -14,10 +14,12 @@ import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
+import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
 import com.carlt.autogo.entry.user.BaseError;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.presenter.register.IRegisterView;
 import com.carlt.autogo.presenter.register.RegisterPresenter;
@@ -164,6 +166,10 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
            params.put("mobile", phoneNum);
            params.put("password", pwd);
            params.put("validate", code);
+           params.put("version", 1);
+           params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
+           params.put("loginModel", AutoGoApp.MODEL);
+           params.put("loginSoftType", "Android");
            doRegiste(params);
        }
 
@@ -188,7 +194,7 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
     }
 
     public static boolean CheckValues( String phoneNum ,String pwd ,String pwdD ,String code ){
-        String regex = "^[A-Za-z0-9]{5,11}+$";
+        String regex = "^[A-Za-z0-9-+=;,./~!@#$%^*\\[.*\\]]{6,32}+$";
         if(!phoneNum.equals("-")){
             boolean  checkOk =  RegexUtils.isMobileExact(phoneNum) ;
             if(!checkOk){
@@ -203,9 +209,9 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
             }
         }
         if(!pwd.equals("-") || !pwdD.equals("-")){
-            if (!RegexUtils.isMatch(regex, pwd) || !RegexUtils.isMatch(regex, pwd)) {
+            if (!RegexUtils.isMatch(GlobalKey.PWD_REGEX, pwd) || !RegexUtils.isMatch(GlobalKey.PWD_REGEX, pwd)) {
                 ToastUtils.setMsgTextSize(15);
-                ToastUtils.showLong("密码有误,输入数字或者字母,长度6到10");
+                ToastUtils.showLong("密码有误,输入数字,字母,符号,长度6到32");
                 return false;
             }
             if (!pwd.equals(pwdD)) {

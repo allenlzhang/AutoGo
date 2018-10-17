@@ -3,7 +3,11 @@ package com.carlt.autogo.view.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.telephony.TelephonyManager;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -21,6 +25,7 @@ import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.BaseDialog;
 import com.carlt.autogo.common.dialog.LoginMoreDialog;
 import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.layouthook.LayoutHook;
 import com.carlt.autogo.layouthook.MyPhoneLayoutInflater;
 import com.carlt.autogo.net.base.ClientFactory;
@@ -114,8 +119,11 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                 .runtime()
                 .permission(needPermissions)
                 .onGranted(new Action<List<String>>() {
+                    @SuppressLint("MissingPermission")
                     @Override
                     public void onAction(List<String> data) {
+                        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                        AutoGoApp.NIMEI = telephonyManager.getDeviceId();
                         LogUtils.e(data.toString());
                     }
                 })
@@ -155,9 +163,15 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     protected void onResume() {
         super.onResume();
         UserInfo userInfo = SharepUtil.getBeanFromSp("user");
-        if (userInfo != null) {
-            userPhone.setText(userInfo.mobile);
-            userPWd.setText(userInfo.password);
+
+        LogUtils.e(userInfo.toString());
+        if (userInfo != null ) {
+            if(userInfo.loginState == GlobalKey.loginStateByPWd){
+                userPhone.setText(userInfo.mobile);
+                userPWd.setText(userInfo.password);
+            }else {
+                userPhone.setText(userInfo.mobile);
+            }
         }
     }
 
@@ -252,4 +266,5 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
         ActivityControl.removeAll();
         super.onBackPressed();
     }
+
 }
