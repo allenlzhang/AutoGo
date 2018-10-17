@@ -2,7 +2,6 @@ package com.carlt.autogo.net.service;
 
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.LoginLogInfo;
-import com.carlt.autogo.entry.user.RetrievePassword;
 import com.carlt.autogo.entry.user.SmsToken;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.entry.user.User;
@@ -29,7 +28,7 @@ public interface UserService {
 
     //找回密码
     @POST("User/RetrievePassword")
-    Observable<RetrievePassword> userRetrievePassword(@Body Map<String, Object> param);
+    Observable<BaseError> userRetrievePassword(@Body Map<String, Object> param);
 
     //获取用户信息
     @POST("User/GetUserInfo")
@@ -61,7 +60,7 @@ public interface UserService {
 
     //支付宝授权
     @POST("User/AlipayAuth")
-    Observable<User> authAliPay(@Body Map<String, String> params);
+    Observable<BaseError> authAliPay(@Body Map<String, String> params);
 
     //上传图片id
     @POST("User/SetFace")
@@ -105,4 +104,7 @@ public interface UserService {
     // 注销
     @POST("User/UnRegister")
     Observable<BaseError> unRegister(@Body Map<String, Object> params);
+    // 修改手机
+    @POST("User/ResetMobile")
+    Observable<BaseError> resetMobile(@Body Map<String, Object> params);
 }

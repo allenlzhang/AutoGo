@@ -15,6 +15,7 @@ public class GlobalKey {
     public static final String FROM_ACTIVITY       = "From_Activity";
     public static final String FACE_LOGIN_SWITCH   = "FACE_LOGIN_SWITCH";
     public static final String PROCESS_SAFE_SWITCH = "PROCESS_SAFE_SWITCH";
+    public static final String Remote_Switch       = "Remote_Switch";
     public static final String IDENTITY_AUTH       = "IDENTITY_AUTH";
 
     //正则密码验证 (字母 数字 字符 长度6~32)

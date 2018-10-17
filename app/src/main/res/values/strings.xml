@@ -13,7 +13,7 @@
     <string name="more_edit_profile">编辑资料</string>
     <string name="more_accounts_and_security">账号与安全</string>
     <string name="more_setting">设置</string>
-    <string name="more_log_out">退出</string>
+    <string name="more_log_out">退出登陆</string>
 
     <!-- 账号与安全  -->
     <string name="safety_identity_authentication">身份认证</string>
@@ -23,7 +23,7 @@
     <string name="safety_remote_pwd_management">远程控制密码管理</string>
     <string name="safety_login_device_management">登录设备管理</string>
     <string name="safety_frozen_account">冻结账户</string>
-    <string name="safety_cancellation_account">注销账户</string>
+    <string name="safety_cancellation_account">账户销户</string>
     <!-- 登录密码管理 -->
     <string name="management_change_login_pwd">修改登录密码</string>
     <string name="management_forget_login_pwd">忘记登录密码</string>

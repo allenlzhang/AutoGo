@@ -14,7 +14,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.alipay.AuthResult;
-import com.carlt.autogo.entry.user.User;
+import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
@@ -63,8 +63,9 @@ public class UserIdChooseActivity extends BaseMvpActivity {
             //支付宝认证
             authALiPay();
         } else {
-            Intent intentId = new Intent(this, IdCardAcceptActivity.class);
-            startActivity(intentId);
+            showToast("此功能暂未开放");
+//            Intent intentId = new Intent(this, IdCardAcceptActivity.class);
+//            startActivity(intentId);
         }
 
     }
@@ -181,9 +182,9 @@ public class UserIdChooseActivity extends BaseMvpActivity {
 
                     }
                 })
-                .flatMap(new Function<AuthResult, ObservableSource<User>>() {
+                .flatMap(new Function<AuthResult, ObservableSource<BaseError>>() {
                     @Override
-                    public ObservableSource<User> apply(AuthResult authResult) throws Exception {
+                    public ObservableSource<BaseError> apply(AuthResult authResult) throws Exception {
                         LogUtils.e("======" + authResult.toString());
                         Map<String, String> map = new HashMap<>();
                         map.put("token", SharepUtil.preferences.getString("token", ""));
@@ -196,17 +197,20 @@ public class UserIdChooseActivity extends BaseMvpActivity {
 
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<User>() {
+                .subscribe(new Consumer<BaseError>() {
                     @Override
-                    public void accept(User user) throws Exception {
-                        if (user.err.code == 0) {
+                    public void accept(BaseError er) throws Exception {
+                        LogUtils.e(er.toString());
+                        if (er.code == 0) {
                             startActivity(new Intent(UserIdChooseActivity.this, FaceAuthSettingActivity.class));
+                        } else {
+                            showToast(er.msg);
                         }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-
+                        LogUtils.e(throwable.toString());
                     }
                 });
         //                .subscribe(new Consumer<AuthResult>() {

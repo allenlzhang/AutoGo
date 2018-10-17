@@ -1,5 +1,6 @@
 package com.carlt.autogo.view.activity.login;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import com.baidu.idl.face.platform.utils.Base64Utils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
+import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.entry.user.User;
@@ -24,13 +26,15 @@ import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.user.accept.IdfCompleteActivity;
 import com.carlt.autogo.view.activity.user.accept.UploadIdCardPhotoActivity;
-import com.google.gson.Gson;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.ObservableSource;
@@ -61,6 +65,33 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
         super.onCreate(savedInstanceState);
         ActivityControl.addActivity(this);
         dialog = new UUDialog(this, R.style.DialogCommon);
+        initData();
+    }
+
+    private void initData() {
+
+        AndPermission.with(this)
+                .runtime()
+                .permission(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .onDenied(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        LogUtils.e(data.toString());
+                        //                        for (String datum : data) {
+                        //                            if (datum.equals(Manifest.permission.CAMERA)) {
+                        //                                ToastUtils.showShort("未获取到相机权限");
+                        //                            }
+                        //                        }
+
+                    }
+                })
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        LogUtils.e(data.toString());
+                    }
+                }).start();
         Intent intent = getIntent();
         isFrom = intent.getIntExtra(GlobalKey.FROM_ACTIVITY, -1);
         switch (isFrom) {
@@ -212,8 +243,12 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
         Map<String, Object> map = new HashMap<>();
         map.put("mobile", mobile);
         map.put("faceId", id);
-        Gson gson = new Gson();
-        String json = gson.toJson(map);
+        map.put("version", AutoGoApp.VERSION);
+        map.put("moveDeviceName", AutoGoApp.MODEL_NAME);
+        map.put("loginModel", AutoGoApp.MODEL);
+        map.put("loginSoftType", "Android");
+        //        Gson gson = new Gson();
+        //        String json = gson.toJson(map);
         //        OkGo.<String>post(faceLoginUrl)
         //                .headers("Carlt-Access-Id", "19877415356991399877")
         //                .upJson(json)

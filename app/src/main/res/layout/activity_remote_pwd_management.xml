@@ -1,68 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:tools="http://schemas.android.com/tools">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/ll_management_set_remote_pwd"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:paddingRight="12dp"
-        android:paddingLeft="12dp"
         android:layout_marginTop="10dp"
-        android:gravity="center_vertical"
         android:background="@color/colorWhite"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="14sp"
-            android:textColor="@color/colorEdtext"
             android:text="@string/management_set_remote_pwd"
+            android:textColor="@color/colorEdtext"
+            android:textSize="14sp"
             />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/management_change_pwd"
-        android:textColor="@color/textColorGray"
-        android:textSize="14sp"
-        android:layout_marginLeft="12dp"
-        tools:ignore="RtlHardcoded"
-        android:layout_marginTop="10dp"
-        />
+
     <LinearLayout
         android:id="@+id/ll_management_remember_remote_old_pwd"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:paddingRight="12dp"
-        android:paddingLeft="12dp"
-        android:gravity="center_vertical"
+        android:layout_marginTop="10dp"
         android:background="@color/colorWhite"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="14sp"
-            android:textColor="@color/colorEdtext"
             android:text="@string/management_remember_remote_old_pwd"
+            android:textColor="@color/colorEdtext"
+            android:textSize="14sp"
             />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -70,47 +68,53 @@
         android:layout_marginRight="12dp"
         android:background="@color/color_c"
         />
+
     <LinearLayout
         android:id="@+id/ll_management_forget_remote_old_pwd"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:paddingRight="12dp"
-        android:paddingLeft="12dp"
-        android:gravity="center_vertical"
         android:background="@color/colorWhite"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="14sp"
-            android:textColor="@color/colorEdtext"
             android:text="@string/management_forget_remote_old_pwd"
+            android:textColor="@color/colorEdtext"
+            android:textSize="14sp"
             />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:paddingRight="12dp"
-        android:paddingLeft="12dp"
         android:layout_marginTop="10dp"
-        android:gravity="center_vertical"
         android:background="@color/colorWhite"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="14sp"
-            android:textColor="@color/colorEdtext"
             android:text="@string/management_without_encryption"
+            android:textColor="@color/colorEdtext"
+            android:textSize="14sp"
             />
+
         <CheckBox
             android:id="@+id/cb_management_without_encryption"
             android:layout_width="wrap_content"
@@ -121,6 +125,7 @@
             android:checked="false"
             />
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -128,37 +133,41 @@
         android:layout_marginRight="12dp"
         android:background="@color/color_c"
         />
+
     <LinearLayout
         android:id="@+id/ll_management_without_encryption_date"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:paddingRight="12dp"
-        android:paddingLeft="12dp"
-        android:gravity="center_vertical"
         android:background="@color/colorWhite"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="14sp"
-            android:textColor="@color/colorEdtext"
             android:text="@string/management_without_encryption_date"
+            android:textColor="@color/colorEdtext"
+            android:textSize="14sp"
             />
+
         <TextView
             android:id="@+id/tv_management_without_encryption_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:textSize="14sp"
-            android:textColor="@color/textColorGray"
+            android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
-            android:layout_marginEnd="12dp" />
+            android:layout_weight="0"
+            android:textColor="@color/textColorGray"
+            android:textSize="14sp"/>
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
 </LinearLayout>

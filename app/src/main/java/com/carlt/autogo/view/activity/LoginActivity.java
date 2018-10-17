@@ -5,8 +5,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -26,14 +24,12 @@ import com.carlt.autogo.common.dialog.BaseDialog;
 import com.carlt.autogo.common.dialog.LoginMoreDialog;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
-import com.carlt.autogo.layouthook.LayoutHook;
-import com.carlt.autogo.layouthook.MyPhoneLayoutInflater;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.presenter.login.ILoginView;
 import com.carlt.autogo.presenter.login.LoginPresenter;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
-import com.carlt.autogo.view.activity.login.ForgotActivity;
+import com.carlt.autogo.view.activity.more.safety.ChangeLoginPwdActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 
@@ -132,22 +128,24 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                     @Override
                     public void onAction(List<String> data) {
                         LogUtils.e(data.toString());
-                        ToastUtils.showShort("部分权限获取失败，应用即将退出");
-                        Observable.create(new ObservableOnSubscribe<Integer>() {
-                            @Override
-                            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                                emitter.onNext(1);
-                            }
-                        }).delay(2, TimeUnit.SECONDS)
-                                .subscribeOn(Schedulers.newThread())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<Integer>() {
-                                    @Override
-                                    public void accept(Integer integer) throws Exception {
-                                        finish();
-                                    }
-                                })
-                        ;
+                        if (data.get(data.size() - 1).equals(Manifest.permission.READ_PHONE_STATE)) {
+                            showToast("部分权限获取失败，应用即将退出");
+                            Observable.create(new ObservableOnSubscribe<Integer>() {
+                                @Override
+                                public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                                    emitter.onNext(1);
+                                }
+                            }).delay(2, TimeUnit.SECONDS)
+                                    .subscribeOn(Schedulers.newThread())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Consumer<Integer>() {
+                                        @Override
+                                        public void accept(Integer integer) throws Exception {
+                                            finish();
+                                        }
+                                    });
+
+                        }
 
                     }
                 }).start();
@@ -164,7 +162,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
         super.onResume();
         UserInfo userInfo = SharepUtil.getBeanFromSp("user");
 
-        LogUtils.e(userInfo.toString());
+//        LogUtils.e(userInfo.toString());
         if (userInfo != null ) {
             if(userInfo.loginState == GlobalKey.loginStateByPWd){
                 userPhone.setText(userInfo.mobile);
@@ -208,11 +206,10 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
                 params.put("mobile", uPhone);
                 params.put("password", pwd);
-                params.put("version", 1);
+                params.put("version", AutoGoApp.VERSION);
                 params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
                 params.put("loginModel", AutoGoApp.MODEL);
                 params.put("loginSoftType", "Android");
-
 
 
                 getPresenter().login(params);
@@ -225,7 +222,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                 passwdToggle.setSelected(!passwdToggle.isSelected());
                 break;
             case R.id.forgot_passwd:
-                startActivity(ForgotActivity.class, false);
+                startActivity(ChangeLoginPwdActivity.class);
                 break;
 
         }

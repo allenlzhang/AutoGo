@@ -82,7 +82,7 @@ public class SafetyActivity extends BaseMvpActivity {
      */
     @BindView(R.id.ll_safety_cancellation_account)
     LinearLayout mLlCancellationAccount;
-//    private LogoutTipDialog mTipDialog;
+    //    private LogoutTipDialog mTipDialog;
 
     @Override
     protected int getContentView() {
@@ -92,13 +92,13 @@ public class SafetyActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText(getResources().getString(R.string.more_accounts_and_security));
-//        mTipDialog = new LogoutTipDialog(this, R.style.DialogCommon);
-//        mTipDialog.setLisniter(new LogoutTipDialog.LogoutTipDialogClickLisniter() {
-//            @Override
-//            public void commit() {
-//                startActivity(new Intent(SafetyActivity.this, LogoutAccountActivityFirst.class));
-//            }
-//        });
+        //        mTipDialog = new LogoutTipDialog(this, R.style.DialogCommon);
+        //        mTipDialog.setLisniter(new LogoutTipDialog.LogoutTipDialogClickLisniter() {
+        //            @Override
+        //            public void commit() {
+        //                startActivity(new Intent(SafetyActivity.this, LogoutAccountActivityFirst.class));
+        //            }
+        //        });
     }
 
     @Override
@@ -110,7 +110,7 @@ public class SafetyActivity extends BaseMvpActivity {
         LogUtils.e("----" + user.toString());
         if (user.alipayAuth != 0 && user.faceId != 0) {
             mTvIdentityAuthentication.setText("已认证");
-            mTvIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
+            mLlIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent safety_identity = new Intent(SafetyActivity.this, IdfCompleteActivity.class);
@@ -120,7 +120,7 @@ public class SafetyActivity extends BaseMvpActivity {
             });
         } else {
             mTvIdentityAuthentication.setText("未认证");
-            mTvIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
+            mLlIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent safety_identity = new Intent(SafetyActivity.this, UserIdChooseActivity.class);
@@ -143,14 +143,14 @@ public class SafetyActivity extends BaseMvpActivity {
      * 手机号中间*展示
      * @param mobile
      */
-    private void showBindingPhone(String mobile){
-        if (!TextUtils.isEmpty(mobile)&&mobile.length()>6){
+    private void showBindingPhone(String mobile) {
+        if (!TextUtils.isEmpty(mobile) && mobile.length() > 6) {
             StringBuffer sb = new StringBuffer();
-            for (int i = 0; i <mobile.length() ; i++) {
+            for (int i = 0; i < mobile.length(); i++) {
                 char c = mobile.charAt(i);
-                if (i>=3&&i<=6){
+                if (i >= 3 && i <= 6) {
                     sb.append('*');
-                }else {
+                } else {
                     sb.append(c);
                 }
             }
@@ -165,30 +165,33 @@ public class SafetyActivity extends BaseMvpActivity {
 
                 break;
             case R.id.ll_safety_face_recognition:
-                startActivity(new Intent(this, FaceRecognitionSettingActivity.class));
+                startActivity(FaceRecognitionSettingActivity.class, false);
                 break;
             case R.id.ll_safety_binding_phone:
+                startActivity(UpdatePhoneOneActivity.class, false);
                 break;
             case R.id.ll_safety_login_pwd_management:
-                Intent intent = new Intent(SafetyActivity.this, LoginPwdManagementActivity.class);
-                startActivity(intent);
+                //                Intent intent = new Intent(SafetyActivity.this, LoginPwdManagementActivity.class);
+                startActivity(LoginPwdManagementActivity.class, false);
                 break;
             case R.id.ll_safety_remote_pwd_management:
-                Intent intent1 = new Intent(SafetyActivity.this, RemotePwdManagementActivity.class);
-                startActivity(intent1);
+                //                Intent intent1 = new Intent(SafetyActivity.this, RemotePwdManagementActivity.class);
+
+                startActivity(RemotePwdManagementActivity.class, false);
+
                 break;
             case R.id.ll_safety_login_device_management:
-                Intent intentDecide = new Intent(SafetyActivity.this, LoginDeviceManagementActivity.class);
-                startActivity(intentDecide);
+                //                Intent intentDecide = new Intent(SafetyActivity.this, LoginDeviceManagementActivity.class);
+                startActivity(LoginDeviceManagementActivity.class, false);
                 break;
             case R.id.ll_safety_frozen_account:
 
-                Intent intentFreeze = new Intent(this, FreezeActivity.class);
-                startActivity(intentFreeze);
+                //                Intent intentFreeze = new Intent(this, FreezeActivity.class);
+                startActivity(FreezeActivity.class, false);
                 break;
             case R.id.ll_safety_cancellation_account:
                 //                mTipDialog.show();
-                startActivity(new Intent(this, UnRegisterNoticeActivity.class));
+                startActivity(UnRegisterNoticeActivity.class, false);
                 break;
         }
     }

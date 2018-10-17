@@ -2,8 +2,6 @@ package com.carlt.autogo.view.activity.more.safety;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.drawable.shapes.Shape;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +14,6 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.FreezeCommitDialog;
-import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
@@ -28,22 +25,15 @@ import com.carlt.autogo.view.activity.LoginActivity;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author wsq
- * @time 15:42  2018/9/21/021
- * @describe 账户冻结
  */
 public class FreezeActivity extends BaseMvpActivity {
 
@@ -51,15 +41,15 @@ public class FreezeActivity extends BaseMvpActivity {
     @BindView(R.id.img_freeze_head)
     ImageView imgFreezeHead;
     @BindView(R.id.tv_freeze_status)
-    TextView tvFreezeStatus;
+    TextView  tvFreezeStatus;
     @BindView(R.id.tv_freeze_status_ino)
-    TextView tvFreezeStatusIno;
+    TextView  tvFreezeStatusIno;
 
     /**
      * 冻结账户提交按钮
      */
     @BindView(R.id.btn_freeze_commit)
-    Button btnFreezeCommit;
+    Button         btnFreezeCommit;
     /**
      * 冻结账户父控件
      */
@@ -91,7 +81,7 @@ public class FreezeActivity extends BaseMvpActivity {
 
     @Override
     public void init() {
-        fromMain = getIntent().getBooleanExtra("fromMain",false);
+        fromMain = getIntent().getBooleanExtra("fromMain", false);
         setTitleText("冻结账户");
         freezeCommitDialog = new FreezeCommitDialog(this, R.style.DialogCommon);
         getUserInfo();
@@ -100,8 +90,8 @@ public class FreezeActivity extends BaseMvpActivity {
     @SuppressLint("CheckResult")
     private void getUserInfo() {
         dialog.show();
-        Map<String,String> params = new HashMap<>();
-        params.put("token", SharepUtil.getPreferences().getString("token",""));
+        Map<String, String> params = new HashMap<>();
+        params.put("token", SharepUtil.getPreferences().getString("token", ""));
         ClientFactory.def(UserService.class).getUserInfo(params)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -109,21 +99,22 @@ public class FreezeActivity extends BaseMvpActivity {
                     @Override
                     public void accept(UserInfo userInfo) throws Exception {
                         dialog.dismiss();
-                        if(userInfo.userFreeze == 1){
+                        if (userInfo.userFreeze == 1) {
                             tvBaseRight.setText("退出登录");
                             tvBaseRight.setTextColor(getResources().getColor(R.color.colorBlue));
                             tvBaseRight.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    SharepUtil.put(GlobalKey.USER_TOKEN,"");
+                                    SharepUtil.put(GlobalKey.USER_TOKEN, "");
                                     startActivity(LoginActivity.class);
                                 }
                             });
                             rlUserFreeze.setVisibility(View.VISIBLE);
                             rlUserUnfreeze.setVisibility(View.GONE);
-
-                            tvFreezeStatusIno.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
-                        }else {
+                            String mobile = SharepUtil.<UserInfo>getBeanFromSp("user").mobile;
+                            StringBuilder builder=new StringBuilder(mobile);
+                            tvFreezeStatusIno.setText("当前账号:" + builder.replace(3, 7, "****"));
+                        } else {
 
                             ivBaseBack.setVisibility(View.GONE);
                             rlUserFreeze.setVisibility(View.GONE);
@@ -153,11 +144,11 @@ public class FreezeActivity extends BaseMvpActivity {
             @Override
             public void commit() {
                 dialog.show();
-                HashMap<String,Object> params = new HashMap<>();
-                params.put(GlobalKey.USER_TOKEN,SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN,""));
-                params.put("password","");
-                params.put("isMd5",true);
-                params.put("userFreeze",2);
+                HashMap<String, Object> params = new HashMap<>();
+                params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN, ""));
+                params.put("password", "");
+                params.put("isMd5", true);
+                params.put("userFreeze", 2);
                 LogUtils.e(params);
                 ClientFactory.def(UserService.class).freeze(params)
                         .subscribeOn(Schedulers.newThread())
@@ -166,17 +157,17 @@ public class FreezeActivity extends BaseMvpActivity {
                             @Override
                             public void accept(BaseError baseError) throws Exception {
                                 dialog.dismiss();
-                                if (baseError.msg == null){
+                                if (baseError.msg == null) {
                                     UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
                                     info.userFreeze = 2;
-                                    SharepUtil.putByBean(GlobalKey.USER_INFO,info);
+                                    SharepUtil.putByBean(GlobalKey.USER_INFO, info);
                                     ToastUtils.showShort("冻结成功");
                                     ivBaseBack.setVisibility(View.GONE);
                                     tvBaseRight.setText("");
                                     setTitleText("冻结账户");
                                     rlUserFreeze.setVisibility(View.GONE);
                                     rlUserUnfreeze.setVisibility(View.VISIBLE);
-                                }else {
+                                } else {
                                     ToastUtils.showShort(baseError.msg);
                                 }
 
@@ -198,19 +189,19 @@ public class FreezeActivity extends BaseMvpActivity {
      * 解除账号冻结提交
      */
     @OnClick(R.id.btn_unfreeze_commit)
-    public void onUnFreeze(){
+    public void onUnFreeze() {
 
-        Intent intent = new Intent(this,UnFreeezeActivity.class );
-        intent.putExtra("fromMain",fromMain);
-        startActivity( intent );
+        Intent intent = new Intent(this, UnFreeezeActivity.class);
+        intent.putExtra("fromMain", fromMain);
+        startActivity(intent);
 
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         UserInfo userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-        if (keyCode == KeyEvent.KEYCODE_BACK&&userInfo.userFreeze == 2){
-            SharepUtil.put(GlobalKey.USER_TOKEN,"");
+        if (keyCode == KeyEvent.KEYCODE_BACK && userInfo.userFreeze == 2) {
+            SharepUtil.put(GlobalKey.USER_TOKEN, "");
             ActivityControl.removeAllActivity(this);
             startActivity(LoginActivity.class);
         }

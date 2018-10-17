@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+    >
+
+    <EditText
+        android:id="@+id/etPhone"
+        style="@style/baseEditStyle"
+        android:layout_marginTop="10dp"
+        android:hint="请输入新手机号"
+        tools:ignore="TextFields"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <EditText
+            android:id="@+id/etCode"
+            style="@style/baseEditStyle"
+            android:hint="@string/management_edit_verification_code"
+            tools:ignore="TextFields"/>
+
+        <Button
+            android:id="@+id/btnSendCode"
+            style="@style/BtnSendCodeBg"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="@string/management_send_verification_code"
+            tools:ignore="RtlHardcoded"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:padding="12dp"
+        android:text="验证码将发送到新手机号上"
+        android:textColor="@color/textColorGray"/>
+
+    <Button
+        android:id="@+id/btnNext"
+        style="@style/BtnCommonCommit"
+        android:text="确定"
+        />
+</LinearLayout>

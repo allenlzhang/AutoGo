@@ -21,9 +21,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:name">
         <activity android:name=".view.activity.MainActivity"/>
-        <activity
-            android:name=".view.activity.LoginActivity"
-            >
+        <activity android:name=".view.activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -96,6 +94,10 @@
         <activity android:name=".view.activity.login.FaceLoginActivity">
         </activity>
         <activity android:name=".view.activity.more.safety.UnRegisterNoticeActivity">
+        </activity>
+        <activity android:name=".view.activity.more.safety.UpdatePhoneOneActivity">
+        </activity>
+        <activity android:name=".view.activity.more.safety.UpdatePhoneTwoActivity">
         </activity>
     </application>
 
