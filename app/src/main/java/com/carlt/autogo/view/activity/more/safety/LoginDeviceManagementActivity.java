@@ -1,6 +1,7 @@
 package com.carlt.autogo.view.activity.more.safety;
 
 import android.annotation.SuppressLint;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -11,6 +12,7 @@ import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.LoginLogInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.HashMap;
 
@@ -24,7 +26,9 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class LoginDeviceManagementActivity extends BaseMvpActivity {
     @BindView(R.id.rvList)
-    RecyclerView rvList;
+    RecyclerView       rvList;
+    @BindView(R.id.smartRefreshLayout)
+    SmartRefreshLayout mSmartRefreshLayout;
 
     @Override
     protected int getContentView() {
@@ -37,16 +41,19 @@ public class LoginDeviceManagementActivity extends BaseMvpActivity {
         rvList.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvList.setLayoutManager(linearLayoutManager);
+        rvList.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         setTitleText(getResources().getString(R.string.management_login_device));
         HashMap<String, Object> map = new HashMap<>();
         map.put("limit", 100);
         map.put("offset", 1);
+        dialog.show();
         ClientFactory.def(UserService.class).loginLog(map)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<LoginLogInfo>() {
                     @Override
                     public void accept(LoginLogInfo info) throws Exception {
+                        dialog.dismiss();
                         LogUtils.e("----" + info);
                         LoginLogItemAdapter itemAdapter = new LoginLogItemAdapter(info.logs);
                         rvList.setAdapter(itemAdapter);

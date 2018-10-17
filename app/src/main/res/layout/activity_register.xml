@@ -86,7 +86,7 @@
         <EditText
             android:id="@+id/ed_register_pwd_d"
             style="@style/EdCommonLoginAndRegister"
-            android:hint="请输再次输入密码"
+            android:hint="请再次输入密码"
             android:inputType="textPassword"
             android:maxLength="32"
             android:selectAllOnFocus="true"
