@@ -99,6 +99,9 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     protected void setTitleText(String text) {
         tvBaseTitle.setText(text);
     }
+    protected void hideTitle(){
+        rlTitle.setVisibility(View.INVISIBLE);
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

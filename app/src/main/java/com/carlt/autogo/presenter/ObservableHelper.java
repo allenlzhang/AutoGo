@@ -85,9 +85,7 @@ public class ObservableHelper {
                             return ClientFactory.def(UserService.class).SendSmsCode(map);
                         }
                     }
-                })
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread());
+                });
 
     }
 
@@ -104,7 +102,7 @@ public class ObservableHelper {
                     @Override
                     public ObservableSource<UserInfo> apply(User user) throws Exception {
                         if(user.err != null){
-                            ToastUtils.showShort(user.err.msg);
+                           // ToastUtils.showShort(user.err.msg);
                             String uId  = (String) params.get("openId");
                             Intent intent  = new Intent(baseMvpActivity,UserBindPhoneActivity.class);
                             intent.putExtra("openId",uId);
@@ -134,11 +132,7 @@ public class ObservableHelper {
                         }
 
                     }
-                })
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread());
+                });
     }
-
-
 
 }

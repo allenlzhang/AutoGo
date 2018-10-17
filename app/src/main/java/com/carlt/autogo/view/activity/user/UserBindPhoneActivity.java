@@ -14,6 +14,8 @@ import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
+import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.LoginActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -131,24 +133,30 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
      */
     private void doOtherRegister(Map<String, Object> parmas) {
 
+        dialog.show();
         Disposable disposable = ClientFactory.def(UserService.class).registerByOpenApi(parmas)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<BaseError>() {
                     @Override
                     public void accept(BaseError user) throws Exception {
+                        dialog.dismiss();
                         if(user.msg != null){
-                            ToastUtils.showShort(user.msg);
+                            ToastUtils.showShort("登录失败");
+                            startActivity(LoginActivity.class);
                         }else {
                             ToastUtils.showShort("注册成功!");
                             LogUtils.e(user,toString());
-                            finish();
+                         //   SharepUtil.cleanAllKey();
+                            startActivity(LoginActivity.class);
+
                         }
                     }
 
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
                         LogUtils.e(throwable.toString());
                     }
                 });

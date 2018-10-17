@@ -108,6 +108,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     @Override
     public void init() {
         setTitleText("登录");
+        hideTitle();
         setBaseBackStyle(getResources().getDrawable(R.drawable.common_close_select));
         AndPermission.with(this)
                 .runtime()

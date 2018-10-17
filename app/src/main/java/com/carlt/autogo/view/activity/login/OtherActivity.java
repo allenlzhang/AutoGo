@@ -176,6 +176,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(Throwable throwable) throws Exception {
+                            dialog.dismiss();
                             ToastUtils.showShort(ObservableHelper.errorMsg);
                             LogUtils.e(throwable.toString());
                         }
@@ -186,6 +187,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 public void onError(Platform platform, int i, Throwable throwable) {
                     dialog.dismiss();
                     ToastUtils.showShort("登录失败");
+
                     LogUtils.e(throwable.getMessage());
                 }
 
@@ -203,7 +205,17 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
         public void onError(Platform platform, int i, Throwable throwable) {
             throwable.printStackTrace();
             dialog.dismiss();
-            ToastUtils.showShort("登录失败");
+
+            String error = throwable.toString();
+            LogUtils.e(error);
+            if(error.contains("NotExistException")){
+                ToastUtils.setMsgTextSize(13);
+                ToastUtils.showShort("请先在应用商店下载该应用再进行该操作");
+
+            }else {
+                ToastUtils.showShort("登录失败");
+            }
+
             LogUtils.e(throwable.toString());
 
         }
@@ -300,6 +312,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
                         LogUtils.e(throwable.toString());
                     }
                 });
