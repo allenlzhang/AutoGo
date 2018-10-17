@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activity.login.loginByPhoneActivity">
+    tools:context=".view.activity.login.LoginByPhoneActivity">
 
 
 
@@ -115,7 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:gravity="center"
-            android:text="发送验证码"
+            android:text="获取验证码"
             android:layout_marginRight="5dp"
             style="@style/BtnCommonCommit"
             android:layout_gravity="center_vertical"

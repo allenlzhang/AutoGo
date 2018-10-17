@@ -5,12 +5,14 @@ import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
@@ -57,6 +59,13 @@ public class ChangeNickNameActivity extends BaseMvpActivity {
             ToastUtils.showShort("昵称不能为空");
             return;
         }
+
+        if(!RegexUtils.isMatch(GlobalKey.NICK_NAME_REGEX,nickName)){
+            ToastUtils.showShort("最多可以输入16位数字、字母、汉字");
+            return;
+        }
+
+
 
         Map<String,Object> params = new HashMap<>();
         params.put("token", SharepUtil.getPreferences().getString("token",""));

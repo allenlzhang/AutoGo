@@ -42,10 +42,10 @@ public class EditUserInfoActivity extends BaseMvpActivity {
 
     @BindView(R.id.img_edheader)
     ImageView imgEdHeader;
-    @BindView(R.id.tv_user_car_name)
-    TextView tvUserCarName;
-    @BindView(R.id.rl_user_car_name)
-    RelativeLayout rlUserCarName;
+    @BindView(R.id.tv_user_nick_name)
+    TextView tvUserNickName;
+    @BindView(R.id.rl_user_nick_name)
+    RelativeLayout rlUserNickName;
     @BindView(R.id.tv_sex)
     TextView tvSex;
     @BindView(R.id.rl_sex)
@@ -78,7 +78,7 @@ public class EditUserInfoActivity extends BaseMvpActivity {
     protected void onResume() {
         super.onResume();
         userInfo = SharepUtil.<UserInfo>getBeanFromSp("user");
-        tvUserCarName.setText("" + userInfo.realName);
+        tvUserNickName.setText("" + userInfo.realName);
         tvSex.setText("" + userInfo.sex);
 
 
@@ -92,9 +92,9 @@ public class EditUserInfoActivity extends BaseMvpActivity {
                 .into(imgEdHeader);
     }
 
-    @OnClick({R.id.rl_user_car_name, R.id.rl_sex})
+    @OnClick({R.id.rl_user_nick_name, R.id.rl_sex})
     public void function(View view) {
-        if (view.getId() == R.id.rl_user_car_name) {
+        if (view.getId() == R.id.rl_user_nick_name) {
             // 修改昵称
             Intent intentNickName = new Intent(this, ChangeNickNameActivity.class);
             startActivity(intentNickName);
