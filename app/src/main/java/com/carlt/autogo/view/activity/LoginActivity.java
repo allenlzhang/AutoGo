@@ -169,7 +169,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
             if(userInfo.loginState == GlobalKey.loginStateByPWd){
                 userPhone.setText(userInfo.mobile);
                 userPWd.setText(userInfo.password);
-                savePwd = userInfo.password ;
+
             }else {
                 userPhone.setText(userInfo.mobile);
             }
@@ -183,8 +183,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
                 BaseDialog baseDialog = new LoginMoreDialog(this, false);
                 baseDialog.show();
-
-
                 break;
             case R.id.user_regist:
                 Intent intentRegist = new Intent(this, RegisterActivity.class);
@@ -207,17 +205,13 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                     return;
                 }
 
-                if(pwd.equals(savePwd)){
-                    pwd = savePwd ;
-                }else {
-                    pwd = CipherUtils.md5(pwd) ;
-                }
 
                 Map<String, Object> params = new HashMap<>();
 
                 params.put("mobile", uPhone);
-                params.put("password", pwd);
+                params.put("password", CipherUtils.md5(pwd));
                 params.put("loginType", GlobalKey.loginStateByPWd);
+                params.put("pwdReally", pwd);
 
                 getPresenter().login(params);
 

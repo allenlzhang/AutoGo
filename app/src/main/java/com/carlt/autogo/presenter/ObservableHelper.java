@@ -61,7 +61,7 @@ public class ObservableHelper {
                             Map<String, String> token = new HashMap<String, String>();
                             token.put("token", User.token);
                             SharepUtil.put(GlobalKey.USER_TOKEN, User.token);
-                            return ObservableHelper.getUserInfoByToken(token , (int) params.get("loginType"), (String) params.get("password"));
+                            return ObservableHelper.getUserInfoByToken(token , (int) params.get("loginType"), (String) params.get("pwdReally"));
                         }
 
                     }
