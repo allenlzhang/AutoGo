@@ -10,9 +10,12 @@ import android.widget.EditText;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
+import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.SharepUtil;
 
@@ -68,21 +71,50 @@ public class UpdatePhoneOneActivity extends BaseMvpActivity {
         }
     }
 
+    @SuppressLint("CheckResult")
     private void nextType() {
         String phone = etPhone.getText().toString().trim();
-        String code = etCode.getText().toString().trim();
+        final String code = etCode.getText().toString().trim();
+
         if (TextUtils.isEmpty(phone)) {
             showToast("请输入手机号");
+            return;
+        }
+        UserInfo user = SharepUtil.getBeanFromSp("user");
+        if (!user.mobile.equals(phone)) {
+            showToast("请输入当前登录手机号");
             return;
         }
         if (TextUtils.isEmpty(code)) {
             showToast("请输入验证码");
             return;
         }
-        Intent intent = new Intent(this, UpdatePhoneTwoActivity.class);
-//        intent.putExtra("oldPhone", phone);
-        intent.putExtra("oldCode", code);
-        startActivity(intent);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("mobile", phone);
+        map.put("validate", code);
+        map.put("version", AutoGoApp.VERSION);
+        map.put("moveDeviceName", AutoGoApp.MODEL_NAME);
+        map.put("loginModel", AutoGoApp.MODEL);
+        map.put("loginSoftType", "Android");
+        ClientFactory.def(UserService.class).authMobile(map)
+                .subscribe(new Consumer<BaseError>() {
+                    @Override
+                    public void accept(BaseError error) throws Exception {
+                        if (error.code == 0) {
+                            Intent intent = new Intent(UpdatePhoneOneActivity.this, UpdatePhoneTwoActivity.class);
+                            //        intent.putExtra("oldPhone", phone);
+                            intent.putExtra("oldCode", code);
+                            startActivity(intent);
+                        } else {
+                            showToast(error.msg);
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
 
 
     }

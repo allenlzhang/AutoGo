@@ -114,4 +114,7 @@ public interface UserService {
     //用户统一注册
     @POST("User/Reg")
     Observable<BaseError>commonReg(@Body Map<String, Object> params);
+    //验证旧手机
+    @POST("User/AuthMobile")
+    Observable<BaseError>authMobile(@Body Map<String, Object> params);
 }

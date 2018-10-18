@@ -1,7 +1,6 @@
 package com.carlt.autogo.view.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -85,11 +84,12 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
 
     @Override
     public void onRegisterFinish() {
-        for (Activity activity : ActivityControl.mActivityList) {
-            if (activity instanceof LoginActivity) {
-                activity.finish();
-            }
-        }
+//        for (Activity activity : ActivityControl.mActivityList) {
+//            if (activity instanceof LoginActivity) {
+//                activity.finish();
+//            }
+//        }
+        ActivityControl.removeAllActivity(this);
         startActivity(MainActivity.class);
     }
 

@@ -142,6 +142,8 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
             case RemotePwdManagementActivity.REMEBERPWD:
                 if (TextUtils.isEmpty(remoteOldPwd) || TextUtils.isEmpty(remoteNewPwd) || TextUtils.isEmpty(remoteNewPwdAgain)) {
                     showToast("远程密码不能为空");
+                } else if (remoteNewPwd.length() < 6 && remoteNewPwdAgain.length() < 6) {
+                    showToast("密码至少为6位数字");
                 } else if (!TextUtils.equals(remoteNewPwd, remoteNewPwdAgain)) {
                     showToast("两次密码不一致");
                 } else {
@@ -151,6 +153,8 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
             case RemotePwdManagementActivity.FORGETPWD:
                 if (TextUtils.isEmpty(mobile)) {
                     showToast("请输入手机号码");
+                } else if (remoteNewPwd.length() < 6 && remoteNewPwdAgain.length() < 6) {
+                    showToast("密码至少为6位数字");
                 } else if (TextUtils.isEmpty(code)) {
                     showToast("请输入验证码");
                 } else if (TextUtils.isEmpty(remoteNewPwd) || TextUtils.isEmpty(remoteNewPwdAgain)) {
