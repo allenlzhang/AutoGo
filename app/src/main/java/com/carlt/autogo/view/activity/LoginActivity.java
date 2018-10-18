@@ -4,7 +4,6 @@ package com.carlt.autogo.view.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.telephony.TelephonyManager;
 import android.text.InputType;
 import android.text.TextUtils;

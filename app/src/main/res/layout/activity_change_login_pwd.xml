@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
     >
 
     <EditText
         android:id="@+id/edit_management_phone"
         style="@style/baseEditStyle"
-        android:hint="@string/management_edit_phone_num"
         android:layout_marginTop="10dp"
+        android:hint="@string/management_edit_phone_num"
+        android:inputType="phone"
+        android:maxLength="11"
         tools:ignore="TextFields"/>
 
     <RelativeLayout
@@ -19,50 +21,117 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         >
+
         <EditText
             android:id="@+id/edit_management_code"
             style="@style/baseEditStyle"
             android:hint="@string/management_edit_verification_code"
-            tools:ignore="TextFields" />
+            android:inputType="number"
+            android:maxLength="6"
+            tools:ignore="TextFields"/>
+
         <Button
             android:id="@+id/btn_management_code"
+            style="@style/BtnSendCodeBg"
             android:layout_width="80dp"
             android:layout_height="30dp"
-            style="@style/BtnSendCodeBg"
-            android:text="@string/management_send_verification_code"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            tools:ignore="RtlHardcoded" />
+            android:layout_centerVertical="true"
+            android:text="@string/management_send_verification_code"
+            tools:ignore="RtlHardcoded"/>
     </RelativeLayout>
 
-    <EditText
-        android:id="@+id/edit_management_old_pwd"
-        style="@style/baseEditStyle"
-        android:hint="@string/management_edit_old_pwd"
-        tools:ignore="TextFields"
+    <LinearLayout
+        android:id="@+id/llOldPwd"
+        style="@style/BgCommonForget"
         android:layout_marginTop="10dp"
-        android:inputType="textPassword"
-        />
-    <EditText
-        android:id="@+id/edit_management_new_pwd"
-        style="@style/baseEditStyle"
-        android:hint="@string/management_edit_new_pwd"
-        tools:ignore="TextFields"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_management_old_pwd"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/management_edit_old_pwd"
+            android:inputType="textPassword"
+            android:textSize="14dp"
+            tools:ignore="TextFields"/>
+
+        <ImageView
+            android:id="@+id/img_passwd_toggle1"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dip"
+            android:src="@mipmap/ic_login_pwd_hide"
+            android:tag="off"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llNewPwd"
+        style="@style/BgCommonForget"
         android:layout_marginTop="10dp"
-        android:inputType="textPassword"
-        />
-    <EditText
-        android:id="@+id/edit_management_new_pwd_again"
-        style="@style/baseEditStyle"
-        android:hint="@string/management_edit_new_pwd_again"
-        tools:ignore="TextFields"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_management_new_pwd"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/management_edit_new_pwd"
+            android:inputType="textPassword"
+            android:textSize="14dp"
+            tools:ignore="TextFields"
+            />
+
+        <ImageView
+            android:id="@+id/img_passwd_toggle2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dip"
+            android:src="@mipmap/ic_login_pwd_hide"
+            android:tag="off"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llPwdAgain"
+        style="@style/BgCommonForget"
         android:layout_marginTop="10dp"
-        android:inputType="textPassword"
-        />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_management_new_pwd_again"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/management_edit_new_pwd_again"
+            android:inputType="textPassword"
+            android:textSize="14dp"
+            tools:ignore="TextFields"
+            />
+
+        <ImageView
+            android:id="@+id/img_passwd_toggle3"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dip"
+            android:src="@mipmap/ic_login_pwd_hide"
+            android:tag="off"/>
+    </LinearLayout>
+
+
     <Button
         android:id="@+id/edit_management_confirm"
         style="@style/BtnCommonCommit"
-        android:text="@string/management_confirm_the_change"
         android:layout_marginTop="40dp"
+        android:text="@string/management_confirm_the_change"
         />
 </LinearLayout>

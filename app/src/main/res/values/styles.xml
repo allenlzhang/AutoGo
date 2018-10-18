@@ -42,7 +42,17 @@
         <item name="layout_constraintBottom_toBottomOf">parent</item>
         <item name="android:background">@drawable/common_edtext_bg</item>
     </style>
-
+    <style name="BgCommonForget">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+        <item name="android:background">@drawable/base_edit_bg</item>
+    </style>
     <!-- 弹出框样式 -->
     <style name="dialog_login_more" parent="@android:style/Theme.Dialog">
         <!-- 背景透明 -->

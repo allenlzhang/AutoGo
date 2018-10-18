@@ -3,10 +3,13 @@ package com.carlt.autogo.view.activity.more.safety;
 import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -41,21 +44,33 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class ChangeLoginPwdActivity extends BaseMvpActivity {
     @BindView(R.id.edit_management_phone)
-    EditText editManagementPhone;
+    EditText       editManagementPhone;
     @BindView(R.id.edit_management_code)
-    EditText editManagementCode;
+    EditText       editManagementCode;
     @BindView(R.id.btn_management_code)
-    Button btnManagementCode;
+    Button         btnManagementCode;
     @BindView(R.id.rl_management_code)
     RelativeLayout rlManagementCode;
     @BindView(R.id.edit_management_old_pwd)
-    EditText editManagementOldPwd;
+    EditText       editManagementOldPwd;
     @BindView(R.id.edit_management_new_pwd)
-    EditText editManagementNewPwd;
+    EditText       editManagementNewPwd;
     @BindView(R.id.edit_management_new_pwd_again)
-    EditText editManagementNewPwdAgain;
+    EditText       editManagementNewPwdAgain;
     @BindView(R.id.edit_management_confirm)
-    Button editManagementConfirm;
+    Button         editManagementConfirm;
+    @BindView(R.id.img_passwd_toggle1)
+    ImageView      imgPasswdToggle1;
+    @BindView(R.id.llOldPwd)
+    LinearLayout   llOldPwd;
+    @BindView(R.id.img_passwd_toggle2)
+    ImageView      imgPasswdToggle2;
+    @BindView(R.id.llNewPwd)
+    LinearLayout   llNewPwd;
+    @BindView(R.id.img_passwd_toggle3)
+    ImageView      imgPasswdToggle3;
+    @BindView(R.id.llPwdAgain)
+    LinearLayout   llPwdAgain;
 
     private int type = 0;
 
@@ -76,15 +91,15 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
 
     @Override
     public void init() {
-        type = getIntent().getIntExtra("changePwd",1);
+        type = getIntent().getIntExtra("changePwd", 1);
         loadTypeView(type);
     }
 
     @SuppressLint("HandlerLeak")
-    Handler mHandler = new Handler(){
+    Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 111){
+            if (msg.what == 111) {
                 count--;
                 if (count > 0) {
                     btnManagementCode.setText(count + "秒后重发");
@@ -103,7 +118,21 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
         }
     };
 
-    @OnClick({R.id.btn_management_code, R.id.edit_management_confirm})
+    private void passwdToggle(boolean selected, EditText editText, ImageView imageView) {
+
+        if (selected) {
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            imageView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_login_pwd_hide));
+
+        } else {
+            editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            imageView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_login_pwd_show));
+
+        }
+
+    }
+
+    @OnClick({R.id.btn_management_code, R.id.edit_management_confirm, R.id.img_passwd_toggle1, R.id.img_passwd_toggle2, R.id.img_passwd_toggle3})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_management_code:
@@ -112,11 +141,24 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
             case R.id.edit_management_confirm:
                 doPwdConfirm();
                 break;
+            case R.id.img_passwd_toggle1:
+                passwdToggle(view.isSelected(), editManagementOldPwd, (ImageView) view);
+                view.setSelected(!view.isSelected());
+                break;
+            case R.id.img_passwd_toggle2:
+                passwdToggle(view.isSelected(), editManagementNewPwd, (ImageView) view);
+                view.setSelected(!view.isSelected());
+                break;
+            case R.id.img_passwd_toggle3:
+                passwdToggle(view.isSelected(), editManagementNewPwdAgain, (ImageView) view);
+                view.setSelected(!view.isSelected());
+                break;
         }
     }
+
     //发送验证码类型(1=注册,2=找回密码,3=修改密码,4=修改手机,5=绑定微信,6=修改手机[旧手机号],7=远程密码重置,8=车辆过户,9=主机认证,10=更换设备,11=登录,12=注销)
     @SuppressLint("CheckResult")
-    private void sendCode(){
+    private void sendCode() {
         final String phone = editManagementCode.getText().toString().trim();
         if (TextUtils.isEmpty(phone)) {
             showToast("请输入手机号码");
@@ -133,19 +175,19 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                 mHandler.sendMessage(msg);
             }
         };
-        timer.schedule(task,1000,1000);
-//        final String phone = editManagementPhone.getText().toString().trim();
-        Map<String,String> params = new HashMap<>();
-        params.put("mobile",phone);
+        timer.schedule(task, 1000, 1000);
+        //        final String phone = editManagementPhone.getText().toString().trim();
+        Map<String, String> params = new HashMap<>();
+        params.put("mobile", phone);
 
         ClientFactory.def(UserService.class).getSmsToken(params)
                 .flatMap(new Function<SmsToken, ObservableSource<BaseError>>() {
                     @Override
                     public ObservableSource<BaseError> apply(SmsToken smsToken) throws Exception {
-                        if (smsToken.msg != null){
+                        if (smsToken.msg != null) {
                             ToastUtils.showShort(smsToken.msg.msg);
                             return null;
-                        }else {
+                        } else {
                             String token = smsToken.token;
                             Map<String, Object> map = new HashMap();
                             map.put("mobile", phone);
@@ -160,7 +202,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                 .subscribe(new Consumer<BaseError>() {
                     @Override
                     public void accept(BaseError s) throws Exception {
-                        if (s.msg != null){
+                        if (s.msg != null) {
                             if (timer != null) {
                                 if (task != null) {
                                     task.cancel();
@@ -191,44 +233,44 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
         String phone = editManagementPhone.getText().toString().trim();
         String code = editManagementCode.getText().toString().trim();
         String oldPwd = editManagementOldPwd.getText().toString().trim();
-        String newPwd = editManagementNewPwd.getText().toString().trim() ;
-        String newPwdAgain = editManagementNewPwdAgain.getText().toString().trim() ;
+        String newPwd = editManagementNewPwd.getText().toString().trim();
+        String newPwdAgain = editManagementNewPwdAgain.getText().toString().trim();
 
 
-        switch (type){
+        switch (type) {
             case LoginPwdManagementActivity.REMEMBER:
-                if (TextUtils.isEmpty(oldPwd)){
+                if (TextUtils.isEmpty(oldPwd)) {
                     ToastUtils.showShort("原密码为空");
                     break;
                 }
-                if(TextUtils.isEmpty(newPwd)  || TextUtils.isEmpty(newPwdAgain) ){
+                if (TextUtils.isEmpty(newPwd) || TextUtils.isEmpty(newPwdAgain)) {
                     ToastUtils.showShort("密码设置为空");
                     break;
                 }
-                if(!newPwd.equals(newPwdAgain)){
+                if (!newPwd.equals(newPwdAgain)) {
                     ToastUtils.showShort("两次密码不一致");
                     break;
                 }
-                doRememberPwdConfirm(oldPwd,newPwd);
+                doRememberPwdConfirm(oldPwd, newPwd);
                 break;
             case LoginPwdManagementActivity.FORGET:
-                if (TextUtils.isEmpty(phone)){
+                if (TextUtils.isEmpty(phone)) {
                     ToastUtils.showShort("请输入手机号码");
                     break;
                 }
-                if (TextUtils.isEmpty(code)){
+                if (TextUtils.isEmpty(code)) {
                     ToastUtils.showShort("验证码为空");
                     break;
                 }
-                if(TextUtils.isEmpty(newPwd)  || TextUtils.isEmpty(newPwdAgain) ){
+                if (TextUtils.isEmpty(newPwd) || TextUtils.isEmpty(newPwdAgain)) {
                     ToastUtils.showShort("密码设置为空");
                     break;
                 }
-                if(!TextUtils.equals(newPwd,newPwdAgain)){
+                if (!TextUtils.equals(newPwd, newPwdAgain)) {
                     ToastUtils.showShort("两次密码不一致");
                     break;
                 }
-                doForgetPwdConfirm(phone,code,newPwd);
+                doForgetPwdConfirm(phone, code, newPwd);
                 break;
         }
 
@@ -239,12 +281,12 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
      * @param oldPwd
      * @param newPwd
      */
-    private void doRememberPwdConfirm(String oldPwd,String newPwd){
-        HashMap<String ,Object> params =new HashMap<>();
-        params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN ,"'"));
-        params.put("oldPassword",CipherUtils.md5(oldPwd));
-        params.put("newPassword",CipherUtils.md5(newPwd));
-        params.put("isMd5",true);
+    private void doRememberPwdConfirm(String oldPwd, String newPwd) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN, "'"));
+        params.put("oldPassword", CipherUtils.md5(oldPwd));
+        params.put("newPassword", CipherUtils.md5(newPwd));
+        params.put("isMd5", true);
         dialog.show();
         Disposable dispRememberPwd = ClientFactory.def(UserService.class).userResetPwd(params)
                 .subscribeOn(Schedulers.newThread())
@@ -253,10 +295,10 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                     @Override
                     public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
-                        if(baseError.msg== null){
+                        if (baseError.msg == null) {
                             ToastUtils.showShort("修改成功");
                             startActivity(LoginActivity.class);
-                        }else {
+                        } else {
                             ToastUtils.showShort(baseError.msg);
                         }
                     }
@@ -276,13 +318,13 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
      * @param validate
      * @param newPwd
      */
-    private void doForgetPwdConfirm(String mobile,String validate,String newPwd){
-        HashMap<String ,Object> params =new HashMap<>();
-        params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN ,"'"));
-        params.put("mobile",mobile);
-        params.put("validate",validate);
+    private void doForgetPwdConfirm(String mobile, String validate, String newPwd) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN, "'"));
+        params.put("mobile", mobile);
+        params.put("validate", validate);
         params.put("newPassword", CipherUtils.md5(newPwd));
-        params.put("isMd5",true);
+        params.put("isMd5", true);
         dialog.show();
         Disposable disposableForgetPwd = ClientFactory.def(UserService.class).userRetrievePassword(params)
                 .subscribeOn(Schedulers.newThread())
@@ -290,10 +332,10 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                 .subscribe(new Consumer<BaseError>() {
                     @Override
                     public void accept(BaseError baseError) throws Exception {
-                        if (baseError.msg == null){
+                        if (baseError.msg == null) {
                             ToastUtils.showShort("修改成功");
                             startActivity(LoginActivity.class);
-                        }else{
+                        } else {
                             ToastUtils.showShort(baseError.msg);
                         }
                         dialog.dismiss();
@@ -309,20 +351,23 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
 
     /**
      * 加载不同类型的界面
-     * @param type  0 记得密码  1 忘记密码
+     * @param type
+     *         0 记得密码  1 忘记密码
      */
-    private void loadTypeView(int type){
-        switch (type){
+    private void loadTypeView(int type) {
+        switch (type) {
             case LoginPwdManagementActivity.REMEMBER:
                 editManagementPhone.setVisibility(View.GONE);
                 rlManagementCode.setVisibility(View.GONE);
-                editManagementOldPwd.setVisibility(View.VISIBLE);
+                //                editManagementOldPwd.setVisibility(View.VISIBLE);
+                llOldPwd.setVisibility(View.VISIBLE);
                 setTitleText(getResources().getString(R.string.management_change_login_pwd));
                 break;
             case LoginPwdManagementActivity.FORGET:
                 editManagementPhone.setVisibility(View.VISIBLE);
                 rlManagementCode.setVisibility(View.VISIBLE);
-                editManagementOldPwd.setVisibility(View.GONE);
+                //                editManagementOldPwd.setVisibility(View.GONE);
+                llOldPwd.setVisibility(View.GONE);
                 setTitleText(getResources().getString(R.string.management_forget_login_pwd));
                 break;
         }
@@ -340,4 +385,6 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
         super.onDestroy();
 
     }
+
+
 }
