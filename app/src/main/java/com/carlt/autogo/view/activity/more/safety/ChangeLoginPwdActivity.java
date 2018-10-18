@@ -156,12 +156,16 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
         }
     }
 
+    String phone  ;
+
     //发送验证码类型(1=注册,2=找回密码,3=修改密码,4=修改手机,5=绑定微信,6=修改手机[旧手机号],7=远程密码重置,8=车辆过户,9=主机认证,10=更换设备,11=登录,12=注销)
     @SuppressLint("CheckResult")
     private void sendCode() {
-        final String phone = editManagementCode.getText().toString().trim();
+        phone = editManagementPhone.getText().toString().trim();
+
         if (TextUtils.isEmpty(phone)) {
             showToast("请输入手机号码");
+            LogUtils.e(phone);
             return;
         }
         count = 60;
@@ -221,6 +225,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                                 task.cancel();
                             }
                         }
+//                        showToast("请检查网络");
                         btnManagementCode.setEnabled(true);
                         btnManagementCode.setText("重发验证码");
                         LogUtils.e(throwable.getMessage());
