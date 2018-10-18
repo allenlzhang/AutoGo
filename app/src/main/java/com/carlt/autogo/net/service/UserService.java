@@ -107,4 +107,11 @@ public interface UserService {
     // 修改手机
     @POST("User/ResetMobile")
     Observable<BaseError> resetMobile(@Body Map<String, Object> params);
+
+    //用户统一登录
+    @POST("User/Login")
+    Observable<User>commonLogin(@Body Map<String, Object> params);
+    //用户统一注册
+    @POST("User/Reg")
+    Observable<BaseError>commonReg(@Body Map<String, Object> params);
 }

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.NetworkUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.global.GlobalUrl;
 import com.carlt.autogo.net.base.myretrofit.MyGsonConverterFactory;
 import com.carlt.autogo.net.service.UserService;
@@ -49,14 +51,17 @@ public abstract class BaseRestClient implements Iservice {
 
     abstract void creat();
 
+
+
     @SuppressLint("CheckResult")
     @Override
-    public <T> T getService(final Class<T> service) {
-      final   T t =   retrofit.create(service);
+    public <T> T getService(final Class<T> service ){
 
-      Object o = Proxy.newProxyInstance(service.getClassLoader(), new Class[]{service}, new InvocationHandler() {
+        final   T t =   retrofit.create(service);
+        Object o = Proxy.newProxyInstance(service.getClassLoader(), new Class[]{service}, new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+              
                 Object o =  method.invoke(t,args);
                 if(o instanceof  Observable){
                     Observable observable = (Observable) o;
@@ -70,7 +75,6 @@ public abstract class BaseRestClient implements Iservice {
 
         return (T) o;
     }
-
     protected static Iservice getDefual() {
         return DefulatClient.getInstace();
     }

@@ -5,4 +5,5 @@ public interface Iservice {
     <T> T getService(final Class<T> service);
 
     void changeUri(int id);
+
 }

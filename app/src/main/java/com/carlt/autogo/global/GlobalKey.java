@@ -23,9 +23,13 @@ public class GlobalKey {
     //昵称匹配(字母 数字 汉字)
     public static final String NICK_NAME_REGEX = "^[\\u4e00-\\u9fa5a-zA-Z0-9]+$";
 
-    public static final int loginStateByPWd = 0;
-    public static final int loginStateByPhone = 1;
-    public static final int loginStateByOther = 2;
+    //登录类型
+    public static final int loginStateByPWd = 1;
+    public static final int loginStateByPhone = 2;
+    public static final int loginStateByOther = 3;
+    public static final int loginStateByFace =4;
 
-
+    //注册类型
+    public static final int RegStateByPWd = 1;
+    public static final int RegStateByOther = 2;
 }

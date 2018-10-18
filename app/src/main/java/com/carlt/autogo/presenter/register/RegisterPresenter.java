@@ -40,50 +40,12 @@ public class RegisterPresenter extends BasePresenter<IRegisterView> {
 
         uuDialog.show();
 
-        Disposable disposable =  ClientFactory.def(UserService.class).userRegister(params)
-                .filter(new Predicate<UserRegister>() {
-                    @Override
-                    public boolean test(UserRegister userRegister) throws Exception {
-                        return userRegister != null;
-                    }
-                })
-                //获取用户token
-                .flatMap(new Function<UserRegister, ObservableSource<User>>() {
-                    @Override
-                    public ObservableSource<User> apply(UserRegister userRegister) throws Exception {
-                        if(userRegister.code == 0){
-                            HashMap<String,Object> mapToken = new HashMap();
-                            mapToken.put("mobile", params.get("mobile"));
-                            mapToken.put("password", params.get("password"));
-
-                            mapToken.put("moveDeviceName", AutoGoApp.MODEL_NAME);
-                            mapToken.put("loginModel", AutoGoApp.MODEL);
-                            mapToken.put("loginSoftType", "Android");
-                            return  ClientFactory.def(UserService.class).userLogin(mapToken);
-                        }else {
-                            ToastUtils.showShort(userRegister.msg);
-                            return  null ;
-                        }
-
-                    }
-                })
-                .flatMap(new Function<User, ObservableSource<String>>() {
-                    @Override
-                    public ObservableSource<String> apply(User user) throws Exception {
-                        if (user.err != null) {
-                            errorMsg = user.err.msg;
-                            return null;
-                        } else {
-                            Map<String, String> token = new HashMap<String, String>();
-                            token.put("token", user.token);
-                            SharepUtil.put(GlobalKey.USER_TOKEN, user.token);
-                            return ObservableHelper.getUserInfoByToken(token ,GlobalKey.loginStateByPWd, (String) params.get("password"));
-                        }
-                    }
-                })
+        Disposable disposable = ObservableHelper.commonReg(params)
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {
+                        uuDialog.dismiss();
+                        ToastUtils.showShort(s);
                         mView.onRegisterFinish();
                     }
                 }, new Consumer<Throwable>() {

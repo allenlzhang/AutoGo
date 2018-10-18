@@ -34,21 +34,7 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
     public void login(final Map<String, Object> params) {
         uuDialog.show();
 
-        ClientFactory.def(UserService.class).userLogin(params)
-                .flatMap(new Function<User, ObservableSource<String>>() {
-                    @Override
-                    public ObservableSource<String> apply(User user) throws Exception {
-                        if (user.err != null) {
-                            errorMsg = user.err.msg;
-                            return null;
-                        } else {
-                            Map<String, String> token = new HashMap<String, String>();
-                            token.put("token", user.token);
-                            SharepUtil.put(GlobalKey.USER_TOKEN, user.token);
-                            return ObservableHelper.getUserInfoByToken(token ,GlobalKey.loginStateByPWd, (String) params.get("password"));
-                        }
-                    }
-                })
+        ObservableHelper.commonLogin(params)
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {

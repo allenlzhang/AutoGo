@@ -107,8 +107,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
 
 
 
-    private HashMap<String ,Object> weChatParams = new HashMap<>();
-    private HashMap<String ,Object> payMent = new HashMap<>();
+    HashMap<String, Object> params = new HashMap<>();
     @PresenterVariable
     private OtherRegisterPresenter otherRegisterPresenter;
     private String                 errorMsg;
@@ -128,6 +127,9 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
         }
 
         dialog = new UUDialog(this, R.style.DialogCommon);
+        params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
+        params.put("loginModel", AutoGoApp.MODEL);
+        params.put("loginSoftType", "Android");
     }
 
     @OnClick({R.id.login_payment, R.id.login_wechat})
@@ -174,19 +176,16 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 public void onComplete(Platform platform, final int i, HashMap<String, Object> hashMap) {
                     LogUtils.e(hashMap);
                     final String unionid = (String) hashMap.get("unionid");
-                    HashMap<String, Object> params = new HashMap<>();
                     params.put("openId", unionid);
                     params.put("openType", 2);
-                    params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
-                    params.put("loginModel", AutoGoApp.MODEL);
-                    params.put("loginSoftType", "Android");
+
                     Observable<String> observable = ObservableHelper.loginByOpenApi(params, OtherActivity.this,2);
                     observable.subscribe(new Consumer<String>() {
                         @Override
                         public void accept(String s) throws Exception {
                             dialog.dismiss();
-                            ToastUtils.showShort(s);
 
+                            ToastUtils.showShort(s);
                             startActivity(MainActivity.class);
                         }
                     }, new Consumer<Throwable>() {
@@ -274,7 +273,6 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
         String sign = OrderInfoUtil2_0.getSign(authInfoMap, privateKey, rsa2);
         final String authInfo = info + "&" + sign;
 
-        final HashMap<String, Object> params = new HashMap<>();
 
         Observable.create(new ObservableOnSubscribe<AuthResult>() {
             @Override
@@ -309,12 +307,8 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 .flatMap(new Function<AuthResult, ObservableSource<String>>() {
                     @Override
                     public ObservableSource<String> apply(AuthResult authResult) throws Exception {
-
                         params.put("openId", authResult.user_id);
                         params.put("openType", 1);
-                        params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
-                        params.put("loginModel", AutoGoApp.MODEL);
-                        params.put("loginSoftType", "Android");
                         LogUtils.e(authResult.user_id);
                         return ObservableHelper.loginByOpenApi(params, OtherActivity.this,1);
                     }

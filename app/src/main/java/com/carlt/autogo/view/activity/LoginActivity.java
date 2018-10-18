@@ -4,6 +4,7 @@ package com.carlt.autogo.view.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.telephony.TelephonyManager;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baidu.idl.face.platform.utils.MD5Utils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
@@ -27,6 +29,7 @@ import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.presenter.login.ILoginView;
 import com.carlt.autogo.presenter.login.LoginPresenter;
 import com.carlt.autogo.utils.ActivityControl;
+import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.more.safety.ChangeLoginPwdActivity;
 import com.yanzhenjie.permission.Action;
@@ -88,6 +91,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     int next;
 
     Disposable disposable;
+    private String savePwd ;
 
     @Override
     protected int getContentView() {
@@ -165,6 +169,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
             if(userInfo.loginState == GlobalKey.loginStateByPWd){
                 userPhone.setText(userInfo.mobile);
                 userPWd.setText(userInfo.password);
+                savePwd = userInfo.password ;
             }else {
                 userPhone.setText(userInfo.mobile);
             }
@@ -190,6 +195,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
                 String uPhone = userPhone.getText().toString().trim();
                 String pwd = userPWd.getText().toString().trim();
+
+
                 if (TextUtils.isEmpty(uPhone)) {
                     ToastUtils.showShort("请输入手机号");
                     return;
@@ -200,15 +207,17 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                     return;
                 }
 
+                if(pwd.equals(savePwd)){
+                    pwd = savePwd ;
+                }else {
+                    pwd = CipherUtils.md5(pwd) ;
+                }
+
                 Map<String, Object> params = new HashMap<>();
 
                 params.put("mobile", uPhone);
                 params.put("password", pwd);
-                params.put("version", AutoGoApp.VERSION);
-                params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
-                params.put("loginModel", AutoGoApp.MODEL);
-                params.put("loginSoftType", "Android");
-
+                params.put("loginType", GlobalKey.loginStateByPWd);
 
                 getPresenter().login(params);
 

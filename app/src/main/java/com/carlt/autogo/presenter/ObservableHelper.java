@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.SmsToken;
@@ -15,6 +16,7 @@ import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.user.UserBindPhoneActivity;
 
 import java.io.Serializable;
@@ -38,6 +40,62 @@ public class ObservableHelper {
     public static  String errorMsg ;
     static String[] sexs = {"男","女","保密"};
 
+    /**
+     * @param params 接口参数
+     * @return
+     */
+    public static Observable<String>commonLogin( final Map<String,Object> params){
+        params.put("version", AutoGoApp.VERSION);
+        params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
+        params.put("loginModel", AutoGoApp.MODEL);
+        params.put("loginSoftType", "Android");
+
+        return ClientFactory.def(UserService.class).commonLogin(params)
+                .flatMap(new Function<User, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(User User) throws Exception {
+                        if (User.err != null) {
+                            errorMsg = User.err.msg;
+                            return null;
+                        } else {
+                            Map<String, String> token = new HashMap<String, String>();
+                            token.put("token", User.token);
+                            SharepUtil.put(GlobalKey.USER_TOKEN, User.token);
+                            return ObservableHelper.getUserInfoByToken(token , (int) params.get("loginType"), (String) params.get("password"));
+                        }
+
+                    }
+                });
+    };
+
+
+    public static Observable<String>commonReg(final Map<String,Object> params){
+        params.put("version", AutoGoApp.VERSION);
+        params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
+        params.put("loginModel", AutoGoApp.MODEL);
+        params.put("loginSoftType", "Android");
+
+        return  ClientFactory.def(UserService.class).commonReg(params)
+                .flatMap(new Function<BaseError, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(BaseError baseError) throws Exception {
+                        if(baseError.code == 0){
+                            int type = (int) params.get("regType");
+                            if(type == ( GlobalKey.RegStateByPWd)){
+                                params.put("loginType", GlobalKey.loginStateByPWd);
+                            }else {
+                                params.put("loginType", GlobalKey.loginStateByOther);
+                            }
+                            params.remove("validate");
+
+                            return  ObservableHelper.commonLogin(params);
+                        }else {
+                            ToastUtils.showShort(baseError.msg);
+                            return  null ;
+                        }
+                    }
+                });
+    }
     /**
      * 根据token 获取用户信息
      */

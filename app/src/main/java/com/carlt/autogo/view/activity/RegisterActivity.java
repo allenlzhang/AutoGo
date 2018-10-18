@@ -23,6 +23,8 @@ import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.presenter.register.IRegisterView;
 import com.carlt.autogo.presenter.register.RegisterPresenter;
+import com.carlt.autogo.utils.CipherUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -164,12 +166,10 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
            }
            Map<String, Object> params = new HashMap<>();
            params.put("mobile", phoneNum);
-           params.put("password", pwd);
+           params.put("password",  CipherUtils.md5(pwd));
            params.put("validate", code);
-           params.put("version", 1);
-           params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
-           params.put("loginModel", AutoGoApp.MODEL);
-           params.put("loginSoftType", "Android");
+           params.put("regType", GlobalKey.RegStateByPWd);
+
            doRegiste(params);
        }
 
