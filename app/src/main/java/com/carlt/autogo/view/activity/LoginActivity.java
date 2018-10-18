@@ -163,8 +163,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     protected void onResume() {
         super.onResume();
         UserInfo userInfo = SharepUtil.getBeanFromSp("user");
-
-        LogUtils.e(userInfo.toString());
         if (userInfo != null ) {
             if(userInfo.loginState == GlobalKey.loginStateByPWd){
                 userPhone.setText(userInfo.mobile);

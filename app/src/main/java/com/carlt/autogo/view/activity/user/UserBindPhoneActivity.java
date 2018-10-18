@@ -17,6 +17,7 @@ import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.LoginActivity;
+import com.carlt.autogo.view.activity.MainActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,9 +26,11 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -78,6 +81,8 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
      * 三方平台类型 1 支付宝 2  微信
      */
     int openType ;
+
+
     @Override
     protected int getContentView() {
         return R.layout.activity_user_bind_phone;
@@ -88,6 +93,7 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
         setTitleText("用户绑定手机");
         openId = getIntent().getExtras().getString("openId");
         openType = getIntent().getExtras().getInt("openType");
+
     }
 
     /**
@@ -135,28 +141,36 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
      * 调用三方注册绑定手机接口
      * @param parmas  请求参数
      */
-    private void doOtherRegister(Map<String, Object> parmas) {
+    private void doOtherRegister(final Map<String, Object> parmas) {
 
         dialog.show();
         Disposable disposable = ClientFactory.def(UserService.class).registerByOpenApi(parmas)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseError>() {
+                .flatMap(new Function<BaseError, ObservableSource<String>>() {
                     @Override
-                    public void accept(BaseError user) throws Exception {
-                        dialog.dismiss();
-                        if(user.msg != null){
+                    public ObservableSource<String> apply(BaseError baseError) throws Exception {
+
+                        if(baseError.msg != null){
                             ToastUtils.showShort("登录失败");
                             startActivity(LoginActivity.class);
+                            return  null ;
                         }else {
-                            ToastUtils.showShort("注册成功!");
-                            LogUtils.e(user,toString());
-                         //   SharepUtil.cleanAllKey();
-                            startActivity(LoginActivity.class);
+
+                            parmas.remove("mobile");
+                            parmas.remove("validate");
+                            LogUtils.e(parmas + "\n" + openType + "========================");
+                            return ObservableHelper.loginByOpenApi(parmas,UserBindPhoneActivity.this,openType);
 
                         }
-                    }
 
+                    }
+                })
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        dialog.dismiss();
+                        ToastUtils.showShort(s);
+                        startActivity(MainActivity.class);
+                    }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
@@ -236,5 +250,11 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
                         }
                     }
                 });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

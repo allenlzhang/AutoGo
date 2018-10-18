@@ -74,7 +74,7 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
     @Override
     public void onRegisterFinish() {
         // TODO: 2018/9/4
-        startActivity(LoginActivity.class);
+        startActivity(MainActivity.class);
     }
 
     @OnClick({R.id.send_code})

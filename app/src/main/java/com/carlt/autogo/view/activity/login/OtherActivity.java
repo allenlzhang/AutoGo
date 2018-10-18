@@ -2,7 +2,9 @@ package com.carlt.autogo.view.activity.login;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -104,6 +106,9 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
             "8WIzdo8RIXSTegItyq/XSMeFthpZVgNfwM7pRR1UAb0+IACP1XKs";
 
 
+
+    private HashMap<String ,Object> weChatParams = new HashMap<>();
+    private HashMap<String ,Object> payMent = new HashMap<>();
     @PresenterVariable
     private OtherRegisterPresenter otherRegisterPresenter;
     private String                 errorMsg;
@@ -137,23 +142,29 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
             case R.id.login_wechat:
                 dialog.show();
                 otherRegisterPresenter.weChatLogin();
-                doAuthorize();
+                doAuthorize(plat, new MyPlatformActionListener(dialog));
                 break;
         }
 
     }
 
-    private void doAuthorize() {
+    public static void doAuthorize(Platform plat ,MyPlatformActionListener listener) {
 
-        plat.setPlatformActionListener((new MyPlatformActionListener()));
+        plat.setPlatformActionListener((listener));
         plat.removeAccount(true);
         plat.SSOSetting(false);
         plat.authorize();
 
     }
 
-    class MyPlatformActionListener implements PlatformActionListener {
-        @Override
+    public class MyPlatformActionListener implements PlatformActionListener {
+        Dialog dialog ;
+
+       public MyPlatformActionListener(Dialog dialog) {
+           this.dialog = dialog;
+       }
+
+       @Override
         public void onComplete(final Platform platform, int i, final HashMap<String, Object> hashMap) {
             LogUtils.e("onComplete");
 
@@ -166,23 +177,23 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("openId", unionid);
                     params.put("openType", 2);
-                    params.put("version", 1);
                     params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
                     params.put("loginModel", AutoGoApp.MODEL);
                     params.put("loginSoftType", "Android");
-                    Observable<String> observable = ObservableHelper.loginByOpenApi(params, OtherActivity.this);
+                    Observable<String> observable = ObservableHelper.loginByOpenApi(params, OtherActivity.this,2);
                     observable.subscribe(new Consumer<String>() {
                         @Override
                         public void accept(String s) throws Exception {
                             dialog.dismiss();
                             ToastUtils.showShort(s);
+
                             startActivity(MainActivity.class);
                         }
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(Throwable throwable) throws Exception {
                             dialog.dismiss();
-                            ToastUtils.showShort(ObservableHelper.errorMsg);
+                         //   ToastUtils.showShort(ObservableHelper.errorMsg);
                             LogUtils.e(throwable.toString());
                         }
                     });
@@ -301,12 +312,11 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
 
                         params.put("openId", authResult.user_id);
                         params.put("openType", 1);
-                        params.put("version", 1);
                         params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
                         params.put("loginModel", AutoGoApp.MODEL);
                         params.put("loginSoftType", "Android");
                         LogUtils.e(authResult.user_id);
-                        return ObservableHelper.loginByOpenApi(params, OtherActivity.this);
+                        return ObservableHelper.loginByOpenApi(params, OtherActivity.this,1);
                     }
                 })
                 .subscribeOn(Schedulers.newThread())

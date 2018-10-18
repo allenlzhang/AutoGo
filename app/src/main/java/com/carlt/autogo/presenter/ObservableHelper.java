@@ -2,7 +2,9 @@ package com.carlt.autogo.presenter;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Parcelable;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
@@ -15,6 +17,7 @@ import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.user.UserBindPhoneActivity;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -101,7 +104,8 @@ public class ObservableHelper {
      * 用户三方登录
      */
     @SuppressLint("CheckResult")
-    public static Observable<String> loginByOpenApi(final Map<String, Object>  params ,final BaseMvpActivity baseMvpActivity){
+    public static Observable<String> loginByOpenApi(final Map<String, Object>  params ,final BaseMvpActivity baseMvpActivity ,final int openType){
+
 
      return    ClientFactory.def(UserService.class).loginByOpenApi(params)
                 .flatMap(new Function<User, ObservableSource<UserInfo>>() {
@@ -110,10 +114,14 @@ public class ObservableHelper {
                         if(user.err != null){
                            // ToastUtils.showShort(user.err.msg);
                             String uId  = (String) params.get("openId");
-                            Intent intent  = new Intent(baseMvpActivity,UserBindPhoneActivity.class);
-                            intent.putExtra("openId",uId);
-                            intent.putExtra("openType",1);
-                            baseMvpActivity. startActivity(intent);
+                            if(baseMvpActivity != null){
+                                Intent intent  = new Intent(baseMvpActivity,UserBindPhoneActivity.class);
+                                intent.putExtra("openId",uId);
+                                intent.putExtra("openType",openType);
+                                //保存微信或者支付宝登录请求参数
+                                baseMvpActivity. startActivity(intent);
+                            }
+
                             return  null ;
                         }else {
 
