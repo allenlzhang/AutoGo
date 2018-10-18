@@ -2,12 +2,10 @@ package com.carlt.autogo.utils;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.view.activity.LoginActivity;
-import com.carlt.autogo.view.activity.more.safety.FreezeActivity;
 
 import java.util.ArrayList;
 
@@ -18,7 +16,7 @@ import java.util.ArrayList;
  * Date       : 2018/10/12 15:43
  */
 public class ActivityControl {
-    private static ArrayList<Activity> mActivityList = new ArrayList<>();
+    public static ArrayList<Activity> mActivityList = new ArrayList<>();
 
     public static void addActivity(Activity activity) {
         if (null != activity) {

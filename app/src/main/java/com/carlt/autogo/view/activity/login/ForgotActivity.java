@@ -13,7 +13,6 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
-import com.carlt.autogo.entry.user.RetrievePassword;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
@@ -34,20 +33,28 @@ import static com.carlt.autogo.view.activity.RegisterActivity.CheckValues;
 
 public class ForgotActivity extends BaseMvpActivity {
 
-    @BindView(R.id.ed_forgot_user_phone)EditText edForgotUserPhone;
-    @BindView(R.id.ed_forgot_user_code)EditText edForgotUserCode;
+    @BindView(R.id.ed_forgot_user_phone)
+    EditText edForgotUserPhone;
+    @BindView(R.id.ed_forgot_user_code)
+    EditText edForgotUserCode;
 
-    @BindView(R.id.ed_forgot_pwd)EditText edForgotPwd;
-    @BindView(R.id.ed_forgot_pwd_d)EditText edForgotPwdD;
+    @BindView(R.id.ed_forgot_pwd)
+    EditText edForgotPwd;
+    @BindView(R.id.ed_forgot_pwd_d)
+    EditText edForgotPwdD;
 
-    @BindView(R.id.img_passwd_toggle)ImageView imgPasswdToggle;
-    @BindView(R.id.img_passwd_toggle_d)ImageView imgPasswdToggleD;
+    @BindView(R.id.img_passwd_toggle)
+    ImageView imgPasswdToggle;
+    @BindView(R.id.img_passwd_toggle_d)
+    ImageView imgPasswdToggleD;
 
-    @BindView(R.id.btn_forgot_commit)Button btnForgotCommit;
-    @BindView(R.id.btn_send_code)Button btnSendCode;
+    @BindView(R.id.btn_forgot_commit)
+    Button btnForgotCommit;
+    @BindView(R.id.btn_send_code)
+    Button btnSendCode;
 
     Disposable disposable;
-    int count = 60 ;
+    int count = 60;
 
     @Override
     protected int getContentView() {
@@ -55,18 +62,18 @@ public class ForgotActivity extends BaseMvpActivity {
     }
 
     @OnClick({R.id.btn_send_code})
-    public void onClick(View view){
+    public void onClick(View view) {
         doSendCode();
     }
 
     @OnClick(R.id.btn_forgot_commit)
-    public void forgotCommit(){
+    public void forgotCommit() {
         String phoneNum = edForgotUserPhone.getText().toString().trim();
         String pwd = edForgotPwd.getText().toString().toString();
         String pwdD = edForgotPwdD.getText().toString().toString();
-        String code =edForgotUserCode.getText().toString().trim() ;
+        String code = edForgotUserCode.getText().toString().trim();
 
-        CheckValues(phoneNum,pwd,pwdD,code);
+        CheckValues(phoneNum, pwd, pwdD, code);
 
         Map<String, Object> params = new HashMap<>();
         params.put("mobile", phoneNum);
@@ -83,22 +90,23 @@ public class ForgotActivity extends BaseMvpActivity {
         ClientFactory.def(UserService.class).userRetrievePassword(params)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<RetrievePassword>() {
+                .subscribe(new Consumer<BaseError>() {
                     @Override
-                    public void accept(RetrievePassword baseError) throws Exception {
+                    public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
-                        if(baseError.err.msg == null){
+                        LogUtils.e(baseError.toString());
+                        if (baseError.msg == null) {
                             ToastUtils.showShort("修改成功");
                             finish();
-                        }else {
-                            ToastUtils.showShort(baseError.err.msg);
+                        } else {
+                            ToastUtils.showShort(baseError.msg);
                         }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
-                        LogUtils.e(throwable.toString());
+                        LogUtils.e(throwable);
                     }
                 });
 
@@ -126,28 +134,28 @@ public class ForgotActivity extends BaseMvpActivity {
     private void doSendCode() {
 
         String phoneNum = edForgotUserPhone.getText().toString().trim();
-        boolean  checkOk =  RegexUtils.isMobileExact(phoneNum) ;
-        if(!checkOk){
+        boolean checkOk = RegexUtils.isMobileExact(phoneNum);
+        if (!checkOk) {
             ToastUtils.showShort("请输入正确手机号!");
             return;
         }
 
 
-        Map<String ,String> param =new HashMap<>();
+        Map<String, String> param = new HashMap<>();
         param.put("mobile", phoneNum);
-        Observable<BaseError> observable = ObservableHelper.sendValidate(phoneNum,param,2);
+        Observable<BaseError> observable = ObservableHelper.sendValidate(phoneNum, param, 2);
 
         observable.subscribe(new Consumer<BaseError>() {
             @Override
             public void accept(BaseError baseError) throws Exception {
-                if(baseError.msg != null){
-                    ToastUtils.showShort(baseError.msg );
+                if (baseError.msg != null) {
+                    ToastUtils.showShort(baseError.msg);
                     btnSendCode.setClickable(true);
                     btnSendCode.setText("发送验证码");
-                    count =60;
-                }else {
+                    count = 60;
+                } else {
                     notifSendValidate();
-                    ToastUtils.showShort("短信下发成功" );
+                    ToastUtils.showShort("短信下发成功");
                     btnSendCode.setClickable(false);
                 }
             }
@@ -160,19 +168,19 @@ public class ForgotActivity extends BaseMvpActivity {
     }
 
     private void notifSendValidate() {
-        disposable  =  Observable.interval(1, TimeUnit.SECONDS)
+        disposable = Observable.interval(1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        if(count <= 0 ){
+                        if (count <= 0) {
                             disposable.dispose();
                             btnSendCode.setClickable(true);
                             btnSendCode.setText("发送验证码");
-                            count =60;
-                        }else {
-                            count -- ;
+                            count = 60;
+                        } else {
+                            count--;
                             btnSendCode.setText(count + "秒");
                         }
                     }

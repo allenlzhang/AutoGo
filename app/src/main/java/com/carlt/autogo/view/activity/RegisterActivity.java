@@ -98,7 +98,7 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
         String phoneNum = registUserPhone.getText().toString().trim();
         boolean  checkOk =  RegexUtils.isMobileExact(phoneNum) ;
         if(!checkOk){
-            ToastUtils.showShort("请输入正确手机号!");
+            showToast("请输入正确手机号!");
             return;
         }
         Map<String ,String> param =new HashMap<>();
@@ -110,13 +110,13 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
             @Override
             public void accept(BaseError baseError) throws Exception {
                 if(baseError.msg != null){
-                    ToastUtils.showShort(baseError.msg );
+                    showToast(baseError.msg );
                     sendCode.setClickable(true);
                     sendCode.setText("发送验证码");
                     count =60;
                 }else {
                     notifSendValidate();
-                    ToastUtils.showShort("短信下发成功" );
+                    showToast("短信下发成功" );
                     sendCode.setClickable(false);
                 }
             }
@@ -159,7 +159,7 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
 
        if( CheckValues(phoneNum,pwd,pwdD,code)){
            if(!cbLaw.isChecked()){
-               ToastUtils.showShort("您未同意服务条款!");
+               showToast("您未同意服务条款!");
                return;
            }
            Map<String, Object> params = new HashMap<>();

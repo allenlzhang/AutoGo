@@ -45,7 +45,6 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                             Map<String, String> token = new HashMap<String, String>();
                             token.put("token", user.token);
                             SharepUtil.put(GlobalKey.USER_TOKEN, user.token);
-                            LogUtils.e(user.token);
                             return ObservableHelper.getUserInfoByToken(token ,GlobalKey.loginStateByPWd, (String) params.get("password"));
                         }
                     }

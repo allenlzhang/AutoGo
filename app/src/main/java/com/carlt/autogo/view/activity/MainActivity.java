@@ -105,6 +105,7 @@ public class MainActivity extends BaseMvpActivity {
     protected void onResume() {
         super.onResume();
         UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+
         if (info.userFreeze == 2){
             Intent intent = new Intent(MainActivity.this,FreezeActivity.class);
             intent.putExtra("fromMain",true);

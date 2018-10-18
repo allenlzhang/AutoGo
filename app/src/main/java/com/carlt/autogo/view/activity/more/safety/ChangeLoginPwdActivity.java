@@ -1,7 +1,6 @@
 package com.carlt.autogo.view.activity.more.safety;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -15,9 +14,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
-import com.carlt.autogo.entry.user.RetrievePassword;
 import com.carlt.autogo.entry.user.SmsToken;
-import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
@@ -29,7 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -80,7 +76,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
 
     @Override
     public void init() {
-        type = getIntent().getIntExtra("changePwd",0);
+        type = getIntent().getIntExtra("changePwd",1);
         loadTypeView(type);
     }
 
@@ -121,6 +117,11 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
     //发送验证码类型(1=注册,2=找回密码,3=修改密码,4=修改手机,5=绑定微信,6=修改手机[旧手机号],7=远程密码重置,8=车辆过户,9=主机认证,10=更换设备,11=登录,12=注销)
     @SuppressLint("CheckResult")
     private void sendCode(){
+        final String phone = editManagementCode.getText().toString().trim();
+        if (TextUtils.isEmpty(phone)) {
+            showToast("请输入手机号码");
+            return;
+        }
         count = 60;
         btnManagementCode.setEnabled(false);
         btnManagementCode.setText(count + "秒后重发");
@@ -133,7 +134,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
             }
         };
         timer.schedule(task,1000,1000);
-        final String phone = editManagementPhone.getText().toString().trim();
+//        final String phone = editManagementPhone.getText().toString().trim();
         Map<String,String> params = new HashMap<>();
         params.put("mobile",phone);
 
@@ -263,7 +264,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
-                        LogUtils.e(throwable.toString());
+                        LogUtils.e(throwable);
                     }
                 });
         disposables.add(dispRememberPwd);
@@ -286,14 +287,14 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
         Disposable disposableForgetPwd = ClientFactory.def(UserService.class).userRetrievePassword(params)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<RetrievePassword>() {
+                .subscribe(new Consumer<BaseError>() {
                     @Override
-                    public void accept(RetrievePassword baseError) throws Exception {
-                        if (baseError.err == null){
+                    public void accept(BaseError baseError) throws Exception {
+                        if (baseError.msg == null){
                             ToastUtils.showShort("修改成功");
                             startActivity(LoginActivity.class);
                         }else{
-                            ToastUtils.showShort(baseError.err.msg);
+                            ToastUtils.showShort(baseError.msg);
                         }
                         dialog.dismiss();
                     }

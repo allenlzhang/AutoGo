@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
@@ -43,23 +42,23 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class ChangeRemotePwdActivity extends BaseMvpActivity {
     @BindView(R.id.edit_management_remote_phone)
-    EditText editManagementRemotePhone;
+    EditText       editManagementRemotePhone;
     @BindView(R.id.edit_management_remote_code)
-    EditText editManagementRemoteCode;
+    EditText       editManagementRemoteCode;
     @BindView(R.id.btn_management_remote_code)
-    Button btnManagementRemoteCode;
+    Button         btnManagementRemoteCode;
     @BindView(R.id.rl_management_remote_code)
     RelativeLayout rlManagementRemoteCode;
     @BindView(R.id.tv_management_edit_remote_old_pwd)
-    TextView tvManagementEditRemoteOldPwd;
+    TextView       tvManagementEditRemoteOldPwd;
     @BindView(R.id.et_management_remote_old_pwd)
-    PwdEditText etManagementRemoteOldPwd;
+    PwdEditText    etManagementRemoteOldPwd;
     @BindView(R.id.et_management_remote_new_pwd)
-    PwdEditText etManagementRemoteNewPwd;
+    PwdEditText    etManagementRemoteNewPwd;
     @BindView(R.id.et_management_remote_new_pwd_again)
-    PwdEditText etManagementRemoteNewPwdAgain;
+    PwdEditText    etManagementRemoteNewPwdAgain;
     @BindView(R.id.btn_management_remote_confirm)
-    Button btnManagementRemoteConfirm;
+    Button         btnManagementRemoteConfirm;
 
     int type = 0;
 
@@ -91,16 +90,16 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                 sendCode();
                 break;
             case R.id.btn_management_remote_confirm:
-                doConfirm(SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN ,"'"));
+                doConfirm(SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN, "'"));
                 break;
         }
     }
 
     @SuppressLint("HandlerLeak")
-    Handler mHandler = new Handler(){
+    Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 111){
+            if (msg.what == 111) {
                 count--;
                 if (count > 0) {
                     btnManagementRemoteCode.setText(count + "秒后重发");
@@ -119,42 +118,44 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
         }
     };
 
-    private void doConfirm(String token){
+    private void doConfirm(String token) {
         String mobile = editManagementRemotePhone.getText().toString();
         String code = editManagementRemoteCode.getText().toString();
         String remoteOldPwd = etManagementRemoteOldPwd.getText().toString();
         String remoteNewPwd = etManagementRemoteNewPwd.getText().toString();
         String remoteNewPwdAgain = etManagementRemoteNewPwdAgain.getText().toString();
-        switch (type){
+        switch (type) {
             case RemotePwdManagementActivity.SETREMOTEPWD:
-                if (TextUtils.isEmpty(remoteNewPwd)||TextUtils.isEmpty(remoteNewPwdAgain)){
-                    ToastUtils.showShort("远程密码不能为空");
-                }else if (!TextUtils.equals(remoteNewPwd,remoteNewPwdAgain)){
-                    ToastUtils.showShort("两次密码不一致");
-                }else {
+                if (TextUtils.isEmpty(remoteNewPwd) || TextUtils.isEmpty(remoteNewPwdAgain)) {
+                    showToast("远程密码不能为空");
+                } else if (remoteNewPwd.length() < 6 && remoteNewPwdAgain.length() < 6) {
+                    showToast("密码至少为6位数字");
+                } else if (!TextUtils.equals(remoteNewPwd, remoteNewPwdAgain)) {
+                    showToast("两次密码不一致");
+                } else {
                     setRemotePwdClient(token, remoteNewPwd);
                 }
                 break;
             case RemotePwdManagementActivity.REMEBERPWD:
-                if (TextUtils.isEmpty(remoteOldPwd)||TextUtils.isEmpty(remoteNewPwd)||TextUtils.isEmpty(remoteNewPwdAgain)){
-                    ToastUtils.showShort("远程密码不能为空");
-                }else if (!TextUtils.equals(remoteNewPwd,remoteNewPwdAgain)){
-                    ToastUtils.showShort("两次密码不一致");
-                }else {
+                if (TextUtils.isEmpty(remoteOldPwd) || TextUtils.isEmpty(remoteNewPwd) || TextUtils.isEmpty(remoteNewPwdAgain)) {
+                    showToast("远程密码不能为空");
+                } else if (!TextUtils.equals(remoteNewPwd, remoteNewPwdAgain)) {
+                    showToast("两次密码不一致");
+                } else {
                     modifyRemotePwd(token, remoteOldPwd, remoteNewPwd);
                 }
                 break;
             case RemotePwdManagementActivity.FORGETPWD:
-                if (TextUtils.isEmpty(mobile)){
-                    ToastUtils.showShort("请输入手机号码");
-                }else if (TextUtils.isEmpty(code)){
-                    ToastUtils.showShort("请输入验证码");
-                }else if (TextUtils.isEmpty(remoteNewPwd)||TextUtils.isEmpty(remoteNewPwdAgain)){
-                    ToastUtils.showShort("远程密码不能为空");
-                }else if (!TextUtils.equals(remoteNewPwd,remoteNewPwdAgain)){
-                    ToastUtils.showShort("两次密码不一致");
-                }else {
-                    remenberRemotePassword(token,mobile,code,remoteNewPwd);
+                if (TextUtils.isEmpty(mobile)) {
+                    showToast("请输入手机号码");
+                } else if (TextUtils.isEmpty(code)) {
+                    showToast("请输入验证码");
+                } else if (TextUtils.isEmpty(remoteNewPwd) || TextUtils.isEmpty(remoteNewPwdAgain)) {
+                    showToast("远程密码不能为空");
+                } else if (!TextUtils.equals(remoteNewPwd, remoteNewPwdAgain)) {
+                    showToast("两次密码不一致");
+                } else {
+                    remenberRemotePassword(token, mobile, code, remoteNewPwd);
                 }
                 break;
         }
@@ -185,7 +186,7 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
 
     //发送验证码类型(1=注册,2=找回密码,3=修改密码,4=修改手机,5=绑定微信,6=修改手机[旧手机号],7=远程密码重置,8=车辆过户,9=主机认证,10=更换设备,11=登录,12=注销)
     @SuppressLint("CheckResult")
-    private void sendCode(){
+    private void sendCode() {
         count = 60;
         btnManagementRemoteCode.setEnabled(false);
         btnManagementRemoteCode.setText(count + "秒后重发");
@@ -197,25 +198,25 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                 mHandler.sendMessage(msg);
             }
         };
-        timer.schedule(task,1000,1000);
+        timer.schedule(task, 1000, 1000);
         final String phone = editManagementRemotePhone.getText().toString().trim();
-        Map<String,String> params = new HashMap<>();
-        params.put("mobile",phone);
+        Map<String, String> params = new HashMap<>();
+        params.put("mobile", phone);
 
         ClientFactory.def(UserService.class).getSmsToken(params)
                 .flatMap(new Function<SmsToken, ObservableSource<BaseError>>() {
                     @Override
                     public ObservableSource<BaseError> apply(SmsToken smsToken) throws Exception {
-                        if (smsToken.msg != null){
-                            ToastUtils.showShort(smsToken.msg.msg);
+                        if (smsToken.msg != null) {
+                            showToast(smsToken.msg.msg);
                             return null;
-                        }else {
+                        } else {
                             String token = smsToken.token;
                             Map<String, Object> map = new HashMap();
                             map.put("mobile", phone);
                             map.put("type", 7);
                             map.put("smsToken", token);
-                            map.put(GlobalKey.USER_TOKEN,SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN ,"'"));
+                            map.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN, "'"));
                             LogUtils.e(map);
                             return ClientFactory.def(UserService.class).SendSmsCode(map);
                         }
@@ -226,7 +227,7 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                 .subscribe(new Consumer<BaseError>() {
                     @Override
                     public void accept(BaseError s) throws Exception {
-                        if (s.msg != null){
+                        if (s.msg != null) {
                             if (timer != null) {
                                 if (task != null) {
                                     task.cancel();
@@ -234,7 +235,7 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                             }
                             btnManagementRemoteCode.setEnabled(true);
                             btnManagementRemoteCode.setText("重发验证码");
-                            ToastUtils.showShort(s.msg);
+                            showToast(s.msg);
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -256,9 +257,9 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
     /**
      * 设置远程密码
      */
-    private void setRemotePwdClient(String token,String remoteNewPwd){
+    private void setRemotePwdClient(String token, String remoteNewPwd) {
 
-        HashMap<String,String> params = new HashMap();
+        HashMap<String, String> params = new HashMap();
         params.put(GlobalKey.USER_TOKEN, token);
         params.put("remotePwd", CipherUtils.md5(remoteNewPwd));
         dialog.show();
@@ -270,10 +271,10 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                     public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
                         if (baseError.msg == null) {
-                            ToastUtils.showShort("修改成功");
+                            showToast("修改成功");
                             finish();
                         } else {
-                            ToastUtils.showShort(baseError.msg);
+                            showToast(baseError.msg);
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -288,13 +289,13 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
     /**
      * 修改远程密码 记得密码
      */
-    private void modifyRemotePwd(String token,String remoteOldPwd,String remoteNewPwd){
-        HashMap<String,String> params = new HashMap();
+    private void modifyRemotePwd(String token, String remoteOldPwd, String remoteNewPwd) {
+        HashMap<String, String> params = new HashMap();
         params.put(GlobalKey.USER_TOKEN, token);
-        params.put("oldremotePwd",CipherUtils.md5(remoteOldPwd));
-        params.put("newRemotePwd",CipherUtils.md5(remoteNewPwd));
+        params.put("oldremotePwd", CipherUtils.md5(remoteOldPwd));
+        params.put("newRemotePwd", CipherUtils.md5(remoteNewPwd));
         LogUtils.e(params);
-        Log.i("modifyRemotePwd","{\"token\":\""+token+"\",\"oldremotePwd\":\""+CipherUtils.md5(remoteOldPwd)+"\",\"newRemotePwd\":\""+CipherUtils.md5(remoteNewPwd)+"\"}");
+        Log.i("modifyRemotePwd", "{\"token\":\"" + token + "\",\"oldremotePwd\":\"" + CipherUtils.md5(remoteOldPwd) + "\",\"newRemotePwd\":\"" + CipherUtils.md5(remoteNewPwd) + "\"}");
         dialog.show();
         Disposable disposableModifyRemotePwd = ClientFactory.def(UserService.class).modifyRemotePassword(params)
                 .subscribeOn(Schedulers.newThread())
@@ -304,10 +305,10 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                     public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
                         if (baseError.msg == null) {
-                            ToastUtils.showShort("修改成功");
+                            showToast("修改成功");
                             finish();
                         } else {
-                            ToastUtils.showShort(baseError.msg);
+                            showToast(baseError.msg);
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -322,13 +323,13 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
     /**
      * 修改远程密码 忘记密码
      */
-    private void remenberRemotePassword(String token,String mobile,String validateCode,String remotePwd){
-        HashMap<String,Object> params = new HashMap();
+    private void remenberRemotePassword(String token, String mobile, String validateCode, String remotePwd) {
+        HashMap<String, Object> params = new HashMap();
         params.put(GlobalKey.USER_TOKEN, token);
-        params.put("mobile",mobile);
-        params.put("validateCode",validateCode);
-        params.put("remotePwd",CipherUtils.md5(remotePwd));
-        params.put("checkIdentity",false);
+        params.put("mobile", mobile);
+        params.put("validateCode", validateCode);
+        params.put("remotePwd", CipherUtils.md5(remotePwd));
+        params.put("checkIdentity", false);
         dialog.show();
         Disposable disposableModifyRemotePwd = ClientFactory.def(UserService.class).resetRemotePassword(params)
                 .subscribeOn(Schedulers.newThread())
@@ -338,10 +339,10 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                     public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
                         if (baseError.msg == null) {
-                            ToastUtils.showShort("修改成功");
+                            showToast("修改成功");
                             finish();
                         } else {
-                            ToastUtils.showShort(baseError.msg);
+                            showToast(baseError.msg);
                         }
                     }
                 }, new Consumer<Throwable>() {

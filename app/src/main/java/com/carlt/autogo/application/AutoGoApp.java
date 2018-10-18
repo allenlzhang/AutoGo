@@ -1,12 +1,9 @@
 package com.carlt.autogo.application;
 
-import android.Manifest;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.telephony.TelephonyManager;
 
 import com.baidu.idl.face.platform.FaceConfig;
 import com.baidu.idl.face.platform.FaceEnvironment;
@@ -29,7 +26,7 @@ import java.util.UUID;
  */
 public class AutoGoApp extends Application {
     public static Context mAppContext;
-    public static String MODEL_NAME;// 手机名称
+    public static String  MODEL_NAME;// 手机名称
 
     public static String MODEL;// 手机型号
 
@@ -40,6 +37,9 @@ public class AutoGoApp extends Application {
     public static String NIMEI;//手机唯一标识吗 (新的)
 
     public static String IMEI;//手机唯一标识吗 (旧的)
+    public static int    VERSION;
+
+    public static String VERSION_NAME;
 
     @Override
     public void onCreate() {
@@ -50,6 +50,17 @@ public class AutoGoApp extends Application {
         MobSDK.init(this);
         initLib();
         initBuild();
+        getVersionInfo();
+    }
+
+    private void getVersionInfo() {
+        PackageManager packageManager = getPackageManager();
+        try {
+            VERSION = packageManager.getPackageInfo(this.getPackageName(), 0).versionCode;
+            VERSION_NAME = packageManager.getPackageInfo(this.getPackageName(), 0).versionName;
+        } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+            LogUtils.e(e);
+        }
     }
 
     private void initBuild() {
@@ -117,6 +128,7 @@ public class AutoGoApp extends Application {
 
         return CipherUtils.md5(m_szDevIDShort);
     }
+
     public static String getUniquePsuedoID() {
 
         String m_szDevIDShort = Build.BRAND + Build.CPU_ABI + Build.DEVICE

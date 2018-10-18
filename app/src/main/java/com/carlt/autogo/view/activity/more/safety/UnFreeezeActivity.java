@@ -81,7 +81,10 @@ public class UnFreeezeActivity extends BaseMvpActivity {
 
         rlUserUnfreeze.setVisibility(View.VISIBLE);
         rlHead2.setVisibility(View.GONE);
-        tvUserUnfreeze.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
+        String mobile = SharepUtil.<UserInfo>getBeanFromSp("user").mobile;
+        StringBuilder builder=new StringBuilder(mobile);
+        tvUserUnfreeze.setText("当前账号:" + builder.replace(3, 7, "****"));
+//        tvUserUnfreeze.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
     }
 
 
@@ -90,6 +93,7 @@ public class UnFreeezeActivity extends BaseMvpActivity {
         switch (view.getId()) {
             case R.id.img_passwd_toggle:
                 passwdToggle(view.isSelected(), edUnfreezePwd, (ImageView) view);
+                view.setSelected(!view.isSelected());
                 break;
             case R.id.btn_unfreeze_next:
                 String pwd = edUnfreezePwd.getText().toString().trim();
