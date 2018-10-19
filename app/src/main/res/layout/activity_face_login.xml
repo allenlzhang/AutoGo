@@ -75,10 +75,8 @@
         <EditText
             android:id="@+id/user_phone"
             style="@style/EdCommonLoginAndRegister"
-            android:enabled="false"
-            android:focusable="false"
             android:gravity="center"
-            android:hint="13659889465465"
+            android:hint="请输入手机号"
             android:maxLength="11"/>
     </LinearLayout>
 

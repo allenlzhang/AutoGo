@@ -113,7 +113,12 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
         if (!TextUtils.isEmpty(user.remotePwd)) {
             llManagementSetRemotePwd.setVisibility(View.GONE);
         }
-        checkSetPwd();
+        //        checkSetPwd();
+        if (TextUtils.isEmpty(user.remotePwd)) {
+            cbManagementRemoteSwitch.setEnabled(false);
+        } else {
+            cbManagementRemoteSwitch.setEnabled(true);
+        }
     }
 
     @OnClick({R.id.ll_management_set_remote_pwd, R.id.ll_management_remember_remote_old_pwd, R.id.ll_management_forget_remote_old_pwd, R.id.ll_management_without_encryption_date})

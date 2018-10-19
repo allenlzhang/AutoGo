@@ -237,12 +237,13 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
      */
     @SuppressLint("CheckResult")
     private void faceLogin(UpdateImageResultInfo updateImageResultInfo) {
-        UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-        String mobile = info.mobile;
+//        UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+//        String mobile = info.mobile;
+        String mobile1 = getIntent().getStringExtra("mobile");
         int id = updateImageResultInfo.message.id;
         Map<String, Object> map = new HashMap<>();
         map.put("loginType", GlobalKey.loginStateByFace);
-        map.put("mobile", mobile);
+        map.put("mobile", mobile1);
         map.put("faceId", id);
         map.put("version", AutoGoApp.VERSION);
         map.put("moveDeviceName", AutoGoApp.MODEL_NAME);

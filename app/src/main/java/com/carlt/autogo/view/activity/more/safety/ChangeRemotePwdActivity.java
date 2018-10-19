@@ -131,40 +131,58 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
             case RemotePwdManagementActivity.SETREMOTEPWD:
                 if (TextUtils.isEmpty(remoteNewPwd) || TextUtils.isEmpty(remoteNewPwdAgain)) {
                     showToast("远程密码不能为空");
-                } else if (remoteNewPwd.length() < 6 && remoteNewPwdAgain.length() < 6) {
-                    showToast("密码至少为6位数字");
-                } else if (!TextUtils.equals(remoteNewPwd, remoteNewPwdAgain)) {
-                    showToast("两次密码不一致");
-                } else {
-                    setRemotePwdClient(token, remoteNewPwd);
+                    return;
                 }
+                if (remoteNewPwd.length() < 6 || remoteNewPwdAgain.length() < 6) {
+                    showToast("密码至少为6位数字");
+                    return;
+                }
+                if (!TextUtils.equals(remoteNewPwd, remoteNewPwdAgain)) {
+                    showToast("两次密码不一致");
+                    return;
+                }
+                setRemotePwdClient(token, remoteNewPwd);
+
                 break;
             case RemotePwdManagementActivity.REMEBERPWD:
                 if (TextUtils.isEmpty(remoteOldPwd) || TextUtils.isEmpty(remoteNewPwd) || TextUtils.isEmpty(remoteNewPwdAgain)) {
                     showToast("远程密码不能为空");
-                } else if (remoteOldPwd.length() < 6 && remoteNewPwd.length() < 6 && remoteNewPwdAgain.length() < 6) {
-                    showToast("密码至少为6位数字");
-                } else if (!TextUtils.equals(remoteNewPwd, remoteNewPwdAgain)) {
-                    showToast("两次密码不一致");
-                } else {
-                    modifyRemotePwd(token, remoteOldPwd, remoteNewPwd);
+                    return;
                 }
+                if (remoteOldPwd.length() < 6 || remoteNewPwd.length() < 6 || remoteNewPwdAgain.length() < 6) {
+                    showToast("密码至少为6位数字");
+                    return;
+                }
+                if (!TextUtils.equals(remoteNewPwd, remoteNewPwdAgain)) {
+                    showToast("两次密码不一致");
+                    return;
+                }
+                modifyRemotePwd(token, remoteOldPwd, remoteNewPwd);
+
                 break;
             case RemotePwdManagementActivity.FORGETPWD:
                 UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
                 if (TextUtils.isEmpty(mobile) && !mobile.equals(user.mobile)) {
                     showToast("手机号码不正确");
-                } else if (remoteNewPwd.length() < 6 && remoteNewPwdAgain.length() < 6) {
-                    showToast("密码至少为6位数字");
-                } else if (TextUtils.isEmpty(code)) {
-                    showToast("请输入验证码");
-                } else if (TextUtils.isEmpty(remoteNewPwd) || TextUtils.isEmpty(remoteNewPwdAgain)) {
-                    showToast("远程密码不能为空");
-                } else if (!TextUtils.equals(remoteNewPwd, remoteNewPwdAgain)) {
-                    showToast("两次密码不一致");
-                } else {
-                    remenberRemotePassword(token, mobile, code, remoteNewPwd);
+                    return;
                 }
+                if (remoteNewPwd.length() < 6 || remoteNewPwdAgain.length() < 6) {
+                    showToast("密码至少为6位数字");
+                    return;
+                }
+                if (TextUtils.isEmpty(code)) {
+                    showToast("请输入验证码");
+                    return;
+                }
+                if (TextUtils.isEmpty(remoteNewPwd) || TextUtils.isEmpty(remoteNewPwdAgain)) {
+                    showToast("远程密码不能为空");
+                    return;
+                }
+                if (!TextUtils.equals(remoteNewPwd, remoteNewPwdAgain)) {
+                    showToast("两次密码不一致");
+                    return;
+                }
+                remenberRemotePassword(token, mobile, code, remoteNewPwd);
                 break;
         }
     }

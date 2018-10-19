@@ -41,11 +41,13 @@ public class FaceLoginActivity extends BaseMvpActivity {
     public void init() {
         setTitleText("人脸登录");
         UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-
-        String mobile = info.mobile;
-        if (!TextUtils.isEmpty(mobile)) {
-            userPhone.setText(mobile);
+        if (info != null) {
+            String mobile = info.mobile;
+            if (!TextUtils.isEmpty(mobile)) {
+                userPhone.setText(mobile);
+            }
         }
+
     }
 
     @OnClick({R.id.btn_changeUrl, R.id.login_commit, R.id.forgot_passwd, R.id.user_regist, R.id.btn_more})
@@ -54,8 +56,14 @@ public class FaceLoginActivity extends BaseMvpActivity {
             case R.id.btn_changeUrl:
                 break;
             case R.id.login_commit:
+                String phone = userPhone.getText().toString().trim();
+                if (TextUtils.isEmpty(phone)) {
+                    showToast("请输入手机号");
+                    return;
+                }
                 Intent intent1 = new Intent(this, FaceLiveCheckActivity.class);
                 intent1.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.FROM_LOGIN_ACTIVITY);
+                intent1.putExtra("mobile", phone);
                 startActivity(intent1);
                 break;
             case R.id.forgot_passwd:

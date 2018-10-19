@@ -163,16 +163,16 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
     @SuppressLint("CheckResult")
     private void sendCode() {
         phone = editManagementPhone.getText().toString().trim();
-        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-        if (!TextUtils.equals(phone, user.mobile)) {
-            showToast("手机号码不正确");
+//        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+//        if (!TextUtils.equals(phone, user.mobile)) {
+//            showToast("手机号码不正确");
+//            return;
+//        }
+        if (TextUtils.isEmpty(phone)) {
+            showToast("请输入手机号码");
+            LogUtils.e(phone);
             return;
         }
-        //        if (TextUtils.isEmpty(phone)) {
-        //            showToast("请输入手机号码");
-        //            LogUtils.e(phone);
-        //            return;
-        //        }
         count = 60;
         btnManagementCode.setEnabled(false);
         btnManagementCode.setText(count + "秒后重发");
@@ -256,7 +256,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                 if (TextUtils.isEmpty(newPwd) || TextUtils.isEmpty(newPwdAgain)) {
                     showToast("密码设置为空");
                     break;
-                } else if (newPwd.length() < 6 && newPwdAgain.length() < 6) {
+                } else if (newPwd.length() < 6 || newPwdAgain.length() < 6) {
                     showToast("新密码至少为6位");
                     break;
                 }
@@ -268,7 +268,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                 break;
             case LoginPwdManagementActivity.FORGET:
                 UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-                if (TextUtils.isEmpty(phone) && !phone.equals(user.mobile)) {
+                if (TextUtils.isEmpty(phone) || !phone.equals(user.mobile)) {
                     showToast("手机号码不正确");
                     break;
                 }
@@ -279,7 +279,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                 if (TextUtils.isEmpty(newPwd) || TextUtils.isEmpty(newPwdAgain)) {
                     showToast("密码设置为空");
                     break;
-                } else if (newPwd.length() < 6 && newPwdAgain.length() < 6) {
+                } else if (newPwd.length() < 6 || newPwdAgain.length() < 6) {
                     showToast("新密码至少为6位");
                     break;
                 }
@@ -352,6 +352,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                     public void accept(BaseError baseError) throws Exception {
                         if (baseError.msg == null) {
                             showToast("修改成功");
+                            ActivityControl.removeAllActivity(ChangeLoginPwdActivity.this);
                             startActivity(LoginActivity.class);
                         } else {
                             showToast(baseError.msg);

@@ -1,6 +1,7 @@
 package com.carlt.autogo.view.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -21,10 +22,9 @@ import com.flyco.tablayout.listener.OnTabSelectListener;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+
 /**
  * Description : 主页面
- * @Author     : zhanglei
- * @Date       : 2018/9/10
  */
 public class MainActivity extends BaseMvpActivity {
 
@@ -38,6 +38,7 @@ public class MainActivity extends BaseMvpActivity {
             R.drawable.ic_bottom_tab_home_selected, R.drawable.ic_bottom_tab_remote_selected,
             R.drawable.ic_bottom_tab_more_selected};
     private ArrayList<CustomTabEntity> mTabEntities     = new ArrayList<>();
+    private int                        mCurrentItem     = 0;
 
     @Override
     protected int getContentView() {
@@ -49,6 +50,23 @@ public class MainActivity extends BaseMvpActivity {
         //        setTitleText("主页");
         rlTitle.setVisibility(View.GONE);
         initBottomTabs();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initSavedInstanceState(savedInstanceState);
+    }
+
+    private void initSavedInstanceState(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("currentItem", mCurrentItem);
+
     }
 
     private void initBottomTabs() {
@@ -65,14 +83,17 @@ public class MainActivity extends BaseMvpActivity {
                 BaseMvpFragment fragment = null;
                 switch (position) {
                     case 0:
+                        mCurrentItem = 0;
                         fragment = FragmentFactory.getFragment(0);
                         ft.replace(R.id.fl_content, fragment);
                         break;
                     case 1:
+                        mCurrentItem = 1;
                         fragment = FragmentFactory.getFragment(1);
                         ft.replace(R.id.fl_content, fragment);
                         break;
                     case 2:
+                        mCurrentItem = 2;
                         fragment = FragmentFactory.getFragment(2);
                         ft.replace(R.id.fl_content, fragment);
                         break;
@@ -106,9 +127,9 @@ public class MainActivity extends BaseMvpActivity {
         super.onResume();
         UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
 
-        if (info.userFreeze == 2){
-            Intent intent = new Intent(MainActivity.this,FreezeActivity.class);
-            intent.putExtra("fromMain",true);
+        if (info.userFreeze == 2) {
+            Intent intent = new Intent(MainActivity.this, FreezeActivity.class);
+            intent.putExtra("fromMain", true);
             startActivity(intent);
         }
     }

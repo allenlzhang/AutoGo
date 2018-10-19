@@ -12,10 +12,10 @@ public class UserInfo implements Serializable {
      * realName : c3miv32wrb
      */
 
-    public int       id;
-    public String    mobile;
-    public int       gender;
-    public String    realName;
+    public int    id;
+    public String mobile;
+    public int    gender;
+    public String realName = "--";
     public String    remotePwd;
     public String    token;
     public BaseError err;
