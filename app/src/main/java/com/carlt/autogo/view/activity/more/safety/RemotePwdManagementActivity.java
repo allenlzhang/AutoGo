@@ -108,6 +108,8 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
     protected void onResume() {
         super.onResume();
         user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        String time = SharepUtil.getPreferences().getString(GlobalKey.REMOTE_SECRET_FREE_TIME, "5");
+        tvManagementWithoutEncryptionDate.setText(time.concat("分钟"));
         if (!TextUtils.isEmpty(user.remotePwd)) {
             llManagementSetRemotePwd.setVisibility(View.GONE);
         }
@@ -180,6 +182,7 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
             ToastUtils.showShort("远程免密时间范围5~60min");
         } else {
             tvManagementWithoutEncryptionDate.setText(d + "分钟");
+            SharepUtil.put(GlobalKey.REMOTE_SECRET_FREE_TIME, d);
         }
     }
 

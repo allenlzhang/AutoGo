@@ -321,7 +321,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                             UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
                             info.faceId = 1;
                             info.alipayAuth = 2;
-                            SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, true);
+//                            SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, true);
                             SharepUtil.putByBean(GlobalKey.USER_INFO, info);
                             go2Activity();
                         } else {

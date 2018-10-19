@@ -28,7 +28,8 @@ public class FaceDetectRoundView extends View {
 
     public static final float SURFACE_HEIGHT    = 1000f;
     public static final float SURFACE_RATIO     = 0.75f;
-    public static final float WIDTH_SPACE_RATIO = 0.43f;
+    //设置人脸识别框大小
+    public static final float WIDTH_SPACE_RATIO = 0.3f;
     public static final float HEIGHT_RATIO      = 0.1f;
     public static final float HEIGHT_EXT_RATIO  = 0.2f;
     //设置外层圆环与相机区域的距离
@@ -153,7 +154,7 @@ public class FaceDetectRoundView extends View {
         //        }
         Log.e("ondraw=====", mR + "");
         mPathPaint.setColor(COLOR_ROUND);
-//        canvas.drawArc();
+        //        canvas.drawArc();
         canvas.drawCircle(mX, mY, mR + CIRCLE_SPACE, mPathPaint);
         canvas.drawCircle(mX, mY, mR, mFaceRoundPaint);
         //        if (mFaceRect != null) {

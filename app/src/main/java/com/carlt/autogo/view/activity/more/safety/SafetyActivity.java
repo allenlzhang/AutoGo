@@ -108,7 +108,7 @@ public class SafetyActivity extends BaseMvpActivity {
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         boolean faceLogin = SharepUtil.getPreferences().getBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
         LogUtils.e("----" + user.toString());
-        if (user.alipayAuth != 0 && user.faceId != 0) {
+        if (user.alipayAuth == 2 && user.faceId != 0) {
             mTvIdentityAuthentication.setText("已认证");
             mLlIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -128,7 +128,7 @@ public class SafetyActivity extends BaseMvpActivity {
                 }
             });
         }
-        if (faceLogin && user.alipayAuth != 0 && user.faceId != 0) {
+        if (faceLogin && user.alipayAuth == 2 && user.faceId != 0) {
             mTvFaceRecognition.setText("已开启");
             mIvFaceRecognition.setVisibility(View.VISIBLE);
         } else {

@@ -142,7 +142,7 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
             case RemotePwdManagementActivity.REMEBERPWD:
                 if (TextUtils.isEmpty(remoteOldPwd) || TextUtils.isEmpty(remoteNewPwd) || TextUtils.isEmpty(remoteNewPwdAgain)) {
                     showToast("远程密码不能为空");
-                } else if (remoteNewPwd.length() < 6 && remoteNewPwdAgain.length() < 6) {
+                } else if (remoteOldPwd.length() < 6 && remoteNewPwd.length() < 6 && remoteNewPwdAgain.length() < 6) {
                     showToast("密码至少为6位数字");
                 } else if (!TextUtils.equals(remoteNewPwd, remoteNewPwdAgain)) {
                     showToast("两次密码不一致");

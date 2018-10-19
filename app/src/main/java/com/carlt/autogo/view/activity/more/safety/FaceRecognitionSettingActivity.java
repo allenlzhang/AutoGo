@@ -42,7 +42,7 @@ public class FaceRecognitionSettingActivity extends BaseMvpActivity {
         setTitleText("人脸识别");
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         LogUtils.e("----" + user.toString());
-        if (user.alipayAuth != 0 && user.faceId != 0) {
+        if (user.alipayAuth == 2 && user.faceId != 0) {
             cbFaceLogin.setEnabled(true);
             cbSafe.setEnabled(true);
             cbFaceLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -62,7 +62,7 @@ public class FaceRecognitionSettingActivity extends BaseMvpActivity {
             cbSafe.setEnabled(false);
             cbSafe.setChecked(false);
             cbFaceLogin.setChecked(false);
-            CommonDialog.createDialogNotitle(this, "温馨提示", "请进行身份认证", "取消", "确定",false, new CommonDialog.DialogWithTitleClick() {
+            CommonDialog.createDialogNotitle(this, "温馨提示", "请进行身份认证", "取消", "确定", false, new CommonDialog.DialogWithTitleClick() {
                 @Override
                 public void onRightClick() {
                     startActivity(new Intent(FaceRecognitionSettingActivity.this, UserIdChooseActivity.class));
