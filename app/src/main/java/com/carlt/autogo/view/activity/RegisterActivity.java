@@ -14,7 +14,6 @@ import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
-import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
@@ -23,11 +22,13 @@ import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.presenter.register.IRegisterView;
 import com.carlt.autogo.presenter.register.RegisterPresenter;
+import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.CipherUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -36,28 +37,36 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
- /**
-  * Description : 注册页面
-  * @Author     : zhanglei
-  * @Date       : 2018/9/10
-  */
+/**
+ * Description : 注册页面
+ */
 
 @CreatePresenter(presenter = RegisterPresenter.class)
 public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
 
-    @BindView(R.id.regist_user_phone) EditText registUserPhone;
-    @BindView(R.id.regist_user_code) EditText registUserCode;
-    @BindView(R.id.send_code) Button sendCode;
-    @BindView(R.id.ed_register_pwd) EditText edRegisterPwd;
-    @BindView(R.id.ed_register_pwd_d) EditText edRegisterPwdD;
-    @BindView(R.id.cb_law) CheckBox cbLaw;
-    @BindView(R.id.tv_law) TextView tvLaw;
-    @BindView(R.id.btn_register_commit) Button btnRegisterCommit;
-    @BindView(R.id.img_passwd_toggle) ImageView imgPasswdToggle;
-    @BindView(R.id.img_passwd_toggle_d) ImageView imgPasswdToggleD;
+    @BindView(R.id.regist_user_phone)
+    EditText  registUserPhone;
+    @BindView(R.id.regist_user_code)
+    EditText  registUserCode;
+    @BindView(R.id.send_code)
+    Button    sendCode;
+    @BindView(R.id.ed_register_pwd)
+    EditText  edRegisterPwd;
+    @BindView(R.id.ed_register_pwd_d)
+    EditText  edRegisterPwdD;
+    @BindView(R.id.cb_law)
+    CheckBox  cbLaw;
+    @BindView(R.id.tv_law)
+    TextView  tvLaw;
+    @BindView(R.id.btn_register_commit)
+    Button    btnRegisterCommit;
+    @BindView(R.id.img_passwd_toggle)
+    ImageView imgPasswdToggle;
+    @BindView(R.id.img_passwd_toggle_d)
+    ImageView imgPasswdToggleD;
 
-    int count  = 60;
-    Disposable disposable ;
+    int count = 60;
+    Disposable disposable;
 
     @PresenterVariable
     private RegisterPresenter presenter;
@@ -75,12 +84,17 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
 
     @Override
     public void onRegisterFinish() {
-        // TODO: 2018/9/4
+//        for (Activity activity : ActivityControl.mActivityList) {
+//            if (activity instanceof LoginActivity) {
+//                activity.finish();
+//            }
+//        }
+        ActivityControl.removeAllActivity(this);
         startActivity(MainActivity.class);
     }
 
     @OnClick({R.id.send_code})
-    public void onClick(View view){
+    public void onClick(View view) {
         doSendCode();
     }
 
@@ -98,27 +112,27 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
     private void doSendCode() {
 
         String phoneNum = registUserPhone.getText().toString().trim();
-        boolean  checkOk =  RegexUtils.isMobileExact(phoneNum) ;
-        if(!checkOk){
+        boolean checkOk = RegexUtils.isMobileExact(phoneNum);
+        if (!checkOk) {
             showToast("请输入正确手机号!");
             return;
         }
-        Map<String ,String> param =new HashMap<>();
+        Map<String, String> param = new HashMap<>();
         param.put("mobile", phoneNum);
 
-        Observable<BaseError> observable = ObservableHelper.sendValidate(phoneNum,param,1);
+        Observable<BaseError> observable = ObservableHelper.sendValidate(phoneNum, param, 1);
 
         observable.subscribe(new Consumer<BaseError>() {
             @Override
             public void accept(BaseError baseError) throws Exception {
-                if(baseError.msg != null){
-                    showToast(baseError.msg );
+                if (baseError.msg != null) {
+                    showToast(baseError.msg);
                     sendCode.setClickable(true);
                     sendCode.setText("发送验证码");
-                    count =60;
-                }else {
+                    count = 60;
+                } else {
                     notifSendValidate();
-                    showToast("短信下发成功" );
+                    showToast("短信下发成功");
                     sendCode.setClickable(false);
                 }
             }
@@ -132,19 +146,19 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
     }
 
     private void notifSendValidate() {
-        disposable  =  Observable.interval(1, TimeUnit.SECONDS)
+        disposable = Observable.interval(1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        if(count <= 0 ){
+                        if (count <= 0) {
                             disposable.dispose();
                             sendCode.setClickable(true);
                             sendCode.setText("发送验证码");
-                            count =60;
-                        }else {
-                            count -- ;
+                            count = 60;
+                        } else {
+                            count--;
                             sendCode.setText(count + "秒");
                         }
                     }
@@ -157,21 +171,21 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
         String phoneNum = registUserPhone.getText().toString().trim();
         String pwd = edRegisterPwd.getText().toString().toString();
         String pwdD = edRegisterPwdD.getText().toString().toString();
-        String code =registUserCode.getText().toString().trim() ;
+        String code = registUserCode.getText().toString().trim();
 
-       if( CheckValues(phoneNum,pwd,pwdD,code)){
-           if(!cbLaw.isChecked()){
-               showToast("您未同意服务条款!");
-               return;
-           }
-           Map<String, Object> params = new HashMap<>();
-           params.put("mobile", phoneNum);
-           params.put("password",  CipherUtils.md5(pwd));
-           params.put("validate", code);
-           params.put("regType", GlobalKey.RegStateByPWd);
+        if (CheckValues(phoneNum, pwd, pwdD, code)) {
+            if (!cbLaw.isChecked()) {
+                showToast("您未同意服务条款!");
+                return;
+            }
+            Map<String, Object> params = new HashMap<>();
+            params.put("mobile", phoneNum);
+            params.put("password", CipherUtils.md5(pwd));
+            params.put("validate", code);
+            params.put("regType", GlobalKey.RegStateByPWd);
 
-           doRegiste(params);
-       }
+            doRegiste(params);
+        }
 
     }
 
@@ -193,22 +207,22 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
         presenter.register(params);
     }
 
-    public static boolean CheckValues( String phoneNum ,String pwd ,String pwdD ,String code ){
+    public static boolean CheckValues(String phoneNum, String pwd, String pwdD, String code) {
         String regex = "^[A-Za-z0-9-+=;,./~!@#$%^*\\[.*\\]]{6,32}+$";
-        if(!phoneNum.equals("-")){
-            boolean  checkOk =  RegexUtils.isMobileExact(phoneNum) ;
-            if(!checkOk){
+        if (!phoneNum.equals("-")) {
+            boolean checkOk = RegexUtils.isMobileExact(phoneNum);
+            if (!checkOk) {
                 ToastUtils.showShort("请输入正确手机号!");
                 return false;
             }
         }
-        if(!code.equals("-")){
-            if( StringUtils.isEmpty(code)){
+        if (!code.equals("-")) {
+            if (StringUtils.isEmpty(code)) {
                 ToastUtils.showShort("验证码为空");
                 return false;
             }
         }
-        if(!pwd.equals("-") || !pwdD.equals("-")){
+        if (!pwd.equals("-") || !pwdD.equals("-")) {
             if (!RegexUtils.isMatch(GlobalKey.PWD_REGEX, pwd) || !RegexUtils.isMatch(GlobalKey.PWD_REGEX, pwd)) {
                 ToastUtils.setMsgTextSize(15);
                 ToastUtils.showLong("密码有误,输入数字,字母,符号,长度6到32");
@@ -220,13 +234,14 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
             }
         }
 
-        return  true;
+        return true;
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        if(disposable != null){
+        if (disposable != null) {
             disposable.dispose();
         }
 

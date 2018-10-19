@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:text="拍摄您本人人脸,请确保正对手机,光纤充足"
+        android:text="拍摄您本人人脸,请确保正对手机,光线充足"
         android:textColor="@color/colorEdtext"
         />
 

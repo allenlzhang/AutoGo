@@ -241,6 +241,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
         String mobile = info.mobile;
         int id = updateImageResultInfo.message.id;
         Map<String, Object> map = new HashMap<>();
+        map.put("loginType", GlobalKey.loginStateByFace);
         map.put("mobile", mobile);
         map.put("faceId", id);
         map.put("version", AutoGoApp.VERSION);
@@ -258,7 +259,8 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
         //                        LogUtils.e("====" + response.body());
         //                    }
         //                });
-        ClientFactory.def(UserService.class).LoginByFace(map)
+
+        ClientFactory.def(UserService.class).commonLogin(map)
 
                 .flatMap(new Function<User, ObservableSource<String>>() {
                     @Override
@@ -273,7 +275,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                             Map<String, String> token = new HashMap<>();
                             token.put("token", user.token);
                             SharepUtil.put(GlobalKey.USER_TOKEN, user.token);
-                            return ObservableHelper.getUserInfoByToken(token,GlobalKey.loginStateByOther);
+                            return ObservableHelper.getUserInfoByToken(token, GlobalKey.loginStateByOther);
                         }
                     }
 
@@ -284,6 +286,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                     @Override
                     public void accept(String s) throws Exception {
                         dialog.dismiss();
+
                         ToastUtils.showShort(s);
                         go2Activity();
                     }
@@ -318,6 +321,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                             UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
                             info.faceId = 1;
                             info.alipayAuth = 2;
+//                            SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, true);
                             SharepUtil.putByBean(GlobalKey.USER_INFO, info);
                             go2Activity();
                         } else {
@@ -343,6 +347,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
             case FROM_LOGIN_ACTIVITY:
                 //                    tvFaceTitle.setText(getString(R.string.face_login_activity_title1));
                 //                finish();
+                ActivityControl.removeAllActivity(this);
                 startActivity(new Intent(this, MainActivity.class));
                 break;
             case FROM_ID_CARDACCEPT_ACTIVITY:

@@ -160,6 +160,7 @@
             android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
             android:layout_weight="0"
+            android:text="5分钟"
             android:textColor="@color/textColorGray"
             android:textSize="14sp"/>
 

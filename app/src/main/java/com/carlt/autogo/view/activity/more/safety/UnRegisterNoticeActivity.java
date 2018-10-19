@@ -29,6 +29,7 @@ public class UnRegisterNoticeActivity extends BaseMvpActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_law:
+
                 break;
             case R.id.btnNext:
                 if (!cbLaw.isChecked()) {

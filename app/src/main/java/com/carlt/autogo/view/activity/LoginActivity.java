@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.baidu.idl.face.platform.utils.MD5Utils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
@@ -32,6 +31,7 @@ import com.carlt.autogo.presenter.login.LoginPresenter;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.login.FaceLoginActivity;
 import com.carlt.autogo.view.activity.more.safety.ChangeLoginPwdActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
@@ -92,7 +92,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     int next;
 
     Disposable disposable;
-    private String savePwd ;
+    private String savePwd;
 
     @Override
     protected int getContentView() {
@@ -165,13 +165,17 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     protected void onResume() {
         super.onResume();
         UserInfo userInfo = SharepUtil.getBeanFromSp("user");
+        boolean faceSwitch = SharepUtil.getPreferences().getBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
 
-        if (userInfo != null ) {
-            if(userInfo.loginState == GlobalKey.loginStateByPWd){
+        if (userInfo != null) {
+            if (userInfo.faceId != 0 && faceSwitch) {
+                startActivity(FaceLoginActivity.class);
+            }
+            if (userInfo.loginState == GlobalKey.loginStateByPWd) {
                 userPhone.setText(userInfo.mobile);
                 userPWd.setText(userInfo.password);
-
-            }else {
+                savePwd = userInfo.password;
+            } else {
                 userPhone.setText(userInfo.mobile);
             }
         }
@@ -206,6 +210,11 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                     return;
                 }
 
+                //                if (pwd.equals(savePwd)) {
+                //                    pwd = savePwd;
+                //                } else {
+                //                    pwd = CipherUtils.md5(pwd);
+                //                }
 
                 Map<String, Object> params = new HashMap<>();
 
@@ -224,7 +233,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                 passwdToggle.setSelected(!passwdToggle.isSelected());
                 break;
             case R.id.forgot_passwd:
-                startActivity(ChangeLoginPwdActivity.class);
+                startActivity(ChangeLoginPwdActivity.class, false);
                 break;
 
         }

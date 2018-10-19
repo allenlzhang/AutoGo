@@ -45,7 +45,7 @@ public class LoginDeviceManagementActivity extends BaseMvpActivity {
         setTitleText(getResources().getString(R.string.management_login_device));
         HashMap<String, Object> map = new HashMap<>();
         map.put("limit", 100);
-        map.put("offset", 1);
+        map.put("offset", 0);
         dialog.show();
         ClientFactory.def(UserService.class).loginLog(map)
                 .subscribeOn(Schedulers.newThread())

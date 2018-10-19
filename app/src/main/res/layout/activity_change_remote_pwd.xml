@@ -21,6 +21,7 @@
             android:id="@+id/edit_management_remote_code"
             style="@style/baseEditStyle"
             android:hint="@string/management_edit_verification_code"
+            android:inputType="number"
             tools:ignore="TextFields" />
         <Button
             android:id="@+id/btn_management_remote_code"

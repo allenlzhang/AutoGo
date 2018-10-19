@@ -2,44 +2,31 @@ package com.carlt.autogo.net.base;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.global.GlobalUrl;
 import com.carlt.autogo.net.base.myretrofit.MyGsonConverterFactory;
-import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.view.activity.LoginActivity;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
-import retrofit2.Call;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public abstract class BaseRestClient implements Iservice {
@@ -70,7 +57,8 @@ public abstract class BaseRestClient implements Iservice {
             public Object invoke(Object proxy, Method method, final Object[] args) throws Throwable {
                 if (!NetworkUtils.isConnected() && !NetworkUtils.isAvailableByPing()) {
 
-                    Toast.makeText(AutoGoApp.mAppContext,"网络错误，请检查网络",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(AutoGoApp.mAppContext,"网络错误，请检查网络",Toast.LENGTH_SHORT).show();
+                    ToastUtils.showShort("网络错误，请检查网络");
                     return Observable.create(new ObservableOnSubscribe<Object>() {
                         @Override
                         public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
@@ -87,17 +75,19 @@ public abstract class BaseRestClient implements Iservice {
 
                                     if(o instanceof BaseError){
                                         BaseError error = (BaseError) o;
-
                                         if(error != null && error.code != 0){
+
                                             if(error.code == 2066){
                                                 ActivityControl.removeAll();
                                                 Activity activity =   ActivityControl.mActivityList.get(0);
                                                 Intent intent = new Intent(activity, LoginActivity.class);
+                                                ToastUtils.showShort(error.msg);
                                                 activity.startActivity(intent);
-
+                                                return false;
+                                            }else {
+                                                return  true;
                                             }
-                                            ToastUtils.showShort(error.msg);
-                                            return false;
+
                                         }else {
                                             return true;
                                         }

@@ -16,6 +16,7 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.SmsToken;
+import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
@@ -70,6 +71,7 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
     private Timer timer = new Timer();
 
     private TimerTask task;
+    private UserInfo  info;
 
     @Override
     protected int getContentView() {
@@ -80,6 +82,7 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
     public void init() {
         type = getIntent().getIntExtra("resetRemote", 0);
         loadTypeView(type);
+        info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
     }
 
 
@@ -139,6 +142,8 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
             case RemotePwdManagementActivity.REMEBERPWD:
                 if (TextUtils.isEmpty(remoteOldPwd) || TextUtils.isEmpty(remoteNewPwd) || TextUtils.isEmpty(remoteNewPwdAgain)) {
                     showToast("远程密码不能为空");
+                } else if (remoteOldPwd.length() < 6 && remoteNewPwd.length() < 6 && remoteNewPwdAgain.length() < 6) {
+                    showToast("密码至少为6位数字");
                 } else if (!TextUtils.equals(remoteNewPwd, remoteNewPwdAgain)) {
                     showToast("两次密码不一致");
                 } else {
@@ -148,6 +153,8 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
             case RemotePwdManagementActivity.FORGETPWD:
                 if (TextUtils.isEmpty(mobile)) {
                     showToast("请输入手机号码");
+                } else if (remoteNewPwd.length() < 6 && remoteNewPwdAgain.length() < 6) {
+                    showToast("密码至少为6位数字");
                 } else if (TextUtils.isEmpty(code)) {
                     showToast("请输入验证码");
                 } else if (TextUtils.isEmpty(remoteNewPwd) || TextUtils.isEmpty(remoteNewPwdAgain)) {
@@ -262,6 +269,7 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
         HashMap<String, String> params = new HashMap();
         params.put(GlobalKey.USER_TOKEN, token);
         params.put("remotePwd", CipherUtils.md5(remoteNewPwd));
+        info.remotePwd = CipherUtils.md5(remoteNewPwd);
         dialog.show();
         Disposable disposableSetRemotePwd = ClientFactory.def(UserService.class).SetRemotePassword(params)
                 .subscribeOn(Schedulers.newThread())
@@ -271,7 +279,8 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                     public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
                         if (baseError.msg == null) {
-                            showToast("修改成功");
+                            showToast("设置成功");
+                            SharepUtil.putByBean(GlobalKey.USER_INFO, info);
                             finish();
                         } else {
                             showToast(baseError.msg);

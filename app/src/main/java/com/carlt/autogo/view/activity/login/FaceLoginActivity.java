@@ -41,6 +41,7 @@ public class FaceLoginActivity extends BaseMvpActivity {
     public void init() {
         setTitleText("人脸登录");
         UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+
         String mobile = info.mobile;
         if (!TextUtils.isEmpty(mobile)) {
             userPhone.setText(mobile);
@@ -59,6 +60,9 @@ public class FaceLoginActivity extends BaseMvpActivity {
                 break;
             case R.id.forgot_passwd:
                 //                密码登录
+                UserInfo userInfo = SharepUtil.getBeanFromSp("user");
+                userInfo.faceId = 0;
+                SharepUtil.putByBean(GlobalKey.USER_INFO, userInfo);
                 startActivity(LoginActivity.class);
                 break;
             case R.id.user_regist:
