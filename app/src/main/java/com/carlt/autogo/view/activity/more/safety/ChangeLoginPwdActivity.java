@@ -156,7 +156,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
         }
     }
 
-    String phone  ;
+    String phone;
 
     //发送验证码类型(1=注册,2=找回密码,3=修改密码,4=修改手机,5=绑定微信,6=修改手机[旧手机号],7=远程密码重置,8=车辆过户,9=主机认证,10=更换设备,11=登录,12=注销)
     @SuppressLint("CheckResult")
@@ -225,7 +225,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                                 task.cancel();
                             }
                         }
-//                        showToast("请检查网络");
+                        //                        showToast("请检查网络");
                         btnManagementCode.setEnabled(true);
                         btnManagementCode.setText("重发验证码");
                         LogUtils.e(throwable.getMessage());
@@ -251,6 +251,9 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                 if (TextUtils.isEmpty(newPwd) || TextUtils.isEmpty(newPwdAgain)) {
                     ToastUtils.showShort("密码设置为空");
                     break;
+                } else if (newPwd.length() < 6 && newPwdAgain.length() < 6) {
+                    showToast("新密码至少为6位");
+                    break;
                 }
                 if (!newPwd.equals(newPwdAgain)) {
                     ToastUtils.showShort("两次密码不一致");
@@ -269,6 +272,9 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                 }
                 if (TextUtils.isEmpty(newPwd) || TextUtils.isEmpty(newPwdAgain)) {
                     ToastUtils.showShort("密码设置为空");
+                    break;
+                }else if (newPwd.length() < 6 && newPwdAgain.length() < 6) {
+                    showToast("新密码至少为6位");
                     break;
                 }
                 if (!TextUtils.equals(newPwd, newPwdAgain)) {

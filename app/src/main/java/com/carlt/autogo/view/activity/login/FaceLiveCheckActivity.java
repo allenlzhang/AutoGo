@@ -286,6 +286,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                     @Override
                     public void accept(String s) throws Exception {
                         dialog.dismiss();
+
                         ToastUtils.showShort(s);
                         go2Activity();
                     }
@@ -346,6 +347,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
             case FROM_LOGIN_ACTIVITY:
                 //                    tvFaceTitle.setText(getString(R.string.face_login_activity_title1));
                 //                finish();
+                ActivityControl.removeAllActivity(this);
                 startActivity(new Intent(this, MainActivity.class));
                 break;
             case FROM_ID_CARDACCEPT_ACTIVITY:

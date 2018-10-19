@@ -209,11 +209,11 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                     return;
                 }
 
-//                if (pwd.equals(savePwd)) {
-//                    pwd = savePwd;
-//                } else {
-//                    pwd = CipherUtils.md5(pwd);
-//                }
+                //                if (pwd.equals(savePwd)) {
+                //                    pwd = savePwd;
+                //                } else {
+                //                    pwd = CipherUtils.md5(pwd);
+                //                }
 
                 Map<String, Object> params = new HashMap<>();
 
@@ -232,7 +232,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                 passwdToggle.setSelected(!passwdToggle.isSelected());
                 break;
             case R.id.forgot_passwd:
-                startActivity(ChangeLoginPwdActivity.class);
+                startActivity(ChangeLoginPwdActivity.class, false);
                 break;
 
         }
