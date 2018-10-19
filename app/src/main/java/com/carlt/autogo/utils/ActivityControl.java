@@ -3,7 +3,6 @@ package com.carlt.autogo.utils;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.view.activity.LoginActivity;
@@ -27,6 +26,7 @@ public class ActivityControl {
 
     public static void removeAllActivity(Activity currentActivity) {
         for (Activity activity : mActivityList) {
+
             if (currentActivity.equals(activity)) {
                 continue;
             }
@@ -59,8 +59,8 @@ public class ActivityControl {
             @Override
             public void onRightClick() {
                 SharepUtil.put(GlobalKey.USER_TOKEN, "");
-                SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
-                SharepUtil.putBoolean(GlobalKey.PROCESS_SAFE_SWITCH, false);
+//                SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
+//                SharepUtil.putBoolean(GlobalKey.PROCESS_SAFE_SWITCH, false);
                 Intent intent = new Intent(context, LoginActivity.class);
                 context.startActivity(intent);
                 context.finish();

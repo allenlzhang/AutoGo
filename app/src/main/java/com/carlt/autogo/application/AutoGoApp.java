@@ -70,8 +70,7 @@ public class AutoGoApp extends Application {
         MODEL = MODEL_NAME + " " + ANDROID_VERSION;
         DISPLAY = "ui_sysinfo " + android.os.Build.DISPLAY;
         NIMEI = getNewUniquePsuedoID();
-    //    IMEI=getUniquePsuedoID();
-
+        //    IMEI=getUniquePsuedoID();
     }
 
     private void initUtils() {

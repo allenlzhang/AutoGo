@@ -151,8 +151,9 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                 }
                 break;
             case RemotePwdManagementActivity.FORGETPWD:
-                if (TextUtils.isEmpty(mobile)) {
-                    showToast("请输入手机号码");
+                UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+                if (TextUtils.isEmpty(mobile) && !mobile.equals(user.mobile)) {
+                    showToast("手机号码不正确");
                 } else if (remoteNewPwd.length() < 6 && remoteNewPwdAgain.length() < 6) {
                     showToast("密码至少为6位数字");
                 } else if (TextUtils.isEmpty(code)) {
@@ -207,6 +208,11 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
         };
         timer.schedule(task, 1000, 1000);
         final String phone = editManagementRemotePhone.getText().toString().trim();
+        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        if (!TextUtils.equals(phone, user.mobile)) {
+            showToast("手机号码不正确");
+            return;
+        }
         Map<String, String> params = new HashMap<>();
         params.put("mobile", phone);
 

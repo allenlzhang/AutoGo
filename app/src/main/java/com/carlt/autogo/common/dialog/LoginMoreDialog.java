@@ -73,7 +73,7 @@ public class LoginMoreDialog extends BaseDialog {
             loginByFace.setVisibility(View.GONE);
             tvLine1.setVisibility(View.GONE);
         } else {
-            if (user.alipayAuth != 0 && user.faceId != 0 && isFaceLogin && !isFaceLoginActivity) {
+            if (user.alipayAuth == 2 && user.faceId != 0 && isFaceLogin && !isFaceLoginActivity) {
                 loginByFace.setVisibility(View.VISIBLE);
                 tvLine1.setVisibility(View.VISIBLE);
             } else {

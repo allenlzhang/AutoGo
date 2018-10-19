@@ -12,7 +12,7 @@
         style="@style/BgCommonLoginAndRegister"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.02">
+        app:layout_constraintVertical_bias="0.03">
 
         <EditText
             android:id="@+id/regist_user_phone"
@@ -28,7 +28,7 @@
         style="@style/BgCommonLoginAndRegister"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/headl1"
-        app:layout_constraintVertical_bias="0.05">
+        app:layout_constraintVertical_bias="0.03">
 
         <EditText
             android:id="@+id/regist_user_code"
@@ -52,7 +52,7 @@
         style="@style/BgCommonLoginAndRegister"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/headl2"
-        app:layout_constraintVertical_bias="0.05">
+        app:layout_constraintVertical_bias="0.03">
 
         <EditText
             android:id="@+id/ed_register_pwd"
@@ -81,7 +81,7 @@
         style="@style/BgCommonLoginAndRegister"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/head"
-        app:layout_constraintVertical_bias="0.05">
+        app:layout_constraintVertical_bias="0.03">
 
         <EditText
             android:id="@+id/ed_register_pwd_d"

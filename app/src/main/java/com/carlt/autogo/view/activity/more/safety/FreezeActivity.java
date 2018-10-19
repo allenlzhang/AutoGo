@@ -100,7 +100,7 @@ public class FreezeActivity extends BaseMvpActivity {
                     public void accept(UserInfo userInfo) throws Exception {
                         dialog.dismiss();
                         if (userInfo.userFreeze == 1) {
-                            tvBaseRight.setText("退出登录");
+//                            tvBaseRight.setText("退出登录");
                             tvBaseRight.setTextColor(getResources().getColor(R.color.colorBlue));
                             tvBaseRight.setOnClickListener(new View.OnClickListener() {
                                 @Override

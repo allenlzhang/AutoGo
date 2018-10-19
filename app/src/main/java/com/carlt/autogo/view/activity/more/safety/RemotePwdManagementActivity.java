@@ -79,7 +79,7 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
         cbManagementRemoteSwitch.setOnCheckedChangeListener(this);
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         LogUtils.e("----" + user.toString());
-        if (user.alipayAuth != 0 && user.faceId != 0) {
+        if (user.alipayAuth == 2 && user.faceId != 0) {
         } else {
             CommonDialog.createDialogNotitle(this, "温馨提示", "请进行身份认证", "取消", "确定", false, new CommonDialog.DialogWithTitleClick() {
                 @Override
@@ -113,6 +113,7 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
         if (!TextUtils.isEmpty(user.remotePwd)) {
             llManagementSetRemotePwd.setVisibility(View.GONE);
         }
+        checkSetPwd();
     }
 
     @OnClick({R.id.ll_management_set_remote_pwd, R.id.ll_management_remember_remote_old_pwd, R.id.ll_management_forget_remote_old_pwd, R.id.ll_management_without_encryption_date})

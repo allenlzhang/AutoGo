@@ -13,14 +13,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.SmsToken;
+import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.LoginActivity;
@@ -162,12 +163,16 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
     @SuppressLint("CheckResult")
     private void sendCode() {
         phone = editManagementPhone.getText().toString().trim();
-
-        if (TextUtils.isEmpty(phone)) {
-            showToast("请输入手机号码");
-            LogUtils.e(phone);
+        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        if (!TextUtils.equals(phone, user.mobile)) {
+            showToast("手机号码不正确");
             return;
         }
+        //        if (TextUtils.isEmpty(phone)) {
+        //            showToast("请输入手机号码");
+        //            LogUtils.e(phone);
+        //            return;
+        //        }
         count = 60;
         btnManagementCode.setEnabled(false);
         btnManagementCode.setText(count + "秒后重发");
@@ -189,7 +194,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                     @Override
                     public ObservableSource<BaseError> apply(SmsToken smsToken) throws Exception {
                         if (smsToken.msg != null) {
-                            ToastUtils.showShort(smsToken.msg.msg);
+                            showToast(smsToken.msg.msg);
                             return null;
                         } else {
                             String token = smsToken.token;
@@ -214,7 +219,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                             }
                             btnManagementCode.setEnabled(true);
                             btnManagementCode.setText("重发验证码");
-                            ToastUtils.showShort(s.msg);
+                            showToast(s.msg);
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -245,40 +250,41 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
         switch (type) {
             case LoginPwdManagementActivity.REMEMBER:
                 if (TextUtils.isEmpty(oldPwd)) {
-                    ToastUtils.showShort("原密码为空");
+                    showToast("原密码为空");
                     break;
                 }
                 if (TextUtils.isEmpty(newPwd) || TextUtils.isEmpty(newPwdAgain)) {
-                    ToastUtils.showShort("密码设置为空");
+                    showToast("密码设置为空");
                     break;
                 } else if (newPwd.length() < 6 && newPwdAgain.length() < 6) {
                     showToast("新密码至少为6位");
                     break;
                 }
                 if (!newPwd.equals(newPwdAgain)) {
-                    ToastUtils.showShort("两次密码不一致");
+                    showToast("两次密码不一致");
                     break;
                 }
                 doRememberPwdConfirm(oldPwd, newPwd);
                 break;
             case LoginPwdManagementActivity.FORGET:
-                if (TextUtils.isEmpty(phone)) {
-                    ToastUtils.showShort("请输入手机号码");
+                UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+                if (TextUtils.isEmpty(phone) && !phone.equals(user.mobile)) {
+                    showToast("手机号码不正确");
                     break;
                 }
                 if (TextUtils.isEmpty(code)) {
-                    ToastUtils.showShort("验证码为空");
+                    showToast("验证码为空");
                     break;
                 }
                 if (TextUtils.isEmpty(newPwd) || TextUtils.isEmpty(newPwdAgain)) {
-                    ToastUtils.showShort("密码设置为空");
+                    showToast("密码设置为空");
                     break;
-                }else if (newPwd.length() < 6 && newPwdAgain.length() < 6) {
+                } else if (newPwd.length() < 6 && newPwdAgain.length() < 6) {
                     showToast("新密码至少为6位");
                     break;
                 }
                 if (!TextUtils.equals(newPwd, newPwdAgain)) {
-                    ToastUtils.showShort("两次密码不一致");
+                    showToast("两次密码不一致");
                     break;
                 }
                 doForgetPwdConfirm(phone, code, newPwd);
@@ -307,10 +313,11 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                     public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
                         if (baseError.msg == null) {
-                            ToastUtils.showShort("修改成功");
+                            showToast("修改成功");
+                            ActivityControl.removeAllActivity(ChangeLoginPwdActivity.this);
                             startActivity(LoginActivity.class);
                         } else {
-                            ToastUtils.showShort(baseError.msg);
+                            showToast(baseError.msg);
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -344,10 +351,10 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                     @Override
                     public void accept(BaseError baseError) throws Exception {
                         if (baseError.msg == null) {
-                            ToastUtils.showShort("修改成功");
+                            showToast("修改成功");
                             startActivity(LoginActivity.class);
                         } else {
-                            ToastUtils.showShort(baseError.msg);
+                            showToast(baseError.msg);
                         }
                         dialog.dismiss();
                     }
