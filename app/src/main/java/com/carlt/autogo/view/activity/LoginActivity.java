@@ -223,6 +223,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                 params.put("loginType", GlobalKey.loginStateByPWd);
                 params.put("pwdReally", pwd);
 
+                LogUtils.e(params);
                 getPresenter().login(params);
 
                 break;

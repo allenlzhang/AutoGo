@@ -1,5 +1,6 @@
 package com.carlt.autogo.net.base.myretrofit;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.utils.SharepUtil;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;

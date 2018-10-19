@@ -40,7 +40,7 @@
         app:layout_constraintVertical_bias="0.01"
         />
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/ll_phone"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -54,7 +54,7 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="left|center_vertical"
             android:layout_marginLeft="10dp"
             android:contentDescription="@string/app_name"
             android:src="@mipmap/ic_login_phone"/>
@@ -62,10 +62,14 @@
         <EditText
             android:id="@+id/user_phone"
             style="@style/EdCommonLoginAndRegister"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
             android:hint="请输入手机号码"
             android:paddingLeft="5dp"
-            android:maxLength="11"/>
-    </LinearLayout>
+            android:maxLength="11"
+            android:gravity="center"
+            />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/line1"
@@ -79,7 +83,7 @@
         android:layout_marginRight="10dp"
         />
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/ll_pwd"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -93,7 +97,7 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="left|center_vertical"
             android:layout_marginLeft="10dp"
             android:contentDescription="@string/app_name"
             android:src="@mipmap/ic_login_pwd"/>
@@ -101,14 +105,16 @@
         <EditText
             android:id="@+id/user_pwd"
             style="@style/EdCommonLoginAndRegister"
-            android:hint="请输入验证码"
-            android:paddingLeft="5dp"
-            android:inputType="text"
-            android:maxLength="32"
-            android:selectAllOnFocus="true"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            />
+            android:gravity="center"
+            android:hint="请输入验证码"
+            android:inputType="text"
+            android:maxLength="32"
+            android:paddingLeft="5dp"
+            android:selectAllOnFocus="true" />
 
         <Button
             android:id="@+id/send_code"
@@ -118,11 +124,12 @@
             android:text="获取验证码"
             android:layout_marginRight="5dp"
             style="@style/BtnCommonCommit"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="right|center_vertical"
+
             />
 
 
-    </LinearLayout>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/line2"
@@ -147,9 +154,6 @@
         android:text="登录"
 
         />
-
-
-
 
 
 
