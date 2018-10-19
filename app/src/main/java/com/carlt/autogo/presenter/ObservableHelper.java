@@ -1,6 +1,7 @@
 package com.carlt.autogo.presenter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 
@@ -37,7 +38,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class ObservableHelper {
 
-    public static  String errorMsg ;
+    public static  String errorMsg = "";
     static String[] sexs = {"男","女","保密"};
 
     /**
@@ -45,6 +46,9 @@ public class ObservableHelper {
      * @return
      */
     public static Observable<String>commonLogin( final Map<String,Object> params){
+       return commonLogin(params, null);
+    };
+    public static Observable<String>commonLogin(final Map<String,Object> params , final Context context){
         params.put("version", AutoGoApp.VERSION);
         params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
         params.put("loginModel", AutoGoApp.MODEL);
@@ -56,6 +60,14 @@ public class ObservableHelper {
                     public ObservableSource<String> apply(User User) throws Exception {
                         if (User.err != null) {
                             errorMsg = User.err.msg;
+                            if(context != null){
+                                String uId  = (String) params.get("openId");
+                                    Intent intent  = new Intent(context,UserBindPhoneActivity.class);
+                                    intent.putExtra("openId",uId);
+                                    intent.putExtra("openType", (Integer) params.get("openType"));
+                                    //保存微信或者支付宝登录请求参数
+                                    context. startActivity(intent);
+                            }
                             return null;
                         } else {
                             Map<String, String> token = new HashMap<String, String>();
@@ -66,10 +78,17 @@ public class ObservableHelper {
 
                     }
                 });
-    };
+    }
 
-
+    /**
+     * @param params 通用注册方法
+     * @return
+     */
     public static Observable<String>commonReg(final Map<String,Object> params){
+
+        return commonReg(params, null);
+    }
+    public static Observable<String>commonReg(final Map<String,Object> params ,final Context context){
         params.put("version", AutoGoApp.VERSION);
         params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
         params.put("loginModel", AutoGoApp.MODEL);
@@ -80,21 +99,23 @@ public class ObservableHelper {
                     @Override
                     public ObservableSource<String> apply(BaseError baseError) throws Exception {
                         if(baseError.code == 0){
+                            params.remove("validate");
                             int type = (int) params.get("regType");
                             if(type == ( GlobalKey.RegStateByPWd)){
                                 params.put("loginType", GlobalKey.loginStateByPWd);
+                                return  ObservableHelper.commonLogin(params);
                             }else {
                                 params.put("loginType", GlobalKey.loginStateByOther);
+                                return  ObservableHelper.commonLogin(params,context);
                             }
-                            params.remove("validate");
 
-                            return  ObservableHelper.commonLogin(params);
                         }else {
                             ToastUtils.showShort(baseError.msg);
                             return  null ;
                         }
                     }
                 });
+
     }
     /**
      * 根据token 获取用户信息

@@ -62,7 +62,7 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
 
     @Override
     public void init() {
-        setTitleText("短信登录");
+        setTitleText("验证码登录");
         uuDialog =new UUDialog(this,R.style.DialogCommon);
         UserInfo userInfo = SharepUtil.getBeanFromSp("user");
         if (userInfo != null) {
@@ -133,43 +133,26 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
         HashMap <String,Object> params = new HashMap<>();
         params.put("mobile",PhoneNum);
         params.put("validate",code);
+        params.put("loginType", GlobalKey.loginStateByPhone);
 
-        params.put("version", 1);
-        params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
-        params.put("loginModel", AutoGoApp.MODEL);
-        params.put("loginSoftType", "Android");
-        ClientFactory.def(UserService.class).loginByPhone(params)
-                .flatMap(new Function<User, ObservableSource<String>>() {
-                    @Override
-                    public ObservableSource<String> apply(User user) throws Exception {
-                        if(user.err != null){
-                            errorMsg = user.err.msg ;
-                            return  null;
-                        }else {
-                            Map<String, String> token =   new HashMap<String, String>();
-                            token.put("token",user.token);
-                            SharepUtil.put("token",user.token);
-                            return ObservableHelper.getUserInfoByToken(token, GlobalKey.loginStateByPhone);
-                        }
-                    }
-                })
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+
+        ObservableHelper.commonLogin(params)
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {
                         uuDialog.dismiss();
                         ToastUtils.showShort(s);
                         startActivity(MainActivity.class);
-
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        ToastUtils.showShort(errorMsg);
                         uuDialog.dismiss();
+                        ToastUtils.showShort(ObservableHelper.errorMsg);
+                       ;
                     }
                 });
+
     }
 
     private void notifSendValidate() {

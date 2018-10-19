@@ -2,6 +2,7 @@ package com.carlt.autogo.view.activity.user;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -128,13 +129,13 @@ public class PersonAvatarActivity extends BaseMvpActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //  Glide.with(this).load(LoginInfo.getAvatar_img()).into(userAvatar);
+        loadImage(this,SharepUtil.<UserInfo>getBeanFromSp("user").avatarFile);
+
     }
 
     public void setPicToView(Bitmap picToView) {
-        userAvatar.setImageBitmap(picToView);
-        //上传图片
 
+        //上传图片
         getUpdateImageResultInfoObservableSource(fileCropUri);
     }
 
@@ -184,6 +185,9 @@ public class PersonAvatarActivity extends BaseMvpActivity {
                             UserInfo userInfo =   SharepUtil.<UserInfo>getBeanFromSp("user");
                             userInfo.avatarFile = avatarPath;
                             SharepUtil.putByBean("user",userInfo);
+
+                            loadImage(PersonAvatarActivity.this,avatarPath);
+
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -198,7 +202,6 @@ public class PersonAvatarActivity extends BaseMvpActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == requestCodePermsiision) {
-
             for(int i=1 ; i<grantResults.length ;i++){
                 if(grantResults[i] == PackageManager.PERMISSION_DENIED){
                     ToastUtils.showShort("部分权限获取失败，正常功能受到影响");
@@ -208,5 +211,15 @@ public class PersonAvatarActivity extends BaseMvpActivity {
         }
     }
 
+    public void loadImage(Context context , String path){
+        Glide.with(context)
+                .load(path)
+                .placeholder(R.mipmap.ic_head_normal_bg)
+                .error(R.mipmap.ic_head_normal_bg)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .skipMemoryCache(true)
+                .into(userAvatar);
+
+    }
 
 }

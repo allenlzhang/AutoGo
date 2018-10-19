@@ -54,7 +54,7 @@ public class EditUserInfoActivity extends BaseMvpActivity {
     RelativeLayout rlEdHead1;
     DialogChangeSex dialogChangeSex;
 
-    UUDialog dialog;
+
 
     private UserInfo userInfo;
 
@@ -69,7 +69,7 @@ public class EditUserInfoActivity extends BaseMvpActivity {
 
         setTitleText("修改资料");
         dialogChangeSex = new DialogChangeSex(this);
-        dialog = new UUDialog(this, R.style.DialogCommon);
+
 
     }
 
@@ -135,7 +135,7 @@ public class EditUserInfoActivity extends BaseMvpActivity {
                             userInfo.sex = text;
                             userInfo.gender = sex;
                             SharepUtil.putByBean("user", userInfo);
-                            LogUtils.e(SharepUtil.<UserInfo>getBeanFromSp("user").gender);
+
                             tvSex.setText(text);
                         }
                     }

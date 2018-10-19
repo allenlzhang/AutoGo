@@ -53,6 +53,8 @@ public class BasePresenter<V> {
 
     }
 
+
+
     public void onDestroyPresenter() {
         this.mContext = null;
         detachView();

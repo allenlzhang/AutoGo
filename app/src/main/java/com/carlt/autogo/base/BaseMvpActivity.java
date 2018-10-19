@@ -160,6 +160,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
         super.onDestroy();
         mPresenterDispatch.detachView();
         //        unbinder.unbind();
+        dialog.dismiss();
 
     }
 

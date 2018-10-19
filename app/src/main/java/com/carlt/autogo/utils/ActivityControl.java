@@ -3,6 +3,7 @@ package com.carlt.autogo.utils;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.view.activity.LoginActivity;
@@ -66,5 +67,6 @@ public class ActivityControl {
             }
         });
     }
+
 
 }

@@ -67,7 +67,6 @@ public class UUDialog extends BaseDialog {
 	@Override
 	public void dismiss() {
 		super.dismiss();
-
 		new Handler(Looper.getMainLooper()).post(new Runnable() {
 			@Override
 			public void run() {

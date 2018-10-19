@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
@@ -87,6 +88,7 @@ public class ChangeNickNameActivity extends BaseMvpActivity {
                                     SharepUtil.putByBean("user",userInfo);
                             finish();
                         }
+                        LogUtils.e(baseError.toString());
                     }
                 }, new Consumer<Throwable>() {
                     @Override

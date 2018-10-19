@@ -19,6 +19,7 @@ import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
 import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.alipay.AuthResult;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.presenter.register.IOtherRegisterView;
 import com.carlt.autogo.presenter.register.OtherRegisterPresenter;
@@ -178,24 +179,25 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     final String unionid = (String) hashMap.get("unionid");
                     params.put("openId", unionid);
                     params.put("openType", 2);
+                    params.put("loginType", GlobalKey.loginStateByOther);
 
-                    Observable<String> observable = ObservableHelper.loginByOpenApi(params, OtherActivity.this,2);
-                    observable.subscribe(new Consumer<String>() {
-                        @Override
-                        public void accept(String s) throws Exception {
-                            dialog.dismiss();
+                    ObservableHelper.commonLogin(params ,OtherActivity.this)
+                            .subscribe(new Consumer<String>() {
+                                @Override
+                                public void accept(String s) throws Exception {
+                                    dialog.dismiss();
+                                    ToastUtils.showShort(s);
+                                    startActivity(MainActivity.class);
+                                }
+                            }, new Consumer<Throwable>() {
+                                @Override
+                                public void accept(Throwable throwable) throws Exception {
+                                    dialog.dismiss();
+                                    //   ToastUtils.showShort(ObservableHelper.errorMsg);
+                                    LogUtils.e(throwable.toString());
+                                }
+                            });
 
-                            ToastUtils.showShort(s);
-                            startActivity(MainActivity.class);
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            dialog.dismiss();
-                         //   ToastUtils.showShort(ObservableHelper.errorMsg);
-                            LogUtils.e(throwable.toString());
-                        }
-                    });
                 }
 
                 @Override
@@ -273,7 +275,6 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
         String sign = OrderInfoUtil2_0.getSign(authInfoMap, privateKey, rsa2);
         final String authInfo = info + "&" + sign;
 
-
         Observable.create(new ObservableOnSubscribe<AuthResult>() {
             @Override
             public void subscribe(ObservableEmitter<AuthResult> emitter) throws Exception {
@@ -282,7 +283,6 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 Map<String, String> result = authTask.authV2(authInfo, true);
                 AuthResult authResult = new AuthResult(result, true);
                 emitter.onNext(authResult);
-
             }
         })
                 .filter(new Predicate<AuthResult>() {
@@ -300,7 +300,6 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                             ToastUtils.showShort("登录失败");
                             return false;
                         }
-
                     }
                 })
 
@@ -309,8 +308,8 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     public ObservableSource<String> apply(AuthResult authResult) throws Exception {
                         params.put("openId", authResult.user_id);
                         params.put("openType", 1);
-                        LogUtils.e(authResult.user_id);
-                        return ObservableHelper.loginByOpenApi(params, OtherActivity.this,1);
+                        params.put("loginType", GlobalKey.loginStateByOther);
+                        return ObservableHelper.commonLogin(params, OtherActivity.this);
                     }
                 })
                 .subscribeOn(Schedulers.newThread())

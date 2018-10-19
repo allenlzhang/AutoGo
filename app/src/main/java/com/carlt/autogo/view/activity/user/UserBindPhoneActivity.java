@@ -12,6 +12,7 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
@@ -129,10 +130,7 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
         parmas.put("openType",openType);
         parmas.put("mobile",phoneNum);
         parmas.put("validate",code);
-
-        parmas.put("moveDeviceName", AutoGoApp.MODEL_NAME);
-        parmas.put("loginModel", AutoGoApp.MODEL);
-        parmas.put("loginSoftType", "Android");
+        parmas.put("regType", GlobalKey.RegStateByOther);
         doOtherRegister(parmas);
 
     }
@@ -141,29 +139,12 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
      * 调用三方注册绑定手机接口
      * @param parmas  请求参数
      */
+    @SuppressLint("CheckResult")
     private void doOtherRegister(final Map<String, Object> parmas) {
 
         dialog.show();
-        Disposable disposable = ClientFactory.def(UserService.class).registerByOpenApi(parmas)
-                .flatMap(new Function<BaseError, ObservableSource<String>>() {
-                    @Override
-                    public ObservableSource<String> apply(BaseError baseError) throws Exception {
 
-                        if(baseError.msg != null){
-                            ToastUtils.showShort("登录失败");
-                            startActivity(LoginActivity.class);
-                            return  null ;
-                        }else {
-
-                            parmas.remove("mobile");
-                            parmas.remove("validate");
-                            LogUtils.e(parmas + "\n" + openType + "========================");
-                            return ObservableHelper.loginByOpenApi(parmas,UserBindPhoneActivity.this,openType);
-
-                        }
-
-                    }
-                })
+        ObservableHelper.commonReg(parmas,UserBindPhoneActivity.this)
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {
@@ -180,7 +161,7 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
                 });
 
 
-        disposables.add(disposable);
+       // disposables.add(disposable);
     }
 
     @SuppressLint("CheckResult")
@@ -200,7 +181,7 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
 //        @POST("User/GetSmsToken")
 //        Observable<SmsToken> getSmsToken(@Body Map<String,String> params);
 
-        Disposable disposableSend = ObservableHelper.sendValidate(phoneNum,param,1)
+        Disposable disposableSend = ObservableHelper.sendValidate(phoneNum,param,13)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<BaseError>() {
@@ -214,7 +195,6 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
                         }else {
                             notifSendValidate();
                             ToastUtils.showShort("短信下发成功" );
-
                         }
                     }
                 }, new Consumer<Throwable>() {

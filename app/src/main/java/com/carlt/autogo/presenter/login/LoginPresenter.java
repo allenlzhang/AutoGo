@@ -42,6 +42,12 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                         ToastUtils.showShort(s);
                         mView.loginFinish();
                     }
-                }, new CommonThrowable<Throwable>());
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        uuDialog.dismiss();
+                        ToastUtils.showLong(ObservableHelper.errorMsg);
+                    }
+                });
     }
 }

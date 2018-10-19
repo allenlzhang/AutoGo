@@ -13,7 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class DefulatClient  extends BaseRestClient {
 
-   static   String URL_NEXT [] = { GlobalUrl.U1_DORIDE_TEST ,GlobalUrl.U1_DORIDE_PRE ,GlobalUrl.U1_DORIDE} ;
+   static   String URL_NEXT [] = { GlobalUrl.BASE_URL ,GlobalUrl.BASE_URL ,GlobalUrl.BASE_URL} ;
     private DefulatClient() {
         super();
     }
