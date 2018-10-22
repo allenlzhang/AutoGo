@@ -39,7 +39,8 @@ public class FaceLoginActivity extends BaseMvpActivity {
 
     @Override
     public void init() {
-        setTitleText("人脸登录");
+        //        setTitleText("人脸登录");
+        hideTitle();
         UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         if (info != null) {
             String mobile = info.mobile;

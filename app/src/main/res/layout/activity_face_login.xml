@@ -52,7 +52,7 @@
         app:layout_constraintVertical_bias="0.01"
         />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_phone"
         style="@style/ConstraintLayoutCommon"
         android:layout_width="match_parent"
@@ -67,6 +67,8 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:contentDescription="@string/app_name"
@@ -75,10 +77,12 @@
         <EditText
             android:id="@+id/user_phone"
             style="@style/EdCommonLoginAndRegister"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:hint="请输入手机号"
             android:maxLength="11"/>
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <Button

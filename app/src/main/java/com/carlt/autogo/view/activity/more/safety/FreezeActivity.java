@@ -82,9 +82,23 @@ public class FreezeActivity extends BaseMvpActivity {
     @Override
     public void init() {
         fromMain = getIntent().getBooleanExtra("fromMain", false);
-        setTitleText("冻结账户");
+        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        if (user.userFreeze == 1) {
+            setTitleText("冻结账户");
+        } else if (user.userFreeze == 2) {
+            setTitleText("解冻账户");
+        }
+
         freezeCommitDialog = new FreezeCommitDialog(this, R.style.DialogCommon);
         getUserInfo();
+        tvBaseRight.setTextColor(getResources().getColor(R.color.colorBlue));
+        tvBaseRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharepUtil.put(GlobalKey.USER_TOKEN, "");
+                startActivity(LoginActivity.class);
+            }
+        });
     }
 
     @SuppressLint("CheckResult")
@@ -100,22 +114,13 @@ public class FreezeActivity extends BaseMvpActivity {
                     public void accept(UserInfo userInfo) throws Exception {
                         dialog.dismiss();
                         if (userInfo.userFreeze == 1) {
-//                            tvBaseRight.setText("退出登录");
-                            tvBaseRight.setTextColor(getResources().getColor(R.color.colorBlue));
-                            tvBaseRight.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    SharepUtil.put(GlobalKey.USER_TOKEN, "");
-                                    startActivity(LoginActivity.class);
-                                }
-                            });
                             rlUserFreeze.setVisibility(View.VISIBLE);
                             rlUserUnfreeze.setVisibility(View.GONE);
                             String mobile = SharepUtil.<UserInfo>getBeanFromSp("user").mobile;
-                            StringBuilder builder=new StringBuilder(mobile);
+                            StringBuilder builder = new StringBuilder(mobile);
                             tvFreezeStatusIno.setText("当前账号:" + builder.replace(3, 7, "****"));
                         } else {
-
+                            tvBaseRight.setText("退出");
                             ivBaseBack.setVisibility(View.GONE);
                             rlUserFreeze.setVisibility(View.GONE);
                             rlUserUnfreeze.setVisibility(View.VISIBLE);
@@ -163,8 +168,9 @@ public class FreezeActivity extends BaseMvpActivity {
                                     SharepUtil.putByBean(GlobalKey.USER_INFO, info);
                                     ToastUtils.showShort("冻结成功");
                                     ivBaseBack.setVisibility(View.GONE);
-                                    tvBaseRight.setText("");
-                                    setTitleText("冻结账户");
+                                    //                                    tvBaseRight.setText("");
+                                    setTitleText("解冻账户");
+                                    tvBaseRight.setText("退出");
                                     rlUserFreeze.setVisibility(View.GONE);
                                     rlUserUnfreeze.setVisibility(View.VISIBLE);
                                 } else {

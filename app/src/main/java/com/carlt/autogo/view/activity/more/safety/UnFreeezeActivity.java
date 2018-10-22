@@ -84,6 +84,7 @@ public class UnFreeezeActivity extends BaseMvpActivity {
         String mobile = SharepUtil.<UserInfo>getBeanFromSp("user").mobile;
         StringBuilder builder=new StringBuilder(mobile);
         tvUserUnfreeze.setText("当前账号:" + builder.replace(3, 7, "****"));
+//        tvBaseRight.setText("退出");
 //        tvUserUnfreeze.setText("当前账号:" + SharepUtil.<UserInfo>getBeanFromSp("user").mobile + "");
     }
 

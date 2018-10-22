@@ -3,7 +3,6 @@ package com.carlt.autogo.view.activity.user.accept;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -15,6 +14,8 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.alipay.AuthResult;
 import com.carlt.autogo.entry.user.BaseError;
+import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
@@ -46,6 +47,7 @@ public class UserIdChooseActivity extends BaseMvpActivity {
     RelativeLayout rlPaymentAccept;
     @BindView(R.id.rl_idcard_accept)
     RelativeLayout rlIdcardAccept;
+    private UserInfo user;
 
     @Override
     protected int getContentView() {
@@ -55,17 +57,34 @@ public class UserIdChooseActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("选择身份认证方式");
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        LogUtils.e(user.toString());
     }
 
     @OnClick({R.id.rl_payment_accept, R.id.rl_idcard_accept})
     public void onClick(View view) {
-        if (view.getId() == R.id.rl_payment_accept) {
-            //支付宝认证
-            authALiPay();
-        } else {
-            showToast("此功能暂未开放");
-//            Intent intentId = new Intent(this, IdCardAcceptActivity.class);
-//            startActivity(intentId);
+        switch (view.getId()) {
+            case R.id.rl_payment_accept:
+                //支付宝认证
+                if (user.alipayAuth == 2) {
+                    startActivity(FaceAuthSettingActivity.class, false);
+                } else {
+                    authALiPay();
+                }
+                break;
+            case R.id.rl_idcard_accept:
+                showToast("此功能暂未开放");
+                //            Intent intentId = new Intent(this, IdCardAcceptActivity.class);
+                //            startActivity(intentId);
+                break;
+            default:
+                break;
         }
 
     }
@@ -202,7 +221,9 @@ public class UserIdChooseActivity extends BaseMvpActivity {
                     public void accept(BaseError er) throws Exception {
                         LogUtils.e(er.toString());
                         if (er.code == 0) {
-                            startActivity(new Intent(UserIdChooseActivity.this, FaceAuthSettingActivity.class));
+                            user.alipayAuth = 2;
+                            SharepUtil.putByBean(GlobalKey.USER_INFO, user);
+                            startActivity(FaceAuthSettingActivity.class, false);
                         } else {
                             showToast(er.msg);
                         }

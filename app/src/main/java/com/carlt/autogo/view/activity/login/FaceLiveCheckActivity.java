@@ -23,6 +23,7 @@ import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.LoginActivity;
 import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.user.accept.IdfCompleteActivity;
 import com.carlt.autogo.view.activity.user.accept.UploadIdCardPhotoActivity;
@@ -118,7 +119,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
         super.onLivenessCompletion(status, message, base64ImageMap);
         if (status == FaceStatusEnum.OK && mIsCompletion) {
             mCamera.stopPreview();
-            ToastUtils.showShort("人脸检测成功");
+//            ToastUtils.showShort("人脸检测成功");
             for (Map.Entry<String, String> stringStringEntry : base64ImageMap.entrySet()) {
                 LogUtils.e("----" + stringStringEntry.getKey());
             }
@@ -237,8 +238,8 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
      */
     @SuppressLint("CheckResult")
     private void faceLogin(UpdateImageResultInfo updateImageResultInfo) {
-//        UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-//        String mobile = info.mobile;
+        //        UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        //        String mobile = info.mobile;
         String mobile1 = getIntent().getStringExtra("mobile");
         int id = updateImageResultInfo.message.id;
         Map<String, Object> map = new HashMap<>();
@@ -270,7 +271,11 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                         dialog.dismiss();
                         if (user.err != null) {
                             //                            errorMsg = user.err.msg;
-                            ToastUtils.showShort("登录失败");
+                            dialog.dismiss();
+                            ToastUtils.showShort(user.err.msg);
+                            ActivityControl.removeAllActivity(FaceLiveCheckActivity.this);
+                            startActivity(new Intent(FaceLiveCheckActivity.this, LoginActivity.class));
+                            finish();
                             return null;
                         } else {
                             Map<String, String> token = new HashMap<>();
@@ -294,6 +299,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
                         LogUtils.e(throwable.toString());
                     }
                 });
@@ -322,7 +328,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                             UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
                             info.faceId = 1;
                             info.alipayAuth = 2;
-//                            SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, true);
+                            //                            SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, true);
                             SharepUtil.putByBean(GlobalKey.USER_INFO, info);
                             go2Activity();
                         } else {
