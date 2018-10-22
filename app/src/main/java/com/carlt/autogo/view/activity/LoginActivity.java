@@ -211,11 +211,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                     return;
                 }
 
-                //                if (pwd.equals(savePwd)) {
-                //                    pwd = savePwd;
-                //                } else {
-                //                    pwd = CipherUtils.md5(pwd);
-                //                }
 
                 Map<String, Object> params = new HashMap<>();
 
@@ -224,7 +219,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                 params.put("loginType", GlobalKey.loginStateByPWd);
                 params.put("pwdReally", pwd);
 
-                LogUtils.e(params);
                 getPresenter().login(params);
 
                 break;

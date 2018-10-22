@@ -18,6 +18,7 @@ public class GlobalKey {
     public static       String Remote_Switch           = "Remote_Switch";
     public static final String IDENTITY_AUTH           = "IDENTITY_AUTH";
     public static final String REMOTE_SECRET_FREE_TIME = "REMOTE_SECRET_FREE_TIME";
+    public static final String TOKENT_OUTOF_TIME                 =  "exp";
 
     //正则密码验证 (字母 数字 字符 长度6~32)
     public static final String PWD_REGEX       = "^[A-Za-z0-9-+=<>;,./~!@#$%^*\\[.*\\]\\{.*\\}]{6,32}+$";

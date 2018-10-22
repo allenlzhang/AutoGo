@@ -177,10 +177,11 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 public void onComplete(Platform platform, final int i, HashMap<String, Object> hashMap) {
                     LogUtils.e(hashMap);
                     final String unionid = (String) hashMap.get("unionid");
+
                     params.put("openId", unionid);
                     params.put("openType", 2);
                     params.put("loginType", GlobalKey.loginStateByOther);
-
+                    LogUtils.e(params);
                     ObservableHelper.commonLogin(params ,OtherActivity.this)
                             .subscribe(new Consumer<String>() {
                                 @Override

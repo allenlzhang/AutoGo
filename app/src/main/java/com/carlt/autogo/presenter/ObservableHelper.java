@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
+import com.baidu.idl.face.platform.utils.Base64Utils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.base.BaseMvpActivity;
@@ -15,6 +16,7 @@ import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.utils.TokenUtil;
 import com.carlt.autogo.view.activity.user.UserBindPhoneActivity;
 
 import java.util.HashMap;
@@ -49,6 +51,14 @@ public class ObservableHelper {
         params.put("loginModel", AutoGoApp.MODEL);
         params.put("loginSoftType", "Android");
 
+      //  判断token 是否过期   false 没有过期   true，token 过期
+//        if(!SharepUtil.getPreferences().getBoolean(GlobalKey.TOKENT_OUTOF_TIME,false)){
+//            String token = SharepUtil.getPreferences().getString("token","");
+//            HashMap map = new HashMap() ;
+//            map.put("token", token);
+//            return ObservableHelper.getUserInfoByToken(map, (int) params.get("loginType"), (String) params.get("pwdReally"));
+//        }
+
         return ClientFactory.def(UserService.class).commonLogin(params)
                 .flatMap(new Function<User, ObservableSource<String>>() {
                     @Override
@@ -66,7 +76,8 @@ public class ObservableHelper {
                             return null;
                         } else {
                             Map<String, String> token = new HashMap<String, String>();
-                            token.put("token", User.token);
+
+                            token.put("token", User.token);;
                             SharepUtil.put(GlobalKey.USER_TOKEN, User.token);
 
                             return ObservableHelper.getUserInfoByToken(token, (int) params.get("loginType"), (String) params.get("pwdReally"));

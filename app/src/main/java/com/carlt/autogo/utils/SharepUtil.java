@@ -80,7 +80,11 @@ public class SharepUtil {
         editor.putString(key, value);
         editor.apply();
     }
-
+    public static void putBoolean(@NonNull final String key, final Boolean value) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
     public static void putBoolean(@NonNull String key, boolean value) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(key, value);
