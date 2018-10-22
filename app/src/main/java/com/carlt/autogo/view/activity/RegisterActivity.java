@@ -1,7 +1,10 @@
 package com.carlt.autogo.view.activity;
 
 import android.annotation.SuppressLint;
+import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spanned;
+import android.text.method.DigitsKeyListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,10 +27,13 @@ import com.carlt.autogo.presenter.register.IRegisterView;
 import com.carlt.autogo.presenter.register.RegisterPresenter;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.CipherUtils;
+import com.carlt.autogo.utils.MyInputFilter;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -79,7 +85,8 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
     @Override
     public void init() {
         setTitleText("注册");
-
+        edRegisterPwd.setFilters(new InputFilter[]{new MyInputFilter()});
+        edRegisterPwdD.setFilters(new InputFilter[]{new MyInputFilter()});
     }
 
     @Override
@@ -212,20 +219,28 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
         if (!phoneNum.equals("-")) {
             boolean checkOk = RegexUtils.isMobileExact(phoneNum);
             if (!checkOk) {
-                ToastUtils.showShort("请输入正确手机号!");
+                ToastUtils.showShort("手机号码不正确!");
                 return false;
             }
         }
         if (!code.equals("-")) {
             if (StringUtils.isEmpty(code)) {
-                ToastUtils.showShort("验证码为空");
+                ToastUtils.showShort("验证码不能为空");
                 return false;
             }
         }
         if (!pwd.equals("-") || !pwdD.equals("-")) {
-            if (!RegexUtils.isMatch(GlobalKey.PWD_REGEX, pwd) || !RegexUtils.isMatch(GlobalKey.PWD_REGEX, pwd)) {
+            if(StringUtils.isEmpty(pwd)){
+                ToastUtils.showLong("密码不能为空");
+                return  false;
+            }else if(pwd.length() < 6){
+                ToastUtils.showLong("密码至少为6位");
+                return  false;
+            }
+
+            if (!RegexUtils.isMatch(GlobalKey.PWD_REGEX, pwd)) {
                 ToastUtils.setMsgTextSize(15);
-                ToastUtils.showLong("密码有误,输入数字,字母,符号,长度6到32");
+                ToastUtils.showLong("密码有误,输入数字,字母,符号");
                 return false;
             }
             if (!pwd.equals(pwdD)) {

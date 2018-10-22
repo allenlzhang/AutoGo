@@ -46,6 +46,7 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         uuDialog.dismiss();
+
                         ToastUtils.showLong(ObservableHelper.errorMsg);
                     }
                 });

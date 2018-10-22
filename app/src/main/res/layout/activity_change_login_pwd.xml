@@ -10,7 +10,7 @@
         style="@style/baseEditStyle"
         android:layout_marginTop="10dp"
         android:hint="@string/management_edit_phone_num"
-        android:inputType="phone"
+        android:inputType="number"
         android:maxLength="11"
         tools:ignore="TextFields"/>
 
@@ -26,7 +26,8 @@
             android:hint="@string/management_edit_verification_code"
             android:inputType="number"
             android:maxLength="6"
-            tools:ignore="TextFields"/>
+            tools:ignore="TextFields"
+            />
 
         <Button
             android:id="@+id/btn_management_code"

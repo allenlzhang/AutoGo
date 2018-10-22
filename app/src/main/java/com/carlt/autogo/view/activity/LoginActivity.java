@@ -114,6 +114,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     public void init() {
         setTitleText("登录");
         hideTitle();
+        versionCode.setText(""+AutoGoApp.VERSION + ".0");
         setBaseBackStyle(getResources().getDrawable(R.drawable.common_close_select));
         AndPermission.with(this)
                 .runtime()

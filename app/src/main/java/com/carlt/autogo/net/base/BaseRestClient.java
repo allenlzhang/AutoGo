@@ -7,9 +7,11 @@ import android.content.Intent;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.carlt.autogo.R;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.global.GlobalUrl;
 import com.carlt.autogo.net.base.myretrofit.MyGsonConverterFactory;
+import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.view.activity.LoginActivity;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -62,6 +64,8 @@ public abstract class BaseRestClient implements Iservice {
                     return Observable.create(new ObservableOnSubscribe<Object>() {
                         @Override
                         public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
+                            ObservableHelper.errorMsg ="网络错误,请检查网络";
+                            emitter.onNext(new Object());
                         }
                     });
                 }
@@ -81,8 +85,9 @@ public abstract class BaseRestClient implements Iservice {
                                                 ActivityControl.removeAll();
                                                 Activity activity =   ActivityControl.mActivityList.get(0);
                                                 Intent intent = new Intent(activity, LoginActivity.class);
-                                                ToastUtils.showShort(error.msg);
+                                                ToastUtils.showShort(R.string.token_err);
                                                 activity.startActivity(intent);
+
                                                 return false;
                                             }else {
                                                 return  true;
@@ -119,11 +124,12 @@ public abstract class BaseRestClient implements Iservice {
 
             if(baseError != null && baseError.code != 0 ){
                 if(baseError.code == 2066 ){
+                    ActivityControl.removeAll();
                   Activity activity =  ActivityControl.mActivityList.get(0);
                   Intent intent = new Intent(activity, LoginActivity.class);
+                    ToastUtils.showShort(R.string.token_err);
                     activity.startActivity(intent);
-                    ActivityControl.removeAll();
-                    LogUtils.e(baseError.toString());
+
                     return false;
                 }else {
                    return true;

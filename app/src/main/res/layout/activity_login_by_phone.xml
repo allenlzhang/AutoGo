@@ -28,16 +28,6 @@
         app:layout_constraintVertical_bias="0.03"
         />
 
-    <TextView
-        android:id="@+id/version_code"
-        style="@style/ConstraintLayoutCommon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="V 1.0.0"
-        android:textSize="14dp"
-        app:layout_constraintTop_toBottomOf="@+id/app_name"
-        app:layout_constraintVertical_bias="0.01"
-        />
 
     <RelativeLayout
         android:id="@+id/ll_phone"
@@ -47,7 +37,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/version_code"
+        app:layout_constraintTop_toBottomOf="@+id/app_name"
         app:layout_constraintVertical_bias="0.02"
         >
 

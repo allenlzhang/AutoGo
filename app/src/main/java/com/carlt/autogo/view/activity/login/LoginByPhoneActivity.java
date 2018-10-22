@@ -41,8 +41,6 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
 
     @BindView(R.id.app_name)
     TextView appName;
-    @BindView(R.id.version_code)
-    TextView versionCode;
     @BindView(R.id.user_phone)
     EditText userPhone;
     @BindView(R.id.user_pwd)

@@ -3,7 +3,9 @@ package com.carlt.autogo.view.activity.more.safety;
 import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.RegexUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
@@ -23,6 +26,7 @@ import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.CipherUtils;
+import com.carlt.autogo.utils.MyInputFilter;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.LoginActivity;
 
@@ -90,10 +94,17 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
         return R.layout.activity_change_login_pwd;
     }
 
+
     @Override
     public void init() {
         type = getIntent().getIntExtra("changePwd", 1);
         loadTypeView(type);
+
+        //密码输入屏蔽 中文其他不满足需求的字符
+        editManagementOldPwd.setFilters(new InputFilter[]{new MyInputFilter()});
+        editManagementNewPwd.setFilters(new InputFilter[]{new MyInputFilter()});
+        editManagementNewPwdAgain.setFilters(new InputFilter[]{new MyInputFilter()});
+
     }
 
     @SuppressLint("HandlerLeak")
@@ -261,7 +272,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                     break;
                 }
                 if (!newPwd.equals(newPwdAgain)) {
-                    showToast("两次密码不一致");
+                    showToast("新密码，确认密码不一致");
                     break;
                 }
                 doRememberPwdConfirm(oldPwd, newPwd);
@@ -284,7 +295,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                     break;
                 }
                 if (!TextUtils.equals(newPwd, newPwdAgain)) {
-                    showToast("两次密码不一致");
+                    showToast("新密码，确认密码不一致");
                     break;
                 }
                 doForgetPwdConfirm(phone, code, newPwd);
