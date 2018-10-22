@@ -140,6 +140,10 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
             case R.id.ll_management_without_encryption_date:
                 if (checkSetPwd())
                     return;
+                if (!cbManagementRemoteSwitch.isChecked()) {
+                    showToast("请先打开远程控制免密");
+                     return;
+                }
                 mDialog.show();
                 break;
         }

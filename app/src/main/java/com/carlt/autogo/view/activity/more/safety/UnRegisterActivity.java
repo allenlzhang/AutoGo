@@ -110,7 +110,7 @@ public class UnRegisterActivity extends BaseMvpActivity<UnRegisterPresenter> imp
                     count = 60;
                 } else {
                     notifSendValidate();
-                    ToastUtils.showShort("短信下发成功");
+                    showToast("短信下发成功");
                     btnSendCode.setClickable(false);
                 }
             }

@@ -56,6 +56,7 @@ public class MainActivity extends BaseMvpActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initSavedInstanceState(savedInstanceState);
+
     }
 
     private void initSavedInstanceState(Bundle savedInstanceState) {
