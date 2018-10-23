@@ -97,10 +97,13 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llSwitch"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginTop="10dp"
         android:background="@color/colorWhite"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center_vertical"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"

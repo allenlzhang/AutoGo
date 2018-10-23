@@ -78,10 +78,11 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
      * 倒计时
      */
     private int count = 60;
+    private boolean isFromlogin;
 
-//    private Timer timer = new Timer();
-//
-//    private TimerTask task;
+    //    private Timer timer = new Timer();
+    //
+    //    private TimerTask task;
 
 
     @Override
@@ -93,6 +94,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
     @Override
     public void init() {
         type = getIntent().getIntExtra("changePwd", 1);
+        isFromlogin = getIntent().getBooleanExtra("Login", false);
         loadTypeView(type);
 
         //密码输入屏蔽 中文其他不满足需求的字符
@@ -106,28 +108,28 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
         editManagementNewPwdAgain.addTextChangedListener(new MyTextWatcher());
     }
 
-//    @SuppressLint("HandlerLeak")
-//    Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            if (msg.what == 111) {
-//                count--;
-//                if (count > 0) {
-//                    btnManagementCode.setText(count + "秒后重发");
-//                } else {
-//                    if (timer != null) {
-//                        if (task != null) {
-//                            task.cancel();
-//                        }
-//                    }
-//                    btnManagementCode.setEnabled(true);
-//                    btnManagementCode.setText("重发验证码");
-//                }
-//            }
-//            super.handleMessage(msg);
-//
-//        }
-//    };
+    //    @SuppressLint("HandlerLeak")
+    //    Handler mHandler = new Handler() {
+    //        @Override
+    //        public void handleMessage(Message msg) {
+    //            if (msg.what == 111) {
+    //                count--;
+    //                if (count > 0) {
+    //                    btnManagementCode.setText(count + "秒后重发");
+    //                } else {
+    //                    if (timer != null) {
+    //                        if (task != null) {
+    //                            task.cancel();
+    //                        }
+    //                    }
+    //                    btnManagementCode.setEnabled(true);
+    //                    btnManagementCode.setText("重发验证码");
+    //                }
+    //            }
+    //            super.handleMessage(msg);
+    //
+    //        }
+    //    };
 
     private void passwdToggle(boolean selected, EditText editText, ImageView imageView) {
 
@@ -173,18 +175,23 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
     @SuppressLint("CheckResult")
     private void sendCode() {
         phone = editManagementPhone.getText().toString().trim();
-//        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-//        if (!TextUtils.equals(phone, user.mobile)) {
-//            showToast("手机号码不正确");
-//            return;
-//        }
-        if (TextUtils.isEmpty(phone)) {
-            showToast("请输入手机号码");
-            LogUtils.e(phone);
-            return;
+        if (!isFromlogin) {
+            UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+            if (!TextUtils.equals(phone, user.mobile)) {
+                showToast("请输入当前登录手机");
+                return;
+            }
+        } else {
+            if (TextUtils.isEmpty(phone)) {
+                showToast("请输入手机号码");
+                LogUtils.e(phone);
+                return;
+            }
         }
-//        btnManagementCode.setEnabled(false);
-//        btnManagementCode.setText(count + "秒后重发");
+
+
+        //        btnManagementCode.setEnabled(false);
+        //        btnManagementCode.setText(count + "秒后重发");
         Map<String, String> param = new HashMap<>();
         param.put("mobile", phone);
         Observable<BaseError> observable = ObservableHelper.sendValidate(phone, param, 2);
@@ -211,69 +218,71 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
         });
 
 
-//        task = new TimerTask() {
-//            @Override
-//            public void run() {
-//                Message msg = new Message();
-//                msg.what = 111;
-//                mHandler.sendMessage(msg);
-//            }
-//        };
-//        timer.schedule(task, 1000, 1000);
-//        //        final String phone = editManagementPhone.getText().toString().trim();
-//        Map<String, String> params = new HashMap<>();
-//        params.put("mobile", phone);
-//
-//        ClientFactory.def(UserService.class).getSmsToken(params)
-//                .flatMap(new Function<SmsToken, ObservableSource<BaseError>>() {
-//                    @Override
-//                    public ObservableSource<BaseError> apply(SmsToken smsToken) throws Exception {
-//                        if (smsToken.msg != null) {
-//                            showToast(smsToken.msg.msg);
-//                            return null;
-//                        } else {
-//                            String token = smsToken.token;
-//                            Map<String, Object> map = new HashMap();
-//                            map.put("mobile", phone);
-//                            map.put("type", 2);
-//                            map.put("smsToken", token);
-//                            return ClientFactory.def(UserService.class).SendSmsCode(map);
-//                        }
-//                    }
-//                })
-//                .subscribeOn(Schedulers.newThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<BaseError>() {
-//                    @Override
-//                    public void accept(BaseError s) throws Exception {
-//                        if (s.msg != null) {
-//                            if (timer != null) {
-//                                if (task != null) {
-//                                    task.cancel();
-//                                }
-//                            }
-//                            btnManagementCode.setEnabled(true);
-//                            btnManagementCode.setText("重发验证码");
-//                            showToast(s.msg);
-//                        }
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        if (timer != null) {
-//                            if (task != null) {
-//                                task.cancel();
-//                            }
-//                        }
-//                        //                        showToast("请检查网络");
-//                        btnManagementCode.setEnabled(true);
-//                        btnManagementCode.setText("重发验证码");
-//                        LogUtils.e(throwable.getMessage());
-//                    }
-//                });
+        //        task = new TimerTask() {
+        //            @Override
+        //            public void run() {
+        //                Message msg = new Message();
+        //                msg.what = 111;
+        //                mHandler.sendMessage(msg);
+        //            }
+        //        };
+        //        timer.schedule(task, 1000, 1000);
+        //        //        final String phone = editManagementPhone.getText().toString().trim();
+        //        Map<String, String> params = new HashMap<>();
+        //        params.put("mobile", phone);
+        //
+        //        ClientFactory.def(UserService.class).getSmsToken(params)
+        //                .flatMap(new Function<SmsToken, ObservableSource<BaseError>>() {
+        //                    @Override
+        //                    public ObservableSource<BaseError> apply(SmsToken smsToken) throws Exception {
+        //                        if (smsToken.msg != null) {
+        //                            showToast(smsToken.msg.msg);
+        //                            return null;
+        //                        } else {
+        //                            String token = smsToken.token;
+        //                            Map<String, Object> map = new HashMap();
+        //                            map.put("mobile", phone);
+        //                            map.put("type", 2);
+        //                            map.put("smsToken", token);
+        //                            return ClientFactory.def(UserService.class).SendSmsCode(map);
+        //                        }
+        //                    }
+        //                })
+        //                .subscribeOn(Schedulers.newThread())
+        //                .observeOn(AndroidSchedulers.mainThread())
+        //                .subscribe(new Consumer<BaseError>() {
+        //                    @Override
+        //                    public void accept(BaseError s) throws Exception {
+        //                        if (s.msg != null) {
+        //                            if (timer != null) {
+        //                                if (task != null) {
+        //                                    task.cancel();
+        //                                }
+        //                            }
+        //                            btnManagementCode.setEnabled(true);
+        //                            btnManagementCode.setText("重发验证码");
+        //                            showToast(s.msg);
+        //                        }
+        //                    }
+        //                }, new Consumer<Throwable>() {
+        //                    @Override
+        //                    public void accept(Throwable throwable) throws Exception {
+        //                        if (timer != null) {
+        //                            if (task != null) {
+        //                                task.cancel();
+        //                            }
+        //                        }
+        //                        //                        showToast("请检查网络");
+        //                        btnManagementCode.setEnabled(true);
+        //                        btnManagementCode.setText("重发验证码");
+        //                        LogUtils.e(throwable.getMessage());
+        //                    }
+        //                });
 
     }
+
     Disposable disposable;
+
     private void notifSendValidate() {
         disposable = Observable.interval(1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.newThread())
@@ -293,6 +302,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                     }
                 });
     }
+
     private void doPwdConfirm() {
         String phone = editManagementPhone.getText().toString().trim();
         String code = editManagementCode.getText().toString().trim();
@@ -321,11 +331,25 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                 doRememberPwdConfirm(oldPwd, newPwd);
                 break;
             case LoginPwdManagementActivity.FORGET:
-                UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-                if (TextUtils.isEmpty(phone) || !phone.equals(user.mobile)) {
-                    showToast("手机号码不正确");
-                    break;
+//                UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+
+                if (!isFromlogin) {
+                    UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+                    if (!TextUtils.equals(phone, user.mobile)) {
+                        showToast("请输入当前登录手机");
+                        return;
+                    }
+                } else {
+                    if (TextUtils.isEmpty(phone)) {
+                        showToast("请输入手机号码");
+                        LogUtils.e(phone);
+                        return;
+                    }
                 }
+//                if (TextUtils.isEmpty(phone) || !phone.equals(user.mobile)) {
+//                    showToast("手机号码不正确");
+//                    break;
+//                }
                 if (TextUtils.isEmpty(code)) {
                     showToast("验证码为空");
                     break;

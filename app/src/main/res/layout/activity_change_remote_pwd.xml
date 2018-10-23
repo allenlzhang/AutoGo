@@ -10,7 +10,7 @@
         style="@style/baseEditStyle"
         android:layout_marginTop="10dp"
         android:hint="@string/management_edit_phone_num"
-        android:inputType="phone"
+        android:inputType="number"
         android:maxLength="11"
         tools:ignore="TextFields"/>
 
@@ -18,8 +18,7 @@
         android:id="@+id/rl_management_remote_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        >
+        android:layout_marginTop="10dp">
 
         <EditText
             android:id="@+id/edit_management_remote_code"
