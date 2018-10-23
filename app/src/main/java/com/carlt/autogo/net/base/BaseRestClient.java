@@ -13,6 +13,7 @@ import com.carlt.autogo.global.GlobalUrl;
 import com.carlt.autogo.net.base.myretrofit.MyGsonConverterFactory;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.ActivityControl;
+import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.LoginActivity;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 

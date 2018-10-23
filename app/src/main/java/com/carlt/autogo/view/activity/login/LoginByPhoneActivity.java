@@ -39,8 +39,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class LoginByPhoneActivity extends BaseMvpActivity {
 
-    @BindView(R.id.app_name)
-    TextView appName;
     @BindView(R.id.user_phone)
     EditText userPhone;
     @BindView(R.id.user_pwd)

@@ -15,36 +15,45 @@
 
         <EditText
             android:id="@+id/bind_user_phone"
-            style="@style/EdCommonLoginAndRegister"
+            style="@style/baseEditStyle"
             android:hint="请输入手机号码"
+            android:layout_height="44dp"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
 
             />
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/bind_phone_headl2"
         style="@style/BgCommonLoginAndRegister"
-        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/bind_phone_headl1"
         app:layout_constraintVertical_bias="0.05">
 
         <EditText
             android:id="@+id/bind_user_code"
-            style="@style/EdCommonLoginAndRegister"
+            style="@style/baseEditStyle"
+            android:layout_width="match_parent"
             android:hint="请输入验证码"
-
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_centerVertical="true"
             />
 
         <Button
             android:id="@+id/send_code"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            style="@style/BtnSendCodeBg"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
             android:gravity="center"
             android:text="发送验证码"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
 
             />
-    </LinearLayout>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btn_register_commit"

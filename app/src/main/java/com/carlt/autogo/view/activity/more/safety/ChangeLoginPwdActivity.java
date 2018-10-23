@@ -23,6 +23,7 @@ import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.MyInputFilter;
+import com.carlt.autogo.utils.MyTextWatcher;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.LoginActivity;
 
@@ -99,6 +100,10 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
         editManagementNewPwd.setFilters(new InputFilter[]{new MyInputFilter()});
         editManagementNewPwdAgain.setFilters(new InputFilter[]{new MyInputFilter()});
 
+
+        editManagementOldPwd.addTextChangedListener(new MyTextWatcher());
+        editManagementNewPwd.addTextChangedListener(new MyTextWatcher());
+        editManagementNewPwdAgain.addTextChangedListener(new MyTextWatcher());
     }
 
 //    @SuppressLint("HandlerLeak")

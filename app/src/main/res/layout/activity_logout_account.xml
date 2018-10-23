@@ -16,12 +16,17 @@
 
         <EditText
             android:id="@+id/etLogoutPhone"
-            style="@style/EdCommonLoginAndRegister"
+            style="@style/baseEditStyle"
+            android:layout_height="44dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:inputType="number"
+            android:maxLength="11"
             android:hint="请输入手机号码" />
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/head2"
         style="@style/BgCommonLoginAndRegister"
         android:orientation="horizontal"
@@ -30,20 +35,28 @@
 
         <EditText
             android:id="@+id/etLogoutCode"
-            style="@style/EdCommonLoginAndRegister"
+            style="@style/baseEditStyle"
+            android:layout_height="44dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_centerVertical="true"
             android:hint="请输入验证码"
+            android:inputType="number"
+            android:maxLength="6"
 
             />
 
         <Button
             android:id="@+id/btnSendCode"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="发送验证码"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
 
             />
-    </LinearLayout>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btnLogoutNext"

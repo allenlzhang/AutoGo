@@ -1,10 +1,13 @@
 package com.carlt.autogo.view.activity;
 
 import android.annotation.SuppressLint;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -28,6 +31,7 @@ import com.carlt.autogo.presenter.register.RegisterPresenter;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.MyInputFilter;
+import com.carlt.autogo.utils.MyTextWatcher;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -87,6 +91,9 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
         setTitleText("注册");
         edRegisterPwd.setFilters(new InputFilter[]{new MyInputFilter()});
         edRegisterPwdD.setFilters(new InputFilter[]{new MyInputFilter()});
+        edRegisterPwd.addTextChangedListener(new MyTextWatcher());
+        edRegisterPwdD.addTextChangedListener(new MyTextWatcher());
+
     }
 
     @Override

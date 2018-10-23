@@ -60,7 +60,7 @@
             android:layout_marginTop="7dp"
             android:text="asddasdasdasas"
             />
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/ll_unfreeze_pwd"
             style="@style/BgCommonLoginAndRegister"
             android:orientation="horizontal"
@@ -70,13 +70,15 @@
 
             <EditText
                 android:id="@+id/ed_unfreeze_pwd"
-                style="@style/EdCommonLoginAndRegister"
+                style="@style/baseEditStyle"
                 android:hint="请输入登录密码"
                 android:inputType="textPassword"
                 android:maxLength="32"
                 android:selectAllOnFocus="true"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:layout_marginRight="0dp"
+                android:layout_marginLeft="0dp"
                 android:paddingLeft="15dp"
                 />
 
@@ -87,9 +89,11 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dip"
                 android:src="@mipmap/ic_login_pwd_hide"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
                 android:tag="off"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
         <Button

@@ -134,11 +134,11 @@
 
         <ImageView
             android:id="@+id/passwd_toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dip"
+            android:layout_marginRight="10dp"
             android:src="@mipmap/ic_login_pwd_hide"
             android:tag="off"/>
 

@@ -17,17 +17,6 @@
         app:layout_constraintVertical_bias="0"
         />
 
-    <TextView
-        android:id="@+id/app_name"
-        style="@style/ConstraintLayoutCommon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="应用名称"
-        android:textSize="22dp"
-        app:layout_constraintTop_toBottomOf="@+id/ic_car"
-        app:layout_constraintVertical_bias="0.03"
-        />
-
 
     <RelativeLayout
         android:id="@+id/ll_phone"
@@ -37,8 +26,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/app_name"
-        app:layout_constraintVertical_bias="0.02"
+        app:layout_constraintTop_toBottomOf="@+id/ic_car"
+        app:layout_constraintVertical_bias="0.12"
         >
 
         <ImageView
@@ -93,7 +82,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:contentDescription="@string/app_name"
-            android:src="@mipmap/ic_login_pwd"/>
+            android:src="@mipmap/icon_email"/>
 
         <EditText
             android:id="@+id/user_pwd"

@@ -79,6 +79,7 @@ public class ObservableHelper {
 
                             token.put("token", User.token);;
                             SharepUtil.put(GlobalKey.USER_TOKEN, User.token);
+                            SharepUtil.putInt(GlobalKey.LOGINTYPE, (Integer) params.get("loginType"));
 
                             return ObservableHelper.getUserInfoByToken(token, (int) params.get("loginType"), (String) params.get("pwdReally"));
                         }

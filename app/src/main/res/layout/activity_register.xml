@@ -21,7 +21,8 @@
 
     <RelativeLayout
         android:id="@+id/headl2"
-        style="@style/BgCommonLoginAndRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/regist_user_phone"
         android:layout_marginTop="10dp"
         app:layout_constraintVertical_bias="0">
@@ -33,8 +34,6 @@
             android:inputType="number"
             android:maxLength="6"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
             android:hint="请输入验证码"
             tools:ignore="TextFields"
 
@@ -42,8 +41,9 @@
 
         <Button
             android:id="@+id/send_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/BtnSendCodeBg"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
             android:gravity="center"
             android:text="发送验证码"
             android:layout_alignParentRight="true"
@@ -55,9 +55,8 @@
 
     <RelativeLayout
         android:id="@+id/head"
-        style="@style/BgCommonLoginAndRegister"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/headl2"
         android:layout_marginTop="10dp"
         app:layout_constraintVertical_bias="0"
@@ -73,17 +72,15 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
             tools:ignore="TextFields"
             />
 
         <ImageView
             android:id="@+id/img_passwd_toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="10dip"
+            android:layout_marginRight="22dp"
             android:src="@mipmap/ic_login_pwd_hide"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
@@ -94,8 +91,8 @@
 
     <RelativeLayout
         android:id="@+id/head2"
-        style="@style/BgCommonLoginAndRegister"
-        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/head"
         android:layout_marginTop="10dp"
         app:layout_constraintVertical_bias="0"
@@ -111,17 +108,15 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
             tools:ignore="TextFields"
             />
 
         <ImageView
             android:id="@+id/img_passwd_toggle_d"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="10dip"
+            android:layout_marginRight="22dp"
             android:src="@mipmap/ic_login_pwd_hide"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
@@ -136,8 +131,7 @@
         app:layout_constraintStart_toStartOf="@+id/head2"
         app:layout_constraintTop_toBottomOf="@+id/head2"
         android:layout_marginTop="10dp"
-        app:layout_constraintVertical_bias="0"
- >
+        app:layout_constraintVertical_bias="0">
 
         <CheckBox
             android:id="@+id/cb_law"
@@ -150,6 +144,7 @@
             android:checked="true"
 
             />
+
         <TextView
             android:id="@+id/tv1"
             android:layout_width="wrap_content"
@@ -158,6 +153,7 @@
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@+id/cb_law"
             android:text="已经阅读并同意" />
+
         <TextView
             android:id="@+id/tv_law"
             android:layout_width="wrap_content"
