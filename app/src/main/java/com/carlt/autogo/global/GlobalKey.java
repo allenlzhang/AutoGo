@@ -23,7 +23,7 @@ public class GlobalKey {
 
     //正则密码验证 (字母 数字 字符 长度6~32)
     public static final String PWD_REGEX       = "^[A-Za-z0-9-+=<>;,./~!@#$%^*\\[.*\\]\\{.*\\}]{6,32}+$";
-    public static final String PWD_REGEX2       = "^[A-Za-z0-9-+=<>;,./~!@#$%^*\\[.*\\]\\{.*\\}]+$";
+    public static final String PWD_REGEX2      = "^[A-Za-z0-9-+=<>;,./~!@#$%^*\\[.*\\]\\{.*\\}]{0,32}+$";
     //昵称匹配(字母 数字 汉字)
     public static final String NICK_NAME_REGEX = "^[\\u4e00-\\u9fa5a-zA-Z0-9]+$";
 
