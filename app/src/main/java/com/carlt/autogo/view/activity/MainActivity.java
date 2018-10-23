@@ -6,9 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
-import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.model.TabEntity;
@@ -49,23 +49,29 @@ public class MainActivity extends BaseMvpActivity {
     public void init() {
         //        setTitleText("主页");
         rlTitle.setVisibility(View.GONE);
-        initBottomTabs();
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initSavedInstanceState(savedInstanceState);
-
+        initBottomTabs();
     }
 
     private void initSavedInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            LogUtils.e("异常关闭----" + savedInstanceState.toString());
+            int currentIndex = savedInstanceState.getInt("currentItem", 0);
+            setIndexFragment(currentIndex);
+        }
 
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        LogUtils.e("异常关闭----" + outState);
         outState.putInt("currentItem", mCurrentItem);
 
     }
@@ -79,29 +85,34 @@ public class MainActivity extends BaseMvpActivity {
         bottomTabs.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                BaseMvpFragment fragment = null;
-                switch (position) {
-                    case 0:
-                        mCurrentItem = 0;
-                        fragment = FragmentFactory.getFragment(0);
-                        ft.replace(R.id.fl_content, fragment);
-                        break;
-                    case 1:
-                        mCurrentItem = 1;
-                        fragment = FragmentFactory.getFragment(1);
-                        ft.replace(R.id.fl_content, fragment);
-                        break;
-                    case 2:
-                        mCurrentItem = 2;
-                        fragment = FragmentFactory.getFragment(2);
-                        ft.replace(R.id.fl_content, fragment);
-                        break;
-                    default:
-                        break;
-                }
-                ft.commitAllowingStateLoss();
+                mCurrentItem = position;
+                setIndexFragment(position);
+                //                FragmentManager fm = getSupportFragmentManager();
+                //                FragmentTransaction ft = fm.beginTransaction();
+                //                BaseMvpFragment fragment = null;
+                //                switch (position) {
+                //                    case 0:
+                //                        mCurrentItem = 0;
+                //                        fragment = FragmentFactory.getFragment(0);
+                //                        ft.replace(R.id.fl_content, fragment);
+                //                        setIndexFragment(0);
+                //                        break;
+                //                    case 1:
+                //                        mCurrentItem = 1;
+                //                        fragment = FragmentFactory.getFragment(1);
+                //                        ft.replace(R.id.fl_content, fragment);
+                //                        setIndexFragment(1);
+                //                break;
+                //                case 2:
+                //                        mCurrentItem = 2;
+                //                        fragment = FragmentFactory.getFragment(2);
+                //                        ft.replace(R.id.fl_content, fragment);
+                //                        setIndexFragment(2);
+                //                        break;
+                //                    default:
+                //                        break;
+                //                }
+                //                ft.commitAllowingStateLoss();
             }
 
             @Override
@@ -110,16 +121,16 @@ public class MainActivity extends BaseMvpActivity {
             }
         });
         bottomTabs.setCurrentTab(0);
-        setDefaultFragment();
+        setIndexFragment(0);
     }
 
     /**
      * 设置默认的fragment
      */
-    private void setDefaultFragment() {
+    private void setIndexFragment(int index) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fl_content, FragmentFactory.getFragment(0));
+        ft.replace(R.id.fl_content, FragmentFactory.getFragment(index));
         ft.commitAllowingStateLoss();
     }
 
