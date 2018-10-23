@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.alipay.sdk.app.AuthTask;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.application.AutoGoApp;
@@ -143,7 +144,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 break;
 
             case R.id.login_wechat:
-                dialog.show();
+            //    dialog.show();
                 otherRegisterPresenter.weChatLogin();
                 doAuthorize(plat, new MyPlatformActionListener(dialog));
                 break;
@@ -230,7 +231,12 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 ToastUtils.setMsgTextSize(13);
                 ToastUtils.showShort("请先在应用商店下载该应用再进行该操作");
 
-            }else {
+            } if (!NetworkUtils.isConnected() && !NetworkUtils.isAvailableByPing()) {
+                ToastUtils.showShort("网络错误，请检查网络");
+
+            }
+
+            else {
                 ToastUtils.showShort("登录失败");
             }
 
@@ -298,7 +304,14 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                             return true;
                         } else {
                             // 其他状态值则为授权失败
-                            ToastUtils.showShort("登录失败");
+
+                            if (!NetworkUtils.isConnected() && !NetworkUtils.isAvailableByPing()) {
+                                ToastUtils.showShort("网络错误，请检查网络");
+
+                            }else {
+                                ToastUtils.showShort("登录失败");
+                            }
+
                             return false;
                         }
                     }
