@@ -55,6 +55,8 @@ public class UnRegisterActivity extends BaseMvpActivity<UnRegisterPresenter> imp
     @Override
     public void init() {
         setTitleText("注销账户");
+        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        etLogoutPhone.setText(user.mobile);
     }
 
     @OnClick({R.id.btnSendCode, R.id.btnLogoutNext})

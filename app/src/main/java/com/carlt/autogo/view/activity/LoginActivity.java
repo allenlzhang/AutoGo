@@ -22,7 +22,6 @@ import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.BaseDialog;
 import com.carlt.autogo.common.dialog.LoginMoreDialog;
-import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
@@ -114,7 +113,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     public void init() {
         setTitleText("登录");
         hideTitle();
-        versionCode.setText("V"+AutoGoApp.VERSION + ".0.0");
+        versionCode.setText("V"+AutoGoApp.VERSION_NAME);
         setBaseBackStyle(getResources().getDrawable(R.drawable.common_close_select));
         AndPermission.with(this)
                 .runtime()
@@ -224,7 +223,9 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                 passwdToggle.setSelected(!passwdToggle.isSelected());
                 break;
             case R.id.forgot_passwd:
-                startActivity(ChangeLoginPwdActivity.class, false);
+                Intent intent = new Intent(this, ChangeLoginPwdActivity.class);
+                intent.putExtra("Login", true);
+                startActivity(intent);
                 break;
 
         }

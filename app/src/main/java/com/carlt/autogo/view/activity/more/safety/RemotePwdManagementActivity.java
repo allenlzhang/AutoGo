@@ -3,7 +3,6 @@ package com.carlt.autogo.view.activity.more.safety;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -94,13 +93,19 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
                 }
             });
         }
-        cbManagementRemoteSwitch.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                checkSetPwd();
-                return false;
-            }
-        });
+        //        cbManagementRemoteSwitch.setOnClickListener(new View.OnClickListener() {
+        //            @Override
+        //            public void onClick(View v) {
+        //                checkSetPwd();
+        //            }
+        //        });
+        //        cbManagementRemoteSwitch.setOnTouchListener(new View.OnTouchListener() {
+        //            @Override
+        //            public boolean onTouch(View v, MotionEvent event) {
+        //                checkSetPwd();
+        //                return true;
+        //            }
+        //        });
 
     }
 
@@ -121,7 +126,7 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
         }
     }
 
-    @OnClick({R.id.ll_management_set_remote_pwd, R.id.ll_management_remember_remote_old_pwd, R.id.ll_management_forget_remote_old_pwd, R.id.ll_management_without_encryption_date})
+    @OnClick({R.id.llSwitch, R.id.ll_management_set_remote_pwd, R.id.ll_management_remember_remote_old_pwd, R.id.ll_management_forget_remote_old_pwd, R.id.ll_management_without_encryption_date})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_management_set_remote_pwd:
@@ -142,9 +147,12 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
                     return;
                 if (!cbManagementRemoteSwitch.isChecked()) {
                     showToast("请先打开远程控制免密");
-                     return;
+                    return;
                 }
                 mDialog.show();
+                break;
+            case R.id.llSwitch:
+                checkSetPwd();
                 break;
         }
     }
@@ -166,9 +174,11 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
                 }
             });
             cbManagementRemoteSwitch.setEnabled(false);
+            cbManagementRemoteSwitch.setClickable(false);
             return true;
         } else {
             cbManagementRemoteSwitch.setEnabled(true);
+            cbManagementRemoteSwitch.setClickable(true);
             return false;
         }
     }
