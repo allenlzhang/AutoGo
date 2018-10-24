@@ -64,6 +64,7 @@ public class MainActivity extends BaseMvpActivity {
             LogUtils.e("异常关闭----" + savedInstanceState.toString());
             int currentIndex = savedInstanceState.getInt("currentItem", 0);
             setIndexFragment(currentIndex);
+            bottomTabs.setCurrentTab(currentIndex);
         }
 
     }
@@ -74,6 +75,14 @@ public class MainActivity extends BaseMvpActivity {
         LogUtils.e("异常关闭----" + outState);
         outState.putInt("currentItem", mCurrentItem);
 
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        int currentIndex = savedInstanceState.getInt("currentItem", 0);
+        setIndexFragment(currentIndex);
+        bottomTabs.setCurrentTab(currentIndex);
     }
 
     private void initBottomTabs() {
