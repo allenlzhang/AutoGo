@@ -124,7 +124,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                     @Override
                     public void onAction(List<String> data) {
                         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                        AutoGoApp.NIMEI = telephonyManager.getDeviceId();
+                        AutoGoApp.IMEI = telephonyManager.getDeviceId();
                         LogUtils.e(data.toString());
                     }
                 })

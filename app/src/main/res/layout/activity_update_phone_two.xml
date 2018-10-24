@@ -11,6 +11,8 @@
         style="@style/baseEditStyle"
         android:layout_marginTop="10dp"
         android:hint="请输入新手机号"
+        android:inputType="number"
+        android:maxLength="11"
         tools:ignore="TextFields"/>
 
     <RelativeLayout
@@ -22,6 +24,8 @@
             android:id="@+id/etCode"
             style="@style/baseEditStyle"
             android:hint="@string/management_edit_verification_code"
+            android:inputType="number"
+            android:maxLength="6"
             tools:ignore="TextFields"/>
 
         <Button

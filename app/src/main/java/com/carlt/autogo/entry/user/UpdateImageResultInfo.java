@@ -19,6 +19,7 @@ public class UpdateImageResultInfo {
     public MessageBean message;
     public int     status;
     public List<?> data;
+    public BaseError err;
 
     @Override
     public String toString() {

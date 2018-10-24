@@ -36,4 +36,7 @@ public class GlobalKey {
     //注册类型
     public static final int RegStateByPWd   = 1;
     public static final int RegStateByOther = 2;
+
+    //账号token 被踢 error key
+    public static final int TOKEN_OUT = 2066;
 }

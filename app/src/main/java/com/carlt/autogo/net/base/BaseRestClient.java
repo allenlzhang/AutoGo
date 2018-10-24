@@ -3,12 +3,14 @@ package com.carlt.autogo.net.base;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.provider.Settings;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.entry.user.BaseError;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.global.GlobalUrl;
 import com.carlt.autogo.net.base.myretrofit.MyGsonConverterFactory;
 import com.carlt.autogo.presenter.ObservableHelper;
@@ -78,11 +80,12 @@ public abstract class BaseRestClient implements Iservice {
                                 @Override
                                 public boolean test(Object o) throws Exception {
 
+                                    LogUtils.e(o+ "==========================================");
                                     if(o instanceof BaseError){
                                         BaseError error = (BaseError) o;
                                         if(error != null && error.code != 0){
 
-                                            if(error.code == 2066){
+                                            if(error.code == GlobalKey.TOKEN_OUT){
                                                 ActivityControl.removeAll();
                                                 Activity activity =   ActivityControl.mActivityList.get(0);
                                                 Intent intent = new Intent(activity, LoginActivity.class);
@@ -124,7 +127,7 @@ public abstract class BaseRestClient implements Iservice {
             BaseError baseError = (BaseError) field.get(o);
 
             if(baseError != null && baseError.code != 0 ){
-                if(baseError.code == 2066 ){
+                if(baseError.code == GlobalKey.TOKEN_OUT ){
                     ActivityControl.removeAll();
                   Activity activity =  ActivityControl.mActivityList.get(0);
                   Intent intent = new Intent(activity, LoginActivity.class);

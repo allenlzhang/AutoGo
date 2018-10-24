@@ -59,6 +59,7 @@ public class UpdatePhoneTwoActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("修改手机号码");
+
     }
 
     @OnClick({R.id.btnSendCode, R.id.btnNext})

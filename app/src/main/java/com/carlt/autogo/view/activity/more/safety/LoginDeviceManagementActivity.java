@@ -62,6 +62,7 @@ public class LoginDeviceManagementActivity extends BaseMvpActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        dialog.show();
                         LogUtils.e("----" + throwable);
                     }
                 });

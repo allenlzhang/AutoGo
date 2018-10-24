@@ -17,6 +17,7 @@ public class LoginLogInfo {
 
     public int total;
     public List<LogsBean> logs;
+    public BaseError err;
 
     @Override
     public String toString() {

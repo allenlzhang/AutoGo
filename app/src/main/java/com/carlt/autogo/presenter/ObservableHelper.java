@@ -50,6 +50,7 @@ public class ObservableHelper {
         params.put("moveDeviceName", AutoGoApp.MODEL_NAME);
         params.put("loginModel", AutoGoApp.MODEL);
         params.put("loginSoftType", "Android");
+        params.put("moveDeviceid", AutoGoApp.IMEI);
 
       //  判断token 是否过期   false 没有过期   true，token 过期
 //        if(!SharepUtil.getPreferences().getBoolean(GlobalKey.TOKENT_OUTOF_TIME,false)){
