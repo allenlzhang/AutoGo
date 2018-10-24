@@ -71,8 +71,10 @@ public class FaceLoginActivity extends BaseMvpActivity {
             case R.id.forgot_passwd:
                 //                密码登录
                 UserInfo userInfo = SharepUtil.getBeanFromSp("user");
-                userInfo.faceId = 0;
-                SharepUtil.putByBean(GlobalKey.USER_INFO, userInfo);
+                if(userInfo != null){
+                    userInfo.faceId = 0;
+                    SharepUtil.putByBean(GlobalKey.USER_INFO, userInfo);
+                }
                 startActivity(LoginActivity.class);
                 break;
             case R.id.user_regist:
