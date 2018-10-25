@@ -4,21 +4,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
+import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
+import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
-import com.carlt.autogo.view.activity.login.FaceLoginActivity;
+import com.carlt.autogo.view.activity.login.FaceLiveCheckActivity;
 import com.carlt.autogo.view.activity.login.LoginByPhoneActivity;
 import com.carlt.autogo.view.activity.login.OtherActivity;
 
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.functions.Consumer;
 
 public class LoginMoreDialog extends BaseDialog {
 
@@ -35,10 +43,12 @@ public class LoginMoreDialog extends BaseDialog {
     @BindView(R.id.cancle)
     TextView cancle;
     private boolean isFaceLoginActivity;
+    private String  phone;
 
-    public LoginMoreDialog(@NonNull Context context, boolean isFace) {
+    public LoginMoreDialog(@NonNull Context context, boolean isFace, String phone) {
         super(context);
         this.isFaceLoginActivity = isFace;
+        this.phone = phone;
     }
 
     @Override
@@ -99,9 +109,37 @@ public class LoginMoreDialog extends BaseDialog {
                 break;
             case R.id.login_by_face:
                 //                人脸登录
-                Intent intent = new Intent(context, FaceLoginActivity.class);
-                //                intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.FROM_LOGIN_ACTIVITY);
-                context.startActivity(intent);
+                if (TextUtils.isEmpty(phone) || phone.length() < 11) {
+                    ToastUtils.showShort("手机号码不正确");
+                    return;
+                }
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("mobile", phone);
+                ClientFactory.def(UserService.class).checkFace(map)
+                        .subscribe(new Consumer<User>() {
+                            @Override
+                            public void accept(User user) throws Exception {
+                                if (user.err == null) {
+                                    if (user.isSet == 1) {
+                                        //没有设置人脸
+                                        ToastUtils.showShort("您尚未进行过人脸设置");
+                                    } else {
+                                        Intent intent = new Intent(context, FaceLiveCheckActivity.class);
+                                        intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.FROM_LOGIN_ACTIVITY);
+                                        intent.putExtra("mobile", phone);
+                                        context.startActivity(intent);
+                                    }
+                                } else {
+                                    ToastUtils.showShort(user.err.msg);
+                                }
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+
+                            }
+                        });
+
                 break;
             case R.id.login_by_normal:
                 //                DialogDismiss();

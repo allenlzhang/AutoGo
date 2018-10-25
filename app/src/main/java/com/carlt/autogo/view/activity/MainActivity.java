@@ -72,8 +72,8 @@ public class MainActivity extends BaseMvpActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        LogUtils.e("异常关闭----" + outState);
         outState.putInt("currentItem", mCurrentItem);
+        LogUtils.e("异常关闭----" + outState);
 
     }
 

@@ -117,4 +117,7 @@ public interface UserService {
     //验证旧手机
     @POST("User/AuthMobile")
     Observable<BaseError>authMobile(@Body Map<String, Object> params);
+    //检测是否设置人脸
+    @POST("User/CheckFace")
+    Observable<User>checkFace (@Body Map<String, Object> params);
 }

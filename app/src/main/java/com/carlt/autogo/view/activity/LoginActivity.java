@@ -182,8 +182,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     public void OnClick(View view) {
         switch (view.getId()) {
             case R.id.btn_more:
-
-                BaseDialog baseDialog = new LoginMoreDialog(this, false);
+                String phone = userPhone.getText().toString().trim();
+                BaseDialog baseDialog = new LoginMoreDialog(this, false,phone);
                 baseDialog.show();
                 break;
             case R.id.user_regist:
