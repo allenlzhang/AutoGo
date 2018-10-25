@@ -12,6 +12,7 @@ public class ClientFactory {
 
     public static void defChangeUrl(int id) {
         BaseRestClient.getDefual().changeUri(id);
+        BaseRestClient.getUpdateImage().changeUri(id);
     }
 
 }

@@ -13,7 +13,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class UpdateImageFileClient extends BaseRestClient {
 
-   static   String URL_NEXT [] = { GlobalUrl.UPDATE_IMG_TEST_URL ,GlobalUrl.UPDATE_IMG_FORMAL_URL ,GlobalUrl.U1_DORIDE} ;
+    static String URL_NEXT[] = {GlobalUrl.UPDATE_IMG_TEST_URL, GlobalUrl.UPDATE_IMG_FORMAL_URL};
+
     private UpdateImageFileClient() {
         super();
     }
@@ -24,11 +25,11 @@ public class UpdateImageFileClient extends BaseRestClient {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-               LogUtils.e(message);
+                LogUtils.e(message);
             }
         });
-        loggingInterceptor.setLevel(BuildConfig.DEBUG_MODE? HttpLoggingInterceptor.Level.HEADERS : HttpLoggingInterceptor.Level.NONE);
-         okBuilder.addInterceptor(loggingInterceptor);
+        loggingInterceptor.setLevel(BuildConfig.DEBUG_MODE ? HttpLoggingInterceptor.Level.HEADERS : HttpLoggingInterceptor.Level.NONE);
+        okBuilder.addInterceptor(loggingInterceptor);
 
         okBuilder.addInterceptor(new Interceptor() {
             @Override
@@ -36,33 +37,35 @@ public class UpdateImageFileClient extends BaseRestClient {
                 Request original = chain.request();
                 Request request = original.newBuilder()
                         .header("Content-Type", "application/json")
-//                        .header("Carlt-Access-Id", "19877415356991399877")
+                        //                        .header("Carlt-Access-Id", "19877415356991399877")
                         .method(original.method(), original.body())
                         .build();
                 return chain.proceed(request);
             }
         });
-         builder.baseUrl(GlobalUrl.UPDATE_IMG_TEST_URL)
-                 .client(okBuilder.build());
-         retrofit = builder.build();
+        builder.baseUrl(GlobalUrl.UPDATE_IMG_TEST_URL)
+                .client(okBuilder.build());
+        retrofit = builder.build();
     }
 
     @Override
     public void changeUri(int id) {
-        if ( id > 0 && id < URL_NEXT.length ){
-            retrofit = null ;
-            builder.baseUrl(URL_NEXT [ id ]);
+        LogUtils.e("====" + id);
+        if (id > 0 && id < URL_NEXT.length) {
+            retrofit = null;
+            builder.baseUrl(URL_NEXT[id]);
             retrofit = builder.build();
         }
 
     }
 
-    private static class SingletonHolder{
+    private static class SingletonHolder {
         private static UpdateImageFileClient instance = new UpdateImageFileClient();
 
     }
-    protected  static UpdateImageFileClient getInstace(){
-      return   SingletonHolder.instance;
+
+    protected static UpdateImageFileClient getInstace() {
+        return SingletonHolder.instance;
     }
 
 
