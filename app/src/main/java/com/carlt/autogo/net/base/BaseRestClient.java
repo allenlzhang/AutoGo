@@ -3,7 +3,6 @@ package com.carlt.autogo.net.base;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.provider.Settings;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
@@ -15,7 +14,6 @@ import com.carlt.autogo.global.GlobalUrl;
 import com.carlt.autogo.net.base.myretrofit.MyGsonConverterFactory;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.ActivityControl;
-import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.LoginActivity;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
@@ -24,6 +22,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -43,7 +42,7 @@ public abstract class BaseRestClient implements Iservice {
         //请求 超时 时间为5秒
         okBuilder.connectTimeout(15, TimeUnit.SECONDS);
         okBuilder.readTimeout(15, TimeUnit.SECONDS);
-        builder.baseUrl(GlobalUrl.BASE_URL)
+        builder.baseUrl(GlobalUrl.TEST_BASE_URL)
                 .addConverterFactory(MyGsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
         creat();

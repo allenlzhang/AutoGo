@@ -87,8 +87,9 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     @BindView(R.id.btn_changeUrl)
     Button btnChangeUrl;
 
-    String[] tag = {"测试服", "正式服", "预发布"};
-    int next;
+    //    String[] tag = {"测试服", "正式服", "预发布"};
+    String[] tag  = {"测试服", "预发布"};
+    int      next = 1;
 
     Disposable disposable;
     private String savePwd;
@@ -113,7 +114,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     public void init() {
         setTitleText("登录");
         hideTitle();
-        versionCode.setText("V"+AutoGoApp.VERSION_NAME);
+        versionCode.setText("V" + AutoGoApp.VERSION_NAME);
         setBaseBackStyle(getResources().getDrawable(R.drawable.common_close_select));
         AndPermission.with(this)
                 .runtime()
@@ -153,7 +154,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
                     }
                 }).start();
-
+        btnChangeUrl.setText(tag[next]);
+        ClientFactory.defChangeUrl(next);
     }
 
     @Override
