@@ -231,7 +231,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 ToastUtils.setMsgTextSize(13);
                 ToastUtils.showShort("请先在应用商店下载该应用再进行该操作");
 
-            } if (!NetworkUtils.isConnected() && !NetworkUtils.isAvailableByPing()) {
+            }  else if (!NetworkUtils.isConnected() && !NetworkUtils.isAvailableByPing()) {
                 ToastUtils.showShort("网络错误，请检查网络");
 
             }
