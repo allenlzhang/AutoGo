@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -153,5 +154,27 @@ public class MainActivity extends BaseMvpActivity {
             intent.putExtra("fromMain", true);
             startActivity(intent);
         }
+    }
+
+
+    private long mExitTime;
+
+    /**
+     * 点击两次返回键退出程序
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if ((System.currentTimeMillis() - mExitTime) > 2000) {
+                showToast("再按一次退出程序");
+                mExitTime = System.currentTimeMillis();
+            } else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

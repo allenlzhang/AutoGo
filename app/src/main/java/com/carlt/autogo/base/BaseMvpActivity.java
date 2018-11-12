@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,7 +24,6 @@ import com.carlt.autogo.basemvp.PresenterDispatch;
 import com.carlt.autogo.basemvp.PresenterProviders;
 import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.layouthook.LayoutHook;
-import com.carlt.autogo.layouthook.MyPhoneLayoutInflater;
 import com.carlt.autogo.utils.ActivityControl;
 
 import java.util.ArrayList;

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
-import com.baidu.idl.face.platform.utils.Base64Utils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.base.BaseMvpActivity;
@@ -16,7 +15,6 @@ import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
-import com.carlt.autogo.utils.TokenUtil;
 import com.carlt.autogo.view.activity.user.UserBindPhoneActivity;
 
 import java.util.HashMap;
@@ -43,7 +41,6 @@ public class ObservableHelper {
         return commonLogin(params, null);
     }
 
-    ;
 
     public static Observable<String> commonLogin(final Map<String, Object> params, final Context context) {
         params.put("version", AutoGoApp.VERSION);
@@ -78,7 +75,7 @@ public class ObservableHelper {
                         } else {
                             Map<String, String> token = new HashMap<String, String>();
 
-                            token.put("token", User.token);;
+                            token.put("token", User.token);
                             SharepUtil.put(GlobalKey.USER_TOKEN, User.token);
                             SharepUtil.putInt(GlobalKey.LOGINTYPE, (Integer) params.get("loginType"));
 
@@ -154,7 +151,7 @@ public class ObservableHelper {
                                 userInfo.loginState = loginState;
                                 userInfo.password = pwd;
                             }
-                            SharepUtil.<UserInfo>putByBean("user", userInfo);
+                            SharepUtil.<UserInfo>putByBean(GlobalKey.USER_INFO, userInfo);
                             GlobalKey.FACE_LOGIN_SWITCH = userInfo.mobile;
                             GlobalKey.Remote_Switch = userInfo.mobile.concat("Remote_Switch");
                         }

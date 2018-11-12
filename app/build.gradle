@@ -9,6 +9,14 @@ android {
         versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters 'armeabi'
+        }
+//        ndk {
+//
+//            //APP的build.gradle设置支持的SO库架构
+//            abiFilters 'armeabi', 'armeabi-v7a','arm64-v8a' ,'x86'
+//        }
     }
     signingConfigs {
         release {
@@ -99,5 +107,6 @@ dependencies {
     //下拉刷新库
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'//没有使用特殊Header，可以不加这行
+    compile 'io.github.dltech21:idcard_ocr:1.1.1'
 
 }

@@ -3,6 +3,7 @@ package com.carlt.autogo.view.activity.user.accept;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -79,9 +80,9 @@ public class UserIdChooseActivity extends BaseMvpActivity {
                 }
                 break;
             case R.id.rl_idcard_accept:
-                showToast("此功能暂未开放");
-                //            Intent intentId = new Intent(this, IdCardAcceptActivity.class);
-                //            startActivity(intentId);
+                //                showToast("此功能暂未开放");
+                Intent intentId = new Intent(this, IdCardAcceptActivity.class);
+                startActivity(intentId);
                 break;
             default:
                 break;

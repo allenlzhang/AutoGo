@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
@@ -28,13 +29,21 @@ import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.PhotoUtils;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.github.dltech21.ocr.IDCardEnum;
+import io.github.dltech21.ocr.IdentityInfo;
+import io.github.dltech21.ocr.OcrCameraActivity;
+import io.github.dltech21.ocr.OcrConfig;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -50,33 +59,43 @@ import okhttp3.RequestBody;
 
 /**
  * @author wsq
- * @time 10:33  2018/9/12/012
- * @describe  上传身份证照片 页面
  */
-public class UploadIdCardPhotoActivity extends BaseMvpActivity {
+public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
 
-    String[] mPermission = {Manifest.permission.CAMERA ,Manifest.permission.READ_EXTERNAL_STORAGE };
-    @BindView(R.id.tv_name)TextView tvName;
-    @BindView(R.id.img_delet_person_photo)ImageView imgDeletPersonPhoto;
-    @BindView(R.id.img_person)ImageView imgPerson;
-    @BindView(R.id.img_person_watermark)ImageView imgPersonWatermark;
-    @BindView(R.id.img_person_c)ImageView imgPersonCamera;
-    @BindView(R.id.img_delet_back_photo)ImageView imgDeletBackPhoto;
-    @BindView(R.id.img_idcard_back_c)ImageView imgIdcardBackCamera;
-    @BindView(R.id.img_idcard_back)ImageView imgIdcardBack;
-    @BindView(R.id.img_back_watermark)ImageView imgBackWatermark;
-    @BindView(R.id.idcard_upload_commit)Button idcardUploadCommit;
-    @BindView(R.id.rl_center)RelativeLayout rlCenter1;
-    @BindView(R.id.rl_center2)RelativeLayout rlCenter2;
+    String[] mPermission = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
+    @BindView(R.id.tv_name)
+    TextView       tvName;
+    @BindView(R.id.img_delet_person_photo)
+    ImageView      imgDeletPersonPhoto;
+    @BindView(R.id.img_person)
+    ImageView      imgPerson;
+    @BindView(R.id.img_person_watermark)
+    ImageView      imgPersonWatermark;
+    //    @BindView(R.id.img_person_c)
+    //    ImageView      imgPersonCamera;
+    @BindView(R.id.img_delet_back_photo)
+    ImageView      imgDeletBackPhoto;
+    //    @BindView(R.id.img_idcard_back_c)
+    //    ImageView      imgIdcardBackCamera;
+    @BindView(R.id.img_idcard_back)
+    ImageView      imgIdcardBack;
+    @BindView(R.id.img_back_watermark)
+    ImageView      imgBackWatermark;
+    @BindView(R.id.idcard_upload_commit)
+    Button         idcardUploadCommit;
+    @BindView(R.id.rl_center)
+    RelativeLayout rlCenter1;
+    @BindView(R.id.rl_center2)
+    RelativeLayout rlCenter2;
 
 
-    private static final int CODE_GALLERY_REQUEST = 0xa0;
-    private static final int CODE_CAMERA_REQUEST = 0xa1;
-    private static final int CODE_RESULT_REQUEST = 0xa2;
-    private File AotugoImage =new File(Environment.getExternalStorageDirectory().getPath()+"/Aotugo/Image");
-    private File fileUri = new File(AotugoImage + "/photo.jpg");
-    private File fileCropUriface = new File(AotugoImage + "/crop_photo_face.jpg");
-    private File fileCropUriBalce = new File(AotugoImage + "/crop_photo_back.jpg");
+    private static final int  CODE_GALLERY_REQUEST = 0xa0;
+    private static final int  CODE_CAMERA_REQUEST  = 0xa1;
+    private static final int  CODE_RESULT_REQUEST  = 0xa2;
+    private              File AotugoImage          = new File(Environment.getExternalStorageDirectory().getPath() + "/Aotugo/Image");
+    private              File fileUri              = new File(AotugoImage + "/photo.jpg");
+    private              File fileCropUriface      = new File(AotugoImage + "/crop_photo_face.jpg");
+    private              File fileCropUriBalce     = new File(AotugoImage + "/crop_photo_back.jpg");
     private Uri imageUri;
     private Uri cropImageUri;
 
@@ -87,11 +106,11 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
 
     DialogIdcardAccept dialogIdcardAccept;
 
-    MultipartBody.Builder MultipartBodyBuilder =   new MultipartBody.Builder().setType(MultipartBody.FORM);
+    MultipartBody.Builder MultipartBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
 
     @Override
     protected int getContentView() {
-        return R.layout.activity_upload_id_card_photo;
+        return R.layout.activity_upload_id_card_photo2;
     }
 
     @Override
@@ -101,7 +120,7 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
         idCardNum = getIntent().getStringExtra("idcard");
         tvName.setText(name + "\t" + idCardNum);
         dialogIdcardAccept = new DialogIdcardAccept(this);
-        if(  !AotugoImage.exists()){
+        if (!AotugoImage.exists()) {
             AotugoImage.mkdirs();
         }
         dialogIdcardAccept.setListner(new DialogIdcardAccept.ItemOnclickListner() {
@@ -111,7 +130,7 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
                 checkPermissions(mPermission, new PremissoinLisniter() {
                     @Override
                     public void createred() {
-                        doCarmera();
+                        //                        doCarmera();
                     }
                 });
             }
@@ -122,14 +141,29 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
                 checkPermissions(mPermission, new PremissoinLisniter() {
                     @Override
                     public void createred() {
-                        doPhoto();
+                        //                        doPhoto();
                     }
                 });
 
             }
         });
+
+        AndPermission.with(this)
+                .runtime()
+                .permission(needPermissions)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+
+                    }
+                })
+                .start();
     }
 
+    protected String[] needPermissions = {
+            Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE, Permission.CAMERA
+
+    };
 
     @Override
     protected void onResume() {
@@ -137,15 +171,15 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     }
 
     //删除从新拍照
-    @OnClick({R.id.img_delet_person_photo ,R.id.img_delet_back_photo })
-    public void deletImage(View view){
-        if(view.getId() == R.id.img_delet_person_photo){
+    @OnClick({R.id.img_delet_person_photo, R.id.img_delet_back_photo})
+    public void deletImage(View view) {
+        if (view.getId() == R.id.img_delet_person_photo) {
             imgPerson.setImageDrawable(getResources().getDrawable(R.mipmap.idcard_person_bg));
             imgPersonWatermark.setVisibility(View.GONE);
             rlCenter1.setVisibility(View.VISIBLE);
             imgDeletPersonPhoto.setVisibility(View.GONE);
 
-        }else {
+        } else {
             imgIdcardBack.setImageDrawable(getResources().getDrawable(R.mipmap.idcard_person_bg));
             imgBackWatermark.setVisibility(View.GONE);
             rlCenter2.setVisibility(View.VISIBLE);
@@ -153,90 +187,112 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
         }
     }
 
+    public static final int Face_Code     = 1001;
+    public static final int National_Code = 1002;
+
     //拍照
-    @OnClick({R.id.img_person_c ,R.id.img_idcard_back_c})
-    public void useCamera(View view){
-
-        if(view.getId() == R.id.img_person_c){
-            carmeraTag = 0;
-        }else {
-            carmeraTag = 1;
-        }
-        if(dialogIdcardAccept != null){
-            dialogIdcardAccept.show();
-        }
-
-    }
+    //    @OnClick({R.id.img_person_c, R.id.img_idcard_back_c})
+    //    public void useCamera(View view) {
+    //
+    //        if (view.getId() == R.id.img_person_c) {
+    //            //            carmeraTag = 0;
+    //            OcrCameraActivity.open(this, IDCardEnum.FaceEmblem, Face_Code);
+    //        } else {
+    //            //            carmeraTag = 1;
+    //            OcrCameraActivity.open(this, IDCardEnum.NationalEmblem, National_Code);
+    //        }
+    //        //        if (dialogIdcardAccept != null) {
+    //        //            dialogIdcardAccept.show();
+    //        //        }
+    //
+    //    }
 
     //提交
     @SuppressLint("CheckResult")
     @OnClick(R.id.idcard_upload_commit)
-    public void commit(){
+    public void commit() {
 
-//        Intent intent =new Intent(UploadIdCardPhotoActivity.this ,IdfCompleteActivity.class);
-//        intent.putExtra("name",tvName.getText().toString());
-//        intent.putExtra("idcard",true);
-//        startActivity(intent);
-
+        //        Intent intent =new Intent(UploadIdCardPhotoActivity.this ,IdfCompleteActivity.class);
+        //        intent.putExtra("name",tvName.getText().toString());
+        //        intent.putExtra("idcard",true);
+        //        startActivity(intent);
+//        localStringBuffer.append("姓名：").append(identityInfo.getName()).append("\n");
+//        localStringBuffer.append("身份号码：").append(identityInfo.getCertid()).append("\n");
+//        localStringBuffer.append("性别：").append(identityInfo.getSex()).append("\n");
+//        localStringBuffer.append("民族：").append(identityInfo.getFork()).append("\n");
+//        localStringBuffer.append("出生：").append(identityInfo.getBirthday()).append("\n");
+//        localStringBuffer.append("住址：").append(identityInfo.getAddress()).append("\n");
+//        localStringBuffer.append("签发机关：").append(identityInfo.getIssue_authority()).append("\n");
+//        localStringBuffer.append("有效期限：").append(identityInfo.getVaild_priod()).append("\n");
+//        localStringBuffer.append(identityInfo.getType() == IDCardEnum.FaceEmblem ? "人像面" : "国徽面").append("\n");
+        if (identityInfo == null) {
+            showToast("请上传身份证");
+            return;
+        }
+        String certid = identityInfo.getCertid();
+        if (!idCardNum.equals(certid)) {
+            showToast("您上传的身份证和您填写的身份证号不一致");
+            return;
+        }
+        String issue_authority = identityInfo.getIssue_authority();
+        
 
     }
 
 
     private void doCarmera() {
         imageUri = Uri.fromFile(fileUri);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //通过FileProvider创建一个content类型的Uri
-            imageUri = FileProvider.getUriForFile(UploadIdCardPhotoActivity.this, "com.carlt.autogo.fileprovider", fileUri);
+            imageUri = FileProvider.getUriForFile(UploadIdCardPhotoActivity2.this, "com.carlt.autogo.fileprovider", fileUri);
         }
-        PhotoUtils.takePicture(UploadIdCardPhotoActivity.this, imageUri, CODE_CAMERA_REQUEST);
+        PhotoUtils.takePicture(UploadIdCardPhotoActivity2.this, imageUri, CODE_CAMERA_REQUEST);
     }
 
-    public void doPhoto(){
-        PhotoUtils.openPic(UploadIdCardPhotoActivity.this, CODE_GALLERY_REQUEST);
+    public void doPhoto() {
+        PhotoUtils.openPic(UploadIdCardPhotoActivity2.this, CODE_GALLERY_REQUEST);
 
     }
+
+    @OnClick({R.id.ivPerson, R.id.ivIDBack})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.ivPerson:
+                OcrCameraActivity.open(this, IDCardEnum.FaceEmblem, Face_Code);
+                //                showToast("正面");
+                break;
+            case R.id.ivIDBack:
+                OcrCameraActivity.open(this, IDCardEnum.NationalEmblem, National_Code);
+                //                showToast("国徽");
+                break;
+        }
+    }
+
+    private IdentityInfo identityInfo;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int output_X = 480, output_Y = 310;
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            identityInfo = (IdentityInfo) data.getSerializableExtra(OcrConfig.OCR_IDENTITYINFO);
             switch (requestCode) {
-                case CODE_CAMERA_REQUEST://拍照完成回调
-                    if(carmeraTag == 0){
-                        cropImageUri = Uri.fromFile(fileCropUriface);
-                    }else {
-                        cropImageUri = Uri.fromFile(fileCropUriBalce);
-                    }
-
-                    PhotoUtils.cropImageUri(this, imageUri, cropImageUri, 1.5, 1, output_X, output_Y, CODE_RESULT_REQUEST);
+                case Face_Code:
+                    String filepath = data.getStringExtra(OcrConfig.OCR_PHOTO_PATH);
+                    imgPerson.setImageBitmap(BitmapFactory.decodeFile(filepath));
                     break;
-                case CODE_GALLERY_REQUEST://访问相册完成回调 ;
-                    if(carmeraTag == 0){
-                        cropImageUri = Uri.fromFile(fileCropUriface);
-                    }else {
-                        cropImageUri = Uri.fromFile(fileCropUriBalce);
-                    }
-                    Uri newUri = Uri.parse(PhotoUtils.getPath(this, data.getData()));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                        newUri = FileProvider.getUriForFile(this, "com.carlt.autogo.fileprovider", new File(newUri.getPath()));
-                    }
-
-                    PhotoUtils.cropImageUri(this, newUri, cropImageUri, 1.5, 1, output_X, output_Y, CODE_RESULT_REQUEST);
+                case National_Code:
+                    String filepath1 = data.getStringExtra(OcrConfig.OCR_PHOTO_PATH);
+                    imgIdcardBack.setImageBitmap(BitmapFactory.decodeFile(filepath1));
                     break;
-                case CODE_RESULT_REQUEST:
-                    Bitmap bitmap = PhotoUtils.getBitmapFromUri(cropImageUri, this);
-                    setPicToView(bitmap);
-                    break;
+                default:
             }
         }
-
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @SuppressLint("CheckResult")
     public void setPicToView(final Bitmap picToView) {
         dialog.show();
-     Disposable disposableImage = Observable.create(new ObservableOnSubscribe<Bitmap>() {
+        Disposable disposableImage = Observable.create(new ObservableOnSubscribe<Bitmap>() {
             @Override
             public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
                 emitter.onNext(picToView);
@@ -261,7 +317,8 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
                     @Override
                     public File apply(Bitmap bitmap) throws Exception {
                         File filePic = saveWaterMarkBitmap(bitmap);
-                        if (filePic == null) return null;
+                        if (filePic == null)
+                            return null;
                         return filePic;
                     }
                 })
@@ -293,13 +350,14 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     }
 
     /**
-     * @param file 要上传的图片文件
+     * @param file
+     *         要上传的图片文件
      * @return 返回请求图片上传接口的回调结果
      */
     private ObservableSource<UpdateImageResultInfo> getUpdateImageResultInfoObservableSource(File file) {
         RequestBody requestBody = MultipartBodyBuilder
                 .addFormDataPart("type", "autogo/face")
-                .addFormDataPart("fileOwner","face")
+                .addFormDataPart("fileOwner", "face")
                 .addFormDataPart("uid", "9999999999")
                 .addFormDataPart("name", "faceImage")
                 .addFormDataPart("faceImage", file.getName(), RequestBody.create(MediaType.parse("image/*"), file))
@@ -310,15 +368,16 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
 
 
     /**
-     * @param bitmap 水印bitmap
+     * @param bitmap
+     *         水印bitmap
      * @return 返回水印图片保存地址
      */
     @Nullable
     private File saveWaterMarkBitmap(Bitmap bitmap) {
         File filePic;
-        if(carmeraTag == 0){
+        if (carmeraTag == 0) {
             filePic = (fileCropUriface);
-        }else {
+        } else {
             filePic = (fileCropUriBalce);
         }
         try {
@@ -335,12 +394,12 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
     }
 
     private void showImg(Bitmap bitmap) {
-        if(carmeraTag == 0){
+        if (carmeraTag == 0) {
             imgPerson.setImageBitmap(bitmap);
             rlCenter1.setVisibility(View.GONE);
             imgDeletPersonPhoto.setVisibility(View.VISIBLE);
         }
-        if(carmeraTag == 1){
+        if (carmeraTag == 1) {
             imgIdcardBack.setImageBitmap(bitmap);
             // imgBackWatermark.setVisibility(View.VISIBLE);
             rlCenter2.setVisibility(View.GONE);
@@ -350,26 +409,26 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
 
     /**
      * @param bitmap
-     * @return
-     *
-     * 利用canvas 叠加两种图片(加水印)
+     * @return 利用canvas 叠加两种图片(加水印)
      */
     @NonNull
     private Bitmap creatWaterMarkBitmap(Bitmap bitmap) {
-        Bitmap firstBitmap = bitmap ;
-        Bitmap  secondBitmap = ( (BitmapDrawable)imgPersonWatermark.getDrawable()).getBitmap();
-        Bitmap b = Bitmap.createBitmap(firstBitmap.getWidth(), firstBitmap.getHeight(),firstBitmap.getConfig());
+        Bitmap firstBitmap = bitmap;
+        Bitmap secondBitmap = ((BitmapDrawable) imgPersonWatermark.getDrawable()).getBitmap();
+        Bitmap b = Bitmap.createBitmap(firstBitmap.getWidth(), firstBitmap.getHeight(), firstBitmap.getConfig());
         Canvas canvas = new Canvas(b);
         float w = b.getWidth();
         float h = b.getHeight();
         LogUtils.e(secondBitmap.getWidth() + "========" + secondBitmap.getHeight());
         Matrix m = new Matrix();
         //确定secondBitmap大小比例
-      //  m.setScale(w / imgPerson.getWidth(), h / imgPerson.getHeight());
-      //  m.setScale(w / secondBitmap.getWidth(), h / secondBitmap.getHeight());
-        canvas.drawBitmap(firstBitmap, 0,0, null);
-        canvas.drawBitmap(secondBitmap, (w-secondBitmap.getWidth())/2,(h-secondBitmap.getHeight())/2, null);
+        //  m.setScale(w / imgPerson.getWidth(), h / imgPerson.getHeight());
+        //  m.setScale(w / secondBitmap.getWidth(), h / secondBitmap.getHeight());
+        canvas.drawBitmap(firstBitmap, 0, 0, null);
+        canvas.drawBitmap(secondBitmap, (w - secondBitmap.getWidth()) / 2, (h - secondBitmap.getHeight()) / 2, null);
         firstBitmap.recycle();
         return b;
     }
+
+
 }

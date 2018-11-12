@@ -16,16 +16,8 @@ import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.view.activity.login.FaceLiveCheckActivity;
 
-import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author wsq
@@ -79,21 +71,21 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
         }
 
 
-        Observable.create(new ObservableOnSubscribe<Integer>() {
-            @Override
-            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                emitter.onNext(1);
-            }
-        })
-                .delay(3, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        beginingAccept();
-                    }
-                });
+//        Observable.create(new ObservableOnSubscribe<Integer>() {
+//            @Override
+//            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+//                emitter.onNext(1);
+//            }
+//        })
+//                .delay(3, TimeUnit.SECONDS)
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<Integer>() {
+//                    @Override
+//                    public void accept(Integer integer) throws Exception {
+//                        beginingAccept();
+//                    }
+//                });
 
     }
 
@@ -129,7 +121,7 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
 
     //人脸识别认证
     @SuppressLint("CheckResult")
-    @OnClick(R.id.btn_accept_face)
+    @OnClick(R.id.btn_idcard_accepte)
     public void commitFaceAccept() {
         //        Observable.create(new ObservableOnSubscribe<Integer>() {
         //            @Override
@@ -150,7 +142,9 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
         //                        startActivity(intent);
         //                    }
         //                });
-        Intent intent = new Intent(this, UploadIdCardPhotoActivity.class);
+        hideName = encrypt(name);
+        hideIdNume = encrypt(idCardNum);
+        Intent intent = new Intent(this, UploadIdCardPhotoActivity2.class);
         intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.FROM_ID_CARDACCEPT_ACTIVITY);
         intent.putExtra("name", hideName);
         intent.putExtra("idcard", hideIdNume);

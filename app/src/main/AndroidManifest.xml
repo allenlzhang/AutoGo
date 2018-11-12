@@ -11,6 +11,26 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <!-- unavailable in API 23 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+    <uses-feature android:name="android.hardware.screen.landscape" />
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="false" />
+
+
     <application
         android:name=".application.AutoGoApp"
         android:allowBackup="true"
@@ -42,6 +62,7 @@
         <activity android:name=".view.activity.user.accept.UserIdChooseActivity"/>
         <activity android:name=".view.activity.user.accept.IdCardAcceptActivity"/>
         <activity android:name=".view.activity.user.accept.UploadIdCardPhotoActivity"/>
+        <activity android:name=".view.activity.user.accept.UploadIdCardPhotoActivity2"/>
         <activity android:name=".view.activity.user.accept.IdfCompleteActivity"/>
         <activity android:name=".view.activity.more.safety.SafetyActivity"/>
         <activity android:name=".view.activity.more.safety.LoginPwdManagementActivity"/>
@@ -50,6 +71,9 @@
         <activity android:name=".view.activity.more.safety.RemotePwdManagementActivity"/>
         <activity android:name=".view.activity.more.safety.LoginDeviceManagementActivity"/>
         <activity android:name=".view.activity.more.safety.UnRegisterActivity"/>
+
+
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"

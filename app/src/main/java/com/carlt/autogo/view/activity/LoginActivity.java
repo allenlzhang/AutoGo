@@ -30,7 +30,6 @@ import com.carlt.autogo.presenter.login.LoginPresenter;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.SharepUtil;
-import com.carlt.autogo.view.activity.login.FaceLoginActivity;
 import com.carlt.autogo.view.activity.more.safety.ChangeLoginPwdActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
@@ -89,7 +88,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     //    String[] tag = {"测试服", "正式服", "预发布"};
     String[] tag  = {"测试服", "预发布"};
-    int      next = 1;
+    int      next = 0;
 
     Disposable disposable;
     private String savePwd;
@@ -162,12 +161,12 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     protected void onResume() {
         super.onResume();
         UserInfo userInfo = SharepUtil.getBeanFromSp("user");
-        boolean faceSwitch = SharepUtil.getPreferences().getBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
+//        boolean faceSwitch = SharepUtil.getPreferences().getBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
 
         if (userInfo != null) {
-            if (userInfo.faceId != 0 && faceSwitch) {
-                startActivity(FaceLoginActivity.class);
-            }
+//            if (userInfo.faceId != 0 && faceSwitch) {
+//                startActivity(FaceLoginActivity.class);
+//            }
             if (userInfo.loginState == GlobalKey.loginStateByPWd) {
                 userPhone.setText(userInfo.mobile);
                 userPWd.setText(userInfo.password);

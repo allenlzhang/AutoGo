@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,6 +43,7 @@ public class UUDialog extends BaseDialog {
 		animator = ObjectAnimator.ofFloat(progressImgAnimate, "rotation", 0f, 359f);
 		animator.setRepeatCount(-1);
 		animator.setDuration(500);
+		animator.setInterpolator(new LinearInterpolator());
 		animator.start();
 
 	}

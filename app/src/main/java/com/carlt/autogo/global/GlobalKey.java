@@ -21,6 +21,7 @@ public class GlobalKey {
     public static final String IDENTITY_AUTH           = "IDENTITY_AUTH";
     public static final String REMOTE_SECRET_FREE_TIME = "REMOTE_SECRET_FREE_TIME";
     public static final String TOKENT_OUTOF_TIME       = "exp";
+//    public static final String Face_Login              = "Face_Login";
     public static final String LOGINTYPE               = "loginType";
 
     //正则密码验证 (字母 数字 字符 长度6~32)

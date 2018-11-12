@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
     >
 
     <LinearLayout
         android:id="@+id/ll_safety_identity_authentication"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorWhite"
         android:gravity="center_vertical"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorWhite"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,24 +24,27 @@
             android:textColor="@color/colorEdtext"
             android:textSize="14sp"
             />
+
         <TextView
             android:id="@+id/tv_safety_identity_authentication_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/app_def_txt"
-            android:textSize="14sp"
-            android:textColor="@color/textColorGray"
-            android:gravity="end|center_vertical"
+            android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
-            android:layout_marginEnd="12dp" />
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:text="@string/app_def_txt"
+            android:textColor="@color/textColorGray"
+            android:textSize="14sp"/>
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -48,15 +52,17 @@
         android:layout_marginRight="12dp"
         android:background="@color/color_c"
         />
+
     <LinearLayout
         android:id="@+id/ll_safety_face_recognition"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:background="@color/colorWhite"
         android:gravity="center_vertical"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        android:background="@color/colorWhite"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,34 +70,37 @@
             android:textColor="@color/colorEdtext"
             android:textSize="14sp"
             />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
             >
+
             <TextView
                 android:id="@+id/tv_safety_face_recognition_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_def_txt"
-                android:textSize="14sp"
-                android:textColor="@color/textColorGray"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
-                android:layout_marginEnd="12dp" />
+                android:text="@string/app_def_txt"
+                android:textColor="@color/textColorGray"
+                android:textSize="14sp"/>
+
             <ImageView
                 android:id="@+id/iv_safety_face_recognition_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_face_recognition_txt"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@id/tv_safety_face_recognition_status"
                 android:layout_toStartOf="@id/tv_safety_face_recognition_status"
-                android:layout_marginRight="10dp"
-                android:layout_marginEnd="10dp"
-                tools:ignore="ContentDescription"
+                android:src="@mipmap/ic_face_recognition_txt"
                 android:visibility="gone"
+                tools:ignore="ContentDescription"
                 />
         </RelativeLayout>
 
@@ -100,18 +109,20 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_safety_binding_phone"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorWhite"
         android:gravity="center_vertical"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorWhite"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -119,34 +130,38 @@
             android:textColor="@color/colorEdtext"
             android:textSize="14sp"
             />
+
         <TextView
             android:id="@+id/tv_safety_binding_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/app_def_txt"
-            android:textSize="14sp"
-            android:textColor="@color/textColorGray"
-            android:gravity="end|center_vertical"
+            android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
-            android:layout_marginEnd="12dp" />
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:text="@string/app_def_txt"
+            android:textColor="@color/textColorGray"
+            android:textSize="14sp"/>
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_safety_login_pwd_management"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorWhite"
         android:gravity="center_vertical"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorWhite"
         >
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -155,13 +170,15 @@
             android:textColor="@color/colorEdtext"
             android:textSize="14sp"
             />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -169,15 +186,17 @@
         android:layout_marginRight="12dp"
         android:background="@color/color_c"
         />
+
     <LinearLayout
         android:id="@+id/ll_safety_remote_pwd_management"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:background="@color/colorWhite"
         android:gravity="center_vertical"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        android:background="@color/colorWhite"
         >
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -186,23 +205,35 @@
             android:textColor="@color/colorEdtext"
             android:textSize="14sp"
             />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:text="该密码用于对车辆的远程控制"
+            android:textColor="@color/textColorGray"
+            android:textSize="11dp"
+            />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_safety_login_device_management"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorWhite"
         android:gravity="center_vertical"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorWhite"
         >
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -211,23 +242,26 @@
             android:textColor="@color/colorEdtext"
             android:textSize="14sp"
             />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_safety_frozen_account"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorWhite"
         android:gravity="center_vertical"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorWhite"
         >
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -236,13 +270,15 @@
             android:textColor="@color/colorEdtext"
             android:textSize="14sp"
             />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -250,15 +286,17 @@
         android:layout_marginRight="12dp"
         android:background="@color/color_c"
         />
+
     <LinearLayout
         android:id="@+id/ll_safety_cancellation_account"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:background="@color/colorWhite"
         android:gravity="center_vertical"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        android:background="@color/colorWhite"
         >
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -267,11 +305,12 @@
             android:textColor="@color/colorEdtext"
             android:textSize="14sp"
             />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
 </LinearLayout>
