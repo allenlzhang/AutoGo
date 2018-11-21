@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@drawable/right_pop_bg"
+              android:divider="@color/colorBlack"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+              android:padding="8dp"
+              android:showDividers="middle">
+
+
+    <TextView
+        android:id="@+id/tvScanner"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:drawableLeft="@mipmap/ic_scaner"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:text="扫一扫"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tvLine"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorFirstItemLine"/>
+
+    <TextView
+        android:id="@+id/tvQrCode"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:drawableLeft="@mipmap/ic_qrcode"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:text="授权/过户"
+        android:textSize="16sp"/>
+
+</LinearLayout>

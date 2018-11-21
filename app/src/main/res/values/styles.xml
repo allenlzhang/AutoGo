@@ -141,4 +141,8 @@
         <item name="android:background">@drawable/checkbox_selector</item>
         <item name="android:button">@null</item>
     </style>
+    <style name="QQPopAnim" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/right_top_in</item>
+        <item name="android:windowExitAnimation">@anim/right_top_out</item>
+    </style>
 </resources>

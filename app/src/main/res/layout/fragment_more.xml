@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent">
 
     <View
         android:id="@+id/view_more_bg"
         android:layout_width="match_parent"
         android:layout_height="252dp"
-        android:background="@mipmap/iv_more_bg"
-        />
+        android:background="@mipmap/iv_more_bg"/>
+
     <RelativeLayout
         android:id="@+id/rl_more_head_sculpture"
         android:layout_width="60dp"
@@ -18,26 +18,36 @@
         android:layout_marginTop="51dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view_more_bg"
-        >
+        app:layout_constraintTop_toTopOf="@+id/view_more_bg">
+
         <ImageView
             android:id="@+id/iv_more_head_sculpture"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@mipmap/iv_more_head_sculpture_def"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
+
         <ImageView
             android:id="@+id/iv_more_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:src="@mipmap/ic_sex_men"
             tools:ignore="ContentDescription,RtlHardcoded"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
             />
     </RelativeLayout>
 
-
+    <ImageView
+        android:id="@+id/ivAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/ic_nav_first"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"/>
 
 
     <TextView
@@ -50,7 +60,8 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/view_more_bg"
         app:layout_constraintStart_toStartOf="@+id/view_more_bg"
-        app:layout_constraintTop_toBottomOf="@+id/rl_more_head_sculpture" />
+        app:layout_constraintTop_toBottomOf="@+id/rl_more_head_sculpture"/>
+
     <TextView
         android:id="@+id/tv_more_edit_profile"
         android:layout_width="76dp"
@@ -63,7 +74,7 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/view_more_bg"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <LinearLayout
         android:id="@+id/ll_more_accounts_and_security"
@@ -80,7 +91,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:src="@mipmap/ic_accounts_and_security"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -89,7 +100,7 @@
             android:gravity="center_vertical"
             android:text="@string/more_accounts_and_security"
             android:textColor="@color/colorEdtext"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -98,7 +109,7 @@
             android:layout_marginRight="12dp"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
 
     <LinearLayout
@@ -115,7 +126,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:src="@mipmap/ic_setting"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -124,7 +135,7 @@
             android:gravity="center_vertical"
             android:text="@string/more_setting"
             android:textColor="@color/colorEdtext"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -133,7 +144,7 @@
             android:layout_marginRight="12dp"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
 
     <LinearLayout
@@ -142,7 +153,6 @@
         android:layout_height="54dp"
         android:layout_marginBottom="8dp"
         android:gravity="center_vertical"
-
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -152,7 +162,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:src="@mipmap/ic_log_out"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -161,7 +171,7 @@
             android:gravity="center_vertical"
             android:text="@string/more_log_out"
             android:textColor="@color/colorEdtext"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -170,6 +180,6 @@
             android:layout_marginRight="12dp"
             android:layout_weight="0"
             android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
