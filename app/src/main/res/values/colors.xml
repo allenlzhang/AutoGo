@@ -13,9 +13,11 @@
     <color name="colorBlue">#478cea</color>
     <!-- 浅灰 -->
     <color name="textColorGray1">#333333</color>
+    <color name="textColorGray2">#666666</color>
     <color name="textColorGray">#999999</color>
     <color name="color_c">#cccccc</color>
     <color name="colorLightGray">#b3b3b3</color>
+    <color name="colorGray">#f1efef</color>
     <color name="transparent">#00000000</color>
     <color name="colorLoginCommitBgNormal">#478cea</color>
     <color name="colorLoginCommitBgPress">#305ec1</color>

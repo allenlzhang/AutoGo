@@ -7,11 +7,5 @@
             <stroke android:width="0.5dp" android:color="@color/colorLoginCommitBgNormal"/>
         </shape>
     </item>
-    <item android:state_focused="false">
-        <shape>
-            <solid android:color="@color/colorWhite"/>
-            <corners android:radius="3dp"/>
-            <stroke android:width="0.5dp" android:color="@color/color_c"/>
-        </shape>
-    </item>
+    <item android:state_focused="false" android:drawable="@drawable/base_edit_gray_bg"/>
 </selector>

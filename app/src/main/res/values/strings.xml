@@ -14,6 +14,11 @@
     <string name="more_accounts_and_security">账号与安全</string>
     <string name="more_setting">设置</string>
     <string name="more_log_out">退出登录</string>
+    <string name="more_my_car">我的爱车</string>
+    <string name="more_remote_update">远程升级</string>
+    <string name="more_service_renewal">服务续费</string>
+    <string name="more_contact">联系客服</string>
+    
 
     <!-- 账号与安全  -->
     <string name="safety_identity_authentication">身份认证</string>
@@ -67,6 +72,14 @@
     <string name="freeze_tv_status_cancle_info">请确认账号安全再解除冻结</string>
     <string name="unfreeze_tv_status_complete_info">账号可以正常使用了</string>
 
+    <!-- 车辆认证 -->
+    <string name="vehicle_certification_add">添加爱车</string>
+    <string name="vehicle_certification_info">车辆信息</string>
+    <string name="vehicle_certification_vin">请输入车辆车架号(VIN码)</string>
+    <string name="vehicle_certification_engine_num">请输入车辆发动机号</string>
+    <string name="vehicle_certification_vouchers">购车凭证</string>
+    <string name="vehicle_certification_hint">行驶证或购车发票</string>
+    <string name="vehicle_certification_next">下一步</string>
     <!--重复登录 -->
     <string name="token_err">您的账户已在其他设备登录，如非本人操作，请通过忘记密码功能，进行密码修改</string>
     <!-- 密码输入限制-->

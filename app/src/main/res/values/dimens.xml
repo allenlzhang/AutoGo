@@ -7,5 +7,6 @@
     <dimen name="title_margin">24dp</dimen>
     <dimen name="baseTitleHeight">46dp</dimen>
     <dimen name="baseTitleTxtSize">18dp</dimen>
+    <dimen name="sp_13">13sp</dimen>
     <dimen name="baseTitleRightTxtSize">14sp</dimen>
 </resources>
