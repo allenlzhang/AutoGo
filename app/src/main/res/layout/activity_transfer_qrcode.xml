@@ -5,15 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="15dp"
+    android:padding="8dp"
     tools:context=".view.activity.more.transfer.AuthQRCodeActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:background="@drawable/qrcode_bg"
-        >
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/tv1"
@@ -22,7 +21,7 @@
             android:layout_centerHorizontal="true"
             android:background="@color/layout_background"
             android:gravity="center"
-            android:text="车辆授权使用"
+            android:text="车辆过户"
             android:textColor="@color/colorBlack"
             android:textSize="16dp"/>
 
@@ -32,7 +31,7 @@
             android:layout_height="200dp"
             android:layout_below="@+id/tv1"
             android:layout_centerHorizontal="true"
-            android:layout_margin="10dp"/>
+            android:layout_margin="8dp"/>
 
         <TextView
             android:id="@+id/tvRefreshCode"
@@ -49,7 +48,7 @@
         <View
             android:id="@+id/line"
             android:layout_width="match_parent"
-            android:layout_height="1.5dp"
+            android:layout_height="2dp"
             android:layout_below="@+id/tvRefreshCode"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -69,54 +68,8 @@
             android:textColor="@color/colorForgotPasswd"
             android:textSize="14dp"/>
 
-        <TextView
-            android:id="@+id/tvTime"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_below="@+id/tvCarName"
-            android:layout_marginRight="8dp"
-            android:drawableRight="@mipmap/ic_arrow_right_normal"
-            android:gravity="center"
-            android:text="有效时间"
-            android:textColor="@color/colorForgotPasswd"
-            android:textSize="14dp"/>
-
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/llTransfer"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/colorGray"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="8dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:src="@mipmap/ic_car_transfer"
-            tools:ignore="ContentDescription"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="车辆过户"
-            android:textColor="@color/textColorGray2"
-            android:textSize="14dp"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_weight="0"
-            android:src="@mipmap/ic_right_arrow"
-            tools:ignore="ContentDescription"/>
-    </LinearLayout>
 </LinearLayout>

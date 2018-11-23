@@ -19,7 +19,7 @@ import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.gildutils.GlideCircleTransform;
 import com.carlt.autogo.view.activity.more.safety.SafetyActivity;
-import com.carlt.autogo.view.activity.more.transfer.QRCodeActivity;
+import com.carlt.autogo.view.activity.more.transfer.AuthQRCodeActivity;
 import com.carlt.autogo.view.activity.more.transfer.ScanActivity;
 import com.carlt.autogo.view.activity.more.transfer.ScannerResultActivity;
 import com.carlt.autogo.view.activity.user.EditUserInfoActivity;
@@ -192,7 +192,7 @@ public class MoreFragment extends BaseMvpFragment {
                         tvQrCode.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                startActivity(new Intent(mActivity, QRCodeActivity.class));
+                                startActivity(new Intent(mActivity, AuthQRCodeActivity.class));
                                 easyPopup.dismiss();
                             }
                         });

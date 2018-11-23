@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
             android:id="@+id/view_more_bg"
             android:layout_width="match_parent"
             android:layout_height="252dp"
-            android:background="@mipmap/iv_more_bg" />
+            android:background="@mipmap/iv_more_bg"/>
 
         <RelativeLayout
             android:id="@+id/rl_more_head_sculpture"
@@ -29,7 +29,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:src="@mipmap/iv_more_head_sculpture_def"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
 
             <ImageView
                 android:id="@+id/iv_more_sex"
@@ -38,19 +38,19 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:src="@mipmap/ic_sex_men"
-                tools:ignore="ContentDescription,RtlHardcoded" />
+                tools:ignore="ContentDescription,RtlHardcoded"/>
         </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/ivAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="10dp"
-        android:src="@mipmap/ic_nav_first"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription"/>
+        <ImageView
+            android:id="@+id/ivAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/ic_add_scan"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"/>
 
         <TextView
             android:id="@+id/tv_more_nickname"
@@ -62,7 +62,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/view_more_bg"
             app:layout_constraintStart_toStartOf="@+id/view_more_bg"
-            app:layout_constraintTop_toBottomOf="@+id/rl_more_head_sculpture" />
+            app:layout_constraintTop_toBottomOf="@+id/rl_more_head_sculpture"/>
 
         <TextView
             android:id="@+id/tv_more_edit_profile"
@@ -76,7 +76,7 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/view_more_bg"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <LinearLayout
             android:id="@+id/ll_more_layout1"
@@ -94,7 +94,7 @@
                 android:paddingTop="10dp"
                 android:text="信息中心"
                 android:textColor="@color/colorEdtext"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -105,7 +105,7 @@
                 android:paddingTop="10dp"
                 android:text="行车生涯"
                 android:textColor="@color/colorEdtext"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -116,7 +116,7 @@
                 android:paddingTop="10dp"
                 android:text="车友圈"
                 android:textColor="@color/colorEdtext"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -133,7 +133,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:src="@mipmap/ic_accounts_and_security"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -142,7 +142,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/more_accounts_and_security"
                 android:textColor="@color/colorEdtext"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -151,7 +151,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_weight="0"
                 android:src="@mipmap/ic_right_arrow"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
         </LinearLayout>
 
         <LinearLayout
@@ -168,7 +168,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:src="@mipmap/ic_setting"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -177,7 +177,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/more_my_car"
                 android:textColor="@color/colorEdtext"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -186,7 +186,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_weight="0"
                 android:src="@mipmap/ic_right_arrow"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
         </LinearLayout>
 
         <LinearLayout
@@ -203,7 +203,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:src="@mipmap/ic_setting"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -212,7 +212,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/more_remote_update"
                 android:textColor="@color/colorEdtext"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -221,7 +221,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_weight="0"
                 android:src="@mipmap/ic_right_arrow"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
         </LinearLayout>
 
         <LinearLayout
@@ -238,7 +238,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:src="@mipmap/ic_setting"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -247,7 +247,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/more_service_renewal"
                 android:textColor="@color/colorEdtext"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -256,7 +256,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_weight="0"
                 android:src="@mipmap/ic_right_arrow"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
         </LinearLayout>
 
         <LinearLayout
@@ -273,7 +273,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:src="@mipmap/ic_setting"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -282,7 +282,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/more_contact"
                 android:textColor="@color/colorEdtext"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -291,7 +291,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_weight="0"
                 android:src="@mipmap/ic_right_arrow"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
         </LinearLayout>
 
         <LinearLayout
@@ -308,7 +308,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:src="@mipmap/ic_log_out"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -317,7 +317,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/more_log_out"
                 android:textColor="@color/colorEdtext"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -326,7 +326,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_weight="0"
                 android:src="@mipmap/ic_right_arrow"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

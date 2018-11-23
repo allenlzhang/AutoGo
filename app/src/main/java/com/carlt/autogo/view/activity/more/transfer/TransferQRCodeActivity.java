@@ -12,40 +12,37 @@ import com.carlt.autogo.utils.QRCodeUtils;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class QRCodeActivity extends BaseMvpActivity {
+/**
+ * Description : 生成过户二维码
+ * Author     : zhanglei
+ * Date       : 2018/11/23
+ */
+public class TransferQRCodeActivity extends BaseMvpActivity {
 
     @BindView(R.id.ivQRCode)
     ImageView ivQRCode;
-    @BindView(R.id.tvRefreshCode)
-    TextView  tvRefreshCode;
     @BindView(R.id.tvCarName)
     TextView  tvCarName;
-    @BindView(R.id.tvTime)
-    TextView  tvTime;
 
 
     @Override
     protected int getContentView() {
-        return R.layout.activity_qrcode;
+        return R.layout.activity_transfer_qrcode;
     }
 
     @Override
     public void init() {
         setTitleText("生成二维码");
-        Bitmap codeBit = QRCodeUtils.createQRCode("sfsadfsfsf");
-        ivQRCode.setImageBitmap(codeBit);
+        Bitmap qrCode = QRCodeUtils.createQRCode("sdfsdf");
+        ivQRCode.setImageBitmap(qrCode);
     }
 
-    @OnClick({R.id.tvRefreshCode, R.id.llCar, R.id.llTime, R.id.llTransfer})
+    @OnClick({R.id.tvRefreshCode, R.id.tvCarName})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvRefreshCode:
                 break;
-            case R.id.llCar:
-                break;
-            case R.id.llTime:
-                break;
-            case R.id.llTransfer:
+            case R.id.tvCarName:
                 break;
         }
     }

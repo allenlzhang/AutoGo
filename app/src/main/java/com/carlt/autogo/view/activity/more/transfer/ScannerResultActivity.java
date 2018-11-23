@@ -7,17 +7,16 @@ import com.carlt.autogo.base.BaseMvpActivity;
 
 import butterknife.BindView;
 
+/**
+ * Description : 扫码结果页面
+ * Author     : zhanglei
+ * Date       : 2018/11/22
+ */
 public class ScannerResultActivity extends BaseMvpActivity {
 
     @BindView(R.id.tvResult)
     TextView tvResult;
 
-    //    @Override
-    //    protected void onCreate(Bundle savedInstanceState) {
-    //        super.onCreate(savedInstanceState);
-    //        setContentView(R.layout.activity_scanner_result);
-    //        ButterKnife.bind(this);
-    //    }
 
     @Override
     protected int getContentView() {

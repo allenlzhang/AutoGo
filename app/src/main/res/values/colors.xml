@@ -22,7 +22,7 @@
     <color name="colorLoginCommitBgNormal">#478cea</color>
     <color name="colorLoginCommitBgPress">#305ec1</color>
     <color name="colorCommitBgEnable">#9ec0ef</color>
-    <color name="colorForgotPasswd">#4a8eea</color>
+    <color name="colorForgotPasswd">#4a8cea</color>
     <color name="colorEdtext">#333333</color>
     <color name="colorRegistBg">#F0F0F0</color>
     <color name="colorFirstTxtColor1">#8d9199</color>

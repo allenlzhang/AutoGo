@@ -8,8 +8,11 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-
-// 自定义扫码 Activity
+/**
+ * Description :自定义扫码 Activity
+ * Author     : zhanglei
+ * Date       : 2018/11/22
+ */
 public class ScanActivity extends BaseMvpActivity {
     CaptureManager       capture;
     DecoratedBarcodeView barcodeView;
