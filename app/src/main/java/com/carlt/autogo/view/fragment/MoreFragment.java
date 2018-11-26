@@ -18,6 +18,7 @@ import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.gildutils.GlideCircleTransform;
+import com.carlt.autogo.view.activity.car.MyCarActivity;
 import com.carlt.autogo.view.activity.more.safety.SafetyActivity;
 import com.carlt.autogo.view.activity.more.transfer.AuthQRCodeActivity;
 import com.carlt.autogo.view.activity.more.transfer.ScanActivity;
@@ -60,7 +61,7 @@ public class MoreFragment extends BaseMvpFragment {
     LinearLayout mLlAccountsAndSecurity;
 
     /**
-     * 设置
+     * 我的爱车
      */
     @BindView(R.id.ll_more_setting)
     LinearLayout mLlSetting;
@@ -139,6 +140,8 @@ public class MoreFragment extends BaseMvpFragment {
                 startActivity(intent);
                 break;
             case R.id.ll_more_setting:
+                Intent intent1 = new Intent(mContext, MyCarActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.ll_more_log_out:
 

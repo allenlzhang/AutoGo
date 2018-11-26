@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorGray"
-    >
+    android:layout_height="wrap_content"
+    android:background="@color/colorGray">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -11,93 +11,91 @@
         android:layout_marginRight="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@drawable/item_my_car_bg"
-        android:orientation="horizontal"
-        >
-        <LinearLayout
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/item_myCar_logo"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-            <ImageView
-                android:id="@+id/item_myCar_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_dorcen_logo"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                />
-            <TextView
-                android:id="@+id/item_myCar_state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="授权中"
-                android:textColor="@color/textColorGray1"
-                android:textSize="@dimen/sp_12"
-                android:gravity="center"
-                />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="15dp"
+            android:src="@mipmap/ic_dorcen_logo" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="30dp"
-            android:orientation="vertical"
-            android:layout_marginStart="30dp">
+            android:layout_marginStart="30dp"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/item_myCar_model"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="大乘 G70S"
-                android:textSize="@dimen/sp_14"
-                android:textColor="@color/textColorGray1"
                 android:layout_marginTop="@dimen/dp_10"
-                />
+                android:text="大乘 G70S"
+                android:textColor="@color/textColorGray1"
+                android:textSize="@dimen/sp_14" />
+
             <TextView
                 android:id="@+id/item_myCar_brandCar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2019款 2.0T 自动尊贵型"
-                android:textSize="@dimen/sp_12"
-                android:textColor="@color/textColorGray"
                 android:layout_marginTop="5dp"
-                />
+                android:text="2019款 2.0T 自动尊贵型"
+                android:textColor="@color/textColorGray"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/item_myCar_authEndTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="授权截止时间：2018-11-08 11:32"
+                android:textColor="@color/textColorGray"
+                android:textSize="@dimen/sp_13"
+                android:visibility="gone" />
+
             <LinearLayout
+                android:id="@+id/item_ll_state"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp">
+                android:layout_marginTop="10dp">
+
                 <ImageView
-                    android:id="@+id/item_myCar_activate"
+                    android:id="@+id/item_myCar_remote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_remote_activate"
-                    />
+                    android:src="@mipmap/ic_remote_activate" />
+
                 <ImageView
                     android:id="@+id/item_myCar_recorder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_recorder"
                     android:layout_marginLeft="30dp"
-                    android:layout_marginStart="30dp" />
+                    android:layout_marginStart="30dp"
+                    android:src="@mipmap/ic_recorder" />
+
                 <ImageView
                     android:id="@+id/item_myCar_machine"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_car_machine"
                     android:layout_marginLeft="30dp"
-                    android:layout_marginStart="30dp" />
+                    android:layout_marginStart="30dp"
+                    android:src="@mipmap/ic_car_machine" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
     <ImageView
-        android:id="@+id/item_myCar_activated_state"
+        android:id="@+id/item_myCar_auth_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_activated_state"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
-        />
+        android:src="@mipmap/ic_auth_state" />
 </RelativeLayout>

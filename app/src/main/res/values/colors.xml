@@ -36,4 +36,6 @@
     <color name="layout_background">#F0F0F0</color>
     <color name="colorBlack">#000000</color>
     <color name="colorDialogIdcardAccepte">#B22D14</color>
+
+    <color name="colorCarPopup">#DCECFE</color>
 </resources>

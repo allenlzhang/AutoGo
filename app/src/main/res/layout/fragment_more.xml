@@ -167,7 +167,7 @@
                 android:layout_height="30dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:src="@mipmap/ic_setting"
+                android:src="@mipmap/ic_my_car"
                 tools:ignore="ContentDescription"/>
 
             <TextView
@@ -202,7 +202,7 @@
                 android:layout_height="30dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:src="@mipmap/ic_setting"
+                android:src="@mipmap/ic_remote_update"
                 tools:ignore="ContentDescription"/>
 
             <TextView
@@ -237,7 +237,7 @@
                 android:layout_height="30dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:src="@mipmap/ic_setting"
+                android:src="@mipmap/ic_service_renewal"
                 tools:ignore="ContentDescription"/>
 
             <TextView
@@ -272,7 +272,7 @@
                 android:layout_height="30dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:src="@mipmap/ic_setting"
+                android:src="@mipmap/ic_more_contact"
                 tools:ignore="ContentDescription"/>
 
             <TextView

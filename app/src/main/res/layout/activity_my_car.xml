@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+    <android.support.design.widget.TabLayout
+        android:id="@+id/myCarTabs"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottomTabHeight"
+        android:background="@color/colorBottomTabBg"
+        tl:tabSelectedTextColor="@color/colorLoginCommitBgNormal"
+        tl:tabTextColor="@color/textColorGray"
+        tl:tabIndicatorColor="@color/colorLoginCommitBgNormal"/>
+    <FrameLayout
+        android:id="@+id/flMyCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+</LinearLayout>
