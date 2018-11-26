@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Marlon on 2018/11/16.
  */
-public class PopupAdapter extends BaseAdapter{
+public class CarPopupAdapter extends BaseAdapter{
     private CarListInfo info;
     private LayoutInflater inflater;
     private int selected_position = 0;
@@ -30,7 +30,7 @@ public class PopupAdapter extends BaseAdapter{
 
     }
 
-    public PopupAdapter(CarListInfo info, Context context) {
+    public CarPopupAdapter(CarListInfo info, Context context) {
         this.context = context;
         this.info = info;
         inflater = LayoutInflater.from(context);

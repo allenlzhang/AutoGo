@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -22,11 +20,8 @@ import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
 import com.carlt.autogo.view.activity.more.safety.FaceRecognitionSettingFirstActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
-import com.carlt.autogo.adapter.PopupAdapter;
+import com.carlt.autogo.adapter.CarPopupAdapter;
 import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -58,7 +53,7 @@ public class HomeFragment extends BaseMvpFragment {
     @BindView(R.id.home_rl_lock)
     RelativeLayout homeRlLock;
 
-    private PopupAdapter adapter;
+    private CarPopupAdapter adapter;
     private PopupWindow popupWindow;
 
     @Override
@@ -75,8 +70,8 @@ public class HomeFragment extends BaseMvpFragment {
 //                startActivity(new Intent(getActivity(), CarCertificationActivity.class));
 //            }
 //        });
-        adapter = new PopupAdapter(getData(), getContext());
-        adapter.setClick(new PopupAdapter.OnItemClick() {
+        adapter = new CarPopupAdapter(getData(), getContext());
+        adapter.setClick(new CarPopupAdapter.OnItemClick() {
             @Override
             public void itemClick(int i, CarListInfo.DataBean dataBean) {
                 popupWindow.dismiss();
@@ -109,7 +104,7 @@ public class HomeFragment extends BaseMvpFragment {
     }
 
     private void showPopupWindow(View view) {
-        View contentView = LayoutInflater.from(getContext()).inflate(R.layout.layout_popupwindow, null, false);
+        View contentView = LayoutInflater.from(getContext()).inflate(R.layout.layout_car_popupwindow, null, false);
         ListView mListView = contentView.findViewById(R.id.list_popup);
         mListView.setAdapter(adapter);
         mListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
