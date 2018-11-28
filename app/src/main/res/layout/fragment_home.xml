@@ -262,6 +262,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rlCarState"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
@@ -335,6 +336,7 @@
                 android:background="@color/colorFirstItemLine"/>
 
             <RelativeLayout
+                android:id="@+id/rlTirePressure"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
@@ -408,6 +410,7 @@
                 android:background="@color/colorFirstItemLine"/>
 
             <RelativeLayout
+                android:id="@+id/rlCarLog"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
@@ -481,6 +484,7 @@
                 android:background="@color/colorFirstItemLine"/>
 
             <RelativeLayout
+                android:id="@+id/rlNav"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_gravity="center"

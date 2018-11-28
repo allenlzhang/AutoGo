@@ -68,7 +68,7 @@
             android:layout_toLeftOf="@id/line_v"
             android:gravity="center"
             android:text="左侧按钮"
-            android:textColor="#333333"
+            android:textColor="@color/colorLoginCommitBgPress"
             android:textSize="16dp"
             />
 
@@ -80,7 +80,7 @@
             android:layout_toRightOf="@id/line_v"
             android:gravity="center"
             android:text="右侧按钮"
-            android:textColor="#333333"
+            android:textColor="@color/colorLoginCommitBgPress"
             android:textSize="16dp"/>
     </RelativeLayout>
 
@@ -90,7 +90,7 @@
         android:layout_height="43dip"
         android:gravity="center"
         android:text="只有一个按钮"
-        android:textColor="#333333"
+        android:textColor="@color/colorLoginCommitBgPress"
         android:textSize="18sp"
         android:textStyle="bold"
         android:visibility="gone" />

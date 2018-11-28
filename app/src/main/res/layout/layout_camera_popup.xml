@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/colorBottomTabUnSelect"
+    android:paddingLeft="@dimen/dp_10"
+    android:paddingRight="@dimen/dp_10"
     >
     <TextView
         android:id="@+id/tvCameraPopup"
@@ -11,19 +12,24 @@
         android:layout_height="@dimen/dp_40"
         android:text="拍照"
         android:textSize="@dimen/sp_14"
-        android:textColor="@color/textColorGray1"
+        android:textColor="@color/colorFirstItemPressed2"
         android:gravity="center"
-        android:background="@color/colorWhite"
+        android:background="@drawable/top_circular_bead_bg"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_c"
         />
     <TextView
         android:id="@+id/tvAlbumPopup"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
-        android:text="相册"
+        android:text="从相册中选择"
         android:textSize="@dimen/sp_14"
-        android:textColor="@color/textColorGray1"
+        android:textColor="@color/colorFirstItemPressed2"
         android:gravity="center"
-        android:background="@color/colorWhite"
+        android:background="@drawable/bottom_circular_bead_bg"
         />
     <TextView
         android:id="@+id/tvCancelPopup"
@@ -34,6 +40,7 @@
         android:textColor="@color/textColorGray1"
         android:gravity="center"
         android:layout_marginTop="@dimen/dp_10"
-        android:background="@color/colorWhite"
+        android:background="@drawable/white_circular_head_bg"
+        android:layout_marginBottom="@dimen/dp_10"
         />
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.carlt.autogo.entry.car;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class CarListInfo {
         this.authCarList = authCarLists;
     }
 
-    public class DataBean{
+    public class DataBean implements Serializable{
         private int id;
         private String brandTitle; // 品牌名称
         private String modelTitle; // 车系名称

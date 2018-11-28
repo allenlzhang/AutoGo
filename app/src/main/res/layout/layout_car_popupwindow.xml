@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/car_pop_bg"
-    >
-    <ListView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/car_pop_bg">
+    <com.carlt.autogo.widget.ConstraintHeightListView
         android:id="@+id/list_popup"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:background="@color/colorWhite"
         android:divider="@null"
         android:scrollbars="none"
+        app:maxHeight = "250dp"
         />
 </LinearLayout>

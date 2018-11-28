@@ -91,25 +91,25 @@ public class MyCarAdapter extends BaseAdapter {
         if (TYPE == MYCAR){
             holder.mTxtAuthEndTime.setVisibility(View.GONE);
             holder.mLlState.setVisibility(View.VISIBLE);
-            if (info.getRemoteStatus() == 1){
+            if (info.getRemoteStatus() == 2){
                 holder.mIvRemoteState.setImageResource(R.mipmap.ic_remote_activating);
-            }else if (info.getRemoteStatus() == 2){
+            }else if (info.getRemoteStatus() == 3){
                 holder.mIvRemoteState.setImageResource(R.mipmap.ic_remote_activated);
             }else {
                 holder.mIvRemoteState.setImageResource(R.mipmap.ic_remote_activate);
             }
 
-            if (info.getRecodeStatus() == 1){
+            if (info.getRecodeStatus() == 2){
                 holder.mIvRecorderState.setImageResource(R.mipmap.ic_recorder);
-            }else if (info.getRemoteStatus() == 2){
+            }else if (info.getRemoteStatus() == 3){
                 holder.mIvRecorderState.setImageResource(R.mipmap.ic_recorder);
             }else {
                 holder.mIvRecorderState.setImageResource(R.mipmap.ic_recorder);
             }
 
-            if (info.getRemoteStatus() == 1){
+            if (info.getRemoteStatus() == 2){
                 holder.mIvMachineState.setImageResource(R.mipmap.ic_car_machine);
-            }else if (info.getRemoteStatus() == 2){
+            }else if (info.getRemoteStatus() == 3){
                 holder.mIvMachineState.setImageResource(R.mipmap.ic_car_machine);
             }else {
                 holder.mIvMachineState.setImageResource(R.mipmap.ic_car_machine);

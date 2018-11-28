@@ -19,6 +19,7 @@
     <color name="colorLightGray">#b3b3b3</color>
     <color name="colorGray">#f1efef</color>
     <color name="transparent">#00000000</color>
+    <color name="colorActivating">#FDCB05</color>
     <color name="colorLoginCommitBgNormal">#478cea</color>
     <color name="colorLoginCommitBgPress">#305ec1</color>
     <color name="colorCommitBgEnable">#9ec0ef</color>

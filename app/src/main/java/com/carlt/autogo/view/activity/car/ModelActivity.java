@@ -1,7 +1,5 @@
 package com.carlt.autogo.view.activity.car;
 
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.ListView;
 
 import com.blankj.utilcode.util.ToastUtils;
@@ -13,7 +11,6 @@ import com.carlt.autogo.entry.car.CarModelInfo;
 import com.carlt.autogo.entry.car.NewCarModelInfo;
 import com.google.gson.Gson;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 

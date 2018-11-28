@@ -71,7 +71,7 @@
         <activity android:name=".view.activity.car.ModelActivity"/>
         <activity android:name=".view.activity.car.BrandCarActivity"/>
         <activity android:name=".view.activity.car.MyCarActivity"/>
-
+        <activity android:name=".view.activity.car.CarDetailsActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

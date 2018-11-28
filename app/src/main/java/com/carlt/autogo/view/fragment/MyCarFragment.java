@@ -14,6 +14,7 @@ import com.carlt.autogo.adapter.MyCarAdapter;
 import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.entry.car.CarListInfo;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
+import com.carlt.autogo.view.activity.car.CarDetailsActivity;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.google.gson.Gson;
 
@@ -44,7 +45,7 @@ public class MyCarFragment extends BaseMvpFragment {
 
     @Override
     protected void init() {
-        List<CarListInfo.DataBean> list = getData();
+        final List<CarListInfo.DataBean> list = getData();
         if (list.size() >= 5) {
             fragmentIvMyCarAdd.setVisibility(View.GONE);
         }
@@ -53,7 +54,21 @@ public class MyCarFragment extends BaseMvpFragment {
         fragmentLvMyCar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                CarListInfo.DataBean item = (CarListInfo.DataBean)adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(mContext, CarDetailsActivity.class);
+                if (item.getAuthStatus() != 3){
+                    if (item.getRemoteStatus() == 2) {
+                        intent.putExtra("remoteActivating",true);
+                        intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
+                    }else if (item.getRemoteStatus() == 3){
+                        intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE2);
+                    }else {
+                        intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
+                    }
+                }else{
+                    intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE3);
+                }
+                startActivity(intent);
             }
         });
     }

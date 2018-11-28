@@ -113,7 +113,7 @@
     <style name="baseEditStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">44dp</item>
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/colorEdtext</item>
         <item name="android:textColorHint">@color/textColorGray</item>
         <item name="android:layout_marginLeft">12dp</item>
@@ -145,4 +145,52 @@
         <item name="android:windowEnterAnimation">@anim/right_top_in</item>
         <item name="android:windowExitAnimation">@anim/right_top_out</item>
     </style>
+    <!-- 单行linerLayout -->
+    <style name="BaseOneLineLinerStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:background">@color/colorWhite</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+    <!-- 单行选择左侧Text -->
+    <style name="BaseOneLineTxtLeftStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/textColorGray1</item>
+    </style>
+    <!-- 单行选择有侧Text包含箭头 -->
+    <style name="BaseOneLineTxtRightIncludeArrowStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginLeft">@dimen/dp_10</item>
+        <item name="android:textColor">@color/textColorGray</item>
+        <item name="android:drawableRight">@mipmap/ic_right_arrow</item>
+        <item name="android:drawablePadding">@dimen/dp_10</item>
+        <item name="android:gravity">end|center_vertical</item>
+    </style>
+
+    <!-- 单行选择有侧Text -->
+    <style name="BaseOneLineTxtRightStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/textColorGray</item>
+        <item name="android:gravity">end|center_vertical</item>
+        <item name="android:layout_marginLeft">@dimen/dp_10</item>
+    </style>
+
+    <!-- 横线 -->
+    <style name="BaseHorizontalLineStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:background">@color/color_c</item>
+    </style>
+
 </resources>

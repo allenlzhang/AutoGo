@@ -3,6 +3,7 @@ package com.carlt.autogo.view.activity.car;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,7 +63,6 @@ public class CarCertificationActivity extends BaseMvpActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //        setContentView(R.layout.activity_car_certification);
     }
 
     @Override
@@ -82,8 +82,11 @@ public class CarCertificationActivity extends BaseMvpActivity {
         TextView mTxtCancel = view.findViewById(R.id.tvCancelPopup);
         WindowManager manager = this.getWindowManager();
         popupWindow = new PopupWindow(view, manager.getDefaultDisplay().getWidth(), WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.setAnimationStyle(R.style.BottomDialogAnimation);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setTouchable(true);
         popupWindow.showAtLocation(llVehicleCertification, Gravity.BOTTOM,0,0);
-        popupWindow.setTouchable(false);
         mTxtCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,6 +118,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
     }
 
     private void doCamera() {
+        popupWindow.dismiss();
         imageUri = Uri.fromFile(fileUri);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
             //通过FileProvider创建一个content类型的Uri
@@ -124,8 +128,8 @@ public class CarCertificationActivity extends BaseMvpActivity {
     }
 
     public void doAlbum(){
+        popupWindow.dismiss();
         PhotoUtils.openPic(this, CODE_GALLERY_REQUEST);
-
     }
 
 
@@ -156,13 +160,13 @@ public class CarCertificationActivity extends BaseMvpActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int output_X = 480, output_Y = 310;
+
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case CODE_CAMERA_REQUEST://拍照完成回调
                         cropImageUri = Uri.fromFile(fileCropUri);
 
-                    PhotoUtils.cropImageUri(this, imageUri, cropImageUri, 1.5, 1, output_X, output_Y, CODE_RESULT_REQUEST);
+                    PhotoUtils.cropImageUri(this, imageUri, cropImageUri, 1, 1, ivVehicleCertification.getWidth(), ivVehicleCertification.getHeight(), CODE_RESULT_REQUEST);
                     break;
                 case CODE_GALLERY_REQUEST://访问相册完成回调 ;
                         cropImageUri = Uri.fromFile(fileCropUri);
@@ -171,11 +175,10 @@ public class CarCertificationActivity extends BaseMvpActivity {
                         newUri = FileProvider.getUriForFile(this, "com.carlt.autogo.fileprovider", new File(newUri.getPath()));
                     }
 
-                    PhotoUtils.cropImageUri(this, newUri, cropImageUri, 1.5, 1, output_X, output_Y, CODE_RESULT_REQUEST);
+                    PhotoUtils.cropImageUri(this, newUri, cropImageUri, 1, 1, ivVehicleCertification.getWidth(), ivVehicleCertification.getHeight(), CODE_RESULT_REQUEST);
                     break;
                 case CODE_RESULT_REQUEST:
                     Bitmap bitmap = PhotoUtils.getBitmapFromUri(cropImageUri, this);
-//                    setPicToView(bitmap);
                     ivVehicleCertification.setImageBitmap(bitmap);
                     break;
             }

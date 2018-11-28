@@ -1,6 +1,8 @@
 package com.carlt.autogo.view.fragment;
 
+import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -8,6 +10,7 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.MyCarAdapter;
 import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.entry.car.CarListInfo;
+import com.carlt.autogo.view.activity.car.CarDetailsActivity;
 import com.google.gson.Gson;
 import java.util.List;
 import butterknife.BindView;
@@ -36,6 +39,14 @@ public class AuthFragment extends BaseMvpFragment {
         getData();
         adapter = new MyCarAdapter(getContext(),listInfos,MyCarAdapter.AUTHCAR);
         fragmentLvMyCar.setAdapter(adapter);
+        fragmentLvMyCar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(mContext, CarDetailsActivity.class);
+                intent.putExtra("type",CarDetailsActivity.DETAILS_TYPE4);
+                startActivity(intent);
+            }
+        });
     }
     private List<CarListInfo.DataBean> getData(){
         String json = "{\"authCarList\":[{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":3,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":1,\"recodeStatus\":0,\"machineStatus\":0}]}";
