@@ -101,23 +101,31 @@ public interface UserService {
     // 用户登录信息
     @POST("User/LoginLog")
     Observable<LoginLogInfo> loginLog(@Body Map<String, Object> params);
+
     // 注销
     @POST("User/UnRegister")
     Observable<BaseError> unRegister(@Body Map<String, Object> params);
+
     // 修改手机
     @POST("User/ResetMobile")
     Observable<BaseError> resetMobile(@Body Map<String, Object> params);
 
     //用户统一登录
     @POST("User/Login")
-    Observable<User>commonLogin(@Body Map<String, Object> params);
+    Observable<User> commonLogin(@Body Map<String, Object> params);
+
     //用户统一注册
     @POST("User/Reg")
-    Observable<BaseError>commonReg(@Body Map<String, Object> params);
+    Observable<BaseError> commonReg(@Body Map<String, Object> params);
+
     //验证旧手机
     @POST("User/AuthMobile")
-    Observable<BaseError>authMobile(@Body Map<String, Object> params);
+    Observable<BaseError> authMobile(@Body Map<String, Object> params);
+
     //检测是否设置人脸
     @POST("User/CheckFace")
-    Observable<User>checkFace (@Body Map<String, Object> params);
+    Observable<User> checkFace(@Body Map<String, Object> params);
+    // 身份证认证相关接口
+    @POST("User/Identity/AddIdentity")
+    Observable<User> addIdentity(@Body Map<String, Object> params);
 }

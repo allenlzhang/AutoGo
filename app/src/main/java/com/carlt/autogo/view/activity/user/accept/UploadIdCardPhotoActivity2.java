@@ -26,6 +26,7 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.DialogIdcardAccept;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
+import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.PhotoUtils;
@@ -36,7 +37,9 @@ import com.yanzhenjie.permission.Permission;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -50,6 +53,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -99,8 +103,10 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
     private Uri imageUri;
     private Uri cropImageUri;
 
-    private String name;
-    private String idCardNum;
+    //    private String name;
+    //    private String idCardNum;
+    private String idNum;
+    private String realName;
 
     private int carmeraTag = -1;
 
@@ -116,8 +122,10 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("上传身份证件");
-        name = getIntent().getStringExtra("name");
-        idCardNum = getIntent().getStringExtra("idcard");
+        String name = getIntent().getStringExtra("name");
+        idNum = getIntent().getStringExtra("idNum");
+        realName = getIntent().getStringExtra("realName");
+        String idCardNum = getIntent().getStringExtra("idcard");
         tvName.setText(name + "\t" + idCardNum);
         dialogIdcardAccept = new DialogIdcardAccept(this);
         if (!AotugoImage.exists()) {
@@ -216,31 +224,156 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
         //        intent.putExtra("name",tvName.getText().toString());
         //        intent.putExtra("idcard",true);
         //        startActivity(intent);
-//        localStringBuffer.append("姓名：").append(identityInfo.getName()).append("\n");
-//        localStringBuffer.append("身份号码：").append(identityInfo.getCertid()).append("\n");
-//        localStringBuffer.append("性别：").append(identityInfo.getSex()).append("\n");
-//        localStringBuffer.append("民族：").append(identityInfo.getFork()).append("\n");
-//        localStringBuffer.append("出生：").append(identityInfo.getBirthday()).append("\n");
-//        localStringBuffer.append("住址：").append(identityInfo.getAddress()).append("\n");
-//        localStringBuffer.append("签发机关：").append(identityInfo.getIssue_authority()).append("\n");
-//        localStringBuffer.append("有效期限：").append(identityInfo.getVaild_priod()).append("\n");
-//        localStringBuffer.append(identityInfo.getType() == IDCardEnum.FaceEmblem ? "人像面" : "国徽面").append("\n");
-        if (identityInfo == null) {
-            showToast("请上传身份证");
-            return;
-        }
-        String certid = identityInfo.getCertid();
-        if (!idCardNum.equals(certid)) {
+        //        localStringBuffer.append("姓名：").append(identityInfo.getName()).append("\n");
+        //        localStringBuffer.append("身份号码：").append(identityInfo.getCertid()).append("\n");
+        //        localStringBuffer.append("性别：").append(identityInfo.getSex()).append("\n");
+        //        localStringBuffer.append("民族：").append(identityInfo.getFork()).append("\n");
+        //        localStringBuffer.append("出生：").append(identityInfo.getBirthday()).append("\n");
+        //        localStringBuffer.append("住址：").append(identityInfo.getAddress()).append("\n");
+        //        localStringBuffer.append("签发机关：").append(identityInfo.getIssue_authority()).append("\n");
+        //        localStringBuffer.append("有效期限：").append(identityInfo.getVaild_priod()).append("\n");
+        //        localStringBuffer.append(identityInfo.getType() == IDCardEnum.FaceEmblem ? "人像面" : "国徽面").append("\n");
+        //        if (identityInfo == null) {
+        //            showToast("请上传身份证");
+        //            return;
+        //        }
+        //        String certid = identityInfo.getCertid();
+        //        String cardName = identityInfo.getName();
+//        if (!realName.equals(scanName)) {
+//            showToast("您上传的身份证和您填写的姓名不一致");
+//            return;
+//        }
+        LogUtils.e("姓名====" + scanName + "---身份号码--" + scanIDNum);
+        if (!idNum.equals(scanIDNum)) {
             showToast("您上传的身份证和您填写的身份证号不一致");
             return;
         }
-        String issue_authority = identityInfo.getIssue_authority();
-        
+        //        String issue_authority = identityInfo.getIssue_authority();
+        if (!scanNational.contains("公安局")) {
+            showToast("您的身份证签发机关不正确");
+            return;
+        }
+        if (facepath == null && nationalpath == null) {
+            showToast("请上传身份证");
+            return;
+        }
+        File faceFile = new File(facepath);
+        File nationalFile = new File(nationalpath);
+        dialog.show();
+        ObservableSource<UpdateImageResultInfo> o1 = getUpdateImageResultInfoObservableSource(faceFile);
+        ObservableSource<UpdateImageResultInfo> o2 = getUpdateImageResultInfoObservableSource(nationalFile);
 
+
+        Observable.zip(o1, o2, new BiFunction<UpdateImageResultInfo, UpdateImageResultInfo, ImgId>() {
+            @Override
+            public ImgId apply(UpdateImageResultInfo resultInfo, UpdateImageResultInfo resultInfo2) throws Exception {
+                ImgId imgId = new ImgId();
+                imgId.faceImgId = resultInfo.message.id;
+                imgId.nationalImgId = resultInfo2.message.id;
+                imgId.idNum = scanIDNum;
+                imgId.name = scanName;
+                //                ArrayList<UpdateImageResultInfo> infos = new ArrayList<>();
+                //                infos.add(resultInfo);
+                //                infos.add(resultInfo2);
+                return imgId;
+            }
+        }).flatMap(new Function<ImgId, ObservableSource<User>>() {
+            @Override
+            public ObservableSource<User> apply(ImgId imgId) throws Exception {
+                //                addIdentity(imgId);
+                Map<String, Object> map = new HashMap<>();
+                map.put("name", imgId.name);
+                map.put("number", imgId.idNum);
+                map.put("front", imgId.faceImgId);
+                map.put("back", imgId.nationalImgId);
+                return ClientFactory.def(UserService.class).addIdentity(map);
+            }
+        })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<User>() {
+                    @Override
+                    public void accept(User user) throws Exception {
+                        dialog.dismiss();
+                        LogUtils.e(user);
+                        showToast("上传成功");
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
+                        showToast("上传失败");
+                        LogUtils.e(throwable);
+                    }
+                });
+
+
+        //        Observable.just(faceFile, nationalFile)
+        //                .flatMap(new Function<File, ObservableSource<UpdateImageResultInfo>>() {
+        //                    @Override
+        //                    public ObservableSource<UpdateImageResultInfo> apply(File file) throws Exception {
+        //                        return getUpdateImageResultInfoObservableSource(file);
+        //                    }
+        //                })
+        //                .subscribeOn(Schedulers.newThread())
+        //                .observeOn(AndroidSchedulers.mainThread())
+        //
+        //                .subscribe(new Consumer<UpdateImageResultInfo>() {
+        //                    @Override
+        //                    public void accept(UpdateImageResultInfo resultInfo) throws Exception {
+        //                        ToastUtils.showShort("上传成功");
+        //                        dialog.dismiss();
+        //                        LogUtils.e(resultInfo.toString());
+        //                    }
+        //                }, new Consumer<Throwable>() {
+        //                    @Override
+        //                    public void accept(Throwable throwable) throws Exception {
+        //
+        //                    }
+        //                });
     }
 
+    @SuppressLint("CheckResult")
+    private void addIdentity(ImgId imgId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", imgId.name);
+        map.put("number", imgId.idNum);
+        map.put("front", imgId.faceImgId);
+        map.put("back", imgId.nationalImgId);
+        ClientFactory.def(UserService.class).addIdentity(map)
+                .subscribe(new Consumer<User>() {
+                    @Override
+                    public void accept(User user) throws Exception {
+                        LogUtils.e(user.toString());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
+    }
+
+    public static class ImgId {
+        public int    faceImgId;
+        public int    nationalImgId;
+        public String idNum;
+        public String name;
+
+        @Override
+        public String toString() {
+            return "ImgId{" +
+                    "faceImgId=" + faceImgId +
+                    ", nationalImgId=" + nationalImgId +
+                    ", idNum='" + idNum + '\'' +
+                    ", name='" + name + '\'' +
+                    '}';
+        }
+    }
 
     private void doCarmera() {
+
+
         imageUri = Uri.fromFile(fileUri);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //通过FileProvider创建一个content类型的Uri
@@ -268,21 +401,38 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
         }
     }
 
-    private IdentityInfo identityInfo;
+    //    private IdentityInfo identityInfo;
+    String facepath;
+    String nationalpath;
+    String scanIDNum;
+    String scanName;
+    String scanNational;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            identityInfo = (IdentityInfo) data.getSerializableExtra(OcrConfig.OCR_IDENTITYINFO);
+            IdentityInfo identityInfo = (IdentityInfo) data.getSerializableExtra(OcrConfig.OCR_IDENTITYINFO);
+            String certid = identityInfo.getCertid();
+            if (certid != null) {
+                scanIDNum = certid;
+            }
+            String name1 = identityInfo.getName();
+            if (name1 != null) {
+                scanName = name1;
+            }
+            String issue_authority = identityInfo.getIssue_authority();
+            if (issue_authority != null) {
+                scanNational = issue_authority;
+            }
             switch (requestCode) {
                 case Face_Code:
-                    String filepath = data.getStringExtra(OcrConfig.OCR_PHOTO_PATH);
-                    imgPerson.setImageBitmap(BitmapFactory.decodeFile(filepath));
+                    facepath = data.getStringExtra(OcrConfig.OCR_PHOTO_PATH);
+                    imgPerson.setImageBitmap(BitmapFactory.decodeFile(facepath));
                     break;
                 case National_Code:
-                    String filepath1 = data.getStringExtra(OcrConfig.OCR_PHOTO_PATH);
-                    imgIdcardBack.setImageBitmap(BitmapFactory.decodeFile(filepath1));
+                    nationalpath = data.getStringExtra(OcrConfig.OCR_PHOTO_PATH);
+                    imgIdcardBack.setImageBitmap(BitmapFactory.decodeFile(nationalpath));
                     break;
                 default:
             }

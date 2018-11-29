@@ -4,6 +4,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.BuildConfig;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.global.GlobalUrl;
+import com.carlt.autogo.utils.SharepUtil;
 
 import java.io.IOException;
 
@@ -43,6 +44,7 @@ public class DefulatClient extends BaseRestClient {
                 Request request = original.newBuilder()
                         .header("Content-Type", "application/json")
                         .header("Carlt-Access-Id", GlobalKey.TEST_ACCESSID)
+                        .header("token", SharepUtil.getPreferences().getString("Carlt-Token",""))
                         .method(original.method(), original.body())
                         .build();
                 return chain.proceed(request);

@@ -148,6 +148,8 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
         intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.FROM_ID_CARDACCEPT_ACTIVITY);
         intent.putExtra("name", hideName);
         intent.putExtra("idcard", hideIdNume);
+        intent.putExtra("idNum", idCardNum);
+        intent.putExtra("realName", name);
         startActivity(intent);
         finish();
 
