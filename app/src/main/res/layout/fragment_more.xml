@@ -155,7 +155,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_more_setting"
+            android:id="@+id/ll_more_myCar"
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:gravity="center_vertical"
@@ -195,7 +195,7 @@
             android:layout_height="54dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/ll_more_setting">
+            app:layout_constraintTop_toBottomOf="@id/ll_more_myCar">
 
             <ImageView
                 android:layout_width="30dp"

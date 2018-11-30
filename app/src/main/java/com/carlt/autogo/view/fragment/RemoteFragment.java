@@ -1,12 +1,9 @@
 package com.carlt.autogo.view.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -16,7 +13,7 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.RemoteAdapter;
 import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.common.dialog.CommonDialog;
-import com.carlt.autogo.entry.car.CarListInfo;
+import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.RemoteInfo;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
@@ -30,9 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * Description: 远程fragment
@@ -54,7 +49,7 @@ public class RemoteFragment extends BaseMvpFragment {
     @BindView(R.id.remote_rl_lock)
     RelativeLayout remoteRlLock;
 
-    CarListInfo.DataBean carInfo;
+    AuthCarInfo.MyCarBean carInfo;
     int title[] = {R.mipmap.remote_engine_title, R.mipmap.remote_air_title, R.mipmap.remote_car_window_title,
             R.mipmap.remote_sky_window_title, R.mipmap.remote_other_title};
     int icon[] = {R.mipmap.remote_engine_icon, R.mipmap.remote_air_icon, R.mipmap.remote_car_window_icon,
@@ -78,11 +73,13 @@ public class RemoteFragment extends BaseMvpFragment {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                int remoteStatus = carInfo.getRemoteStatus();
-                if (remoteStatus == 1){
-                    showCommonDialog("设备还未激活");
-                }else if (remoteStatus == 2){
-                    showCommonDialog("设备正在激活中");
+                if (carInfo!=null) {
+                    int remoteStatus = carInfo.remoteStatus;
+                    if (remoteStatus == 1) {
+                        showCommonDialog("设备还未激活");
+                    } else if (remoteStatus == 2) {
+                        showCommonDialog("设备正在激活中");
+                    }
                 }
             }
         });
@@ -107,8 +104,8 @@ public class RemoteFragment extends BaseMvpFragment {
         List<RemoteInfo> infos = new ArrayList<>();
         for (int i = 0; i < title.length; i++) {
             RemoteInfo remoteInfo = new RemoteInfo();
-            remoteInfo.setId_img1(title[i]);
-            remoteInfo.setId_img2(icon[i]);
+            remoteInfo.id_img1 = title[i];
+            remoteInfo.id_img2 = icon[i];
             infos.add(remoteInfo);
         }
         return infos;

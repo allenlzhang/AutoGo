@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.carlt.autogo.R;
-import com.carlt.autogo.entry.car.CarListInfo;
+import com.carlt.autogo.entry.car.AuthCarInfo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +15,11 @@ import java.util.List;
  * Created by Marlon on 2018/11/16.
  */
 public class CarPopupAdapter extends BaseAdapter{
-    private CarListInfo info;
+    private AuthCarInfo info;
     private LayoutInflater inflater;
     private int selected_position = 0;
     private OnItemClick click;
-    private List<CarListInfo.DataBean> list = new ArrayList<>();
+    private List<AuthCarInfo.MyCarBean> list = new ArrayList<>();
     private Context context;
     public void setClick(OnItemClick click) {
         this.click = click;
@@ -30,16 +30,16 @@ public class CarPopupAdapter extends BaseAdapter{
 
     }
 
-    public CarPopupAdapter(CarListInfo info, Context context) {
+    public CarPopupAdapter(AuthCarInfo info, Context context) {
         this.context = context;
         this.info = info;
         inflater = LayoutInflater.from(context);
         if (info!=null){
-            if (info.getMyCarList()!=null){
-                list.addAll(info.getMyCarList());
+            if (info.myCar!=null){
+                list.addAll(info.myCar);
             }
-            if (info.getAuthCarList()!=null){
-                list.addAll(info.getAuthCarList());
+            if (info.authCar!=null){
+                list.addAll(info.authCar);
             }
         }
 
@@ -48,13 +48,13 @@ public class CarPopupAdapter extends BaseAdapter{
     @Override
     public int getCount() {
         if ( info!=null){
-            if (info.getMyCarList()!=null&&info.getAuthCarList()!=null){
-                return info.getMyCarList().size()+info.getAuthCarList().size();
+            if (info.myCar!=null&&info.authCar!=null){
+                return info.myCar.size()+info.authCar.size();
             }else{
-                if (info.getMyCarList()!=null){
-                    return info.getMyCarList().size();
-                }else if (info.getAuthCarList()!=null){
-                    return info.getAuthCarList().size();
+                if (info.myCar!=null){
+                    return info.myCar.size();
+                }else if (info.authCar!=null){
+                    return info.authCar.size();
                 }else {
                     return 0;
                 }
@@ -92,13 +92,13 @@ public class CarPopupAdapter extends BaseAdapter{
         holder.mTitle.setVisibility(View.GONE);
         holder.mLine1.setVisibility(View.GONE);
         holder.mLine2.setVisibility(View.GONE);
-        if (info!=null&&info.getMyCarList()!=null&&info.getMyCarList().size()>0&&i == 0){
+        if (info!=null&&info.myCar!=null&&info.myCar.size()>0&&i == 0){
             holder.mTitle.setVisibility(View.VISIBLE);
             holder.mLine2.setVisibility(View.VISIBLE);
             holder.mTitle.setText("我的车辆");
         }
-        if (info!=null&&info.getAuthCarList()!=null&&info.getAuthCarList().size()>0){
-            if (info.getMyCarList()!=null&&info.getMyCarList().size()>0&&i==info.getMyCarList().size()){
+        if (info!=null&&info.authCar!=null&&info.authCar.size()>0){
+            if (info.myCar!=null&&info.myCar.size()>0&&i==info.myCar.size()){
                 holder.mTitle.setVisibility(View.VISIBLE);
                 holder.mLine2.setVisibility(View.VISIBLE);
                 holder.mLine1.setVisibility(View.VISIBLE);
@@ -112,8 +112,8 @@ public class CarPopupAdapter extends BaseAdapter{
             }
 
         }
-        final CarListInfo.DataBean dataBean = list.get(i);
-        holder.mTxt.setText(dataBean.getCarName());
+        final AuthCarInfo.MyCarBean dataBean = list.get(i);
+        holder.mTxt.setText(dataBean.carName);
         if (selected_position == i){
             holder.mTxt.setBackgroundColor(context.getResources().getColor(R.color.colorCarPopup));
             holder.mSelected.setVisibility(View.VISIBLE);
@@ -146,6 +146,6 @@ public class CarPopupAdapter extends BaseAdapter{
         View mSelected;
     }
     public interface OnItemClick{
-        void itemClick(int i,CarListInfo.DataBean dataBean);
+        void itemClick(int i,AuthCarInfo.MyCarBean dataBean);
     }
 }

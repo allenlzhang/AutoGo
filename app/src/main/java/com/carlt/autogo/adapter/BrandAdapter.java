@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.carlt.autogo.R;
-import com.carlt.autogo.entry.car.BrandInfo;
+import com.carlt.autogo.entry.car.BrandInfo.BrandData;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class BrandAdapter extends BaseAdapter{
 
-    private List<BrandInfo> list;
+    private List<BrandData> list;
 
     private LayoutInflater inflater;
 
@@ -29,7 +29,7 @@ public class BrandAdapter extends BaseAdapter{
         this.clickListener = clickListener;
     }
 
-    public BrandAdapter(Context context, List<BrandInfo> list) {
+    public BrandAdapter(Context context, List<BrandData> list) {
         this.list = list;
         inflater = LayoutInflater.from(context);
     }
@@ -64,13 +64,13 @@ public class BrandAdapter extends BaseAdapter{
         }else {
             holder = (ViewHolder) view.getTag();
         }
-        final BrandInfo info = list.get(i);
-        if (TextUtils.isEmpty(info.getTitle())){
-            holder.mTitle.setText(info.getInitial());
+        final BrandData info = list.get(i);
+        if (TextUtils.isEmpty(info.title)){
+            holder.mTitle.setText(info.initial);
             holder.mContext.setVisibility(View.GONE);
         }else {
             holder.mTitle.setVisibility(View.GONE);
-            holder.mContext.setText(info.getTitle());
+            holder.mContext.setText(info.title);
         }
         holder.mContext.setOnClickListener(new View.OnClickListener() {
             @Override

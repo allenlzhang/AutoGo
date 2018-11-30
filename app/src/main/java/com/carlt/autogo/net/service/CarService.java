@@ -1,7 +1,10 @@
 package com.carlt.autogo.net.service;
 
+import com.carlt.autogo.entry.car.AddCarInfo;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.CarAuthTimeInfo;
+import com.carlt.autogo.entry.car.CarBrandInfo;
+import com.carlt.autogo.entry.car.CarModelInfo;
 
 import java.util.Map;
 
@@ -17,5 +20,17 @@ public interface CarService {
     Observable<CarAuthTimeInfo> getAuthSetting(@Body Map<String, Object> param);
 
     @POST("CarAuth/GetMyCarList")
-    Observable<AuthCarInfo> getMyCarList(@Body Map<String, Object> param);
+    Observable<AuthCarInfo> getMyCarList(@Body Map<String, Integer> param);
+
+    @POST("BrandProduct/GetModel")
+    Observable<CarModelInfo> getModel(@Body Map<String,Integer> param);
+
+    @POST("BrandProduct/GetBrandCar")
+    Observable<CarBrandInfo> getBrandCar(@Body Map<String,Integer> param);
+
+    @POST("Bind/AddCar")
+    Observable<AddCarInfo>addCar(@Body Map<String,Object> param);
+
+
+
 }

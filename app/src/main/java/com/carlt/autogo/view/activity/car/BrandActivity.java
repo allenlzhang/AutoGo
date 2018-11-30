@@ -1,5 +1,7 @@
 package com.carlt.autogo.view.activity.car;
 
+import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,7 @@ import com.carlt.autogo.adapter.BrandAdapter;
 import com.carlt.autogo.adapter.OnItemClickListener;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.car.BrandInfo;
+import com.carlt.autogo.entry.car.CarBrandInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +24,7 @@ import butterknife.BindView;
 
 /**
  * Created by Marlon on 2018/11/20.
+ * 品牌
  */
 public class BrandActivity extends BaseMvpActivity {
 
@@ -30,6 +34,7 @@ public class BrandActivity extends BaseMvpActivity {
 
     private BrandAdapter adapter;
 
+    private static final int CODE_BRAND_REQUEST = 0xb6;
     @Override
     protected int getContentView() {
         return R.layout.layout_list;
@@ -38,77 +43,49 @@ public class BrandActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("品牌");
-        adapter = new BrandAdapter(this,getData());
+        Intent intent = getIntent();
+        BrandInfo info = (BrandInfo) intent.getSerializableExtra("brand");
+
+        adapter = new BrandAdapter(this,getData(info));
         layoutList.setAdapter(adapter);
         adapter.setClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(Object o) {
-                BrandInfo info = (BrandInfo) o;
-                ToastUtils.showShort(info.getTitle());
+                BrandInfo.BrandData info = (BrandInfo.BrandData) o;
+                Intent intent1 = new Intent(BrandActivity.this,ModelActivity.class);
+                intent1.putExtra("brandId",info.id);
+                startActivityForResult(intent1,CODE_BRAND_REQUEST);
             }
         });
     }
 
-    private List<BrandInfo> getData() {
-        List<BrandInfo> list = new ArrayList<>();
-        BrandInfo brandInfo = new BrandInfo();
-        brandInfo.setBrandLogo("logo");
-        brandInfo.setId(1);
-        brandInfo.setInitial("D");
-        brandInfo.setLogoUrl("logoUrl");
-        brandInfo.setTitle("大乘智享");
-        brandInfo.setTitlePy("dachengzhixiang");
-        brandInfo.setYear("2018");
-        list.add(brandInfo);
-        BrandInfo brandInfo1 = new BrandInfo();
-        brandInfo1.setBrandLogo("logo");
-        brandInfo1.setId(2);
-        brandInfo1.setInitial("Y");
-        brandInfo1.setLogoUrl("logoUrl");
-        brandInfo1.setTitle("野马汽车");
-        brandInfo1.setTitlePy("yemaqiche");
-        brandInfo1.setYear("2018");
-        list.add(brandInfo1);
-        BrandInfo brandInfo4 = new BrandInfo();
-        brandInfo4.setBrandLogo("logo");
-        brandInfo4.setId(4);
-        brandInfo4.setInitial("A");
-        brandInfo4.setLogoUrl("logoUrl");
-        brandInfo4.setTitle("奥迪");
-        brandInfo4.setTitlePy("aodi");
-        brandInfo4.setYear("2018");
-        list.add(brandInfo4);
-        BrandInfo brandInfo5 = new BrandInfo();
-        brandInfo5.setBrandLogo("logo");
-        brandInfo5.setId(5);
-        brandInfo5.setInitial("A");
-        brandInfo5.setLogoUrl("logoUrl");
-        brandInfo5.setTitle("奥拓");
-        brandInfo5.setTitlePy("aotuo");
-        brandInfo5.setYear("2018");
-        list.add(brandInfo5);
-        BrandInfo brandInfo2 = new BrandInfo();
-        brandInfo2.setBrandLogo("logo");
-        brandInfo2.setId(3);
-        brandInfo2.setInitial("Z");
-        brandInfo2.setLogoUrl("logoUrl");
-        brandInfo2.setTitle("众泰大迈");
-        brandInfo2.setTitlePy("zhongtaidama");
-        brandInfo2.setYear("2018");
-        list.add(brandInfo2);
+    private List<BrandInfo.BrandData> getData(BrandInfo brandInfo) {
+        List<BrandInfo.BrandData> list = brandInfo.items;
         Collections.sort(list);
-        List<BrandInfo> list1 = new ArrayList<>();
+        List<BrandInfo.BrandData> list1 = new ArrayList<>();
         String initial = "";
         for (int i = 0; i < list.size() ; i++) {
-            if (!TextUtils.equals(initial,list.get(i).getInitial())){
-                BrandInfo info = new BrandInfo();
-                info.setInitial(list.get(i).getInitial());
+            if (!TextUtils.equals(initial,list.get(i).initial)){
+                BrandInfo.BrandData info = new BrandInfo.BrandData();
+                info.initial = list.get(i).initial;
                 list1.add(info);
-                initial = list.get(i).getInitial();
+                initial = list.get(i).initial;
             }
             list1.add(list.get(i));
         }
         return list1;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK){
+            if (requestCode == CODE_BRAND_REQUEST){
+                CarBrandInfo.DataBean dataBean = (CarBrandInfo.DataBean) data.getSerializableExtra("carName");
+                Intent intent = new Intent();
+                intent.putExtra("carName",dataBean);
+                this.setResult(RESULT_OK,intent);
+                this.finish();
+            }
+        }
+    }
 }

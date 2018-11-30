@@ -82,7 +82,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     @SuppressLint("CheckResult")
     private void initCarName() {
         dialog.show();
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Integer> map = new HashMap<>();
         map.put("type", 1);
         ClientFactory.def(CarService.class).getMyCarList(map)
                 .subscribe(new Consumer<AuthCarInfo>() {

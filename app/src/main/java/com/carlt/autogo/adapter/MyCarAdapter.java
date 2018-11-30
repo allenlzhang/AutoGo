@@ -11,17 +11,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.carlt.autogo.R;
-import com.carlt.autogo.entry.car.CarListInfo;
+import com.carlt.autogo.entry.car.AuthCarInfo;
 
 import java.util.List;
-import java.util.logging.Handler;
 
 /**
  * Created by Marlon on 2018/11/22.
  */
 public class MyCarAdapter extends BaseAdapter {
 
-    private List<CarListInfo.DataBean> list;
+    private List<AuthCarInfo.MyCarBean> list;
 
     private LayoutInflater inflater;
 
@@ -31,7 +30,7 @@ public class MyCarAdapter extends BaseAdapter {
 
     private int TYPE = MYCAR;
 
-    public MyCarAdapter(Context context, List<CarListInfo.DataBean> list,int TYPE) {
+    public MyCarAdapter(Context context, List<AuthCarInfo.MyCarBean> list, int TYPE) {
         this.list = list;
         inflater = LayoutInflater.from(context);
         this.TYPE = TYPE;
@@ -66,50 +65,50 @@ public class MyCarAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        CarListInfo.DataBean info = list.get(i);
-        if (!TextUtils.isEmpty(info.getCarLogo())) {
+        AuthCarInfo.MyCarBean info = list.get(i);
+        if (!TextUtils.isEmpty(info.carLogo)) {
 
         } else {
             holder.mLogo.setImageResource(R.mipmap.ic_dorcen_logo);
         }
-        if (info.getAuthStatus() == 3 && TYPE == MYCAR) {
+        if (info.authStatus == 3 && TYPE == MYCAR) {
             holder.mIvAuthState.setVisibility(View.VISIBLE);
         } else {
             holder.mIvAuthState.setVisibility(View.GONE);
         }
-        if (!TextUtils.isEmpty(info.getOptionTitle())){
-            holder.mTxtModel.setText(info.getOptionTitle());
+        if (!TextUtils.isEmpty(info.optionTitle)){
+            holder.mTxtModel.setText(info.optionTitle);
         }else {
             holder.mTxtModel.setText(R.string.app_def_txt);
         }
 
-        if (!TextUtils.isEmpty(info.getCarName())){
-            holder.mTxtCarBrand.setText(info.getCarName());
+        if (!TextUtils.isEmpty(info.carName)){
+            holder.mTxtCarBrand.setText(info.carName);
         }else {
             holder.mTxtCarBrand.setText(R.string.app_def_txt);
         }
         if (TYPE == MYCAR){
             holder.mTxtAuthEndTime.setVisibility(View.GONE);
             holder.mLlState.setVisibility(View.VISIBLE);
-            if (info.getRemoteStatus() == 2){
+            if (info.remoteStatus == 2){
                 holder.mIvRemoteState.setImageResource(R.mipmap.ic_remote_activating);
-            }else if (info.getRemoteStatus() == 3){
+            }else if (info.remoteStatus == 3){
                 holder.mIvRemoteState.setImageResource(R.mipmap.ic_remote_activated);
             }else {
                 holder.mIvRemoteState.setImageResource(R.mipmap.ic_remote_activate);
             }
 
-            if (info.getRecodeStatus() == 2){
+            if (info.recodeStatus == 2){
                 holder.mIvRecorderState.setImageResource(R.mipmap.ic_recorder);
-            }else if (info.getRemoteStatus() == 3){
+            }else if (info.recodeStatus== 3){
                 holder.mIvRecorderState.setImageResource(R.mipmap.ic_recorder);
             }else {
                 holder.mIvRecorderState.setImageResource(R.mipmap.ic_recorder);
             }
 
-            if (info.getRemoteStatus() == 2){
+            if (info.machineStatus == 2){
                 holder.mIvMachineState.setImageResource(R.mipmap.ic_car_machine);
-            }else if (info.getRemoteStatus() == 3){
+            }else if (info.machineStatus == 3){
                 holder.mIvMachineState.setImageResource(R.mipmap.ic_car_machine);
             }else {
                 holder.mIvMachineState.setImageResource(R.mipmap.ic_car_machine);
@@ -118,8 +117,8 @@ public class MyCarAdapter extends BaseAdapter {
         }else {
             holder.mTxtAuthEndTime.setVisibility(View.VISIBLE);
             holder.mLlState.setVisibility(View.GONE);
-            if (info.getAuthEndTime()!=0) {
-                holder.mTxtAuthEndTime.setText("授权截止时间："+info.getAuthEndTime());
+            if (info.authEndTime!=0) {
+                holder.mTxtAuthEndTime.setText("授权截止时间："+info.authEndTime);
             }else {
                 holder.mTxtAuthEndTime.setText("授权截止时间：--");
             }

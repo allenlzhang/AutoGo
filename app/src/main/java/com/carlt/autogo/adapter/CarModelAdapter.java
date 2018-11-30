@@ -65,12 +65,12 @@ public class CarModelAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         final NewCarModelInfo newCarModelInfo = list.get(i);
-        if (TextUtils.isEmpty(newCarModelInfo.getDataBeanTitle())){
-            holder.title.setText(newCarModelInfo.getTitle());
+        if (TextUtils.isEmpty(newCarModelInfo.dataBeanTitle)){
+            holder.title.setText(newCarModelInfo.title);
             holder.context.setVisibility(View.GONE);
         }else {
             holder.title.setVisibility(View.GONE);
-            holder.context.setText(newCarModelInfo.getDataBeanTitle());
+            holder.context.setText(newCarModelInfo.dataBeanTitle);
         }
         holder.context.setOnClickListener(new View.OnClickListener() {
             @Override

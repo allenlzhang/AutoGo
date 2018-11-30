@@ -1,8 +1,11 @@
 package com.carlt.autogo.view.fragment;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,7 +34,9 @@ import com.zyyoona7.popup.XGravity;
 import com.zyyoona7.popup.YGravity;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 
 /**
@@ -63,8 +68,8 @@ public class MoreFragment extends BaseMvpFragment {
     /**
      * 我的爱车
      */
-    @BindView(R.id.ll_more_setting)
-    LinearLayout mLlSetting;
+    @BindView(R.id.ll_more_myCar)
+    LinearLayout mLlMyCar;
 
     /**
      * 头像
@@ -77,13 +82,23 @@ public class MoreFragment extends BaseMvpFragment {
      * 车主昵称
      */
     @BindView(R.id.tv_more_nickname)
-    TextView  tvMoreNickname;
+    TextView tvMoreNickname;
 
     /**
-     *
+     * 退出登录
      */
     @BindView(R.id.ll_more_log_out)
     LinearLayout llMoreLogOut;
+
+
+    @BindView(R.id.ll_more_layout1)
+    LinearLayout llMoreLayout1;
+    @BindView(R.id.ll_more_remote_update)
+    LinearLayout llMoreRemoteUpdate;
+    @BindView(R.id.ll_more_service_renewal)
+    LinearLayout llMoreServiceRenewal;
+    @BindView(R.id.ll_more_contact)
+    LinearLayout llMoreContact;
 
 
     private UserInfo userInfo;
@@ -126,9 +141,15 @@ public class MoreFragment extends BaseMvpFragment {
                 .skipMemoryCache(true)
                 .transform(new GlideCircleTransform(mContext))
                 .into(ivMoreHeadSculpture);
+        if (!SharepUtil.getPreferences().getBoolean("isBindCar", false)) {
+            llMoreLayout1.setVisibility(View.GONE);
+            llMoreRemoteUpdate.setVisibility(View.GONE);
+            llMoreServiceRenewal.setVisibility(View.GONE);
+            llMoreContact.setVisibility(View.GONE);
+        }
     }
 
-    @OnClick({R.id.ivAdd, R.id.tv_more_edit_profile, R.id.ll_more_accounts_and_security, R.id.ll_more_setting, R.id.ll_more_log_out})
+    @OnClick({R.id.ivAdd, R.id.tv_more_edit_profile, R.id.ll_more_accounts_and_security, R.id.ll_more_myCar, R.id.ll_more_log_out})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_more_edit_profile:
@@ -139,7 +160,7 @@ public class MoreFragment extends BaseMvpFragment {
                 Intent intent = new Intent(mContext, SafetyActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.ll_more_setting:
+            case R.id.ll_more_myCar:
                 Intent intent1 = new Intent(mContext, MyCarActivity.class);
                 startActivity(intent1);
                 break;

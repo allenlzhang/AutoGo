@@ -65,11 +65,11 @@ public class CarBrandAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         final CarBrandInfo.DataBean dataBean = list.get(i);
-        if (TextUtils.isEmpty(dataBean.getTitle())){
-            holder.title.setText(dataBean.getYear());
+        if (TextUtils.isEmpty(dataBean.title)){
+            holder.title.setText(dataBean.year);
             holder.txt.setVisibility(View.GONE);
         }else {
-            holder.txt.setText(dataBean.getTitle());
+            holder.txt.setText(dataBean.title);
             holder.title.setVisibility(View.GONE);
         }
 

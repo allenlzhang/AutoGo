@@ -19,11 +19,11 @@ public class RemoteAdapter extends BaseQuickAdapter<RemoteInfo,BaseViewHolder> {
     protected void convert(BaseViewHolder helper, RemoteInfo item) {
         int adapterPosition = helper.getAdapterPosition();
         if (adapterPosition%2 ==  0){
-            helper.setImageResource(R.id.item_remote_iv1,item.getId_img1());
-            helper.setImageResource(R.id.item_remote_iv2,item.getId_img2());
+            helper.setImageResource(R.id.item_remote_iv1,item.id_img1);
+            helper.setImageResource(R.id.item_remote_iv2,item.id_img2);
         }else {
-            helper.setImageResource(R.id.item_remote_iv1,item.getId_img2());
-            helper.setImageResource(R.id.item_remote_iv2,item.getId_img1());
+            helper.setImageResource(R.id.item_remote_iv1,item.id_img2);
+            helper.setImageResource(R.id.item_remote_iv2,item.id_img1);
         }
     }
 }

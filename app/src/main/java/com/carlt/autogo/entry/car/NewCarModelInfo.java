@@ -5,42 +5,10 @@ package com.carlt.autogo.entry.car;
  * 车系车型 转成 adapter需要的 info
  */
 public class NewCarModelInfo {
-    private int id;                 //车系id
-    private String title;           //车系名
-    private int dataBeanId;         //车型id
-    private String dataBeanTitle;   //车型名
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public int getDataBeanId() {
-        return dataBeanId;
-    }
-
-    public void setDataBeanId(int dataBeanId) {
-        this.dataBeanId = dataBeanId;
-    }
-
-    public String getDataBeanTitle() {
-        return dataBeanTitle;
-    }
-
-    public void setDataBeanTitle(String dataBeanTitle) {
-        this.dataBeanTitle = dataBeanTitle;
-    }
+    public int id;                 //车系id
+    public String title;           //车系名
+    public int dataBeanId;         //车型id
+    public String dataBeanTitle;   //车型名
 
     @Override
     public String toString() {

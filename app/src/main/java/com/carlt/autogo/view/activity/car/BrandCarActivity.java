@@ -1,27 +1,40 @@
 package com.carlt.autogo.view.activity.car;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.CarBrandAdapter;
 import com.carlt.autogo.adapter.CarModelAdapter;
 import com.carlt.autogo.adapter.OnItemClickListener;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.entry.car.BrandInfo;
 import com.carlt.autogo.entry.car.CarBrandInfo;
+import com.carlt.autogo.entry.car.CarModelInfo;
+import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.service.CarService;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Marlon on 2018/11/20.
+ * 车款
  */
 public class BrandCarActivity extends BaseMvpActivity {
 
@@ -38,31 +51,39 @@ public class BrandCarActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("车款");
-        adapter = new CarBrandAdapter(this, getData());
-        layoutList.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(Object o) {
-                CarBrandInfo.DataBean dataBean = (CarBrandInfo.DataBean) o;
-                ToastUtils.showShort(dataBean.getTitle());
-            }
-        });
+        Intent intent = getIntent();
+        CarBrandInfo info = (CarBrandInfo) intent.getSerializableExtra("brandCar");
+        if (info != null) {
+            adapter = new CarBrandAdapter(this, getData(info));
+            layoutList.setAdapter(adapter);
+            adapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(Object o) {
+                    CarBrandInfo.DataBean dataBean = (CarBrandInfo.DataBean) o;
+                    Intent intent1 = new Intent();
+                    intent1.putExtra("carName", dataBean.title);
+                    BrandCarActivity.this.setResult(RESULT_OK, intent1);
+                }
+            });
+        }
+        int modelId = intent.getIntExtra("modelId", -1);
+        if (modelId != -1) {
+            clientGetData(modelId);
+        }
+
     }
 
-    private List<CarBrandInfo.DataBean> getData() {
+    private List<CarBrandInfo.DataBean> getData(CarBrandInfo info) {
         List<CarBrandInfo.DataBean> list = new ArrayList<>();
-        String json = "{\"data\":[{\"id\":2179033,\"title\":\"野马F99 2009款 1.5L 旗舰型\",\"year\":\"2018\"},{\"id\":2224318,\"title\":\"大乘汽车G60 1.5T 5MT 尊享型\",\"year\":\"2017\"},{\"id\":2179032,\"title\":\"野马F99 2009款 1.5L 舒适型\",\"year\":\"2018\"},{\"id\":2224317,\"title\":\"大乘汽车G60 1.5T 5MT 豪华型\",\"year\":\"2017\"}]}";
-        Gson gson = new Gson();
-        CarBrandInfo info = gson.fromJson(json, CarBrandInfo.class);
-        List<CarBrandInfo.DataBean> dataBeans = info.getData();
+        List<CarBrandInfo.DataBean> dataBeans = info.items;
         Collections.sort(dataBeans);
         String year = "";
         for (int i = 0; i < dataBeans.size(); i++) {
-            if (!year.equals(dataBeans.get(i).getYear())) {
+            if (!year.equals(dataBeans.get(i).year)) {
                 CarBrandInfo.DataBean data = new CarBrandInfo.DataBean();
-                data.setYear(dataBeans.get(i).getYear());
+                data.year = dataBeans.get(i).year;
                 list.add(data);
-                year = dataBeans.get(i).getYear();
+                year = dataBeans.get(i).year;
             }
             list.add(dataBeans.get(i));
         }
@@ -70,10 +91,42 @@ public class BrandCarActivity extends BaseMvpActivity {
         return list;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
+    private void clientGetData(int modelId) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("modelId", modelId);
+        Disposable disposable = ClientFactory.def(CarService.class).getBrandCar(map)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<CarBrandInfo>() {
+                    @Override
+                    public void accept(CarBrandInfo carBrandInfo) throws Exception {
+                        if (carBrandInfo.err != null) {
+                            ToastUtils.showShort(carBrandInfo.err.msg);
+                        } else {
+                            if (carBrandInfo.items != null) {
+                                adapter = new CarBrandAdapter(BrandCarActivity.this, getData(carBrandInfo));
+                                layoutList.setAdapter(adapter);
+                                adapter.setOnItemClickListener(new OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(Object o) {
+                                        CarBrandInfo.DataBean dataBean = (CarBrandInfo.DataBean) o;
+                                        Intent intent1 = new Intent();
+                                        intent1.putExtra("carName", dataBean);
+                                        BrandCarActivity.this.setResult(RESULT_OK,intent1);
+                                        BrandCarActivity.this.finish();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable);
+                    }
+                });
+        disposables.add(disposable);
+
     }
+
 }

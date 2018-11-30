@@ -26,7 +26,7 @@
         tools:ignore="UseCompoundDrawables">
 
         <TextView
-            android:id="@+id/edit_vehicle_certification_add"
+            android:id="@+id/txt_vehicle_certification_add"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -50,6 +50,7 @@
     <EditText
         android:id="@+id/edit_vehicle_certification_vin"
         style="@style/baseEditStyle"
+        android:maxLength="17"
         android:layout_marginTop="10dp"
         android:hint="@string/vehicle_certification_vin"
         tools:ignore="TextFields"/>

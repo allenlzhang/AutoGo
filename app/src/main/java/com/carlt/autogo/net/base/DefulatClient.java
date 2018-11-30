@@ -44,7 +44,7 @@ public class DefulatClient extends BaseRestClient {
                 Request request = original.newBuilder()
                         .header("Content-Type", "application/json")
                         .header("Carlt-Access-Id", GlobalKey.TEST_ACCESSID)
-                        .header("token", SharepUtil.getPreferences().getString("Carlt-Token",""))
+                        .header("Carlt-Token", SharepUtil.getPreferences().getString("token",""))
                         .method(original.method(), original.body())
                         .build();
                 return chain.proceed(request);

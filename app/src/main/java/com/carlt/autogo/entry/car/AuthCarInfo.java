@@ -1,40 +1,41 @@
 package com.carlt.autogo.entry.car;
 
+import com.carlt.autogo.entry.user.BaseError;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * Description:
- * Company    : carlt
- * Author     : zhanglei
- * Date       : 2018/11/28 17:32
+ * Created by Marlon on 2018/11/22.
  */
 public class AuthCarInfo {
-
     public List<MyCarBean> myCar;
-    public List<MyCarBean> AuthCar;
+
+    public List<MyCarBean> authCar;
+
+    public BaseError err;
 
     @Override
     public String toString() {
         return "AuthCarInfo{" +
                 "myCar=" + myCar +
-                ", AuthCar=" + AuthCar +
+                ", authCar=" + authCar +
+                ", err=" + err +
                 '}';
     }
 
-    public static class MyCarBean {
-        /**
-         * id : 5
-         * brandTitle : 雪佛兰
-         * modelTitle : 上汽通用雪佛兰
-         * optionTitle : 科鲁兹
-         * carName : 科鲁兹 2009款 1.6 SL AT
-         */
-
+    public class MyCarBean implements Serializable{
         public int id;
-        public String brandTitle;
-        public String modelTitle;
-        public String optionTitle;
-        public String carName;
+        public String brandTitle; // 品牌名称
+        public String modelTitle; // 车系名称
+        public String optionTitle; // 车型名称
+        public String carName; // 车辆名称
+        public String carLogo; // 车辆logo
+        public int authEndTime; // 授权结束时间
+        public int authStatus; // 授权状态
+        public int remoteStatus; // 远程激活状态
+        public int recodeStatus; // 行车记录仪激活状态
+        public int machineStatus; // 车机激活状态
 
         @Override
         public String toString() {
@@ -44,7 +45,19 @@ public class AuthCarInfo {
                     ", modelTitle='" + modelTitle + '\'' +
                     ", optionTitle='" + optionTitle + '\'' +
                     ", carName='" + carName + '\'' +
+                    ", carLogo='" + carLogo + '\'' +
+                    ", authEndTime=" + authEndTime +
+                    ", authStatus=" + authStatus +
+                    ", remoteStatus=" + remoteStatus +
+                    ", recodeStatus=" + recodeStatus +
+                    ", machineStatus=" + machineStatus +
                     '}';
         }
     }
+
+
+
+
+
+
 }
