@@ -25,8 +25,8 @@ import com.carlt.autogo.utils.QRCodeUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.zyyoona7.popup.EasyPopup;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -47,8 +47,6 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     TextView  tvCarName;
     @BindView(R.id.tvTime)
     TextView  tvTime;
-    private ArrayList<String> carNames = new ArrayList<>();
-    private ArrayList<String> times    = new ArrayList<>();
     private CarAuthTimeAdapter authTimeAdapter;
     private CarNameItemAdapter carNameItemAdapter;
 
@@ -62,27 +60,17 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
         setTitleText("生成二维码");
         Bitmap codeBit = QRCodeUtils.createQRCode("sfsadfsfsf");
         ivQRCode.setImageBitmap(codeBit);
-        carNames.add("奥迪 A4L 2017款 30 FSI 舒适版");
-        carNames.add("奥迪 A5L 2017款 30 FSI 舒适版");
-        carNames.add("奥迪 A6L 2017款 30 FSI 舒适版");
-        carNames.add("奥迪 A1L 2017款 30 FSI 舒适版");
-        carNames.add("奥迪 A3L 2017款 30 FSI 舒适版");
-        carNames.add("奥迪 A8L 2017款 30 FSI 舒适版");
-        carNames.add("奥迪 A7L 2017款 30 FSI 舒适版");
-        times.add("1小时");
-        times.add("2小时");
-        times.add("3小时");
-        times.add("4小时");
-        times.add("5小时");
-        times.add("6小时");
-        //        initAuthTime();
-        initCarName();
+        initQrCode();
+    }
+
+    private void initQrCode() {
+        
     }
 
     @SuppressLint("CheckResult")
-    private void initCarName() {
+    private void initCarName(final View v) {
         dialog.show();
-        HashMap<String, Integer> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>();
         map.put("type", 1);
         ClientFactory.def(CarService.class).getMyCarList(map)
                 .subscribe(new Consumer<AuthCarInfo>() {
@@ -90,6 +78,9 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                     public void accept(AuthCarInfo carInfo) throws Exception {
                         dialog.dismiss();
                         LogUtils.e(carInfo);
+                        List<AuthCarInfo.MyCarBean> myCar = carInfo.myCar;
+                        carNameItemAdapter = new CarNameItemAdapter(myCar,carCurrentSelect);
+                        showCarPop(v, "请选择授权车辆", carNameItemAdapter);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -98,11 +89,29 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                         LogUtils.e(throwable);
                     }
                 });
-       
+//                Gson gson=new Gson();
+//                OkGo.<String>post(url)
+//                        .headers("Carlt-Access-Id", GlobalKey.TEST_ACCESSID)
+//                        .headers("Carlt-Token", SharepUtil.getPreferences().getString("token", ""))
+//                        .upJson(gson.toJson(map))
+//                        .execute(new StringCallback() {
+//                            @Override
+//                            public void onSuccess(Response<String> response) {
+//                                LogUtils.e(response.body());
+//                            }
+//
+//                            @Override
+//                            public void onError(Response<String> response) {
+//                                super.onError(response);
+//                                LogUtils.e(response.body());
+//                            }
+//                        });
 
     }
 
-    public static final String url = "http://192.168.10.184:8080/app/CarAuth/GetMyCarList";
+    public static final String url = "http://test.linewin.cc:8888/app/CarAuth/GetMyCarList";
+    private int timeCurrentSelect;
+    private int carCurrentSelect;
 
     @SuppressLint("CheckResult")
     private void initAuthTime(final View view) {
@@ -114,7 +123,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                     public void accept(CarAuthTimeInfo carAuthTimeInfo) throws Exception {
                         dialog.dismiss();
                         LogUtils.e(carAuthTimeInfo);
-                        authTimeAdapter = new CarAuthTimeAdapter(carAuthTimeInfo.list);
+                        authTimeAdapter = new CarAuthTimeAdapter(carAuthTimeInfo.list, timeCurrentSelect);
                         showCarPop(view, "请选择授权时长", authTimeAdapter);
 
                     }
@@ -136,8 +145,9 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                 refreshQrCode();
                 break;
             case R.id.tvCarName:
-                carNameItemAdapter = new CarNameItemAdapter(carNames);
-                showCarPop(view, "请选择授权车辆", carNameItemAdapter);
+                //                carNameItemAdapter = new CarNameItemAdapter(carNames);
+                //                showCarPop(view, "请选择授权车辆", carNameItemAdapter);
+                initCarName(view);
                 break;
             case R.id.tvTime:
                 //                showCarPop(view, "请选择授权时长", times);
@@ -184,6 +194,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                                 @Override
                                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                                     CarAuthTimeInfo.ListBean info = (CarAuthTimeInfo.ListBean) adapter.getData().get(position);
+                                    timeCurrentSelect = position;
                                     authTimeAdapter.setDefSelect(position);
                                     tvTime.setText(info.name);
                                     easyPopup.dismiss();
@@ -193,8 +204,9 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                             carNameItemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                                    String name = (String) adapter.getData().get(position);
-                                    tvCarName.setText(name);
+                                    AuthCarInfo.MyCarBean carBean = (AuthCarInfo.MyCarBean) adapter.getData().get(position);
+                                    carCurrentSelect = position;
+                                    tvCarName.setText(carBean.carName);
                                     easyPopup.dismiss();
                                 }
                             });

@@ -127,15 +127,19 @@
         </activity>
         <activity android:name=".view.activity.more.transfer.ScannerResultActivity">
         </activity>
-        <activity android:name=".view.activity.more.transfer.AuthQRCodeActivity"
-                  android:hardwareAccelerated="false">
+        <activity
+            android:name=".view.activity.more.transfer.AuthQRCodeActivity"
+            android:hardwareAccelerated="false">
         </activity>
-        <activity android:name=".view.activity.more.transfer.TransferQRCodeActivity"
-                  android:hardwareAccelerated="false">
+        <activity
+            android:name=".view.activity.more.transfer.TransferQRCodeActivity"
+            android:hardwareAccelerated="false">
         </activity>
         <activity android:name=".view.activity.more.transfer.AuthHandleActivity">
         </activity>
         <activity android:name=".view.activity.more.transfer.TransHandleActivity">
+        </activity>
+        <activity android:name=".view.activity.activate.ActivateStepActivity">
         </activity>
     </application>
 

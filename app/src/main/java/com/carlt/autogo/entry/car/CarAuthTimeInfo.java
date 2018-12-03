@@ -1,5 +1,7 @@
 package com.carlt.autogo.entry.car;
 
+import com.carlt.autogo.entry.user.BaseError;
+
 import java.util.List;
 
 /**
@@ -11,7 +13,7 @@ import java.util.List;
 public class CarAuthTimeInfo {
 
     public List<ListBean> list;
-
+    public BaseError      err;
     @Override
     public String toString() {
         return "CarAuthTimeInfo{" +

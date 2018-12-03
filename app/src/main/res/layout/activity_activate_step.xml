@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
+    tools:context=".view.activity.activate.ActivateStepActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/qrcode_bg"
+        android:paddingBottom="30dp">
+
+        <com.shuhart.stepview.StepView
+            android:id="@+id/step_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="8dp"
+            app:sv_animationType="All"
+            app:sv_doneCircleColor="#478cea"
+            app:sv_doneStepLineColor="@color/colorPrimary"
+            app:sv_doneStepMarkColor="#fff"
+            app:sv_doneTextColor="#fff"
+            app:sv_nextStepLineColor="#C5CEEF"
+            app:sv_nextTextColor="#C5CEEF"
+            app:sv_selectedCircleColor="#C5CEEF"
+            app:sv_selectedStepNumberColor="#fff"
+            app:sv_stepPadding="5dp"
+            app:sv_stepsNumber="6"/>
+
+        <ImageView
+            android:id="@+id/ivState"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_below="@+id/step_view"
+            android:src="@mipmap/iv_activate_ing"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="15dp"/>
+
+        <TextView
+            android:id="@+id/tvState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivState"
+            android:layout_centerHorizontal="true"
+            android:drawablePadding="8dp"
+            android:text="核实车辆信息中"
+            android:textColor="@color/textColorGray"
+            android:textSize="14dp"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnRetry"
+        style="@style/BtnCommonCommit"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:text="发起授权"
+        android:textSize="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivQRCode"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:drawablePadding="8dp"
+        android:gravity="center"
+        android:text="多次重试后仍无法连接设备，请拔打400000000"
+        android:textColor="@color/textColorGray"
+        android:textSize="12dp"/>
+</LinearLayout>

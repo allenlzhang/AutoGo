@@ -1,11 +1,8 @@
 package com.carlt.autogo.view.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,9 +31,7 @@ import com.zyyoona7.popup.XGravity;
 import com.zyyoona7.popup.YGravity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 
 /**
@@ -149,7 +144,7 @@ public class MoreFragment extends BaseMvpFragment {
         }
     }
 
-    @OnClick({R.id.ivAdd, R.id.tv_more_edit_profile, R.id.ll_more_accounts_and_security, R.id.ll_more_myCar, R.id.ll_more_log_out})
+    @OnClick({R.id.ll_more_remote_update, R.id.ivAdd,R.id.ll_more_myCar, R.id.tv_more_edit_profile, R.id.ll_more_accounts_and_security, R.id.ll_more_log_out})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_more_edit_profile:
@@ -170,6 +165,9 @@ public class MoreFragment extends BaseMvpFragment {
                 break;
             case R.id.ivAdd:
                 showPop(ivAdd);
+                break;
+            case R.id.ll_more_remote_update:
+//                startActivity(new Intent(mActivity, ActivateStepActivity.class));
                 break;
             default:
         }

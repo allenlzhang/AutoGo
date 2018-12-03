@@ -24,15 +24,16 @@ public class CarAuthTimeAdapter extends BaseQuickAdapter<CarAuthTimeInfo.ListBea
 
     private int defItem = -1;
 
-    public CarAuthTimeAdapter(List<CarAuthTimeInfo.ListBean> data) {
+    public CarAuthTimeAdapter(List<CarAuthTimeInfo.ListBean> data, int pos) {
         super(R.layout.item_car_name, data);
+        this.defItem = pos;
     }
 
 
     @Override
     protected void convert(BaseViewHolder helper, CarAuthTimeInfo.ListBean info) {
         helper.setText(R.id.tvName, info.name);
-//        helper.setVisible(R.id.ivSelect, info.isSelect);
+        helper.setVisible(R.id.ivSelect, info.isSelect);
     }
 
     public void setDefSelect(int position) {

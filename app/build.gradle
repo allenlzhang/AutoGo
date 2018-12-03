@@ -10,7 +10,7 @@ android {
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
-            abiFilters 'armeabi','armeabi-v7a'
+            abiFilters 'armeabi', 'armeabi-v7a'
         }
 //        ndk {
 //
@@ -110,5 +110,5 @@ dependencies {
     compile 'io.github.dltech21:idcard_ocr:1.1.3'
     compile 'com.github.zyyoona7:EasyPopup:1.1.2'
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
-
+    implementation 'com.shuhart.stepview:stepview:1.4.0'
 }

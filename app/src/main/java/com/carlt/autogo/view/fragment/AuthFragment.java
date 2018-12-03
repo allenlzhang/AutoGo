@@ -15,7 +15,6 @@ import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.view.activity.car.CarDetailsActivity;
-import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +58,7 @@ public class AuthFragment extends BaseMvpFragment {
 //    }
     @SuppressLint("CheckResult")
     private void ClientGetMyCar(){
-        Map<String,Integer> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>();
         map.put("type",2);
         map.put("isShowActive",2);
         ClientFactory.def(CarService.class).getMyCarList(map)

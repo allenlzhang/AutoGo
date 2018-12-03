@@ -20,7 +20,9 @@ public interface CarService {
     Observable<CarAuthTimeInfo> getAuthSetting(@Body Map<String, Object> param);
 
     @POST("CarAuth/GetMyCarList")
-    Observable<AuthCarInfo> getMyCarList(@Body Map<String, Integer> param);
+    Observable<AuthCarInfo> getMyCarList(@Body Map<String, Object> param);
+    @POST("CarAuth/CreateAuthQrcode")
+    Observable<AuthCarInfo> createAuthQrcode(@Body Map<String, Object> param);
 
     @POST("BrandProduct/GetModel")
     Observable<CarModelInfo> getModel(@Body Map<String,Integer> param);

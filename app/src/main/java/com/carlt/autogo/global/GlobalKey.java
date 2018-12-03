@@ -7,8 +7,8 @@ package com.carlt.autogo.global;
 public class GlobalKey {
     public static final String Authentication   = "1";
     public static final String UnAuthentication = "0";
-//    public static final String TEST_ACCESSID    = "18644515396614518644";
-    public static final String TEST_ACCESSID    = "12938315356991092938";
+    public static final String TEST_ACCESSID    = "18644515396614518644";
+//    public static final String TEST_ACCESSID    = "12938315356991092938";
     public static final String PRE_ACCESSID     = "10590215396563070590";
 
 

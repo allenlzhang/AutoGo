@@ -333,26 +333,7 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
         //                });
     }
 
-    @SuppressLint("CheckResult")
-    private void addIdentity(ImgId imgId) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", imgId.name);
-        map.put("number", imgId.idNum);
-        map.put("front", imgId.faceImgId);
-        map.put("back", imgId.nationalImgId);
-        ClientFactory.def(UserService.class).addIdentity(map)
-                .subscribe(new Consumer<User>() {
-                    @Override
-                    public void accept(User user) throws Exception {
-                        LogUtils.e(user.toString());
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
 
-                    }
-                });
-    }
 
     public static class ImgId {
         public int    faceImgId;
@@ -428,11 +409,13 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
             switch (requestCode) {
                 case Face_Code:
                     facepath = data.getStringExtra(OcrConfig.OCR_PHOTO_PATH);
-                    imgPerson.setImageBitmap(BitmapFactory.decodeFile(facepath));
+                    Bitmap bitmap = creatWaterMarkBitmap(BitmapFactory.decodeFile(facepath));
+                    imgPerson.setImageBitmap(bitmap);
                     break;
                 case National_Code:
                     nationalpath = data.getStringExtra(OcrConfig.OCR_PHOTO_PATH);
-                    imgIdcardBack.setImageBitmap(BitmapFactory.decodeFile(nationalpath));
+                    Bitmap bitmap1 = creatWaterMarkBitmap(BitmapFactory.decodeFile(facepath));
+                    imgIdcardBack.setImageBitmap(bitmap1);
                     break;
                 default:
             }
