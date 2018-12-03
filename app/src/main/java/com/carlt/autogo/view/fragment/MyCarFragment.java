@@ -13,10 +13,16 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.MyCarAdapter;
 import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.entry.car.AuthCarInfo;
+import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
 import com.carlt.autogo.view.activity.car.CarDetailsActivity;
+import com.carlt.autogo.view.activity.more.safety.FaceRecognitionSettingFirstActivity;
+import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,11 +98,11 @@ public class MyCarFragment extends BaseMvpFragment {
                                      public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                          AuthCarInfo.MyCarBean item = (AuthCarInfo.MyCarBean)adapterView.getItemAtPosition(i);
                                          Intent intent = new Intent(mContext, CarDetailsActivity.class);
-                                         if (item.authStatus != 3){
-                                             if (item.remoteStatus == 2) {
+                                         if (item.authStatus != 2){
+                                             if (item.remoteStatus == 1) {
                                                  intent.putExtra("remoteActivating",true);
                                                  intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
-                                             }else if (item.remoteStatus == 3){
+                                             }else if (item.remoteStatus == 2){
                                                  intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE2);
                                              }else {
                                                  intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
@@ -114,8 +120,7 @@ public class MyCarFragment extends BaseMvpFragment {
 
     @OnClick(R.id.fragment_iv_myCar_add)
     public void onViewClicked() {
-        Intent intent = new Intent(getContext(), CarCertificationActivity.class);
-        startActivityForResult(intent,CODE_ADDCAR_REQUEST);
+        certification();
     }
 
     @Override
@@ -124,6 +129,21 @@ public class MyCarFragment extends BaseMvpFragment {
             if(requestCode == CODE_ADDCAR_REQUEST){
                 ClientGetMyCar();
             }
+        }
+    }
+
+    private void certification() {
+        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        Intent intent = new Intent();
+        if (user.alipayAuth == 1) {
+            intent.setClass(mContext, UserIdChooseActivity.class);
+            startActivity(intent);
+        } else if (user.faceId == 0) {
+            intent.setClass(mContext, FaceRecognitionSettingFirstActivity.class);
+            startActivity(intent);
+        } else {
+            intent.setClass(mContext, CarCertificationActivity.class);
+            startActivityForResult(intent,CODE_ADDCAR_REQUEST);
         }
     }
 }

@@ -13,55 +13,41 @@ import com.carlt.autogo.base.BaseMvpActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Marlon on 2018/11/27.
+ * 车辆详情
  */
 public class CarDetailsActivity extends BaseMvpActivity {
-    @BindView(R.id.tvDetailsModel)
-    TextView tvDetailsModel;
-    @BindView(R.id.tvDetailsBuyTime)
-    TextView tvDetailsBuyTime;
-    @BindView(R.id.tvDetailsServiceCycle)
-    TextView tvDetailsServiceCycle;
-    @BindView(R.id.tvDetailsServiceTime)
-    TextView tvDetailsServiceTime;
-    @BindView(R.id.tvDetailsInsureTime)
-    TextView tvDetailsInsureTime;
-    @BindView(R.id.tvDetailsAnnualTime)
-    TextView tvDetailsAnnualTime;
-    @BindView(R.id.tvDetailsAuthStartTime)
-    TextView tvDetailsAuthStartTime;
-    @BindView(R.id.llDetailsAuthStart)
-    LinearLayout llDetailsAuthStart;
-    @BindView(R.id.tvDetailsAuthEndTime)
-    TextView tvDetailsAuthEndTime;
-    @BindView(R.id.llDetailsAuthEnd)
-    LinearLayout llDetailsAuthEnd;
-    @BindView(R.id.llDetails)
-    LinearLayout llDetails;
-    @BindView(R.id.ivDetailsRemoteState)
-    ImageView ivDetailsRemoteState;
-    @BindView(R.id.tvDetailsRemoteState)
-    TextView tvDetailsRemoteState;
-    @BindView(R.id.ivDetailsRecorderState)
-    ImageView ivDetailsRecorderState;
-    @BindView(R.id.tvDetailsRecorderState)
-    TextView tvDetailsRecorderState;
-    @BindView(R.id.ivDetailsMachineState)
-    ImageView ivDetailsMachineState;
-    @BindView(R.id.tvDetailsMachineState)
-    TextView tvDetailsMachineState;
-    @BindView(R.id.llDetailsDevice)
-    LinearLayout llDetailsDevice;
-    @BindView(R.id.btnCancelAuth)
-    Button btnCancelAuth;
-    @BindView(R.id.tvDetailsRemote)
-    TextView tvDetailsRemote;
-    @BindView(R.id.tvDetailsRecorder)
-    TextView tvDetailsRecorder;
-    @BindView(R.id.tvDetailsMachine)
-    TextView tvDetailsMachine;
+    @BindView(R.id.tvDetailsModel) TextView tvDetailsModel;//车型
+
+    @BindView(R.id.llDetails) LinearLayout llDetails;//详情模块
+    @BindView(R.id.tvDetailsBuyTime) TextView tvDetailsBuyTime;//购车时间
+    @BindView(R.id.tvDetailsServiceCycle) TextView tvDetailsServiceCycle;//上次保养里程
+    @BindView(R.id.tvDetailsServiceTime) TextView tvDetailsServiceTime;//上次保养时间
+    @BindView(R.id.tvDetailsInsureTime) TextView tvDetailsInsureTime;//上次投保时间
+    @BindView(R.id.tvDetailsAnnualTime) TextView tvDetailsAnnualTime;//上次年检时间
+    @BindView(R.id.tvDetailsAuthStartTime) TextView tvDetailsAuthStartTime;//授权开始时间
+    @BindView(R.id.llDetailsAuthStart) LinearLayout llDetailsAuthStart;
+    @BindView(R.id.tvDetailsAuthEndTime) TextView tvDetailsAuthEndTime;//授权结束时间
+    @BindView(R.id.llDetailsAuthEnd) LinearLayout llDetailsAuthEnd;
+
+    @BindView(R.id.llDetailsDevice) LinearLayout llDetailsDevice;//设备模块
+    @BindView(R.id.llDetailsRemote) LinearLayout llDetailsRemote;//远程
+    @BindView(R.id.ivDetailsRemoteState) ImageView ivDetailsRemoteState;//远程激活icon
+    @BindView(R.id.tvDetailsRemoteState) TextView tvDetailsRemoteState;//远程激活状态
+    @BindView(R.id.llDetailsRecorder) LinearLayout llDetailsRecorder;//记录仪
+    @BindView(R.id.ivDetailsRecorderState) ImageView ivDetailsRecorderState;//记录仪icon
+    @BindView(R.id.tvDetailsRecorderState) TextView tvDetailsRecorderState;//记录仪状态
+    @BindView(R.id.llDetailsMachine) LinearLayout llDetailsMachine;//车机
+    @BindView(R.id.ivDetailsMachineState) ImageView ivDetailsMachineState;//车机icon
+    @BindView(R.id.tvDetailsMachineState) TextView tvDetailsMachineState;//车机状态
+    @BindView(R.id.tvDetailsRemote) TextView tvDetailsRemote;//远程txt
+    @BindView(R.id.tvDetailsRecorder) TextView tvDetailsRecorder;//记录仪txt
+    @BindView(R.id.tvDetailsMachine) TextView tvDetailsMachine;//车机txt
+
+    @BindView(R.id.btnCancelAuth) Button btnCancelAuth;//取消授权
 
     private int type = DETAILS_TYPE1;
     private boolean isRemoteActivating = false;  //远程是否激活中
@@ -77,10 +63,11 @@ public class CarDetailsActivity extends BaseMvpActivity {
 
     @Override
     public void init() {
+        setTitleText("车辆详情");
         initView();
     }
 
-    private void initView(){
+    private void initView() {
         Intent intent = getIntent();
         type = intent.getIntExtra("type", DETAILS_TYPE1);
         isRemoteActivating = intent.getBooleanExtra("remoteActivating", false);
@@ -116,5 +103,30 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 btnCancelAuth.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    @OnClick({R.id.llDetailsRemote, R.id.llDetailsRecorder, R.id.llDetailsMachine, R.id.btnCancelAuth})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.llDetailsRemote:
+                clickRemote();
+                break;
+            case R.id.llDetailsRecorder:
+                break;
+            case R.id.llDetailsMachine:
+                break;
+            case R.id.btnCancelAuth:
+                break;
+        }
+    }
+
+    private void clickRemote(){
+        if (type == DETAILS_TYPE1){
+            if (isRemoteActivating){
+                startActivity(DeviceActivateEditActivity.class,false);
+            }else {
+                startActivity(DeviceActivateActivity.class,false);
+            }
+        }else {}
     }
 }

@@ -1,5 +1,6 @@
 package com.carlt.autogo.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.CarPopupAdapter;
 import com.carlt.autogo.base.BaseMvpFragment;
@@ -18,14 +21,23 @@ import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
+import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
+import com.carlt.autogo.view.activity.car.DeviceActivateActivity;
 import com.carlt.autogo.view.activity.more.safety.FaceRecognitionSettingFirstActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 import com.google.gson.Gson;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Description: 首页fragment
@@ -73,38 +85,27 @@ public class HomeFragment extends BaseMvpFragment {
 
     @Override
     protected void init() {
-//        tv.setText("首页");
-//        CommonDialog.createDialogNotitle(getActivity(), "你还没有进行车辆认证", "", "稍候再说", "立即认证", new CommonDialog.DialogWithTitleClick() {
-//            @Override
-//            public void onRightClick() {
-//                startActivity(new Intent(getActivity(), CarCertificationActivity.class));
-//            }
-//        });
-        AuthCarInfo info = getData();
-        adapter = new CarPopupAdapter(info, getContext());
-        adapter.setClick(new CarPopupAdapter.OnItemClick() {
-            @Override
-            public void itemClick(int i, AuthCarInfo.MyCarBean dataBean) {
-                popupWindow.dismiss();
-                adapter.setSelected_position(i);
-                tvCarType.setText(dataBean.carName);
-                SharepUtil.putByBean("carInfo", dataBean);
-            }
-        });
+
 
     }
 
-    private AuthCarInfo getData() {
+//    private AuthCarInfo getData() {
 //        String json = "{\"myCar\":[{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵\n" +
 //                "型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0}]}";
-        String json = "{\"myCar\":[{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":3,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":1,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":3,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":2,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0}],\"authCar\":[{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":3,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":1,\"recodeStatus\":0,\"machineStatus\":0}]}";
+//        String json = "{\"myCar\":[{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":3,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":1,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":3,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":2,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0}],\"authCar\":[{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":3,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":1,\"recodeStatus\":0,\"machineStatus\":0}]}";
 //        String json2 = "\n" +
 //                "{\"myCar\":[{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":3,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":1,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":3,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":2,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0}]}";
+//
+//        Gson gson = new Gson();
+//        carListInfo = gson.fromJson(json, AuthCarInfo.class);
+//        return carListInfo;
+//    }
 
-        Gson gson = new Gson();
-        carListInfo = gson.fromJson(json, AuthCarInfo.class);
-        if (carListInfo != null && (carListInfo.myCar!= null || carListInfo.authCar != null)) {
-            if (carListInfo.myCar.size() > 0 || carListInfo.authCar.size() > 0) {
+    private void isBindCar(AuthCarInfo info){
+        if (info != null) {
+            if (info.myCar!= null&&info.myCar.size() > 0 ){
+                SharepUtil.putBoolean("isBindCar", true);
+            }else if (info.authCar != null && info.authCar.size() > 0) {
                 SharepUtil.putBoolean("isBindCar", true);
             } else {
                 SharepUtil.putBoolean("isBindCar", false);
@@ -112,17 +113,58 @@ public class HomeFragment extends BaseMvpFragment {
         } else {
             SharepUtil.putBoolean("isBindCar", false);
         }
-        return carListInfo;
+    }
+
+    @SuppressLint("CheckResult")
+    private void ClientGetData(){
+        Map<String,Object> map = new HashMap<>();
+        map.put("type",3);
+        ClientFactory.def(CarService.class).getMyCarList(map)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<AuthCarInfo>() {
+                    @Override
+                    public void accept(AuthCarInfo info) throws Exception {
+                        if (info.err!=null){
+                            ToastUtils.showShort(info.err.msg);
+                        }else {
+                            adapter = new CarPopupAdapter(info, getContext());
+                            adapter.setClick(new CarPopupAdapter.OnItemClick() {
+                                @Override
+                                public void itemClick(int i, AuthCarInfo.MyCarBean dataBean) {
+                                    popupWindow.dismiss();
+                                    adapter.setSelected_position(i);
+                                    tvCarType.setText(dataBean.carName);
+                                    SharepUtil.putByBean("carInfo", dataBean);
+                                }
+                            });
+                            isBindCar(info);
+                            if (SharepUtil.getPreferences().getBoolean("isBindCar", false)) {
+                                homeRlLock.setVisibility(View.GONE);
+                            } else {
+                                homeRlLock.setVisibility(View.VISIBLE);
+                            }
+                            if (info.myCar!=null&&info.myCar.size()>0){
+                                tvCarType.setText(info.myCar.get(0).carName);
+                                SharepUtil.putByBean("carInfo", info.myCar.get(0));
+                            }else if (info.authCar!=null&&info.authCar.size()>0){
+                                tvCarType.setText(info.authCar.get(0).carName);
+                                SharepUtil.putByBean("carInfo", info.authCar.get(0));
+                            }
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable);
+                    }
+                });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (SharepUtil.getPreferences().getBoolean("isBindCar", false)) {
-            homeRlLock.setVisibility(View.GONE);
-        } else {
-            homeRlLock.setVisibility(View.VISIBLE);
-        }
+        ClientGetData();
     }
 
     private void showPopupWindow(View view) {
@@ -180,14 +222,15 @@ public class HomeFragment extends BaseMvpFragment {
     }
 
     private boolean isActivated(){
+        // 远程激活状态,设备激活状态 0-未激活  1-正在激活  2-激活成功  3-激活失败
         AuthCarInfo.MyCarBean dataBean = SharepUtil.getBeanFromSp("carInfo");
         if (dataBean!=null) {
             int remoteStatus = dataBean.remoteStatus;
-            if (remoteStatus == 1) {
-                showCommonDialog("设备还未激活");
+            if (remoteStatus == 0) {
+                showCommonDialog("设备还未激活","去激活",false);
                 return false;
-            } else if (remoteStatus == 2) {
-                showCommonDialog("设备正在激活");
+            } else if (remoteStatus == 1) {
+                showCommonDialog("设备正在激活","查看详情",true);
                 return false;
             } else {
                 return true;
@@ -209,8 +252,8 @@ public class HomeFragment extends BaseMvpFragment {
         startActivity(intent);
     }
 
-    private void showCommonDialog(String title) {
-        CommonDialog.createDialogNotitle(mContext, title, "", "确定", "查看详情", true, new CommonDialog.DialogWithTitleClick() {
+    private void showCommonDialog(String title,String rightTxt,final boolean isActivated) {
+        CommonDialog.createDialogNotitle(mContext, title, "", "确定", rightTxt, true, new CommonDialog.DialogWithTitleClick() {
             @Override
             public void onLeftClick() {
 
@@ -218,7 +261,13 @@ public class HomeFragment extends BaseMvpFragment {
 
             @Override
             public void onRightClick() {
+                Intent intent = new Intent();
+                if (isActivated){
 
+                }else {
+                    intent.setClass(mContext, DeviceActivateActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }

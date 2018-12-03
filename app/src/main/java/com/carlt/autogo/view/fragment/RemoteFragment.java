@@ -19,6 +19,7 @@ import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
+import com.carlt.autogo.view.activity.car.DeviceActivateActivity;
 import com.carlt.autogo.view.activity.more.safety.FaceRecognitionSettingFirstActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -49,7 +50,6 @@ public class RemoteFragment extends BaseMvpFragment {
     @BindView(R.id.remote_rl_lock)
     RelativeLayout remoteRlLock;
 
-    AuthCarInfo.MyCarBean carInfo;
     int title[] = {R.mipmap.remote_engine_title, R.mipmap.remote_air_title, R.mipmap.remote_car_window_title,
             R.mipmap.remote_sky_window_title, R.mipmap.remote_other_title};
     int icon[] = {R.mipmap.remote_engine_icon, R.mipmap.remote_air_icon, R.mipmap.remote_car_window_icon,
@@ -69,24 +69,19 @@ public class RemoteFragment extends BaseMvpFragment {
         rvListRemote.setLayoutManager(linearLayoutManager);
         RemoteAdapter adapter = new RemoteAdapter(getData());
         rvListRemote.setAdapter(adapter);
-        carInfo = SharepUtil.getBeanFromSp("carInfo");
+
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (carInfo!=null) {
-                    int remoteStatus = carInfo.remoteStatus;
-                    if (remoteStatus == 1) {
-                        showCommonDialog("设备还未激活");
-                    } else if (remoteStatus == 2) {
-                        showCommonDialog("设备正在激活中");
-                    }
+                if (isActivated()){
+
                 }
             }
         });
     }
 
-    private void showCommonDialog(String title){
-        CommonDialog.createDialogNotitle(mContext, title, "", "确定", "查看详情", true, new CommonDialog.DialogWithTitleClick() {
+    private void showCommonDialog(String title, String rightTxt, final boolean isActivated){
+        CommonDialog.createDialogNotitle(mContext, title, "", "确定", rightTxt, true, new CommonDialog.DialogWithTitleClick() {
             @Override
             public void onLeftClick() {
 
@@ -94,7 +89,13 @@ public class RemoteFragment extends BaseMvpFragment {
 
             @Override
             public void onRightClick() {
+                Intent intent = new Intent();
+                if (isActivated){
 
+                }else {
+                    intent.setClass(mContext,DeviceActivateActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -115,8 +116,10 @@ public class RemoteFragment extends BaseMvpFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_base_back:
+                if (isActivated()){}
                 break;
             case R.id.tv_base_right:
+                if (isActivated()){}
                 break;
             case R.id.remote_btn_lock:
                 certification();
@@ -134,17 +137,41 @@ public class RemoteFragment extends BaseMvpFragment {
         }
     }
 
+    /**
+     * 判断是否认证
+     */
     private void certification(){
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         Intent intent = new Intent();
-        if (user.alipayAuth == 1){
+        if (user.alipayAuth == 1){ //身份认证
             intent.setClass(mContext,UserIdChooseActivity.class);
-        }else if (user.faceId == 0){
+        }else if (user.faceId == 0){//人脸认证
             intent.setClass(mContext,FaceRecognitionSettingFirstActivity.class);
         }else {
             intent.setClass(mContext, CarCertificationActivity.class);
         }
         startActivity(intent);
+    }
+
+    /**
+     * 是否激活设备
+     * @return
+     */
+    private boolean isActivated(){
+        AuthCarInfo.MyCarBean carInfo = SharepUtil.getBeanFromSp("carInfo");
+        if (carInfo!=null) {
+            int remoteStatus = carInfo.remoteStatus;
+            if (remoteStatus == 0) {
+                showCommonDialog("设备还未激活","去激活",false);
+                return false;
+            } else if (remoteStatus == 1) {
+                showCommonDialog("设备正在激活中","查看详情",true);
+                return false;
+            }else {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

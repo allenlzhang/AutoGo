@@ -71,7 +71,7 @@ public class MyCarAdapter extends BaseAdapter {
         } else {
             holder.mLogo.setImageResource(R.mipmap.ic_dorcen_logo);
         }
-        if (info.authStatus == 3 && TYPE == MYCAR) {
+        if (info.authStatus == 2 && TYPE == MYCAR) {
             holder.mIvAuthState.setVisibility(View.VISIBLE);
         } else {
             holder.mIvAuthState.setVisibility(View.GONE);
@@ -90,25 +90,25 @@ public class MyCarAdapter extends BaseAdapter {
         if (TYPE == MYCAR){
             holder.mTxtAuthEndTime.setVisibility(View.GONE);
             holder.mLlState.setVisibility(View.VISIBLE);
-            if (info.remoteStatus == 2){
+            if (info.remoteStatus == 1){
                 holder.mIvRemoteState.setImageResource(R.mipmap.ic_remote_activating);
-            }else if (info.remoteStatus == 3){
+            }else if (info.remoteStatus == 2){
                 holder.mIvRemoteState.setImageResource(R.mipmap.ic_remote_activated);
             }else {
                 holder.mIvRemoteState.setImageResource(R.mipmap.ic_remote_activate);
             }
 
-            if (info.recodeStatus == 2){
+            if (info.recodeStatus == 1){
                 holder.mIvRecorderState.setImageResource(R.mipmap.ic_recorder);
-            }else if (info.recodeStatus== 3){
+            }else if (info.recodeStatus== 2){
                 holder.mIvRecorderState.setImageResource(R.mipmap.ic_recorder);
             }else {
                 holder.mIvRecorderState.setImageResource(R.mipmap.ic_recorder);
             }
 
-            if (info.machineStatus == 2){
+            if (info.machineStatus == 1){
                 holder.mIvMachineState.setImageResource(R.mipmap.ic_car_machine);
-            }else if (info.machineStatus == 3){
+            }else if (info.machineStatus == 2){
                 holder.mIvMachineState.setImageResource(R.mipmap.ic_car_machine);
             }else {
                 holder.mIvMachineState.setImageResource(R.mipmap.ic_car_machine);

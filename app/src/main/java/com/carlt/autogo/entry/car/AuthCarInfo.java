@@ -32,8 +32,8 @@ public class AuthCarInfo {
         public String carName; // 车辆名称
         public String carLogo; // 车辆logo
         public int authEndTime; // 授权结束时间
-        public int authStatus; // 授权状态
-        public int remoteStatus; // 远程激活状态
+        public int authStatus; // 授权状态,1未授权，2授权中
+        public int remoteStatus; // 远程激活状态,设备激活状态 0-未激活  1-正在激活  2-激活成功  3-激活失败
         public int recodeStatus; // 行车记录仪激活状态
         public int machineStatus; // 车机激活状态
 
