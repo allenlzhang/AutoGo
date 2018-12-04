@@ -253,52 +253,62 @@ public class CarCertificationActivity extends BaseMvpActivity {
                     @Override
                     public void onSuccess(Response<String> response) {
                         dialog.dismiss();
-                        String s = response.body();
-                        int level = 0;
-                        if (s != null) {
-                            JSONObject object = null;
-                            try {
-                                object = new JSONObject(s);
-                                level = object.optInt("level", 0);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                        parseFilter(response.body());
+                    }
 
-                            Gson gson = new Gson();
-                            Intent intent = new Intent();
-                            if (level == 1) {
-                                BrandInfo info = gson.fromJson(s, BrandInfo.class);
-                                if (info.err != null) {
-                                    ToastUtils.showShort(info.err.msg);
-                                } else {
-                                    intent.setClass(CarCertificationActivity.this, BrandActivity.class);
-                                    intent.putExtra("brand", info);
-                                    startActivity(intent);
-                                }
-                            } else if (level == 2) {
-                                CarModelInfo info = gson.fromJson(s, CarModelInfo.class);
-                                if (info.err != null) {
-                                    ToastUtils.showShort(info.err.msg);
-                                } else {
-                                    intent.setClass(CarCertificationActivity.this, ModelActivity.class);
-                                    intent.putExtra("model", info);
-                                    startActivityForResult(intent, CODE_ADDCAR_REQUEST);
-                                }
-                            } else if (level == 3) {
-                                CarBrandInfo info = gson.fromJson(s, CarBrandInfo.class);
-                                if (info.err != null) {
-                                    ToastUtils.showShort(info.err.msg);
-                                } else {
-                                    intent.setClass(CarCertificationActivity.this, BrandCarActivity.class);
-                                    intent.putExtra("brandCar", info);
-                                    startActivityForResult(intent, CODE_ADDCAR_REQUEST);
-                                }
-                            } else {
-                                LogUtils.e("CarCertificationActivity---数据类型错误");
-                            }
-                        }
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        dialog.dismiss();
+                        LogUtils.e(response);
                     }
                 });
+    }
+
+    private void parseFilter (String body){
+        int level = 0;
+        if (body != null) {
+            JSONObject object = null;
+            try {
+                object = new JSONObject(body);
+                level = object.optInt("level", 0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            Gson gson = new Gson();
+            Intent intent = new Intent();
+            if (level == 1) {
+                BrandInfo info = gson.fromJson(body, BrandInfo.class);
+                if (info.err != null) {
+                    ToastUtils.showShort(info.err.msg);
+                } else {
+                    intent.setClass(CarCertificationActivity.this, BrandActivity.class);
+                    intent.putExtra("brand", info);
+                    startActivity(intent);
+                }
+            } else if (level == 2) {
+                CarModelInfo info = gson.fromJson(body, CarModelInfo.class);
+                if (info.err != null) {
+                    ToastUtils.showShort(info.err.msg);
+                } else {
+                    intent.setClass(CarCertificationActivity.this, ModelActivity.class);
+                    intent.putExtra("model", info);
+                    startActivityForResult(intent, CODE_ADDCAR_REQUEST);
+                }
+            } else if (level == 3) {
+                CarBrandInfo info = gson.fromJson(body, CarBrandInfo.class);
+                if (info.err != null) {
+                    ToastUtils.showShort(info.err.msg);
+                } else {
+                    intent.setClass(CarCertificationActivity.this, BrandCarActivity.class);
+                    intent.putExtra("brandCar", info);
+                    startActivityForResult(intent, CODE_ADDCAR_REQUEST);
+                }
+            } else {
+                LogUtils.e("CarCertificationActivity---数据类型错误");
+            }
+        }
     }
 
     /**

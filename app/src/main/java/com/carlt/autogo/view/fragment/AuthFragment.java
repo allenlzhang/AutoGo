@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.MyCarAdapter;
@@ -67,23 +68,32 @@ public class AuthFragment extends BaseMvpFragment {
                 .subscribe(new Consumer<AuthCarInfo>() {
                     @Override
                     public void accept(AuthCarInfo authCarInfo) throws Exception {
-                        if (authCarInfo.err!=null){
-                            ToastUtils.showShort(authCarInfo.err.msg);
-                        }else {
-                            fragmentIvMyCarAdd.setVisibility(View.GONE);
-                            listInfos = authCarInfo.authCar;
-                            adapter = new MyCarAdapter(getContext(),listInfos,MyCarAdapter.AUTHCAR);
-                            fragmentLvMyCar.setAdapter(adapter);
-                            fragmentLvMyCar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    Intent intent = new Intent(mContext, CarDetailsActivity.class);
-                                    intent.putExtra("type",CarDetailsActivity.DETAILS_TYPE4);
-                                    startActivity(intent);
-                                }
-                            });
-                        }
+                        parseGetMyCarList(authCarInfo);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable);
                     }
                 });
+    }
+
+    private void parseGetMyCarList(AuthCarInfo authCarInfo){
+        if (authCarInfo.err != null) {
+            ToastUtils.showShort(authCarInfo.err.msg);
+        } else {
+            fragmentIvMyCarAdd.setVisibility(View.GONE);
+            listInfos = authCarInfo.authCar;
+            adapter = new MyCarAdapter(getContext(), listInfos, MyCarAdapter.AUTHCAR);
+            fragmentLvMyCar.setAdapter(adapter);
+            fragmentLvMyCar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(mContext, CarDetailsActivity.class);
+                    intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE4);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 }

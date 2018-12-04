@@ -125,33 +125,7 @@ public class HomeFragment extends BaseMvpFragment {
                 .subscribe(new Consumer<AuthCarInfo>() {
                     @Override
                     public void accept(AuthCarInfo info) throws Exception {
-                        if (info.err!=null){
-                            ToastUtils.showShort(info.err.msg);
-                        }else {
-                            adapter = new CarPopupAdapter(info, getContext());
-                            adapter.setClick(new CarPopupAdapter.OnItemClick() {
-                                @Override
-                                public void itemClick(int i, AuthCarInfo.MyCarBean dataBean) {
-                                    popupWindow.dismiss();
-                                    adapter.setSelected_position(i);
-                                    tvCarType.setText(dataBean.carName);
-                                    SharepUtil.putByBean("carInfo", dataBean);
-                                }
-                            });
-                            isBindCar(info);
-                            if (SharepUtil.getPreferences().getBoolean("isBindCar", false)) {
-                                homeRlLock.setVisibility(View.GONE);
-                            } else {
-                                homeRlLock.setVisibility(View.VISIBLE);
-                            }
-                            if (info.myCar!=null&&info.myCar.size()>0){
-                                tvCarType.setText(info.myCar.get(0).carName);
-                                SharepUtil.putByBean("carInfo", info.myCar.get(0));
-                            }else if (info.authCar!=null&&info.authCar.size()>0){
-                                tvCarType.setText(info.authCar.get(0).carName);
-                                SharepUtil.putByBean("carInfo", info.authCar.get(0));
-                            }
-                        }
+                        parseGetMyList(info);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -159,6 +133,36 @@ public class HomeFragment extends BaseMvpFragment {
                         LogUtils.e(throwable);
                     }
                 });
+    }
+
+    private void parseGetMyList(AuthCarInfo info){
+        if (info.err!=null){
+            ToastUtils.showShort(info.err.msg);
+        }else {
+            adapter = new CarPopupAdapter(info, getContext());
+            adapter.setClick(new CarPopupAdapter.OnItemClick() {
+                @Override
+                public void itemClick(int i, AuthCarInfo.MyCarBean dataBean) {
+                    popupWindow.dismiss();
+                    adapter.setSelected_position(i);
+                    tvCarType.setText(dataBean.carName);
+                    SharepUtil.putByBean("carInfo", dataBean);
+                }
+            });
+            isBindCar(info);
+            if (SharepUtil.getPreferences().getBoolean("isBindCar", false)) {
+                homeRlLock.setVisibility(View.GONE);
+            } else {
+                homeRlLock.setVisibility(View.VISIBLE);
+            }
+            if (info.myCar!=null&&info.myCar.size()>0){
+                tvCarType.setText(info.myCar.get(0).carName);
+                SharepUtil.putByBean("carInfo", info.myCar.get(0));
+            }else if (info.authCar!=null&&info.authCar.size()>0){
+                tvCarType.setText(info.authCar.get(0).carName);
+                SharepUtil.putByBean("carInfo", info.authCar.get(0));
+            }
+        }
     }
 
     @Override

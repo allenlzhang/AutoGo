@@ -3,11 +3,13 @@ package com.carlt.autogo.view.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.MyCarAdapter;
@@ -84,38 +86,47 @@ public class MyCarFragment extends BaseMvpFragment {
                 .subscribe(new Consumer<AuthCarInfo>() {
                     @Override
                     public void accept(AuthCarInfo authCarInfo) throws Exception {
-                             if (authCarInfo.err!=null){
-                                 ToastUtils.showShort(authCarInfo.err.msg);
-                             }else {
-                                 List<AuthCarInfo.MyCarBean> list = getData(authCarInfo);
-                                 if (list.size() >= 5) {
-                                     fragmentIvMyCarAdd.setVisibility(View.GONE);
-                                 }
-                                 adapter = new MyCarAdapter(getContext(), list, MyCarAdapter.MYCAR);
-                                 fragmentLvMyCar.setAdapter(adapter);
-                                 fragmentLvMyCar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                     @Override
-                                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                         AuthCarInfo.MyCarBean item = (AuthCarInfo.MyCarBean)adapterView.getItemAtPosition(i);
-                                         Intent intent = new Intent(mContext, CarDetailsActivity.class);
-                                         if (item.authStatus != 2){
-                                             if (item.remoteStatus == 1) {
-                                                 intent.putExtra("remoteActivating",true);
-                                                 intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
-                                             }else if (item.remoteStatus == 2){
-                                                 intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE2);
-                                             }else {
-                                                 intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
-                                             }
-                                         }else{
-                                             intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE3);
-                                         }
-                                         startActivity(intent);
-                                     }
-                                 });
-                             }
+                        parseGetMyCarList(authCarInfo);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable);
                     }
                 });
+    }
+
+    private void parseGetMyCarList(AuthCarInfo authCarInfo){
+        if (authCarInfo.err != null) {
+            ToastUtils.showShort(authCarInfo.err.msg);
+        } else {
+            List<AuthCarInfo.MyCarBean> list = getData(authCarInfo);
+            if (list.size() >= 5) {
+                fragmentIvMyCarAdd.setVisibility(View.GONE);
+            }
+            adapter = new MyCarAdapter(getContext(), list, MyCarAdapter.MYCAR);
+            fragmentLvMyCar.setAdapter(adapter);
+            fragmentLvMyCar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    AuthCarInfo.MyCarBean item = (AuthCarInfo.MyCarBean) adapterView.getItemAtPosition(i);
+                    Intent intent = new Intent(mContext, CarDetailsActivity.class);
+                    if (item.authStatus != 2) {
+                        if (item.remoteStatus == 1) {
+                            intent.putExtra("remoteActivating", true);
+                            intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
+                        } else if (item.remoteStatus == 2) {
+                            intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE2);
+                        } else {
+                            intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
+                        }
+                    } else {
+                        intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE3);
+                    }
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     @OnClick(R.id.fragment_iv_myCar_add)
