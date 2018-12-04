@@ -142,6 +142,8 @@
         </activity>
         <activity android:name=".view.activity.activate.ActivateStepActivity">
         </activity>
+        <activity android:name=".view.activity.more.transfer.WaitAuthActivity">
+        </activity>
     </application>
 
 </manifest>

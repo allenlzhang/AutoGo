@@ -94,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="25dp"
-        android:text="发起授权"
+        android:text="同意授权"
         android:textSize="16dp"/>
 
     <Button

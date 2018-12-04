@@ -8,6 +8,7 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+
 /**
  * Description :自定义扫码 Activity
  * Author     : zhanglei
@@ -21,21 +22,16 @@ public class ScanActivity extends BaseMvpActivity {
     Bundle               mBundle;
 
     //    @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-//            setContentView(R.layout.activity_scan);
-            mBundle = savedInstanceState;
-            initView();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBundle = savedInstanceState;
+        initView();
 
-        }
+    }
 
     private void initView() {
-        //        barcodeView  = findViewById(R.id.dbv_custom);
-        //        tittle  = findViewById(R.id.tittle_tv);
-        //        back  = findViewById(R.id.back_img);
-                barcodeView  = findViewById(R.id.dbv_custom);
-        //        backTv  = findViewById(R.id.back_tv);
-        //        tittle.setText("条码扫描");
+
+        barcodeView = findViewById(R.id.dbv_custom);
         barcodeView.getStatusView().setVisibility(View.GONE);
         capture = new CaptureManager(this, barcodeView);
         capture.initializeFromIntent(getIntent(), mBundle);
@@ -75,9 +71,9 @@ public class ScanActivity extends BaseMvpActivity {
 
     @Override
     public void init() {
-//        capture = new CaptureManager(this, barcodeView);
-//        capture.initializeFromIntent(getIntent(), mBundle);
-//        capture.decode();
+        //        capture = new CaptureManager(this, barcodeView);
+        //        capture.initializeFromIntent(getIntent(), mBundle);
+        //        capture.decode();
         setTitleText("扫一扫");
     }
 

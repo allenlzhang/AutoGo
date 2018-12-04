@@ -19,22 +19,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:gravity="center_horizontal">
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="40dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="待过户车辆"
+            android:text="待授权车辆"
             android:textColor="@color/colorEdtext"
             android:textSize="16dp"/>
 
         <TextView
-            android:id="@+id/tvCarName"
+            android:id="@+id/tvAuthCar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
-            android:text="大乘A102018，风尚款"
+            android:lines="2"
+            android:text="--"
+            android:layout_marginRight="15dp"
             android:textColor="@color/textColorGray"
             android:textSize="16dp"/>
     </LinearLayout>
@@ -42,22 +44,47 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:gravity="center_horizontal">
+        android:layout_marginLeft="45dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="40dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="过户账户"
+            android:text="授权时长"
             android:textColor="@color/colorEdtext"
             android:textSize="16dp"/>
 
         <TextView
-            android:id="@+id/tvAccount"
+            android:id="@+id/tvAuthDuration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
-            android:text="大乘A102018，风尚款"
+            android:text="--"
+            android:textColor="@color/textColorGray"
+            android:textSize="16dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="45dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="授权账户"
+            android:textColor="@color/colorEdtext"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/tvAuthAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:text="--"
             android:textColor="@color/textColorGray"
             android:textSize="16dp"/>
     </LinearLayout>
@@ -68,7 +95,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="25dp"
-        android:text="同意过户"
+        android:text="同意授权"
         android:textSize="16dp"/>
 
     <Button
@@ -77,6 +104,6 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="25dp"
-        android:text="拒绝过户"
+        android:text="拒绝授权"
         android:textSize="16dp"/>
 </LinearLayout>

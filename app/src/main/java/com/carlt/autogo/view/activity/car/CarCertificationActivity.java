@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -13,7 +12,6 @@ import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.text.method.ReplacementTransformationMethod;
-import android.text.method.TransformationMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +31,6 @@ import com.carlt.autogo.entry.car.AddCarInfo;
 import com.carlt.autogo.entry.car.BrandInfo;
 import com.carlt.autogo.entry.car.CarBrandInfo;
 import com.carlt.autogo.entry.car.CarModelInfo;
-import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.global.GlobalUrl;
@@ -56,10 +53,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -261,6 +256,11 @@ public class CarCertificationActivity extends BaseMvpActivity {
                         super.onError(response);
                         dialog.dismiss();
                         LogUtils.e(response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
                     }
                 });
     }

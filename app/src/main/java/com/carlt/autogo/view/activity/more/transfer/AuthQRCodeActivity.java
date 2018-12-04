@@ -1,6 +1,7 @@
 package com.carlt.autogo.view.activity.more.transfer;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,8 @@ import com.carlt.autogo.adapter.CarNameItemAdapter;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.CarAuthTimeInfo;
+import com.carlt.autogo.entry.car.CarBaseInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.utils.QRCodeUtils;
@@ -27,10 +30,15 @@ import com.zyyoona7.popup.EasyPopup;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * Description : 过户二维码页面
@@ -50,6 +58,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     private CarAuthTimeAdapter authTimeAdapter;
     private CarNameItemAdapter carNameItemAdapter;
 
+
     @Override
     protected int getContentView() {
         return R.layout.activity_qrcode;
@@ -58,13 +67,71 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("生成二维码");
-        Bitmap codeBit = QRCodeUtils.createQRCode("sfsadfsfsf");
-        ivQRCode.setImageBitmap(codeBit);
+
         initQrCode();
+        //        checkQrCodeState();
     }
 
+    private Disposable disposable;
+
+    @SuppressLint("CheckResult")
+    private void checkQrCodeState(final int id) {
+        final HashMap<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        disposable = Observable.interval(5, TimeUnit.SECONDS)
+
+                .flatMap(new Function<Long, ObservableSource<CarBaseInfo>>() {
+                    @Override
+                    public ObservableSource<CarBaseInfo> apply(Long aLong) throws Exception {
+                        return ClientFactory.def(CarService.class).checkStatus(map);
+                    }
+                })
+                .subscribe(new Consumer<CarBaseInfo>() {
+                    @Override
+                    public void accept(CarBaseInfo carBaseInfo) throws Exception {
+                        LogUtils.e(carBaseInfo.checkStatus);
+                        if (carBaseInfo.checkStatus == 2) {
+                            disposable.dispose();
+                            Intent intent = new Intent(AuthQRCodeActivity.this, AuthHandleActivity.class);
+                            intent.putExtra("id", id);
+                            startActivity(intent);
+
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable);
+                        disposable.dispose();
+                    }
+                });
+    }
+
+    @SuppressLint("CheckResult")
     private void initQrCode() {
-        
+        dialog.show();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("carId", 2216286);
+        map.put("authType", 1);
+        ClientFactory.def(CarService.class).createAuthQrcode(map)
+                .subscribe(new Consumer<CarBaseInfo>() {
+                    @Override
+                    public void accept(CarBaseInfo carInfo) throws Exception {
+                        if (carInfo.id != 0) {
+                            Bitmap codeBit = QRCodeUtils.createQRCode(GlobalKey.AUTH_REGEX + carInfo.id);
+                            checkQrCodeState(carInfo.id);
+                            ivQRCode.setImageBitmap(codeBit);
+                        }
+                        dialog.dismiss();
+                        LogUtils.e(carInfo);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable);
+                        dialog.dismiss();
+                    }
+                });
     }
 
     @SuppressLint("CheckResult")
@@ -79,7 +146,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                         dialog.dismiss();
                         LogUtils.e(carInfo);
                         List<AuthCarInfo.MyCarBean> myCar = carInfo.myCar;
-                        carNameItemAdapter = new CarNameItemAdapter(myCar,carCurrentSelect);
+                        carNameItemAdapter = new CarNameItemAdapter(myCar, carCurrentSelect);
                         showCarPop(v, "请选择授权车辆", carNameItemAdapter);
                     }
                 }, new Consumer<Throwable>() {
@@ -89,23 +156,23 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                         LogUtils.e(throwable);
                     }
                 });
-//                Gson gson=new Gson();
-//                OkGo.<String>post(url)
-//                        .headers("Carlt-Access-Id", GlobalKey.TEST_ACCESSID)
-//                        .headers("Carlt-Token", SharepUtil.getPreferences().getString("token", ""))
-//                        .upJson(gson.toJson(map))
-//                        .execute(new StringCallback() {
-//                            @Override
-//                            public void onSuccess(Response<String> response) {
-//                                LogUtils.e(response.body());
-//                            }
-//
-//                            @Override
-//                            public void onError(Response<String> response) {
-//                                super.onError(response);
-//                                LogUtils.e(response.body());
-//                            }
-//                        });
+        //                Gson gson=new Gson();
+        //                OkGo.<String>post(url)
+        //                        .headers("Carlt-Access-Id", GlobalKey.TEST_ACCESSID)
+        //                        .headers("Carlt-Token", SharepUtil.getPreferences().getString("token", ""))
+        //                        .upJson(gson.toJson(map))
+        //                        .execute(new StringCallback() {
+        //                            @Override
+        //                            public void onSuccess(Response<String> response) {
+        //                                LogUtils.e(response.body());
+        //                            }
+        //
+        //                            @Override
+        //                            public void onError(Response<String> response) {
+        //                                super.onError(response);
+        //                                LogUtils.e(response.body());
+        //                            }
+        //                        });
 
     }
 
@@ -215,5 +282,13 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                     }
                 })
                 .showAtLocation(v, Gravity.BOTTOM, 0, 0);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (disposable != null) {
+            disposable.dispose();
+        }
     }
 }

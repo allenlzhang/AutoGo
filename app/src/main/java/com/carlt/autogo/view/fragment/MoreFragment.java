@@ -1,5 +1,6 @@
 package com.carlt.autogo.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,15 +15,21 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpFragment;
+import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.entry.user.UserInfo;
+import com.carlt.autogo.global.GlobalKey;
+import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.gildutils.GlideCircleTransform;
+import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 import com.carlt.autogo.view.activity.car.MyCarActivity;
 import com.carlt.autogo.view.activity.more.safety.SafetyActivity;
 import com.carlt.autogo.view.activity.more.transfer.AuthQRCodeActivity;
 import com.carlt.autogo.view.activity.more.transfer.ScanActivity;
 import com.carlt.autogo.view.activity.more.transfer.ScannerResultActivity;
+import com.carlt.autogo.view.activity.more.transfer.WaitAuthActivity;
 import com.carlt.autogo.view.activity.user.EditUserInfoActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -30,8 +37,11 @@ import com.zyyoona7.popup.EasyPopup;
 import com.zyyoona7.popup.XGravity;
 import com.zyyoona7.popup.YGravity;
 
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.functions.Consumer;
 
 
 /**
@@ -77,7 +87,7 @@ public class MoreFragment extends BaseMvpFragment {
      * 车主昵称
      */
     @BindView(R.id.tv_more_nickname)
-    TextView tvMoreNickname;
+    TextView  tvMoreNickname;
 
     /**
      * 退出登录
@@ -144,7 +154,7 @@ public class MoreFragment extends BaseMvpFragment {
         }
     }
 
-    @OnClick({R.id.ll_more_remote_update, R.id.ivAdd,R.id.ll_more_myCar, R.id.tv_more_edit_profile, R.id.ll_more_accounts_and_security, R.id.ll_more_log_out})
+    @OnClick({R.id.ll_more_remote_update, R.id.ivAdd, R.id.ll_more_myCar, R.id.tv_more_edit_profile, R.id.ll_more_accounts_and_security, R.id.ll_more_log_out})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_more_edit_profile:
@@ -167,7 +177,7 @@ public class MoreFragment extends BaseMvpFragment {
                 showPop(ivAdd);
                 break;
             case R.id.ll_more_remote_update:
-//                startActivity(new Intent(mActivity, ActivateStepActivity.class));
+                startActivity(new Intent(mActivity, ActivateStepActivity.class));
                 break;
             default:
         }
@@ -231,15 +241,46 @@ public class MoreFragment extends BaseMvpFragment {
 
         if (result != null && result.getContents() != null) {
             LogUtils.e(result.getContents());
-            ToastUtils.showShort("扫码成功---" + result.getContents());
+            //            ToastUtils.showShort("扫码成功---" + result.getContents());
             //            Toast.makeText(this,"扫码成功",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(mActivity, ScannerResultActivity.class);
-            intent.putExtra("result", result.getContents());
-            startActivity(intent);
+            String contents = result.getContents();
+            if (contents.startsWith(GlobalKey.AUTH_REGEX)) {
+                checkQRCodeState(contents);
+            } else {
+                Intent intent = new Intent(mActivity, ScannerResultActivity.class);
+                intent.putExtra("result", result.getContents());
+                startActivity(intent);
+            }
+
+
         } else {
             ToastUtils.showShort("扫码失败");
             //            Toast.makeText(this, "扫码失败", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    @SuppressLint("CheckResult")
+    private void checkQRCodeState(String contents) {
+        String[] split = contents.split("=");
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id", Integer.valueOf(split[1]));
+        ClientFactory.def(CarService.class).scanQrcode(map)
+                .subscribe(new Consumer<CarBaseInfo>() {
+                    @Override
+                    public void accept(CarBaseInfo carBaseInfo) throws Exception {
+                        if (carBaseInfo.error == null) {
+                            startActivity(new Intent(mActivity, WaitAuthActivity.class));
+                        } else {
+                            ToastUtils.showShort(carBaseInfo.error.msg);
+                        }
+                        LogUtils.e(carBaseInfo);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable);
+                    }
+                });
     }
 }
