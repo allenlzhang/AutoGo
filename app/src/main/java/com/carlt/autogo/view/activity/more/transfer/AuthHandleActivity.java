@@ -85,6 +85,7 @@ public class AuthHandleActivity extends BaseMvpActivity {
 
     @SuppressLint("CheckResult")
     private void doAuthState(int status) {
+        dialog.show();
         HashMap<String, Object> map = new HashMap<>();
         map.put("id", id);
         map.put("status", status);
@@ -92,15 +93,18 @@ public class AuthHandleActivity extends BaseMvpActivity {
                 .subscribe(new Consumer<CarBaseInfo>() {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
+                        dialog.dismiss();
                         if (carBaseInfo.error == null) {
                             showToast("操作成功");
-                        }else {
+                        } else {
                             showToast("操作失败");
                         }
+
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
                         showToast("操作失败");
                     }
                 });

@@ -107,6 +107,7 @@ public class MoreFragment extends BaseMvpFragment {
 
 
     private UserInfo userInfo;
+    private boolean  isBindCar;
 
     @Override
     public int getLayoutId() {
@@ -122,6 +123,7 @@ public class MoreFragment extends BaseMvpFragment {
     @Override
     public void onResume() {
         super.onResume();
+        isBindCar = SharepUtil.getPreferences().getBoolean("isBindCar", false);
         userInfo = SharepUtil.getBeanFromSp("user");
         if (!TextUtils.isEmpty(userInfo.realName)) {
             tvMoreNickname.setText(userInfo.realName + "");
@@ -200,9 +202,17 @@ public class MoreFragment extends BaseMvpFragment {
                 .setOnViewListener(new EasyPopup.OnViewListener() {
                     @Override
                     public void initViews(View view, final EasyPopup easyPopup) {
+
                         View tvLine = view.findViewById(R.id.tvLine);
                         View tvScanner = view.findViewById(R.id.tvScanner);
                         View tvQrCode = view.findViewById(R.id.tvQrCode);
+                        if (!isBindCar) {
+                            tvLine.setVisibility(View.GONE);
+                            tvQrCode.setVisibility(View.GONE);
+                        }else {
+                            tvLine.setVisibility(View.VISIBLE);
+                            tvQrCode.setVisibility(View.VISIBLE);
+                        }
                         tvScanner.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

@@ -25,6 +25,7 @@ import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.utils.QRCodeUtils;
+import com.carlt.autogo.utils.SharepUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.zyyoona7.popup.EasyPopup;
 
@@ -57,7 +58,8 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     TextView  tvTime;
     private CarAuthTimeAdapter authTimeAdapter;
     private CarNameItemAdapter carNameItemAdapter;
-
+    private int                mCarId;
+    private int                mTimeType;
 
     @Override
     protected int getContentView() {
@@ -68,7 +70,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     public void init() {
         setTitleText("生成二维码");
 
-        initQrCode();
+        initQrCode(0, 0);
         //        checkQrCodeState();
     }
 
@@ -108,11 +110,23 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     }
 
     @SuppressLint("CheckResult")
-    private void initQrCode() {
+    private void initQrCode(int carId, int authType) {
+        AuthCarInfo.MyCarBean carInfo = SharepUtil.getBeanFromSp("carInfo");
+        tvCarName.setText(carInfo.carName);
+        tvTime.setText("1小时");
         dialog.show();
         HashMap<String, Object> map = new HashMap<>();
-        map.put("carId", 2216286);
-        map.put("authType", 1);
+        if (carId == 0) {
+            map.put("carId", carInfo.id);
+        } else {
+            map.put("carId", carId);
+        }
+        if (authType == 0) {
+            map.put("authType", 1);
+        } else {
+            map.put("authType", authType);
+        }
+
         ClientFactory.def(CarService.class).createAuthQrcode(map)
                 .subscribe(new Consumer<CarBaseInfo>() {
                     @Override
@@ -227,8 +241,9 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     }
 
     private void refreshQrCode() {
-        Bitmap codeBit = QRCodeUtils.createQRCode("ddsdxza");
-        ivQRCode.setImageBitmap(codeBit);
+        //        Bitmap codeBit = QRCodeUtils.createQRCode("ddsdxza");
+        //        ivQRCode.setImageBitmap(codeBit);
+        initQrCode(mCarId, mTimeType);
     }
 
     private void showCarPop(View v, final String title, final BaseQuickAdapter adapter) {
@@ -265,6 +280,8 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                                     authTimeAdapter.setDefSelect(position);
                                     tvTime.setText(info.name);
                                     easyPopup.dismiss();
+                                    initQrCode(0, info.type);
+                                    mTimeType = info.type;
                                 }
                             });
                         } else {
@@ -275,6 +292,8 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                                     carCurrentSelect = position;
                                     tvCarName.setText(carBean.carName);
                                     easyPopup.dismiss();
+                                    initQrCode(carBean.id, 0);
+                                    mCarId = carBean.id;
                                 }
                             });
                         }

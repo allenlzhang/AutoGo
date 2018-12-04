@@ -258,10 +258,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
                         LogUtils.e(response);
                     }
 
-                    @Override
-                    public void onError(Response<String> response) {
-                        super.onError(response);
-                    }
+                 
                 });
     }
 
