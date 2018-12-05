@@ -97,6 +97,7 @@ public class ModelActivity extends BaseMvpActivity {
     }
 
     private void clientGetData(int brandId){
+        dialog.show();
         Map<String,Integer>map = new HashMap<>();
         map.put("brandId",brandId);
         Disposable disposable = ClientFactory.def(CarService.class).getModel(map)
@@ -105,6 +106,7 @@ public class ModelActivity extends BaseMvpActivity {
                 .subscribe(new Consumer<CarModelInfo>() {
                     @Override
                     public void accept(CarModelInfo carModelInfo) throws Exception {
+                        dialog.dismiss();
                         if (carModelInfo.err!=null){
                             ToastUtils.showShort(carModelInfo.err.msg);
                         }else {
@@ -126,6 +128,7 @@ public class ModelActivity extends BaseMvpActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
                         LogUtils.e(throwable);
                     }
                 });

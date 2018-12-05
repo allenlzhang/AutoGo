@@ -27,10 +27,10 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
-import com.carlt.autogo.entry.car.AddCarInfo;
 import com.carlt.autogo.entry.car.BrandInfo;
 import com.carlt.autogo.entry.car.CarBrandInfo;
 import com.carlt.autogo.entry.car.CarModelInfo;
+import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.global.GlobalUrl;
@@ -115,13 +115,13 @@ public class CarCertificationActivity extends BaseMvpActivity {
         editVehicleCertificationVin.setTransformationMethod(new ReplacementTransformationMethod() {
             @Override
             protected char[] getOriginal() {
-                char [] small = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+                char[] small = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
                 return small;
             }
 
             @Override
             protected char[] getReplacement() {
-                char [] big = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+                char[] big = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
                 return big;
             }
         });
@@ -262,7 +262,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
                 });
     }
 
-    private void parseFilter (String body){
+    private void parseFilter(String body) {
         int level = 0;
         if (body != null) {
             JSONObject object = null;
@@ -282,7 +282,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
                 } else {
                     intent.setClass(CarCertificationActivity.this, BrandActivity.class);
                     intent.putExtra("brand", info);
-                    startActivityForResult(intent,CODE_ADDCAR_REQUEST);
+                    startActivityForResult(intent, CODE_ADDCAR_REQUEST);
                 }
             } else if (level == 2) {
                 CarModelInfo info = gson.fromJson(body, CarModelInfo.class);
@@ -310,49 +310,56 @@ public class CarCertificationActivity extends BaseMvpActivity {
 
     /**
      * 添加车辆 下一步按钮
+     *
      * @return
      */
     @SuppressLint("CheckResult")
     private boolean addCar() {
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         if (TextUtils.isEmpty(txtVehicleCertificationAdd.getText())) {
             ToastUtils.showShort("请添加爱车");
             return false;
-        }else {
-            map.put("brandCarId",dataBean.id);
+        } else {
+            map.put("brandCarId", dataBean.id);
         }
         if (TextUtils.isEmpty(editVehicleCertificationVin.getText())) {
             ToastUtils.showShort("请输入车辆车架号");
             return false;
-        }else {
-            map.put("vin",editVehicleCertificationVin.getText().toString());
+        } else {
+            map.put("vin", editVehicleCertificationVin.getText().toString());
         }
         if (TextUtils.isEmpty(editVehicleCertificationEngineNum.getText())) {
             TextUtils.isEmpty("请输入车辆发动机号");
             return false;
-        }else {
-            map.put("engineNum",editVehicleCertificationEngineNum.getText().toString());
+        } else {
+            map.put("engineNum", editVehicleCertificationEngineNum.getText().toString());
         }
-        if (avatarId == 0){
+        if (avatarId == 0) {
             ToastUtils.showShort("请上传购车凭证");
             return false;
-        }else {
-            map.put("certificateId",avatarId);
+        } else {
+            map.put("certificateId", avatarId);
         }
         dialog.show();
         ClientFactory.def(CarService.class).addCar(map).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<AddCarInfo>() {
+                .subscribe(new Consumer<BaseError>() {
                     @Override
-                    public void accept(AddCarInfo addCarInfo) throws Exception {
+                    public void accept(BaseError err) throws Exception {
                         dialog.dismiss();
-                        if (addCarInfo.err!=null){
-                            ToastUtils.showShort(addCarInfo.err.msg);
-                        }else {
+                        if (!TextUtils.isEmpty(err.msg)) {
+                            ToastUtils.showShort(err.msg);
+                        } else {
                             ToastUtils.showShort("添加车辆成功");
-                            CarCertificationActivity.this.setResult(RESULT_OK);
-                            CarCertificationActivity.this.finish();
                         }
+                        CarCertificationActivity.this.setResult(RESULT_OK);
+                        CarCertificationActivity.this.finish();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
+                        LogUtils.e(throwable);
                     }
                 });
         return true;
@@ -360,6 +367,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
 
     /**
      * 图像上传
+     *
      * @param file
      */
     @SuppressLint("CheckResult")
@@ -380,9 +388,9 @@ public class CarCertificationActivity extends BaseMvpActivity {
                     @Override
                     public void accept(UpdateImageResultInfo updateImageResultInfo) throws Exception {
                         dialog.dismiss();
-                        if (updateImageResultInfo.err!=null){
+                        if (updateImageResultInfo.err != null) {
                             ToastUtils.showShort(updateImageResultInfo.err.msg);
-                        }else {
+                        } else {
                             if (updateImageResultInfo.message != null) {
                                 avatarId = updateImageResultInfo.message.id;
                                 Bitmap bitmap = PhotoUtils.getBitmapFromUri(cropImageUri, CarCertificationActivity.this);

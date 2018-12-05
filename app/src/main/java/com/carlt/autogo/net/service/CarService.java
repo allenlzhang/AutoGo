@@ -1,12 +1,12 @@
 package com.carlt.autogo.net.service;
 
-import com.carlt.autogo.entry.car.AddCarInfo;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.CarAuthTimeInfo;
 import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.entry.car.CarBrandInfo;
 import com.carlt.autogo.entry.car.CarInfo;
 import com.carlt.autogo.entry.car.CarModelInfo;
+import com.carlt.autogo.entry.user.BaseError;
 
 import java.util.Map;
 
@@ -46,7 +46,7 @@ public interface CarService {
     Observable<CarBrandInfo> getBrandCar(@Body Map<String, Integer> param);
 
     @POST("Bind/AddCar")        //车辆认证
-    Observable<AddCarInfo> addCar(@Body Map<String, Object> param);
+    Observable<BaseError> addCar(@Body Map<String, Object> param);
 
     @POST("Car/GetCarInfo")     //获取车辆信息
     Observable<CarInfo> getCarInfo(@Body Map<String,Integer> param);
