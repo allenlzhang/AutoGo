@@ -351,9 +351,9 @@ public class CarCertificationActivity extends BaseMvpActivity {
                             ToastUtils.showShort(err.msg);
                         } else {
                             ToastUtils.showShort("添加车辆成功");
+                            CarCertificationActivity.this.setResult(RESULT_OK);
+                            CarCertificationActivity.this.finish();
                         }
-                        CarCertificationActivity.this.setResult(RESULT_OK);
-                        CarCertificationActivity.this.finish();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
