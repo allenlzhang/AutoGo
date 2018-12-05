@@ -111,6 +111,7 @@ public class MyCarFragment extends BaseMvpFragment {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     AuthCarInfo.MyCarBean item = (AuthCarInfo.MyCarBean) adapterView.getItemAtPosition(i);
                     Intent intent = new Intent(mContext, CarDetailsActivity.class);
+                    intent.putExtra("id",item.id);
                     if (item.authStatus != 2) {
                         if (item.remoteStatus == 1) {
                             intent.putExtra("remoteActivating", true);

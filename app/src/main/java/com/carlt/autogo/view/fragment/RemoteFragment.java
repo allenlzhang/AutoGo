@@ -18,6 +18,7 @@ import com.carlt.autogo.entry.car.RemoteInfo;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
 import com.carlt.autogo.view.activity.car.DeviceActivateActivity;
 import com.carlt.autogo.view.activity.more.safety.FaceRecognitionSettingFirstActivity;
@@ -91,11 +92,11 @@ public class RemoteFragment extends BaseMvpFragment {
             public void onRightClick() {
                 Intent intent = new Intent();
                 if (isActivated){
-
+                    intent.setClass(mContext, ActivateStepActivity.class);
                 }else {
                     intent.setClass(mContext,DeviceActivateActivity.class);
-                    startActivity(intent);
                 }
+                startActivity(intent);
             }
         });
     }

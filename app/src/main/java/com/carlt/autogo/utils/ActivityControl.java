@@ -61,6 +61,8 @@ public class ActivityControl {
             @Override
             public void onRightClick() {
                 SharepUtil.put(GlobalKey.USER_TOKEN, "");
+                SharepUtil.putByBean("carInfo",null);
+                SharepUtil.putBoolean("isBinding",false);
                 //                SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
                 //                SharepUtil.putBoolean(GlobalKey.PROCESS_SAFE_SWITCH, false);
                 UserInfo userInfo = SharepUtil.getBeanFromSp("user");

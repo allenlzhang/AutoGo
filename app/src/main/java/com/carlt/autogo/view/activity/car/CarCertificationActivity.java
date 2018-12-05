@@ -258,7 +258,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
                         LogUtils.e(response);
                     }
 
-                 
+
                 });
     }
 
