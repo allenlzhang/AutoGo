@@ -56,6 +56,8 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
     public static final int FROM_LOGIN_ACTIVITY         = 11;
     public static final int FROM_ID_CARDACCEPT_ACTIVITY = 12;
     public static final int FROM_ALIPAY_AUTH            = 13;
+    public static final int Trans_Handle_Activity       = 14;
+    public static final int Auth_Handle_Activity        = 15;
     private int      isFrom;
     private String   name;
     private String   idcard;
@@ -108,7 +110,12 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                 tvFaceTitle.setText(getString(R.string.face_login_activity_title2));
 
                 break;
+            case Trans_Handle_Activity:
+                tvFaceTitle.setText("安全验证");
+
+                break;
             default:
+
                 break;
         }
     }
@@ -119,7 +126,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
         super.onLivenessCompletion(status, message, base64ImageMap);
         if (status == FaceStatusEnum.OK && mIsCompletion) {
             mCamera.stopPreview();
-//            ToastUtils.showShort("人脸检测成功");
+            //            ToastUtils.showShort("人脸检测成功");
             for (Map.Entry<String, String> stringStringEntry : base64ImageMap.entrySet()) {
                 LogUtils.e("----" + stringStringEntry.getKey());
             }

@@ -63,10 +63,96 @@ public class CommonDialog {
 
     }
 
+    public static void createTwoBtnDialog(Context context, String content, boolean cancelable, final DialogWithTitleClick click) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.dialog_common, null);
+        //        final Dialog dialogI = new Dialog(context, R.style.DialogCommon);
+
+        builder.setView(view);
+        builder.create();
+        final AlertDialog alertDialog = builder.show();
+        TextView tvRight = view.findViewById(R.id.tvDialogRight);
+        TextView tvLeft = view.findViewById(R.id.tvDialogLeft);
+        TextView tvTitle1 = view.findViewById(R.id.tvTitle1);
+        TextView tvTitle2 = view.findViewById(R.id.tvTitle2);
+        alertDialog.setCancelable(cancelable);
+        tvRight.setText("确定");
+        tvLeft.setText("取消");
+        tvTitle1.setText("温馨提示");
+
+        if (TextUtils.isEmpty(content)) {
+            tvTitle2.setVisibility(View.GONE);
+        } else {
+            tvTitle2.setVisibility(View.VISIBLE);
+            tvTitle2.setText(content);
+        }
+        tvRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                click.onRightClick();
+            }
+        });
+        tvLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                click.onLeftClick();
+            }
+        });
+
+
+    }
+
     public interface DialogWithTitleClick {
 
         void onLeftClick();
 
         void onRightClick();
+    }
+
+    public interface DialogOneBtnClick {
+
+        void onOneBtnClick();
+
+
+    }
+
+    public static void createOneBtnDialog(Context context, String content, boolean cancelable, final DialogOneBtnClick click) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.dialog_common_one_btn, null);
+        //        final Dialog dialogI = new Dialog(context, R.style.DialogCommon);
+
+        builder.setView(view);
+        builder.create();
+        final AlertDialog alertDialog = builder.show();
+
+        TextView tvTitle2 = view.findViewById(R.id.tvContent);
+        TextView tvOneBtn = view.findViewById(R.id.tvDialogOneBtn);
+        alertDialog.setCancelable(cancelable);
+
+
+        if (TextUtils.isEmpty(content)) {
+            tvTitle2.setVisibility(View.GONE);
+        } else {
+            tvTitle2.setVisibility(View.VISIBLE);
+            tvTitle2.setText(content);
+        }
+        tvOneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                click.onOneBtnClick();
+            }
+        });
+
+
+        //                int w = (int) (AutoGoApp.ScreenDensity * 300);
+        //        ViewGroup.LayoutParams parm = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        //        dialogI.setContentView(view);
+        //        dialogI.show();
+
     }
 }

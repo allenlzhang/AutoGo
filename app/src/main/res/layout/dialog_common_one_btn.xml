@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="300dp"
+              android:layout_height="wrap_content"
+              android:background="@drawable/common_dialog_bg"
+              android:orientation="vertical">
+
+    <!-- 内容部分 -->
+
+    <RelativeLayout
+        android:id="@+id/dialog_notitle_lay_content"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginTop="15dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:text="温馨提示"
+            android:textColor="@color/colorLoginCommitBgPress"
+            android:textSize="16dp"
+            android:visibility="visible"
+            />
+
+        <TextView
+            android:id="@+id/tvContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTitle"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dip"
+            android:layout_marginLeft="20dip"
+            android:gravity="center_horizontal"
+            android:textColor="#333333"
+            android:textSize="16dp"
+            android:visibility="visible"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#d6d6d6"/>
+
+
+    <TextView
+        android:id="@+id/tvDialogOneBtn"
+        android:layout_width="fill_parent"
+        android:layout_height="43dip"
+        android:gravity="center"
+        android:text="确定"
+        android:textColor="@color/colorLoginCommitBgPress"
+        android:textSize="18sp"
+        android:visibility="visible"/>
+</LinearLayout>

@@ -16,13 +16,15 @@
         android:id="@+id/liveness_face_round"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
     <ImageView
         android:layout_width="222dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"
         android:layout_marginTop="165dp"
-        android:src="@mipmap/iv_face_circle_bg"/>
+        android:src="@mipmap/iv_face_circle_bg"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:id="@+id/liveness_surface_overlay_layout"
         android:layout_width="match_parent"
@@ -99,6 +101,18 @@
         android:layout_height="45dp"
         android:src="@mipmap/ic_success"
         android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/tvMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="28dp"
+        android:text="短信验证"
+        android:textColor="#999999"
+        android:textSize="16dp"
+        android:visibility="gone"/>
 
     <HorizontalScrollView
         android:layout_width="match_parent"

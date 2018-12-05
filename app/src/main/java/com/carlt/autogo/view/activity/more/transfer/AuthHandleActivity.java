@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
@@ -17,7 +18,11 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.functions.Consumer;
-
+/**
+ * Description : 授权处理页面
+ * Author     : zhanglei
+ * Date       : 2018/12/5
+ */
 public class AuthHandleActivity extends BaseMvpActivity {
 
 
@@ -78,7 +83,18 @@ public class AuthHandleActivity extends BaseMvpActivity {
                 doAuthState(3);
                 break;
             case R.id.btnRefuseAgree:
-                doAuthState(4);
+                CommonDialog.createTwoBtnDialog(this, "您确定要拒绝吗", true, new CommonDialog.DialogWithTitleClick() {
+                    @Override
+                    public void onLeftClick() {
+
+                    }
+
+                    @Override
+                    public void onRightClick() {
+                        doAuthState(4);
+                    }
+                });
+
                 break;
         }
     }
@@ -94,7 +110,7 @@ public class AuthHandleActivity extends BaseMvpActivity {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         dialog.dismiss();
-                        if (carBaseInfo.error == null) {
+                        if (carBaseInfo.err == null) {
                             showToast("操作成功");
                         } else {
                             showToast("操作失败");

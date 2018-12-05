@@ -35,34 +35,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
+            android:paddingRight="15dp"
+            android:maxLines="2"
             android:text="大乘A102018，风尚款"
             android:textColor="@color/textColorGray"
             android:textSize="16dp"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="45dp"
-        android:layout_marginTop="30dp"
-        >
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="45dp"-->
+        <!--android:layout_marginTop="30dp"-->
+        <!--&gt;-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="授权时长"
-            android:textColor="@color/colorEdtext"
-            android:textSize="16dp"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="授权时长"-->
+            <!--android:textColor="@color/colorEdtext"-->
+            <!--android:textSize="16dp"/>-->
 
-        <TextView
-            android:id="@+id/tvDuration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:text="1天"
-            android:textColor="@color/textColorGray"
-            android:textSize="16dp"/>
-    </LinearLayout>
+        <!--<TextView-->
+            <!--android:id="@+id/tvDuration"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="25dp"-->
+            <!--android:text="1天"-->
+            <!--android:textColor="@color/textColorGray"-->
+            <!--android:textSize="16dp"/>-->
+    <!--</LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -94,7 +96,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="25dp"
-        android:text="同意授权"
+        android:text="同意过户"
         android:textSize="16dp"/>
 
     <Button
@@ -103,6 +105,6 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="25dp"
-        android:text="拒绝授权"
+        android:text="拒绝过户"
         android:textSize="16dp"/>
 </LinearLayout>

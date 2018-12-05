@@ -9,17 +9,19 @@ import com.carlt.autogo.entry.user.BaseError;
  * Date       : 2018/12/3 11:23
  */
 public class CarBaseInfo {
-    public BaseError error;
+    public BaseError err;
     public int       id;
     public int       checkStatus;
     public int       duration;
+    public int       transferId;
+    public int       status;
     public String    mobile;
     public String    carName;
 
     @Override
     public String toString() {
         return "CarBaseInfo{" +
-                "error=" + error +
+                "error=" + err +
                 ", id=" + id +
                 ", checkStatus=" + checkStatus +
                 ", duration=" + duration +

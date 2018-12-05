@@ -3,6 +3,7 @@ package com.carlt.autogo.view.activity.more.transfer;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.CarAuthTimeAdapter;
 import com.carlt.autogo.adapter.CarNameItemAdapter;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.CarAuthTimeInfo;
 import com.carlt.autogo.entry.car.CarBaseInfo;
@@ -56,10 +58,11 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     TextView  tvCarName;
     @BindView(R.id.tvTime)
     TextView  tvTime;
-    private CarAuthTimeAdapter authTimeAdapter;
-    private CarNameItemAdapter carNameItemAdapter;
-    private int                mCarId;
-    private int                mTimeType;
+    private CarAuthTimeAdapter    authTimeAdapter;
+    private CarNameItemAdapter    carNameItemAdapter;
+    private int                   mCarId;
+    private int                   mTimeType;
+    private AuthCarInfo.MyCarBean carInfo;
 
     @Override
     protected int getContentView() {
@@ -75,6 +78,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     }
 
     private Disposable disposable;
+    private int duration = 10 * 60 * 60;
 
     @SuppressLint("CheckResult")
     private void checkQrCodeState(final int id) {
@@ -92,12 +96,17 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         LogUtils.e(carBaseInfo.checkStatus);
-                        if (carBaseInfo.checkStatus == 2) {
+                        if (duration <= 0) {
                             disposable.dispose();
-                            Intent intent = new Intent(AuthQRCodeActivity.this, AuthHandleActivity.class);
-                            intent.putExtra("id", id);
-                            startActivity(intent);
+                        } else {
+                            if (carBaseInfo.checkStatus == 2) {
+                                disposable.dispose();
+                                Intent intent = new Intent(AuthQRCodeActivity.this, AuthHandleActivity.class);
+                                intent.putExtra("id", id);
+                                startActivity(intent);
 
+                            }
+                            duration--;
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -111,15 +120,18 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
 
     @SuppressLint("CheckResult")
     private void initQrCode(int carId, int authType) {
-        AuthCarInfo.MyCarBean carInfo = SharepUtil.getBeanFromSp("carInfo");
+        carInfo = SharepUtil.getBeanFromSp("carInfo");
+
         tvCarName.setText(carInfo.carName);
         tvTime.setText("1小时");
         dialog.show();
         HashMap<String, Object> map = new HashMap<>();
         if (carId == 0) {
             map.put("carId", carInfo.id);
+            mCarId = carInfo.id;
         } else {
             map.put("carId", carId);
+            mCarId = carId;
         }
         if (authType == 0) {
             map.put("authType", 1);
@@ -135,6 +147,15 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                             Bitmap codeBit = QRCodeUtils.createQRCode(GlobalKey.AUTH_REGEX + carInfo.id);
                             checkQrCodeState(carInfo.id);
                             ivQRCode.setImageBitmap(codeBit);
+                        } else {
+                            showToast(carInfo.err.msg);
+
+                            CommonDialog.createOneBtnDialog(AuthQRCodeActivity.this, carInfo.err.msg, false, new CommonDialog.DialogOneBtnClick() {
+                                @Override
+                                public void onOneBtnClick() {
+                                    finish();
+                                }
+                            });
                         }
                         dialog.dismiss();
                         LogUtils.e(carInfo);
@@ -219,6 +240,8 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
 
     }
 
+    public static final int resCode = 101;
+
     @OnClick({R.id.tvRefreshCode, R.id.tvTime, R.id.tvCarName, R.id.llTransfer})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -235,8 +258,26 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                 initAuthTime(view);
                 break;
             case R.id.llTransfer:
-                startActivity(TransferQRCodeActivity.class, false);
+                Intent intent = new Intent(this, TransferQRCodeActivity.class);
+                intent.putExtra("carId", mCarId);
+                intent.putExtra("carName", carInfo.carName);
+                startActivityForResult(intent, resCode);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == resCode) {
+                CommonDialog.createOneBtnDialog(AuthQRCodeActivity.this, "授权码已过期，请稍后重试", false, new CommonDialog.DialogOneBtnClick() {
+                    @Override
+                    public void onOneBtnClick() {
+                        finish();
+                    }
+                });
+            }
         }
     }
 
@@ -304,10 +345,12 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         if (disposable != null) {
             disposable.dispose();
         }
     }
+
+
 }

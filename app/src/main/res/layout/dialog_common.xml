@@ -49,6 +49,7 @@
 
     <RelativeLayout
         android:id="@+id/dialog_notitle_lay_bottom"
+
         android:layout_width="fill_parent"
         android:layout_height="43dip"
         android:visibility="visible" >

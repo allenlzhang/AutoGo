@@ -16,11 +16,12 @@
         android:src="@mipmap/iv_wait_auth"/>
 
     <TextView
+        android:id="@+id/tvDes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:gravity="center"
-        android:text="已发送授权请求等待确认"
+        android:text=""
         android:textColor="@color/colorEdtext"
         android:textSize="16dp"/>
 

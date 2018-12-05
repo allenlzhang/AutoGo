@@ -96,6 +96,7 @@ public class FaceLivenessActivity extends Activity implements
     // 监听系统音量广播
     protected BroadcastReceiver mVolumeReceiver;
     protected TextView          tvFaceTitle;
+    protected TextView          tvMsg;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,6 +158,7 @@ public class FaceLivenessActivity extends Activity implements
             }
         });
         tvFaceTitle = (TextView) findViewById(R.id.tvFaceTitle);
+        tvMsg = (TextView) findViewById(R.id.tvMsg);
         mFaceDetectRoundView = (FaceDetectRoundView) mRootView.findViewById(R.id.liveness_face_round);
         mCloseView = (ImageView) mRootView.findViewById(R.id.liveness_close);
         mSoundView = (ImageView) mRootView.findViewById(R.id.liveness_sound);

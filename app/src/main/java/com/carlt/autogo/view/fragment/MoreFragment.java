@@ -209,7 +209,7 @@ public class MoreFragment extends BaseMvpFragment {
                         if (!isBindCar) {
                             tvLine.setVisibility(View.GONE);
                             tvQrCode.setVisibility(View.GONE);
-                        }else {
+                        } else {
                             tvLine.setVisibility(View.VISIBLE);
                             tvQrCode.setVisibility(View.VISIBLE);
                         }
@@ -240,7 +240,7 @@ public class MoreFragment extends BaseMvpFragment {
                         });
                     }
                 })
-                .showAtAnchorView(ivAdd, YGravity.BELOW, XGravity.LEFT, SizeUtils.dp2px(30), 0);
+                .showAtAnchorView(ivAdd, YGravity.BELOW, XGravity.LEFT, SizeUtils.dp2px(40), 0);
 
     }
 
@@ -256,6 +256,8 @@ public class MoreFragment extends BaseMvpFragment {
             String contents = result.getContents();
             if (contents.startsWith(GlobalKey.AUTH_REGEX)) {
                 checkQRCodeState(contents);
+            } else if (contents.startsWith(GlobalKey.TRANSFER_REGEX)) {
+                checkTransferCode(contents);
             } else {
                 Intent intent = new Intent(mActivity, ScannerResultActivity.class);
                 intent.putExtra("result", result.getContents());
@@ -271,18 +273,53 @@ public class MoreFragment extends BaseMvpFragment {
     }
 
     @SuppressLint("CheckResult")
+    private void checkTransferCode(String contents) {
+         String[] split = contents.split("=");
+        final Integer id = Integer.valueOf(split[1]);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("transferId", id);
+        ClientFactory.def(CarService.class).scanTransferCode(map)
+                .subscribe(new Consumer<CarBaseInfo>() {
+                    @Override
+                    public void accept(CarBaseInfo carBaseInfo) throws Exception {
+                        LogUtils.e(carBaseInfo.status);
+
+                        if (carBaseInfo.status == 1) {
+                            Intent intent = new Intent(mActivity, WaitAuthActivity.class);
+                            intent.putExtra("code", 1);
+                            intent.putExtra("transferId",id);
+                            startActivity(intent);
+
+                        } else {
+                            ToastUtils.showShort(carBaseInfo.err.msg);
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable);
+                    }
+                });
+    }
+
+    @SuppressLint("CheckResult")
     private void checkQRCodeState(String contents) {
         String[] split = contents.split("=");
+        final Integer id = Integer.valueOf(split[1]);
+        LogUtils.e(id);
         HashMap<String, Object> map = new HashMap<>();
-        map.put("id", Integer.valueOf(split[1]));
+        map.put("id", id);
         ClientFactory.def(CarService.class).scanQrcode(map)
                 .subscribe(new Consumer<CarBaseInfo>() {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
-                        if (carBaseInfo.error == null) {
-                            startActivity(new Intent(mActivity, WaitAuthActivity.class));
+                        if (carBaseInfo.err == null) {
+                            Intent intent = new Intent(mActivity, WaitAuthActivity.class);
+                            intent.putExtra("code", 2);
+                            intent.putExtra("authId", id);
+                            startActivity(intent);
                         } else {
-                            ToastUtils.showShort(carBaseInfo.error.msg);
+                            ToastUtils.showShort(carBaseInfo.err.msg);
                         }
                         LogUtils.e(carBaseInfo);
                     }
