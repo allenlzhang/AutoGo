@@ -282,7 +282,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
                 } else {
                     intent.setClass(CarCertificationActivity.this, BrandActivity.class);
                     intent.putExtra("brand", info);
-                    startActivity(intent);
+                    startActivityForResult(intent,CODE_ADDCAR_REQUEST);
                 }
             } else if (level == 2) {
                 CarModelInfo info = gson.fromJson(body, CarModelInfo.class);

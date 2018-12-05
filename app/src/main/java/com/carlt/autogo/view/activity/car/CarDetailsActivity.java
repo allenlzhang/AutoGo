@@ -111,28 +111,28 @@ public class CarDetailsActivity extends BaseMvpActivity {
             case DETAILS_TYPE1:
                 llDetails.setVisibility(View.GONE);
                 btnCancelAuth.setVisibility(View.GONE);
-                if (isRemoteActivating) {
-                    ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activating_big);
-                    tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorActivating));
-                    tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorActivating));
-                } else {
-                    ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activate_big);
-                    tvDetailsRemote.setTextColor(getResources().getColor(R.color.textColorGray));
-                    tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.textColorGray));
-                }
+//                if (isRemoteActivating) {
+//                    ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activating_big);
+//                    tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorActivating));
+//                    tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorActivating));
+//                } else {
+//                    ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activate_big);
+//                    tvDetailsRemote.setTextColor(getResources().getColor(R.color.textColorGray));
+//                    tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.textColorGray));
+//                }
                 break;
             case DETAILS_TYPE2:
                 llDetailsAuthStart.setVisibility(View.GONE);
                 llDetailsAuthEnd.setVisibility(View.GONE);
                 btnCancelAuth.setVisibility(View.GONE);
-                ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activated_big);
-                tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorBlue));
-                tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorBlue));
+//                ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activated_big);
+//                tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorBlue));
+//                tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorBlue));
                 break;
             case DETAILS_TYPE3:
-                ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activated_big);
-                tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorBlue));
-                tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorBlue));
+//                ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activated_big);
+//                tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorBlue));
+//                tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorBlue));
                 break;
             case DETAILS_TYPE4:
                 llDetailsDevice.setVisibility(View.GONE);
