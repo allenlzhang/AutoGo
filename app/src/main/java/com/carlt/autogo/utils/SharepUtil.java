@@ -108,6 +108,12 @@ public class SharepUtil {
         editor.apply();
     }
 
+    public static void cleanKey(String key){
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(key);
+        editor.apply();
+    }
+
     public static void cleanAllKey() {
         preferences.edit().clear().apply();
     }

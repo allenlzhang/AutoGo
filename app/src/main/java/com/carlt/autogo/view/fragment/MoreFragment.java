@@ -125,8 +125,8 @@ public class MoreFragment extends BaseMvpFragment {
     @Override
     public void onResume() {
         super.onResume();
-        isBindCar = SharepUtil.getPreferences().getBoolean("isBindCar", false);
-        userInfo = SharepUtil.getBeanFromSp("user");
+        isBindCar = SharepUtil.getPreferences().getBoolean(GlobalKey.CAR_IS_BOUND, false);
+        userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         if (!TextUtils.isEmpty(userInfo.realName)) {
             tvMoreNickname.setText(userInfo.realName + "");
         } else {
@@ -150,7 +150,7 @@ public class MoreFragment extends BaseMvpFragment {
                 .skipMemoryCache(true)
                 .transform(new GlideCircleTransform(mContext))
                 .into(ivMoreHeadSculpture);
-        if (!SharepUtil.getPreferences().getBoolean("isBindCar", false)) {
+        if (!SharepUtil.getPreferences().getBoolean(GlobalKey.CAR_IS_BOUND, false)) {
             llMoreLayout1.setVisibility(View.GONE);
             llMoreRemoteUpdate.setVisibility(View.GONE);
             llMoreServiceRenewal.setVisibility(View.GONE);

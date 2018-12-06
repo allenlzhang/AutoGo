@@ -131,7 +131,7 @@ public class RemoteFragment extends BaseMvpFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (SharepUtil.getPreferences().getBoolean("isBindCar", false)) {
+        if (SharepUtil.getPreferences().getBoolean(GlobalKey.CAR_IS_BOUND, false)) {
             remoteRlLock.setVisibility(View.GONE);
         } else {
             remoteRlLock.setVisibility(View.VISIBLE);
@@ -159,7 +159,7 @@ public class RemoteFragment extends BaseMvpFragment {
      * @return
      */
     private boolean isActivated(){
-        AuthCarInfo.MyCarBean carInfo = SharepUtil.getBeanFromSp("carInfo");
+        AuthCarInfo.MyCarBean carInfo = SharepUtil.getBeanFromSp(GlobalKey.CAR_INFO);
         if (carInfo!=null) {
             int remoteStatus = carInfo.remoteStatus;
             if (remoteStatus == 0) {

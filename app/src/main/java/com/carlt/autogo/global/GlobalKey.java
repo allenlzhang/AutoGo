@@ -7,8 +7,8 @@ package com.carlt.autogo.global;
 public class GlobalKey {
     public static final String Authentication   = "1";
     public static final String UnAuthentication = "0";
-    public static final String TEST_ACCESSID    = "18644515396614518644";
-    //    public static final String TEST_ACCESSID    = "12938315356991092938";
+//    public static final String TEST_ACCESSID    = "18644515396614518644";
+        public static final String TEST_ACCESSID    = "12938315356991092938";
     public static final String PRE_ACCESSID     = "10590215396563070590";
     public static final String AUTH_REGEX       = "carlt_car_auth_id=";
     public static final String TRANSFER_REGEX   = "carlt_car_transfer_id=";
@@ -44,4 +44,11 @@ public class GlobalKey {
 
     //账号token 被踢 error key
     public static final int TOKEN_OUT = 2066;
+
+
+    public static final String CAR_INFO = "carInfo";    //车辆基本信息
+
+    public static final String CAR_IS_BOUND = "isBindCar"; //是否绑定车辆
+
+    public static final String CAR_TAG = "carTag";  //当前车辆标记
 }

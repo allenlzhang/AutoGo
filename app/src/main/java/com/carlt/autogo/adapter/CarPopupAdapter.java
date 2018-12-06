@@ -27,7 +27,6 @@ public class CarPopupAdapter extends BaseAdapter{
 
     public void setSelected_position(int selected_position) {
         this.selected_position = selected_position;
-
     }
 
     public CarPopupAdapter(AuthCarInfo info, Context context) {
@@ -42,7 +41,9 @@ public class CarPopupAdapter extends BaseAdapter{
                 list.addAll(info.authCar);
             }
         }
-
+        if (list!=null&&list.size()>0){
+            selected_position = list.get(0).id;
+        }
     }
 
     @Override
@@ -75,7 +76,7 @@ public class CarPopupAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(final int i, View view, ViewGroup viewGroup) {
+    public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder holder = null;
         if (view == null){
             holder = new ViewHolder();
@@ -98,11 +99,13 @@ public class CarPopupAdapter extends BaseAdapter{
             holder.mTitle.setText("我的车辆");
         }
         if (info!=null&&info.authCar!=null&&info.authCar.size()>0){
-            if (info.myCar!=null&&info.myCar.size()>0&&i==info.myCar.size()){
-                holder.mTitle.setVisibility(View.VISIBLE);
-                holder.mLine2.setVisibility(View.VISIBLE);
-                holder.mLine1.setVisibility(View.VISIBLE);
-                holder.mTitle.setText("被授权车辆");
+            if (info.myCar!=null&&info.myCar.size()>0){
+                if (i==info.myCar.size()) {
+                    holder.mTitle.setVisibility(View.VISIBLE);
+                    holder.mLine2.setVisibility(View.VISIBLE);
+                    holder.mLine1.setVisibility(View.VISIBLE);
+                    holder.mTitle.setText("被授权车辆");
+                }
             }else {
                 if (i==0){
                     holder.mTitle.setVisibility(View.VISIBLE);
@@ -113,8 +116,9 @@ public class CarPopupAdapter extends BaseAdapter{
 
         }
         final AuthCarInfo.MyCarBean dataBean = list.get(i);
+        final int tag = dataBean.id;
         holder.mTxt.setText(dataBean.carName);
-        if (selected_position == i){
+        if (selected_position == tag){
             holder.mTxt.setBackgroundColor(context.getResources().getColor(R.color.colorCarPopup));
             holder.mSelected.setVisibility(View.VISIBLE);
             holder.mTxt.getPaint().setFakeBoldText(true);
@@ -126,7 +130,7 @@ public class CarPopupAdapter extends BaseAdapter{
         holder.mTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                click.itemClick(i,dataBean);
+                click.itemClick(tag,dataBean);
             }
         });
         return view;
@@ -146,6 +150,6 @@ public class CarPopupAdapter extends BaseAdapter{
         View mSelected;
     }
     public interface OnItemClick{
-        void itemClick(int i,AuthCarInfo.MyCarBean dataBean);
+        void itemClick(int tag,AuthCarInfo.MyCarBean dataBean);
     }
 }

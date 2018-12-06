@@ -30,7 +30,7 @@ import butterknife.BindView;
 public class MainActivity extends BaseMvpActivity {
 
     @BindView(R.id.bottomTabs)
-    CommonTabLayout bottomTabs;
+    public CommonTabLayout bottomTabs;
     private String[]                   mTabNames        = {"首页", "远程", "更多"};
     private int[]                      mIconUnselectIds = {
             R.drawable.ic_bottom_tab_home_normal, R.drawable.ic_bottom_tab_remote_normal,

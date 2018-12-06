@@ -398,6 +398,11 @@ public class CarCertificationActivity extends BaseMvpActivity {
                             }
                         }
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable);
+                    }
                 });
     }
 }

@@ -63,6 +63,7 @@ public class ActivityControl {
                 SharepUtil.put(GlobalKey.USER_TOKEN, "");
                 SharepUtil.putByBean("carInfo",null);
                 SharepUtil.putBoolean("isBinding",false);
+                SharepUtil.cleanKey("carTag");
                 //                SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
                 //                SharepUtil.putBoolean(GlobalKey.PROCESS_SAFE_SWITCH, false);
                 UserInfo userInfo = SharepUtil.getBeanFromSp("user");

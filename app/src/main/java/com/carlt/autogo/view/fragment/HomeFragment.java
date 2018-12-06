@@ -3,11 +3,11 @@ package com.carlt.autogo.view.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,11 +24,13 @@ import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
 import com.carlt.autogo.view.activity.car.DeviceActivateActivity;
 import com.carlt.autogo.view.activity.more.safety.FaceRecognitionSettingFirstActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
+import com.carlt.autogo.widget.MaxListView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -96,21 +98,25 @@ public class HomeFragment extends BaseMvpFragment {
 //                "{\"myCar\":[{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":3,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":1,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":3,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":2,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0}]}";
 //
 //        Gson gson = new Gson();
-//        carListInfo = gson.fromJson(json, AuthCarInfo.class);
+//        AuthCarInfo carListInfo = gson.fromJson(json, AuthCarInfo.class);
 //        return carListInfo;
 //    }
 
+    /**
+     * 是否绑定车辆
+     * @param info
+     */
     private void isBindCar(AuthCarInfo info){
         if (info != null) {
             if (info.myCar!= null&&info.myCar.size() > 0 ){
-                SharepUtil.putBoolean("isBindCar", true);
+                SharepUtil.putBoolean(GlobalKey.CAR_IS_BOUND, true);
             }else if (info.authCar != null && info.authCar.size() > 0) {
-                SharepUtil.putBoolean("isBindCar", true);
+                SharepUtil.putBoolean(GlobalKey.CAR_IS_BOUND, true);
             } else {
-                SharepUtil.putBoolean("isBindCar", false);
+                SharepUtil.putBoolean(GlobalKey.CAR_IS_BOUND, false);
             }
         } else {
-            SharepUtil.putBoolean("isBindCar", false);
+            SharepUtil.putBoolean(GlobalKey.CAR_IS_BOUND, false);
         }
     }
 
@@ -141,26 +147,33 @@ public class HomeFragment extends BaseMvpFragment {
             adapter = new CarPopupAdapter(info, getContext());
             adapter.setClick(new CarPopupAdapter.OnItemClick() {
                 @Override
-                public void itemClick(int i, AuthCarInfo.MyCarBean dataBean) {
+                public void itemClick(int tag, AuthCarInfo.MyCarBean dataBean) {
                     popupWindow.dismiss();
-                    adapter.setSelected_position(i);
+                    adapter.setSelected_position(tag);
+                    SharepUtil.putInt(GlobalKey.CAR_TAG,tag);
                     tvCarType.setText(dataBean.carName);
-                    SharepUtil.putByBean("carInfo", dataBean);
+                    SharepUtil.putByBean(GlobalKey.CAR_INFO, dataBean);
                 }
             });
+            int tag = SharepUtil.getPreferences().getInt(GlobalKey.CAR_TAG,-1);
+            if (tag != -1){
+                adapter.setSelected_position(tag);
+            }else {
+                if (info.myCar!=null&&info.myCar.size()>0){
+                    tvCarType.setText(info.myCar.get(0).carName);
+                    SharepUtil.putByBean(GlobalKey.CAR_INFO, info.myCar.get(0));
+                }else if (info.authCar!=null&&info.authCar.size()>0){
+                    tvCarType.setText(info.authCar.get(0).carName);
+                    SharepUtil.putByBean(GlobalKey.CAR_INFO, info.authCar.get(0));
+                }
+            }
             isBindCar(info);
-            if (SharepUtil.getPreferences().getBoolean("isBindCar", false)) {
+            if (SharepUtil.getPreferences().getBoolean(GlobalKey.CAR_IS_BOUND, false)) {
                 homeRlLock.setVisibility(View.GONE);
             } else {
                 homeRlLock.setVisibility(View.VISIBLE);
             }
-            if (info.myCar!=null&&info.myCar.size()>0){
-                tvCarType.setText(info.myCar.get(0).carName);
-                SharepUtil.putByBean("carInfo", info.myCar.get(0));
-            }else if (info.authCar!=null&&info.authCar.size()>0){
-                tvCarType.setText(info.authCar.get(0).carName);
-                SharepUtil.putByBean("carInfo", info.authCar.get(0));
-            }
+
         }
     }
 
@@ -172,9 +185,9 @@ public class HomeFragment extends BaseMvpFragment {
 
     private void showPopupWindow(View view) {
         @SuppressLint("InflateParams") View contentView = LayoutInflater.from(getContext()).inflate(R.layout.layout_car_popupwindow, null, false);
-        ListView mListView = contentView.findViewById(R.id.list_popup);
+        MaxListView mListView = contentView.findViewById(R.id.list_popup);
         mListView.setAdapter(adapter);
-
+        mListView.setListViewHeight(getPopupWindowHeight(view));
         mListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         popupWindow = new PopupWindow(contentView,
                 view.getWidth(), WindowManager.LayoutParams.WRAP_CONTENT, true);
@@ -182,6 +195,21 @@ public class HomeFragment extends BaseMvpFragment {
         popupWindow.setTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.showAsDropDown(view);
+    }
+
+    /**
+     * 根据屏幕适配PopupWindow显示高度
+     * @param view
+     * @return
+     */
+    private int getPopupWindowHeight(View view){
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        int windowHeight = dm.heightPixels;
+        int bottomLayoutHeight = ((MainActivity)getActivity()).bottomTabs.getHeight();
+        int [] location = new int[2];
+        view.getLocationInWindow(location);
+        int viewBottom = location[1]+view.getHeight();
+        return windowHeight-bottomLayoutHeight-viewBottom-50;
     }
 
     @OnClick({R.id.rl_home_chose_car_type, R.id.rlCarLocation, R.id.home_btn_lock,R.id.rlCarState,
@@ -242,6 +270,9 @@ public class HomeFragment extends BaseMvpFragment {
         return false;
     }
 
+    /**
+     * 判断身份认证
+     */
     private void certification() {
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         Intent intent = new Intent();
