@@ -26,7 +26,6 @@ import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.LoginActivity;
 import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.user.accept.IdfCompleteActivity;
-import com.carlt.autogo.view.activity.user.accept.UploadIdCardPhotoActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 
@@ -59,8 +58,8 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
     public static final int Trans_Handle_Activity       = 14;
     public static final int Auth_Handle_Activity        = 15;
     private int      isFrom;
-    private String   name;
-    private String   idcard;
+    //    private String   name;
+    //    private String   idcard;
     public  UUDialog dialog;
 
     @Override
@@ -103,8 +102,8 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                 break;
             case FROM_ID_CARDACCEPT_ACTIVITY:
                 tvFaceTitle.setText(getString(R.string.face_login_activity_title2));
-                name = intent.getStringExtra("name");
-                idcard = intent.getStringExtra("idcard");
+                //                name = intent.getStringExtra("name");
+                //                idcard = intent.getStringExtra("idcard");
                 break;
             case FROM_ALIPAY_AUTH:
                 tvFaceTitle.setText(getString(R.string.face_login_activity_title2));
@@ -331,12 +330,19 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                     public void accept(User user) throws Exception {
                         LogUtils.e("=====" + user);
                         if (user.err == null) {
+
                             ToastUtils.showShort("设置成功");
-                            UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-                            info.faceId = 1;
-                            info.alipayAuth = 2;
-                            //                            SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, true);
-                            SharepUtil.putByBean(GlobalKey.USER_INFO, info);
+
+
+                            //                            switch (isFrom) {
+                            //                                case FROM_ALIPAY_AUTH:
+                            //
+                            //                                    break;
+                            //                                case FROM_ID_CARDACCEPT_ACTIVITY:
+                            //
+                            //                                    break;
+                            //                            }
+
                             go2Activity();
                         } else {
                             ToastUtils.showShort("设置失败");
@@ -357,6 +363,10 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
     }
 
     private void go2Activity() {
+        UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        info.faceId = 1;
+
+
         switch (isFrom) {
             case FROM_LOGIN_ACTIVITY:
                 //                    tvFaceTitle.setText(getString(R.string.face_login_activity_title1));
@@ -366,12 +376,14 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                 break;
             case FROM_ID_CARDACCEPT_ACTIVITY:
                 //                    tvFaceTitle.setText(getString(R.string.face_login_activity_title2));
-                Intent intent = new Intent(this, UploadIdCardPhotoActivity.class);
-                intent.putExtra("name", name);
-                intent.putExtra("idcard", idcard);
+                info.identityAuth = 2;
+                Intent intent = new Intent(this, IdfCompleteActivity.class);
+                //                intent.putExtra("name", name);
+                intent.putExtra("idcard", true);
                 startActivity(intent);
                 break;
             case FROM_ALIPAY_AUTH:
+                info.alipayAuth = 2;
                 Intent intent1 = new Intent(this, IdfCompleteActivity.class);
                 intent1.putExtra("idcard", false);
                 startActivity(intent1);
@@ -380,6 +392,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                 break;
 
         }
+        SharepUtil.putByBean(GlobalKey.USER_INFO, info);
         finish();
     }
 

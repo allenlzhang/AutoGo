@@ -27,9 +27,11 @@ import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.DialogIdcardAccept;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.entry.user.User;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.PhotoUtils;
+import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
@@ -239,10 +241,10 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
         //        }
         //        String certid = identityInfo.getCertid();
         //        String cardName = identityInfo.getName();
-//        if (!realName.equals(scanName)) {
-//            showToast("您上传的身份证和您填写的姓名不一致");
-//            return;
-//        }
+        //        if (!realName.equals(scanName)) {
+        //            showToast("您上传的身份证和您填写的姓名不一致");
+        //            return;
+        //        }
         LogUtils.e("姓名====" + scanName + "---身份号码--" + scanIDNum);
         if (!idNum.equals(scanIDNum)) {
             showToast("您上传的身份证和您填写的身份证号不一致");
@@ -296,7 +298,16 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
                     public void accept(User user) throws Exception {
                         dialog.dismiss();
                         LogUtils.e(user);
-                        showToast("上传成功");
+                        if (user.code == 0) {
+                            showToast("上传成功");
+                            Intent intent = new Intent(UploadIdCardPhotoActivity2.this, FaceAuthSettingActivity.class);
+                            intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ID_Card);
+                            startActivity(intent);
+
+                        } else {
+                            showToast(user.msg);
+                        }
+
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -332,7 +343,6 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
         //                    }
         //                });
     }
-
 
 
     public static class ImgId {
@@ -414,7 +424,7 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
                     break;
                 case National_Code:
                     nationalpath = data.getStringExtra(OcrConfig.OCR_PHOTO_PATH);
-                    Bitmap bitmap1 = creatWaterMarkBitmap(BitmapFactory.decodeFile(facepath));
+                    Bitmap bitmap1 = creatWaterMarkBitmap(BitmapFactory.decodeFile(nationalpath));
                     imgIdcardBack.setImageBitmap(bitmap1);
                     break;
                 default:

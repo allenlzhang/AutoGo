@@ -22,7 +22,6 @@ import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.alipay.OrderInfoUtil2_0;
 import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
-import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,20 +73,34 @@ public class UserIdChooseActivity extends BaseMvpActivity {
             case R.id.rl_payment_accept:
                 //支付宝认证
                 if (user.alipayAuth == 2) {
-                    startActivity(FaceAuthSettingActivity.class, false);
+                    go2Activity(FaceAuthSettingActivity.From_ALiPay_Auth);
                 } else {
                     authALiPay();
                 }
                 break;
             case R.id.rl_idcard_accept:
                 //                showToast("此功能暂未开放");
-                Intent intentId = new Intent(this, IdCardAcceptActivity.class);
-                startActivity(intentId);
+                if (user.identityAuth == 2) {
+//                    Intent intent = new Intent(this, FaceAuthSettingActivity.class);
+//                    intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ID_Card);
+//                    startActivity(intent);
+                    go2Activity(FaceAuthSettingActivity.From_ID_Card);
+                } else {
+                    Intent intentId = new Intent(this, IdCardAcceptActivity.class);
+                    startActivity(intentId);
+                }
+
                 break;
             default:
                 break;
         }
 
+    }
+
+    private void go2Activity(int from) {
+        Intent intent = new Intent(this, FaceAuthSettingActivity.class);
+        intent.putExtra(GlobalKey.FROM_ACTIVITY, from);
+        startActivity(intent);
     }
 
     /**
@@ -103,7 +116,6 @@ public class UserIdChooseActivity extends BaseMvpActivity {
      * 支付宝账户登录授权业务：入参target_id值
      */
     public static final String TARGET_ID = System.currentTimeMillis() + "";
-    Gson gson = new Gson();
     /** 商户私钥，pkcs8格式 */
     /** 如下私钥，RSA2_PRIVATE 或者 RSA_PRIVATE 只需要填入一个 */
     /** 如果商户两个都设置了，优先使用 RSA2_PRIVATE */
@@ -235,40 +247,7 @@ public class UserIdChooseActivity extends BaseMvpActivity {
                         LogUtils.e(throwable.toString());
                     }
                 });
-        //                .subscribe(new Consumer<AuthResult>() {
-        //                    @Override
-        //                    public void accept(AuthResult authResult) throws Exception {
-        //                        LogUtils.e("-----" + authResult.toString());
-        //                        LinkedHashMap<String, String> map = new LinkedHashMap<>();
-        //                        map.put("token", SharepUtil.preferences.getString("token", ""));
-        //                        map.put("authCode", authResult.authCode);
-        //                        map.put("openId", authResult.user_id);
-        //                        Gson gson = new Gson();
-        //                        String json = gson.toJson(map);
-        //                        LogUtils.e("--json---" + json);
-        //                        OkGo.<String>post(AliPay_Auth_URL)
-        //                                .headers("Carlt-Access-Id", "19877415356991399877")
-        //                                .headers("Content-Type", "application/json")
-        //                                .upJson(json)
-        //                                .execute(new StringCallback() {
-        //                                    @Override
-        //                                    public void onSuccess(Response<String> response) {
-        //                                        LogUtils.e("-----" + response.body());
-        //                                    }
-        //
-        //                                    @Override
-        //                                    public void onError(Response<String> response) {
-        //                                        super.onError(response);
-        //                                        LogUtils.e("-----" + response.body());
-        //                                    }
-        //                                });
-        //                    }
-        //                }, new Consumer<Throwable>() {
-        //                    @Override
-        //                    public void accept(Throwable throwable) throws Exception {
-        //                        LogUtils.e(throwable.toString());
-        //                    }
-        //                });
+
 
     }
 }

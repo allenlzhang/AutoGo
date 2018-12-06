@@ -6,7 +6,9 @@ public class User {
      */
 
     public String token;
-    public int isSet;
+    public String msg;
+    public int    isSet;
+    public int    code;
 
     public BaseError err;
 

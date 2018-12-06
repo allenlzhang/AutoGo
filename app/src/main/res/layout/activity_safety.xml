@@ -223,6 +223,84 @@
             tools:ignore="ContentDescription"/>
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="10dp"
+        android:text="第三方账号登录"
+        android:textColor="@color/textColorGray"
+        android:textSize="12dp"
+        />
+
+    <RelativeLayout
+        android:id="@+id/rlWechatSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorWhite"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="微信"
+            android:textColor="@color/colorEdtext"
+            android:textSize="14dp"
+            />
+
+        <CheckBox
+            android:id="@+id/cbWechatLogin"
+            style="@style/CheckBoxStyles"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:checked="false"
+            android:enabled="false"
+            android:clickable="false"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_c"
+        />
+
+    <RelativeLayout
+        android:id="@+id/rlAliSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/colorWhite"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="支付宝"
+            android:textColor="@color/colorEdtext"
+            android:textSize="14dp"
+            />
+
+        <CheckBox
+            android:id="@+id/cbALiPayLogin"
+            style="@style/CheckBoxStyles"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:checked="false"
+            android:enabled="false"
+            android:clickable="false"/>
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/ll_safety_login_device_management"
         android:layout_width="match_parent"

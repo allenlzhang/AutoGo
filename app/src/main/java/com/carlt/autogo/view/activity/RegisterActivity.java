@@ -1,13 +1,8 @@
 package com.carlt.autogo.view.activity;
 
 import android.annotation.SuppressLint;
-import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.Spanned;
-import android.text.TextWatcher;
-import android.text.method.DigitsKeyListener;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -36,8 +31,6 @@ import com.carlt.autogo.utils.MyTextWatcher;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;

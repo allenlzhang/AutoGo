@@ -54,7 +54,10 @@ public class IdfCompleteActivity extends BaseMvpActivity {
         for (Activity activity : ActivityControl.mActivityList) {
             if (activity instanceof UserIdChooseActivity) {
                 activity.finish();
+            } else if (activity instanceof UploadIdCardPhotoActivity2) {
+                activity.finish();
             }
+
         }
         finish();
 

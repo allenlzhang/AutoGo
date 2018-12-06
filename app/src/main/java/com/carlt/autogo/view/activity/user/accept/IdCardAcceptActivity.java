@@ -13,8 +13,6 @@ import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
-import com.carlt.autogo.global.GlobalKey;
-import com.carlt.autogo.view.activity.login.FaceLiveCheckActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -145,7 +143,7 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
         hideName = encrypt(name);
         hideIdNume = encrypt(idCardNum);
         Intent intent = new Intent(this, UploadIdCardPhotoActivity2.class);
-        intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.FROM_ID_CARDACCEPT_ACTIVITY);
+//        intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.FROM_ID_CARDACCEPT_ACTIVITY);
         intent.putExtra("name", hideName);
         intent.putExtra("idcard", hideIdNume);
         intent.putExtra("idNum", idCardNum);

@@ -16,10 +16,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.entry.car.CarBaseInfo;
+import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.gildutils.GlideCircleTransform;
@@ -154,6 +156,23 @@ public class MoreFragment extends BaseMvpFragment {
             llMoreServiceRenewal.setVisibility(View.GONE);
             llMoreContact.setVisibility(View.GONE);
         }
+        getIdentity();
+    }
+
+    @SuppressLint("CheckResult")
+    private void getIdentity() {
+         ClientFactory.def(UserService.class).getIdentity(new HashMap<String, Object>())
+                 .subscribe(new Consumer<User>() {
+                     @Override
+                     public void accept(User user) throws Exception {
+
+                     }
+                 }, new Consumer<Throwable>() {
+                     @Override
+                     public void accept(Throwable throwable) throws Exception {
+
+                     }
+                 });
     }
 
     @OnClick({R.id.ll_more_remote_update, R.id.ivAdd, R.id.ll_more_myCar, R.id.tv_more_edit_profile, R.id.ll_more_accounts_and_security, R.id.ll_more_log_out})
@@ -186,14 +205,7 @@ public class MoreFragment extends BaseMvpFragment {
     }
 
     private void showPop(ImageView ivAdd) {
-        //        EasyPopup popup = new EasyPopup(mActivity)
-        //                .setContentView(R.layout.layout_right_pop)
-        //                .setAnimationStyle(R.style.QQPopAnim)
-        //                .setFocusAndOutsideEnable(true)
-        //                .createPopup();
-        //        popup.showAtAnchorView(ivAdd, VerticalGravity.BELOW, HorizontalGravity.LEFT, SizeUtils.dp2px(30), 0);
-        //        int offsetX = SizeUtils.dp2px(20) - ivAdd.getWidth() / 2;
-        //        int offsetY = (ti.getHeight() - ivAdd.getHeight()) / 2;
+
         EasyPopup.create()
                 .setContext(mActivity)
                 .setContentView(R.layout.layout_right_pop)

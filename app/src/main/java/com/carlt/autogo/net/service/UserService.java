@@ -2,6 +2,7 @@ package com.carlt.autogo.net.service;
 
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.LoginLogInfo;
+import com.carlt.autogo.entry.user.ShareLoginList;
 import com.carlt.autogo.entry.user.SmsToken;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.entry.user.User;
@@ -55,8 +56,12 @@ public interface UserService {
     Observable<UpdateImageResultInfo> updateImageFile(@Body RequestBody params);
 
     //获取短信验证码token
-    @POST("User/GetSmsToken")
+    @POST("SmsCode/GetSmsToken")
     Observable<SmsToken> getSmsToken(@Body Map<String, String> params);
+
+    //发送短信验证码
+    @POST("SmsCode/SendSmsCode")
+    Observable<BaseError> SendSmsCode(@Body Map<String, Object> params);
 
     //支付宝授权
     @POST("User/AlipayAuth")
@@ -66,9 +71,6 @@ public interface UserService {
     @POST("User/SetFace")
     Observable<User> setFace(@Body Map<String, Object> params);
 
-    //发送短信验证码
-    @POST("User/SendSmsCode")
-    Observable<BaseError> SendSmsCode(@Body Map<String, Object> params);
 
     //设置远程密码
     @POST("User/SetRemotePassword")
@@ -85,6 +87,22 @@ public interface UserService {
     //三方注册
     @POST("User/RegisterByOpenApi")
     Observable<BaseError> registerByOpenApi(@Body Map<String, Object> params);
+
+    //三方绑定
+    @POST("UserShare/ShareLoginBind")
+    Observable<BaseError> shareLoginBind(@Body Map<String, Object> params);
+
+    // 解绑第三方账号
+    @POST("UserShare/ShareLoginUnbind")
+    Observable<BaseError> shareLoginUnbind(@Body Map<String, Object> params);
+
+    //获取已绑定所有第三方账号
+    @POST("UserShare/GetShareLogin")
+    Observable<ShareLoginList> getShareLogin(@Body Map<String, Object> params);
+
+    //查询是否设置第三方登录
+    @POST("UserShare/CheckShareLogin")
+    Observable<BaseError> checkShareLogin(@Body Map<String, Object> params);
 
     //人脸登录
     @POST("User/LoginByFace")
@@ -125,7 +143,11 @@ public interface UserService {
     //检测是否设置人脸
     @POST("User/CheckFace")
     Observable<User> checkFace(@Body Map<String, Object> params);
+
     // 身份证认证相关接口
-    @POST("User/Identity/AddIdentity")
+    @POST("Identity/AddIdentity")
     Observable<User> addIdentity(@Body Map<String, Object> params);
+
+    @POST("Identity/GetIdentity")
+    Observable<User> getIdentity(@Body Map<String, Object> params);
 }
