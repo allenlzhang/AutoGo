@@ -1,20 +1,22 @@
 package com.carlt.autogo.view.activity.car;
 
 import android.content.Intent;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ListView;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.CarModelAdapter;
-import com.carlt.autogo.adapter.OnItemClickListener;
+import com.carlt.autogo.adapter.OnItemClickCallback;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.car.CarBrandInfo;
 import com.carlt.autogo.entry.car.CarModelInfo;
 import com.carlt.autogo.entry.car.NewCarModelInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +37,7 @@ public class ModelActivity extends BaseMvpActivity {
 
 
     @BindView(R.id.layout_list)
-    ListView layoutList;
+    RecyclerView layoutList;
 
     private static final int CODE_MODEL_RESULT = 0xb5;
 
@@ -50,10 +52,14 @@ public class ModelActivity extends BaseMvpActivity {
         setTitleText("车型");
         Intent intent = getIntent();
         CarModelInfo info = (CarModelInfo) intent.getSerializableExtra("model");
+        layoutList.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        layoutList.setLayoutManager(linearLayoutManager);
+        layoutList.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         if (info!=null) {
-            adapter = new CarModelAdapter(this, getData(info));
+            adapter = new CarModelAdapter(getData(info));
             layoutList.setAdapter(adapter);
-            adapter.setOnItemClickListener(new OnItemClickListener() {
+            adapter.setCallback(new OnItemClickCallback() {
                 @Override
                 public void onItemClick(Object o) {
                     NewCarModelInfo newCarModelInfo = (NewCarModelInfo) o;
@@ -111,9 +117,9 @@ public class ModelActivity extends BaseMvpActivity {
                             ToastUtils.showShort(carModelInfo.err.msg);
                         }else {
                             if (carModelInfo.items!=null) {
-                                adapter = new CarModelAdapter(ModelActivity.this, getData(carModelInfo));
+                                adapter = new CarModelAdapter(getData(carModelInfo));
                                 layoutList.setAdapter(adapter);
-                                adapter.setOnItemClickListener(new OnItemClickListener() {
+                                adapter.setCallback(new OnItemClickCallback() {
                                     @Override
                                     public void onItemClick(Object o) {
                                         NewCarModelInfo newCarModelInfo = (NewCarModelInfo) o;

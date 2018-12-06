@@ -1,15 +1,13 @@
 package com.carlt.autogo.adapter;
 
-import android.content.Context;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.carlt.autogo.R;
 import com.carlt.autogo.entry.car.CarBrandInfo;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
 
@@ -17,75 +15,35 @@ import java.util.List;
  * Created by Marlon on 2018/11/21.
  * 车款Adapter
  */
-public class CarBrandAdapter extends BaseAdapter {
+public class CarBrandAdapter extends BaseQuickAdapter<CarBrandInfo.DataBean,BaseViewHolder> {
 
-    private List<CarBrandInfo.DataBean> list;
+    private OnItemClickCallback callback;
 
-    private LayoutInflater inflater;
-
-    private OnItemClickListener onItemClickListener;
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+    public void setCallback(OnItemClickCallback callback) {
+        this.callback = callback;
     }
 
-    public CarBrandAdapter(Context context, List<CarBrandInfo.DataBean> list) {
-        this.list = list;
-        inflater = LayoutInflater.from(context);
+    public CarBrandAdapter(@Nullable List<CarBrandInfo.DataBean> data) {
+        super(R.layout.item_car_model,data);
     }
 
     @Override
-    public int getCount() {
-        if (list!=null){
-            return list.size();
-        }
-        return 0;
-    }
-
-    @Override
-    public Object getItem(int i) {
-        return list.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        ViewHolder holder;
-        if (view == null){
-            holder = new ViewHolder();
-            view = inflater.inflate(R.layout.item_car_model,null,false);
-            holder.title = view.findViewById(R.id.model_title);
-            holder.txt = view.findViewById(R.id.model_txt);
-            view.setTag(holder);
+    protected void convert(BaseViewHolder helper, final CarBrandInfo.DataBean item) {
+        if (TextUtils.isEmpty(item.title)){
+            helper.setText(R.id.model_title,item.year);
+            helper.setVisible(R.id.model_title,true);
+            helper.setGone(R.id.model_txt,false);
         }else {
-            holder = (ViewHolder) view.getTag();
+            helper.setText(R.id.model_txt,item.title);
+            helper.setVisible(R.id.model_txt,true);
+            helper.setGone(R.id.model_title,false);
         }
-        final CarBrandInfo.DataBean dataBean = list.get(i);
-        if (TextUtils.isEmpty(dataBean.title)){
-            holder.title.setText(dataBean.year);
-            holder.txt.setVisibility(View.GONE);
-        }else {
-            holder.txt.setText(dataBean.title);
-            holder.title.setVisibility(View.GONE);
-        }
-
-        holder.txt.setOnClickListener(new View.OnClickListener() {
+        helper.setOnClickListener(R.id.model_txt, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onItemClickListener.onItemClick(dataBean);
+                callback.onItemClick(item);
             }
         });
-
-        return view;
-    }
-
-    class ViewHolder{
-        TextView title;
-        TextView txt;
     }
 
 }

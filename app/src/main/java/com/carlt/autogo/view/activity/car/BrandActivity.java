@@ -1,17 +1,15 @@
 package com.carlt.autogo.view.activity.car;
 
 import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.widget.ListView;
 
-import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.BrandAdapter;
-import com.carlt.autogo.adapter.OnItemClickListener;
+import com.carlt.autogo.adapter.OnItemClickCallback;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.car.BrandInfo;
 import com.carlt.autogo.entry.car.CarBrandInfo;
@@ -30,7 +28,7 @@ public class BrandActivity extends BaseMvpActivity {
 
 
     @BindView(R.id.layout_list)
-    ListView layoutList;
+    RecyclerView layoutList;
 
     private BrandAdapter adapter;
 
@@ -45,10 +43,13 @@ public class BrandActivity extends BaseMvpActivity {
         setTitleText("品牌");
         Intent intent = getIntent();
         BrandInfo info = (BrandInfo) intent.getSerializableExtra("brand");
-
-        adapter = new BrandAdapter(this,getData(info));
+        layoutList.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        layoutList.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        layoutList.setLayoutManager(linearLayoutManager);
+        adapter = new BrandAdapter(getData(info));
         layoutList.setAdapter(adapter);
-        adapter.setClickListener(new OnItemClickListener() {
+        adapter.setCallback(new OnItemClickCallback() {
             @Override
             public void onItemClick(Object o) {
                 BrandInfo.BrandData info = (BrandInfo.BrandData) o;
