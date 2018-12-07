@@ -15,6 +15,7 @@ import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.RemoteInfo;
+import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.utils.SharepUtil;
@@ -55,6 +56,9 @@ public class RemoteFragment extends BaseMvpFragment {
             R.mipmap.remote_sky_window_title, R.mipmap.remote_other_title};
     int icon[] = {R.mipmap.remote_engine_icon, R.mipmap.remote_air_icon, R.mipmap.remote_car_window_icon,
             R.mipmap.remote_sky_window_icon, R.mipmap.remote_other_icon};
+
+    private SingletonCar singletonCar;
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_remote;
@@ -62,6 +66,7 @@ public class RemoteFragment extends BaseMvpFragment {
 
     @Override
     protected void init() {
+        singletonCar = SingletonCar.getInstance();
         tvBaseTitle.setText("远程");
         ivBaseBack.setImageResource(R.drawable.ic_remote_car_state_bg);
         tvBaseRight.setBackground(getResources().getDrawable(R.drawable.ic_remote_log_bg));
@@ -131,7 +136,8 @@ public class RemoteFragment extends BaseMvpFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (SharepUtil.getPreferences().getBoolean(GlobalKey.CAR_IS_BOUND, false)) {
+        boolean isBound = singletonCar.isBound();
+        if (isBound){
             remoteRlLock.setVisibility(View.GONE);
         } else {
             remoteRlLock.setVisibility(View.VISIBLE);
@@ -144,7 +150,7 @@ public class RemoteFragment extends BaseMvpFragment {
     private void certification(){
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         Intent intent = new Intent();
-        if (user.alipayAuth == 1){ //身份认证
+        if (user.alipayAuth == 1||user.identityAuth == 1){ //身份认证
             intent.setClass(mContext,UserIdChooseActivity.class);
         }else if (user.faceId == 0){//人脸认证
             intent.setClass(mContext,FaceRecognitionSettingFirstActivity.class);
@@ -159,7 +165,7 @@ public class RemoteFragment extends BaseMvpFragment {
      * @return
      */
     private boolean isActivated(){
-        AuthCarInfo.MyCarBean carInfo = SharepUtil.getBeanFromSp(GlobalKey.CAR_INFO);
+        AuthCarInfo.MyCarBean carInfo = singletonCar.getMyCarBean();
         if (carInfo!=null) {
             int remoteStatus = carInfo.remoteStatus;
             if (remoteStatus == 0) {

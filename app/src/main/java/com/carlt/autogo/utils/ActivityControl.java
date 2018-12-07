@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.carlt.autogo.common.dialog.CommonDialog;
+import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.view.activity.LoginActivity;
@@ -61,9 +62,10 @@ public class ActivityControl {
             @Override
             public void onRightClick() {
                 SharepUtil.put(GlobalKey.USER_TOKEN, "");
-                SharepUtil.putByBean("carInfo",null);
-                SharepUtil.putBoolean("isBinding",false);
-                SharepUtil.cleanKey("carTag");
+                SingletonCar singletonCar = SingletonCar.getInstance();
+                singletonCar.setBound(false);
+                singletonCar.setCarTag(0);
+                singletonCar.setMyCarBean(null);
                 //                SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
                 //                SharepUtil.putBoolean(GlobalKey.PROCESS_SAFE_SWITCH, false);
                 UserInfo userInfo = SharepUtil.getBeanFromSp("user");

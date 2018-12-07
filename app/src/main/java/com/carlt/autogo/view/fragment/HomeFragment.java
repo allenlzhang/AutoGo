@@ -19,6 +19,7 @@ import com.carlt.autogo.adapter.CarPopupAdapter;
 import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.AuthCarInfo;
+import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
@@ -79,6 +80,8 @@ public class HomeFragment extends BaseMvpFragment {
     private CarPopupAdapter adapter;
     private PopupWindow popupWindow;
 
+    private SingletonCar singletonCar;
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_home;
@@ -86,7 +89,7 @@ public class HomeFragment extends BaseMvpFragment {
 
     @Override
     protected void init() {
-
+        singletonCar = SingletonCar.getInstance();
 
     }
 
@@ -109,14 +112,14 @@ public class HomeFragment extends BaseMvpFragment {
     private void isBindCar(AuthCarInfo info){
         if (info != null) {
             if (info.myCar!= null&&info.myCar.size() > 0 ){
-                SharepUtil.putBoolean(GlobalKey.CAR_IS_BOUND, true);
+                singletonCar.setBound(true);
             }else if (info.authCar != null && info.authCar.size() > 0) {
-                SharepUtil.putBoolean(GlobalKey.CAR_IS_BOUND, true);
+                singletonCar.setBound(true);
             } else {
-                SharepUtil.putBoolean(GlobalKey.CAR_IS_BOUND, false);
+                singletonCar.setBound(false);
             }
         } else {
-            SharepUtil.putBoolean(GlobalKey.CAR_IS_BOUND, false);
+            singletonCar.setBound(false);
         }
     }
 
@@ -150,25 +153,26 @@ public class HomeFragment extends BaseMvpFragment {
                 public void itemClick(int tag, AuthCarInfo.MyCarBean dataBean) {
                     popupWindow.dismiss();
                     adapter.setSelected_position(tag);
-                    SharepUtil.putInt(GlobalKey.CAR_TAG,tag);
+                    singletonCar.setCarTag(tag);
                     tvCarType.setText(dataBean.carName);
-                    SharepUtil.putByBean(GlobalKey.CAR_INFO, dataBean);
+                    singletonCar.setMyCarBean(dataBean);
                 }
             });
-            int tag = SharepUtil.getPreferences().getInt(GlobalKey.CAR_TAG,-1);
-            if (tag != -1){
+            int tag = singletonCar.getCarTag();
+            if (tag != 0){
                 adapter.setSelected_position(tag);
             }else {
                 if (info.myCar!=null&&info.myCar.size()>0){
                     tvCarType.setText(info.myCar.get(0).carName);
-                    SharepUtil.putByBean(GlobalKey.CAR_INFO, info.myCar.get(0));
+                    singletonCar.setMyCarBean(info.myCar.get(0));
                 }else if (info.authCar!=null&&info.authCar.size()>0){
                     tvCarType.setText(info.authCar.get(0).carName);
-                    SharepUtil.putByBean(GlobalKey.CAR_INFO, info.authCar.get(0));
+                    singletonCar.setMyCarBean(info.authCar.get(0));
                 }
             }
             isBindCar(info);
-            if (SharepUtil.getPreferences().getBoolean(GlobalKey.CAR_IS_BOUND, false)) {
+            boolean isBound = singletonCar.isBound();
+            if (isBound){
                 homeRlLock.setVisibility(View.GONE);
             } else {
                 homeRlLock.setVisibility(View.VISIBLE);
@@ -254,7 +258,7 @@ public class HomeFragment extends BaseMvpFragment {
 
     private boolean isActivated(){
         // 远程激活状态,设备激活状态 0-未激活  1-正在激活  2-激活成功  3-激活失败
-        AuthCarInfo.MyCarBean dataBean = SharepUtil.getBeanFromSp("carInfo");
+        AuthCarInfo.MyCarBean dataBean = singletonCar.getMyCarBean();
         if (dataBean!=null) {
             int remoteStatus = dataBean.remoteStatus;
             if (remoteStatus == 0) {
@@ -276,7 +280,7 @@ public class HomeFragment extends BaseMvpFragment {
     private void certification() {
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         Intent intent = new Intent();
-        if (user.alipayAuth == 1) {
+        if (user.alipayAuth == 1||user.identityAuth == 1) {
             intent.setClass(mContext, UserIdChooseActivity.class);
         } else if (user.faceId == 0) {
             intent.setClass(mContext, FaceRecognitionSettingFirstActivity.class);

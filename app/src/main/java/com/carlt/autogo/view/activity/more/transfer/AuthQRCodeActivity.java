@@ -23,11 +23,11 @@ import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.CarAuthTimeInfo;
 import com.carlt.autogo.entry.car.CarBaseInfo;
+import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.utils.QRCodeUtils;
-import com.carlt.autogo.utils.SharepUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.zyyoona7.popup.EasyPopup;
 
@@ -120,7 +120,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
 
     @SuppressLint("CheckResult")
     private void initQrCode(int carId, int authType) {
-        carInfo = SharepUtil.getBeanFromSp("carInfo");
+        carInfo = SingletonCar.getInstance().getMyCarBean();
 
         tvCarName.setText(carInfo.carName);
         tvTime.setText("1小时");

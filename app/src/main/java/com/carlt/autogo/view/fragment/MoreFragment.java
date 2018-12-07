@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.entry.car.CarBaseInfo;
+import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
@@ -118,14 +119,13 @@ public class MoreFragment extends BaseMvpFragment {
 
     @Override
     protected void init() {
-
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-        isBindCar = SharepUtil.getPreferences().getBoolean(GlobalKey.CAR_IS_BOUND, false);
+        isBindCar = SingletonCar.getInstance().isBound();
         userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         if (!TextUtils.isEmpty(userInfo.realName)) {
             tvMoreNickname.setText(userInfo.realName + "");
@@ -150,7 +150,7 @@ public class MoreFragment extends BaseMvpFragment {
                 .skipMemoryCache(true)
                 .transform(new GlideCircleTransform(mContext))
                 .into(ivMoreHeadSculpture);
-        if (!SharepUtil.getPreferences().getBoolean(GlobalKey.CAR_IS_BOUND, false)) {
+        if (!isBindCar) {
             llMoreLayout1.setVisibility(View.GONE);
             llMoreRemoteUpdate.setVisibility(View.GONE);
             llMoreServiceRenewal.setVisibility(View.GONE);
