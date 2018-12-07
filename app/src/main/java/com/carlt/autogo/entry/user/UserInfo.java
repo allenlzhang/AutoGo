@@ -29,7 +29,7 @@ public class UserInfo implements Serializable {
     public String faceFile;          // 人脸图片文件路径
     public int    faceId;          // 人脸图片文件路径
     public int    logoutState;
-    public int    identityAuth;
+    public int    identityAuth;       // 身份证实名认证状态  1-未认证  2-已认证
 
     public int loginState;    // 登录状态 0 账号密码登录， 1 短信登录，2 三方登录
 

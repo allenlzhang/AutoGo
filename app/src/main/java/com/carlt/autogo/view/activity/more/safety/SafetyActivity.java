@@ -149,7 +149,6 @@ public class SafetyActivity extends BaseMvpActivity {
             public void onClick(View v) {
                 if (cbALiPayLogin.isChecked()) {
                     showUnBindAliTip("你确定要解绑支付宝吗", 1);
-
                 } else {
                     showBindAliTip();
                 }
@@ -160,9 +159,7 @@ public class SafetyActivity extends BaseMvpActivity {
             public void onClick(View v) {
                 if (cbWechatLogin.isChecked()) {
                     showUnBindAliTip("你确定要解绑微信吗", 2);
-
                 } else {
-
                     showBindWechatTip();
                 }
             }
@@ -197,7 +194,7 @@ public class SafetyActivity extends BaseMvpActivity {
                 }
             });
         }
-        if (faceLogin && user.alipayAuth == 2 && user.faceId != 0) {
+        if (faceLogin && user.identityAuth == 2 ||user.alipayAuth == 2 && user.faceId != 0) {
             mTvFaceRecognition.setText("已开启");
             mIvFaceRecognition.setVisibility(View.VISIBLE);
         } else {
@@ -230,7 +227,7 @@ public class SafetyActivity extends BaseMvpActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-
+                            LogUtils.e(throwable);
                     }
                 });
     }
@@ -420,7 +417,7 @@ public class SafetyActivity extends BaseMvpActivity {
                 @Override
                 public void onError(Platform platform, int i, Throwable throwable) {
                     dialog.dismiss();
-                    ToastUtils.showShort("登录失败");
+                    ToastUtils.showShort("绑定失败");
 
                     LogUtils.e(throwable.getMessage());
                 }
@@ -428,7 +425,7 @@ public class SafetyActivity extends BaseMvpActivity {
                 @Override
                 public void onCancel(Platform platform, int i) {
                     dialog.dismiss();
-                    ToastUtils.showShort("登录取消");
+                    ToastUtils.showShort("绑定取消");
                 }
             });
             platform.showUser(null);
