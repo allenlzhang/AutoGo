@@ -17,6 +17,8 @@ public class CarBaseInfo {
     public int       status;
     public String    mobile;
     public String    carName;
+    public int       code;
+    public String    msg;
 
     @Override
     public String toString() {

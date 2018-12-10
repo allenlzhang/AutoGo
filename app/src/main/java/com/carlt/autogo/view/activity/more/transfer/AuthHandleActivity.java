@@ -18,6 +18,7 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.functions.Consumer;
+
 /**
  * Description : 授权处理页面
  * Author     : zhanglei
@@ -110,10 +111,10 @@ public class AuthHandleActivity extends BaseMvpActivity {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         dialog.dismiss();
-                        if (carBaseInfo.err == null) {
+                        if (carBaseInfo.code == 0) {
                             showToast("操作成功");
                         } else {
-                            showToast("操作失败");
+                            showToast(carBaseInfo.msg);
                         }
 
                     }
