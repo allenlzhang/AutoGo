@@ -62,10 +62,7 @@ public class ActivityControl {
             @Override
             public void onRightClick() {
                 SharepUtil.put(GlobalKey.USER_TOKEN, "");
-                SingletonCar singletonCar = SingletonCar.getInstance();
-                singletonCar.setBound(false);
-                singletonCar.setCarTag(0);
-                singletonCar.setMyCarBean(null);
+                SingletonCar.getInstance().initCar();
                 //                SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
                 //                SharepUtil.putBoolean(GlobalKey.PROCESS_SAFE_SWITCH, false);
                 UserInfo userInfo = SharepUtil.getBeanFromSp("user");

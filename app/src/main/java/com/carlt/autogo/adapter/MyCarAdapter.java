@@ -1,5 +1,6 @@
 package com.carlt.autogo.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,9 +11,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.entry.car.AuthCarInfo;
+import com.carlt.autogo.utils.MyTimeUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,10 +36,17 @@ public class MyCarAdapter extends BaseAdapter {
 
     private int TYPE = MYCAR;
 
+    private long time;
+
     public MyCarAdapter(Context context, List<AuthCarInfo.MyCarBean> list, int TYPE) {
         this.list = list;
         inflater = LayoutInflater.from(context);
         this.TYPE = TYPE;
+        try {
+            time = MyTimeUtils.FORMAT_DAY.parse("2038-01-01").getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -54,6 +67,7 @@ public class MyCarAdapter extends BaseAdapter {
         return i;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
@@ -118,7 +132,11 @@ public class MyCarAdapter extends BaseAdapter {
             holder.mTxtAuthEndTime.setVisibility(View.VISIBLE);
             holder.mLlState.setVisibility(View.GONE);
             if (info.authEndTime!=0) {
-                holder.mTxtAuthEndTime.setText("授权截止时间："+info.authEndTime);
+                if (info.authEndTime*1000>=time){
+                    holder.mTxtAuthEndTime.setText("授权截止时间：永久");
+                }else {
+                    holder.mTxtAuthEndTime.setText("授权截止时间："+MyTimeUtils.formatDateSecend(info.authEndTime));
+                }
             }else {
                 holder.mTxtAuthEndTime.setText("授权截止时间：--");
             }

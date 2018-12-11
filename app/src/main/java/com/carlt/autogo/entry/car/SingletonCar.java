@@ -49,4 +49,10 @@ public class SingletonCar {
     public void setCarTag(int carTag) {
         this.carTag = carTag;
     }
+
+    public void initCar(){
+        myCarBean = null;
+        isBound = false;
+        carTag = 0;
+    }
 }

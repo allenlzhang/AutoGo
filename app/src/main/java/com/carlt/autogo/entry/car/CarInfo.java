@@ -26,8 +26,8 @@ public class CarInfo {
     public int maintenNextDate; // 下次保养日期
     public int applicantDate; // 上次投保时间
     public int inspectTime; // 上次年检时间
-    public int authStartTime; // 授权开始时间
-    public int authEndTime; // 授权结束时间
+    public long authStartTime; // 授权开始时间
+    public long authEndTime; // 授权结束时间
     public int authStatus; // 授权状态,1未授权，2授权中
     public int authType; // 授权类型，1授权别人，2 被授权
     public int remoteStatus; // 远程激活状态,设备激活状态 0-未激活  1-正在激活  2-激活成功  3-激活失败

@@ -155,6 +155,11 @@ public class MoreFragment extends BaseMvpFragment {
             llMoreRemoteUpdate.setVisibility(View.GONE);
             llMoreServiceRenewal.setVisibility(View.GONE);
             llMoreContact.setVisibility(View.GONE);
+        }else {
+            llMoreLayout1.setVisibility(View.VISIBLE);
+            llMoreRemoteUpdate.setVisibility(View.VISIBLE);
+            llMoreServiceRenewal.setVisibility(View.VISIBLE);
+            llMoreContact.setVisibility(View.VISIBLE);
         }
         getIdentity();
     }

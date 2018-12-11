@@ -10,13 +10,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.car.CarInfo;
+import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.utils.MyTimeUtils;
 import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +29,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.internal.schedulers.NewThreadScheduler;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -91,7 +97,8 @@ public class CarDetailsActivity extends BaseMvpActivity {
     public static final int DETAILS_TYPE2 = 1;  //已激活未授权（我的爱车详情）
     public static final int DETAILS_TYPE3 = 2;  //已激活授权中（我的爱车详情）
     public static final int DETAILS_TYPE4 = 3;  //（被授权车辆详情）
-
+    private int id;
+    private int remoteStatus = 0;
     @Override
     protected int getContentView() {
         return R.layout.activity_car_details;
@@ -139,10 +146,14 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 btnCancelAuth.setVisibility(View.GONE);
                 break;
         }
-        int id = intent.getIntExtra("id", 0);
+        id = intent.getIntExtra("id", 0);
         ClientGetCarInfo(id);
     }
 
+    /**
+     * 获取车辆信息
+     * @param id
+     */
     @SuppressLint("CheckResult")
     private void ClientGetCarInfo(int id) {
         dialog.show();
@@ -155,7 +166,11 @@ public class CarDetailsActivity extends BaseMvpActivity {
                     @Override
                     public void accept(CarInfo carInfo){
                         dialog.dismiss();
-                        setData(carInfo);
+                        if (carInfo.err!=null){
+                            ToastUtils.showShort(carInfo.err.msg);
+                        }else {
+                            setData(carInfo);
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -164,6 +179,38 @@ public class CarDetailsActivity extends BaseMvpActivity {
                         LogUtils.e(throwable);
                     }
                 });
+    }
+
+    /**
+     * 取消授权
+     */
+    @SuppressLint("CheckResult")
+    private void cancelAuth(){
+        dialog.show();
+        Map<String, Integer> map = new HashMap<>();
+        map.put("id", id);
+        ClientFactory.def(CarService.class).cancelAuth(map).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseError>() {
+                    @Override
+                    public void accept(BaseError baseError) throws Exception {
+                        dialog.dismiss();
+                        if (baseError!=null) {
+                            if (!TextUtils.isEmpty(baseError.msg)) {
+                                ToastUtils.showShort(baseError.msg);
+                            }
+                        }else {
+                            ToastUtils.showShort("取消授权成功");
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
+                        LogUtils.e(throwable);
+                    }
+                });
+
     }
 
     @OnClick({R.id.llDetailsRemote, R.id.llDetailsRecorder, R.id.llDetailsMachine, R.id.btnCancelAuth})
@@ -177,23 +224,32 @@ public class CarDetailsActivity extends BaseMvpActivity {
             case R.id.llDetailsMachine:
                 break;
             case R.id.btnCancelAuth:
+                cancelAuth();
                 break;
         }
     }
 
     private void clickRemote() {
-        if (type == DETAILS_TYPE1) {
-            if (isRemoteActivating) {
-                startActivity(DeviceActivateEditActivity.class, false);
-            } else {
-                startActivity(DeviceActivateActivity.class, false);
-            }
-        } else {
+//        if (type == DETAILS_TYPE1) {
+//            if (isRemoteActivating) {
+//                startActivity(DeviceActivateEditActivity.class, false);
+//            } else {
+//                startActivity(DeviceActivateActivity.class, false);
+//            }
+//        } else {
+//            startActivity(ActivateStepActivity.class,false);
+//        }
+        if (remoteStatus == 1){
             startActivity(ActivateStepActivity.class,false);
+        }else if(remoteStatus == 2){
+            startActivity(ActivateStepActivity.class,false);
+        }else {
+            startActivity(DeviceActivateActivity.class,false);
         }
     }
 
     public void setData(CarInfo data) {
+        remoteStatus = data.remoteStatus;
         if (!TextUtils.isEmpty(data.carName)) {
             tvDetailsModel.setText(data.carName);
         }
@@ -207,16 +263,26 @@ public class CarDetailsActivity extends BaseMvpActivity {
             tvDetailsServiceTime.setText(String.valueOf(data.maintenDate));
         }
         if (data.applicantDate != 0){
-            tvDetailsInsureTime.setText(data.applicantDate);
+            tvDetailsInsureTime.setText(String.valueOf(data.applicantDate));
         }
         if (data.inspectTime != 0){
-            tvDetailsAnnualTime.setText(data.inspectTime);
+            tvDetailsAnnualTime.setText(String.valueOf(data.inspectTime));
         }
         if (data.authStartTime != 0){
-            tvDetailsAuthStartTime.setText(data.authStartTime);
+            tvDetailsAuthStartTime.setText(MyTimeUtils.formatDateSecend(data.authStartTime));
         }
         if (data.authEndTime != 0){
-            tvDetailsAuthEndTime.setText(data.authEndTime);
+            long time = 0;
+            try {
+                time = MyTimeUtils.FORMAT_DAY.parse("2038-01-01").getTime();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (data.authEndTime*1000 >= time){
+                tvDetailsAuthEndTime.setText("永久");
+            }else {
+                tvDetailsAuthEndTime.setText(MyTimeUtils.formatDateSecend(data.authEndTime));
+            }
         }
         if (data.remoteStatus == 1){
             ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activating_big);

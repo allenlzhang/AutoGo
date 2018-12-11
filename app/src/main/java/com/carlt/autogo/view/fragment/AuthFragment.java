@@ -91,6 +91,7 @@ public class AuthFragment extends BaseMvpFragment {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     Intent intent = new Intent(mContext, CarDetailsActivity.class);
                     intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE4);
+                    intent.putExtra("id",listInfos.get(i).id);
                     startActivity(intent);
                 }
             });

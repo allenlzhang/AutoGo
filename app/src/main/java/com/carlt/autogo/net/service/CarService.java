@@ -79,4 +79,7 @@ public interface CarService {
     @POST("Car/GetCarInfo")
         //获取车辆信息
     Observable<CarInfo> getCarInfo(@Body Map<String, Integer> param);
+
+    @POST("CarAuth/CancelAuth")//取消授权
+    Observable<BaseError> cancelAuth(@Body Map<String,Integer> param);
 }

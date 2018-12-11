@@ -62,7 +62,7 @@ public class WaitAuthActivity extends BaseMvpActivity {
 
     @SuppressLint("CheckResult")
     private void pollingAuthResult() {
-        int id = getIntent().getIntExtra("id", 0);
+        int id = getIntent().getIntExtra("authId", 0);
         final HashMap<String, Object> map = new HashMap<>();
         map.put("id", id);
         disposable = Observable.interval(5, TimeUnit.SECONDS)

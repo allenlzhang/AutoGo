@@ -10,6 +10,7 @@ import android.view.View;
 import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.model.TabEntity;
@@ -171,6 +172,7 @@ public class MainActivity extends BaseMvpActivity {
                 showToast("再按一次退出程序");
                 mExitTime = System.currentTimeMillis();
             } else {
+                SingletonCar.getInstance().initCar();
                 finish();
             }
             return true;
