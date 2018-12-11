@@ -10,4 +10,5 @@ import com.carlt.autogo.entry.user.BaseError;
  */
 public interface IUnRegisterView {
     void unRegisterFinish(BaseError e);
+//    void checkSmsCodeFinish(BaseError e);
 }

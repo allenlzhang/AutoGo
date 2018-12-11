@@ -41,4 +41,23 @@ public class UnRegisterPresenter extends BasePresenter<IUnRegisterView> {
                     }
                 });
     }
+//    @SuppressLint("CheckResult")
+//    public void checkSmsCode(Map<String, Object> params) {
+//        uuDialog.show();
+//        ClientFactory.def(UserService.class).checkSmsCode(params)
+//
+//                .subscribe(new Consumer<BaseError>() {
+//                    @Override
+//                    public void accept(BaseError baseError) throws Exception {
+//                        LogUtils.e("========" + baseError.toString());
+//                        uuDialog.dismiss();
+//                        mView.checkSmsCodeFinish(baseError);
+//                    }
+//                }, new Consumer<Throwable>() {
+//                    @Override
+//                    public void accept(Throwable throwable) throws Exception {
+//                        uuDialog.dismiss();
+//                    }
+//                });
+//    }
 }

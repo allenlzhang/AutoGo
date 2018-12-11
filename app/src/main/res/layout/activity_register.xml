@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorRegistBg"
-    tools:context=".view.activity.RegisterActivity">
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:background="@color/colorRegistBg"
+                                             android:paddingTop="15dp"
+                                             tools:context=".view.activity.RegisterActivity">
 
     <EditText
         android:id="@+id/regist_user_phone"
         style="@style/baseEditStyle"
-        android:inputType="number"
-        android:maxLength="11"
-        android:hint="请输入手机号码"
-        tools:ignore="TextFields"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-
+        android:hint="请输入手机号码"
+        android:inputType="number"
+        android:maxLength="11"
+        tools:ignore="TextFields"
         />
 
     <RelativeLayout
         android:id="@+id/headl2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/regist_user_phone"
         android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/regist_user_phone"
         app:layout_constraintVertical_bias="0">
 
         <EditText
             android:id="@+id/regist_user_code"
             style="@style/baseEditStyle"
             android:layout_width="match_parent"
-            android:inputType="number"
-            android:maxLength="6"
             android:layout_centerVertical="true"
             android:hint="请输入验证码"
+            android:inputType="number"
+            android:maxLength="6"
             tools:ignore="TextFields"
 
             />
@@ -44,10 +44,10 @@
             style="@style/BtnSendCodeBg"
             android:layout_width="80dp"
             android:layout_height="30dp"
-            android:gravity="center"
-            android:text="发送验证码"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="发送验证码"
 
             />
 
@@ -57,21 +57,21 @@
         android:id="@+id/head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/headl2"
         android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/headl2"
         app:layout_constraintVertical_bias="0"
         >
 
         <EditText
             android:id="@+id/ed_register_pwd"
             style="@style/baseEditStyle"
+            android:layout_centerVertical="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:hint="请输入登录密码"
             android:inputType="textPassword"
             android:maxLength="32"
             android:selectAllOnFocus="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:layout_centerVertical="true"
             tools:ignore="TextFields"
             />
 
@@ -79,11 +79,11 @@
             android:id="@+id/img_passwd_toggle"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="22dp"
             android:src="@mipmap/ic_login_pwd_hide"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:tag="off"/>
 
 
@@ -93,21 +93,21 @@
         android:id="@+id/head2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/head"
         android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/head"
         app:layout_constraintVertical_bias="0"
         >
 
         <EditText
             android:id="@+id/ed_register_pwd_d"
             style="@style/baseEditStyle"
+            android:layout_centerVertical="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:hint="请再次输入密码"
             android:inputType="textPassword"
             android:maxLength="32"
             android:selectAllOnFocus="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:layout_centerVertical="true"
             tools:ignore="TextFields"
             />
 
@@ -115,11 +115,11 @@
             android:id="@+id/img_passwd_toggle_d"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="22dp"
             android:src="@mipmap/ic_login_pwd_hide"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:tag="off"/>
 
     </RelativeLayout>
@@ -128,9 +128,9 @@
         android:id="@+id/head3"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="@+id/head2"
         app:layout_constraintTop_toBottomOf="@+id/head2"
-        android:layout_marginTop="10dp"
         app:layout_constraintVertical_bias="0">
 
         <CheckBox
@@ -152,7 +152,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@+id/cb_law"
-            android:text="已经阅读并同意" />
+            android:text="已经阅读并同意"/>
 
         <TextView
             android:id="@+id/tv_law"
@@ -161,7 +161,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/tv1"
             android:text="@string/app_law"
-            android:textColor="@color/colorForgotPasswd" />
+            android:textColor="@color/colorForgotPasswd"/>
 
     </RelativeLayout>
 
@@ -171,6 +171,6 @@
         android:text="注册"
         android:textSize="20dp"
         app:layout_constraintTop_toBottomOf="@+id/head3"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.1"/>
 
 </android.support.constraint.ConstraintLayout>

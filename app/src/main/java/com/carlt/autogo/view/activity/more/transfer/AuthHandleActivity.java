@@ -1,6 +1,7 @@
 package com.carlt.autogo.view.activity.more.transfer;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,8 +11,10 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.CarBaseInfo;
+import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.view.activity.login.FaceLiveCheckActivity;
 
 import java.util.HashMap;
 
@@ -81,7 +84,11 @@ public class AuthHandleActivity extends BaseMvpActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnAgree:
-                doAuthState(3);
+//                doAuthState(3);
+                Intent intent = new Intent(this, FaceLiveCheckActivity.class);
+                intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.Auth_Handle_Activity);
+                intent.putExtra("authId", id);
+                startActivity(intent);
                 break;
             case R.id.btnRefuseAgree:
                 CommonDialog.createTwoBtnDialog(this, "您确定要拒绝吗", true, new CommonDialog.DialogWithTitleClick() {

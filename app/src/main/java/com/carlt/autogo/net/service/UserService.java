@@ -59,6 +59,10 @@ public interface UserService {
     @POST("SmsCode/GetSmsToken")
     Observable<SmsToken> getSmsToken(@Body Map<String, String> params);
 
+    //校验验证码
+    @POST("SmsCode/CheckSmsCode")
+    Observable<BaseError> checkSmsCode(@Body Map<String, Object> params);
+
     //发送短信验证码
     @POST("SmsCode/SendSmsCode")
     Observable<BaseError> SendSmsCode(@Body Map<String, Object> params);
@@ -70,6 +74,9 @@ public interface UserService {
     //上传图片id
     @POST("User/SetFace")
     Observable<User> setFace(@Body Map<String, Object> params);
+
+    @POST("User/CompareFace")
+    Observable<User> compareFace(@Body Map<String, Object> params);
 
 
     //设置远程密码

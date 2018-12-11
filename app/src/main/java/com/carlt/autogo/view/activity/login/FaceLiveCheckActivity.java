@@ -2,9 +2,11 @@ package com.carlt.autogo.view.activity.login;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.View;
 
 import com.baidu.idl.face.platform.FaceStatusEnum;
 import com.baidu.idl.face.platform.ui.FaceLivenessActivity;
@@ -14,17 +16,24 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.common.dialog.UUDialog;
+import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.LoginActivity;
 import com.carlt.autogo.view.activity.MainActivity;
+import com.carlt.autogo.view.activity.more.transfer.AuthHandleActivity;
+import com.carlt.autogo.view.activity.more.transfer.AuthQRCodeActivity;
+import com.carlt.autogo.view.activity.more.transfer.CheckSmsCodeActivity;
+import com.carlt.autogo.view.activity.more.transfer.TransHandleActivity;
+import com.carlt.autogo.view.activity.more.transfer.TransferQRCodeActivity;
 import com.carlt.autogo.view.activity.user.accept.IdfCompleteActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
@@ -110,13 +119,33 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
 
                 break;
             case Trans_Handle_Activity:
+            case Auth_Handle_Activity:
                 tvFaceTitle.setText("安全验证");
-
+                tvMsg.setVisibility(View.VISIBLE);
                 break;
             default:
 
                 break;
         }
+        tvMsg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentSms = new Intent(FaceLiveCheckActivity.this, CheckSmsCodeActivity.class);
+                switch (isFrom) {
+                    case Trans_Handle_Activity:
+                        int transferId = getIntent().getIntExtra("transferId", -1);
+                        intentSms.putExtra("isTransfer", true);
+                        intentSms.putExtra("transferId", transferId);
+                        break;
+                    case Auth_Handle_Activity:
+                        int authId = getIntent().getIntExtra("authId", -1);
+                        intentSms.putExtra("isTransfer", false);
+                        intentSms.putExtra("authId", authId);
+                        break;
+                }
+                startActivity(intentSms);
+            }
+        });
     }
 
     @SuppressLint("CheckResult")
@@ -217,6 +246,15 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                                         //人脸登录逻辑
                                         faceLogin(updateImageResultInfo);
                                         break;
+                                    case Trans_Handle_Activity:
+                                        //过户人脸验证
+                                        int transferId = getIntent().getIntExtra("transferId", -1);
+                                        checkFaceForTrans(updateImageResultInfo, transferId, 1);
+                                        break;
+                                    case Auth_Handle_Activity:
+                                        int authId = getIntent().getIntExtra("authId", -1);
+                                        checkFaceForAuth(updateImageResultInfo, authId, 3);
+                                        break;
                                 }
                                 LogUtils.e(updateImageResultInfo.toString());
                             }
@@ -233,6 +271,101 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
         }
 
 
+    }
+
+    @SuppressLint("CheckResult")
+    private void checkFaceForAuth(UpdateImageResultInfo updateImageResultInfo, int authId, int status) {
+        Map<String, Object> map = new HashMap<>();
+        int id = updateImageResultInfo.message.id;
+        map.put("faceId", id);
+
+        final HashMap<String, Object> map1 = new HashMap<>();
+        map1.put("id", authId);
+        map1.put("status", status);
+        ClientFactory.def(UserService.class).compareFace(map)
+                .flatMap(new Function<User, ObservableSource<CarBaseInfo>>() {
+                    @Override
+                    public ObservableSource<CarBaseInfo> apply(User user) throws Exception {
+                        return ClientFactory.def(CarService.class).modifyStatus(map1);
+                    }
+                })
+                .subscribe(new Consumer<CarBaseInfo>() {
+                    @Override
+                    public void accept(CarBaseInfo carBaseInfo) throws Exception {
+                        dialog.dismiss();
+                        if (carBaseInfo.err == null) {
+
+                            ToastUtils.showShort("操作成功");
+                            closeActivity();
+                        } else {
+                            ToastUtils.showShort(carBaseInfo.msg);
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
+                        LogUtils.e(throwable);
+                        ToastUtils.showShort("操作失败");
+                    }
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    private void checkFaceForTrans(UpdateImageResultInfo updateImageResultInfo, int transferId, int status) {
+        Map<String, Object> map = new HashMap<>();
+        int id = updateImageResultInfo.message.id;
+        map.put("faceId", id);
+
+        final HashMap<String, Object> map1 = new HashMap<>();
+        map1.put("transferId", transferId);
+        map1.put("isAgree", status);
+        ClientFactory.def(UserService.class).compareFace(map)
+                .flatMap(new Function<User, ObservableSource<CarBaseInfo>>() {
+                    @Override
+                    public ObservableSource<CarBaseInfo> apply(User user) throws Exception {
+                        return ClientFactory.def(CarService.class).dealTransferCode(map1);
+                    }
+                })
+                .subscribe(new Consumer<CarBaseInfo>() {
+                    @Override
+                    public void accept(CarBaseInfo carBaseInfo) throws Exception {
+                        dialog.dismiss();
+                        if (carBaseInfo.err == null) {
+
+                            ToastUtils.showShort("操作成功");
+                            closeActivity();
+                        } else {
+                            ToastUtils.showShort(carBaseInfo.msg);
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
+                        LogUtils.e(throwable);
+                        ToastUtils.showShort("操作失败");
+                    }
+                });
+
+    }
+
+    private void closeActivity() {
+        for (Activity activity : ActivityControl.mActivityList) {
+            if (activity instanceof AuthQRCodeActivity) {
+                activity.finish();
+            }
+            if (activity instanceof TransferQRCodeActivity) {
+                activity.finish();
+            }
+            if (activity instanceof TransHandleActivity) {
+                activity.finish();
+            }
+            if (activity instanceof AuthHandleActivity) {
+                activity.finish();
+            }
+        }
+        finish();
     }
 
     public static final String faceLoginUrl = "http://test.linewin.cc:8888/app/User/LoginByFace";

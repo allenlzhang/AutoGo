@@ -15,6 +15,7 @@ import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.login.FaceLiveCheckActivity;
 
 import java.util.HashMap;
 
@@ -62,10 +63,11 @@ public class TransHandleActivity extends BaseMvpActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnAgree:
-                                doAuthState(1);
-//                Intent intent = new Intent(this, FaceLiveCheckActivity.class);
-//                intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.Trans_Handle_Activity);
-//                startActivity(intent);
+                //                                doAuthState(1);
+                Intent intent = new Intent(this, FaceLiveCheckActivity.class);
+                intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.Trans_Handle_Activity);
+                intent.putExtra("transferId", id);
+                startActivity(intent);
                 break;
             case R.id.btnRefuseAgree:
                 CommonDialog.createTwoBtnDialog(this, "您确定要拒绝吗", true, new CommonDialog.DialogWithTitleClick() {

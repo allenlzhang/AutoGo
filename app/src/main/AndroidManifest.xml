@@ -74,6 +74,7 @@
         <activity android:name=".view.activity.car.CarDetailsActivity"/>
         <activity android:name=".view.activity.car.DeviceActivateActivity"/>
         <activity android:name=".view.activity.car.DeviceActivateEditActivity"/>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.carlt.autogo.fileprovider"
@@ -91,7 +92,9 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <activity android:name=".view.activity.login.FaceLiveCheckActivity"/>
+        <activity
+            android:name=".view.activity.login.FaceLiveCheckActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".view.activity.login.LoginByPhoneActivity"/>
         <activity android:name=".view.activity.more.safety.FreezeActivity"/>
         <activity
@@ -143,6 +146,8 @@
         <activity android:name=".view.activity.activate.ActivateStepActivity">
         </activity>
         <activity android:name=".view.activity.more.transfer.WaitAuthActivity">
+        </activity>
+        <activity android:name=".view.activity.more.transfer.CheckSmsCodeActivity">
         </activity>
     </application>
 
