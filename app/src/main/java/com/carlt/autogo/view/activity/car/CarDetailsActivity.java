@@ -97,8 +97,8 @@ public class CarDetailsActivity extends BaseMvpActivity {
     public static final int DETAILS_TYPE2 = 1;  //已激活未授权（我的爱车详情）
     public static final int DETAILS_TYPE3 = 2;  //已激活授权中（我的爱车详情）
     public static final int DETAILS_TYPE4 = 3;  //（被授权车辆详情）
-    private int id;
-    private int remoteStatus = 0;
+    private int remoteStatus = 0;   //远程状态
+    private int authId = 0; //授权id
     @Override
     protected int getContentView() {
         return R.layout.activity_car_details;
@@ -146,7 +146,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 btnCancelAuth.setVisibility(View.GONE);
                 break;
         }
-        id = intent.getIntExtra("id", 0);
+        int id = intent.getIntExtra("id", 0);
         ClientGetCarInfo(id);
     }
 
@@ -188,7 +188,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
     private void cancelAuth(){
         dialog.show();
         Map<String, Integer> map = new HashMap<>();
-        map.put("id", id);
+        map.put("id", authId);
         ClientFactory.def(CarService.class).cancelAuth(map).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<BaseError>() {
@@ -198,9 +198,10 @@ public class CarDetailsActivity extends BaseMvpActivity {
                         if (baseError!=null) {
                             if (!TextUtils.isEmpty(baseError.msg)) {
                                 ToastUtils.showShort(baseError.msg);
+                            }else {
+                                ToastUtils.showShort("取消授权成功");
+                                finish();
                             }
-                        }else {
-                            ToastUtils.showShort("取消授权成功");
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -250,6 +251,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
 
     public void setData(CarInfo data) {
         remoteStatus = data.remoteStatus;
+        authId = data.authId;
         if (!TextUtils.isEmpty(data.carName)) {
             tvDetailsModel.setText(data.carName);
         }

@@ -1,25 +1,33 @@
 package com.carlt.autogo.view.activity.more.transfer;
 
 import android.annotation.SuppressLint;
+import android.view.View;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
+import com.carlt.autogo.adapter.CarPopupAdapter;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.CommonDialog;
+import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.CarBaseInfo;
+import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class WaitAuthActivity extends BaseMvpActivity {
     @BindView(R.id.tvDes)
@@ -87,7 +95,11 @@ public class WaitAuthActivity extends BaseMvpActivity {
                                 CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "授权成功", false, new CommonDialog.DialogOneBtnClick() {
                                     @Override
                                     public void onOneBtnClick() {
-                                        finish();
+                                        if (!SingletonCar.getInstance().isBound()){
+                                            GetCarList();
+                                        }else {
+                                            finish();
+                                        }
                                     }
                                 });
 
@@ -157,6 +169,56 @@ public class WaitAuthActivity extends BaseMvpActivity {
                         disposable.dispose();
                     }
                 });
+    }
+
+    @SuppressLint("CheckResult")
+    private void GetCarList(){
+        Map<String,Object> map = new HashMap<>();
+        map.put("type",3);
+        ClientFactory.def(CarService.class).getMyCarList(map)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<AuthCarInfo>() {
+                    @Override
+                    public void accept(AuthCarInfo info) throws Exception {
+                        parseGetMyList(info);
+                        finish();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable);
+                        finish();
+                    }
+                });
+    }
+
+    private void parseGetMyList(AuthCarInfo info){
+        if (info.err!=null){
+            ToastUtils.showShort(info.err.msg);
+        }else {
+            isBindCar(info);
+        }
+    }
+
+    /**
+     * 是否绑定车辆
+     * @param info
+     */
+    private void isBindCar(AuthCarInfo info){
+        if (info != null) {
+            if (info.myCar!= null&&info.myCar.size() > 0 ){
+                SingletonCar.getInstance().setBound(true);
+                SingletonCar.getInstance().setMyCarBean(info.myCar.get(0));
+            }else if (info.authCar != null && info.authCar.size() > 0) {
+                SingletonCar.getInstance().setBound(true);
+                SingletonCar.getInstance().setMyCarBean(info.authCar.get(0));
+            } else {
+                SingletonCar.getInstance().setBound(false);
+            }
+        } else {
+            SingletonCar.getInstance().setBound(false);
+        }
     }
 
     @Override

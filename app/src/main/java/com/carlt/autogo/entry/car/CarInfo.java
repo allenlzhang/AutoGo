@@ -39,6 +39,7 @@ public class CarInfo {
     public int chargetime; // 定时充电时间
     public int register_time; // 注册到车管所时间
     public int next_inspect_time; // 下次年检时间
+    public int authId;  //授权id
     public BaseError err; // 错误描述
 
     @Override
@@ -77,6 +78,7 @@ public class CarInfo {
                 ", chargetime=" + chargetime +
                 ", register_time=" + register_time +
                 ", next_inspect_time=" + next_inspect_time +
+                ", authId=" + authId +
                 ", err=" + err +
                 '}';
     }

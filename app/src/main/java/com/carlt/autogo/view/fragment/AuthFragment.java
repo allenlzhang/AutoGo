@@ -47,16 +47,14 @@ public class AuthFragment extends BaseMvpFragment {
     @Override
     protected void init() {
         fragmentIvMyCarAdd.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         ClientGetMyCar();
     }
-//    private List<AuthCarInfo.MyCarBean> getData(AuthCarInfo info){
-//        String json = "{\"authCarList\":[{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":3,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":1,\"recodeStatus\":0,\"machineStatus\":0}]}";
-//        Gson gson = new Gson();
-//        AuthCarInfo info = gson.fromJson(json,AuthCarInfo.class);
-//        listInfos = info.authCar;
-//
-//        return listInfos;
-//    }
+
     @SuppressLint("CheckResult")
     private void ClientGetMyCar(){
         Map<String,Object> map = new HashMap<>();

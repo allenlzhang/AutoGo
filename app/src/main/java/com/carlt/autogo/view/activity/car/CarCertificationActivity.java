@@ -112,6 +112,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("车辆认证");
+        initPopup();
         editVehicleCertificationVin.setTransformationMethod(new ReplacementTransformationMethod() {
             @Override
             protected char[] getOriginal() {
@@ -127,7 +128,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
         });
     }
 
-    private void showPopup() {
+    private void initPopup() {
         View view = LayoutInflater.from(this).inflate(R.layout.layout_camera_popup, null, false);
         TextView mTxtCamera = view.findViewById(R.id.tvCameraPopup);
         TextView mTxtAlbum = view.findViewById(R.id.tvAlbumPopup);
@@ -138,7 +139,12 @@ public class CarCertificationActivity extends BaseMvpActivity {
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setOutsideTouchable(true);
         popupWindow.setTouchable(true);
-        popupWindow.showAtLocation(llVehicleCertification, Gravity.BOTTOM, 0, 0);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                backgroundAlpha(1f);
+            }
+        });
         mTxtCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -169,6 +175,19 @@ public class CarCertificationActivity extends BaseMvpActivity {
         });
     }
 
+    /**
+     * 屏幕透明度
+     * @param bgAlpha
+     */
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
+    }
+
+    /**
+     * 打开相机
+     */
     private void doCamera() {
         popupWindow.dismiss();
         imageUri = Uri.fromFile(fileUri);
@@ -179,6 +198,9 @@ public class CarCertificationActivity extends BaseMvpActivity {
         PhotoUtils.takePicture(this, imageUri, CODE_CAMERA_REQUEST);
     }
 
+    /**
+     * 打开相册
+     */
     public void doAlbum() {
         popupWindow.dismiss();
         PhotoUtils.openPic(this, CODE_GALLERY_REQUEST);
@@ -196,7 +218,12 @@ public class CarCertificationActivity extends BaseMvpActivity {
                 filter();
                 break;
             case R.id.iv_vehicle_certification:
-                showPopup();
+                if (popupWindow.isShowing()){
+                    popupWindow.dismiss();
+                }else {
+                    popupWindow.showAtLocation(llVehicleCertification, Gravity.BOTTOM, 0, 0);
+                    backgroundAlpha(0.7f);
+                }
                 break;
         }
     }
@@ -401,6 +428,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
                         LogUtils.e(throwable);
                     }
                 });

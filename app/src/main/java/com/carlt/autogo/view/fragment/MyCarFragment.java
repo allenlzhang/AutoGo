@@ -3,7 +3,6 @@ package com.carlt.autogo.view.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -24,7 +23,6 @@ import com.carlt.autogo.view.activity.car.CarCertificationActivity;
 import com.carlt.autogo.view.activity.car.CarDetailsActivity;
 import com.carlt.autogo.view.activity.more.safety.FaceRecognitionSettingFirstActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,13 +53,16 @@ public class MyCarFragment extends BaseMvpFragment {
 
     @Override
     protected void init() {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         ClientGetMyCar();
     }
 
     private List<AuthCarInfo.MyCarBean> getData(AuthCarInfo carListInfo) {
-//        String json = "{\"myCarList\":[{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":0,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":3,\"recodeStatus\":0,\"machineStatus\":0},{id:1,\"brandTitle\":\"大乘汽车\",\"modelTitle\":\"大乘\",\"optionTitle\":\"大乘 G70S\",\"carName\":\"2019款 2.0T 自动尊贵型\",\"carLogo\":\"\",\"authEndTime\":1542877148,\"authStatus\":0,\"remoteStatus\":1,\"recodeStatus\":0,\"machineStatus\":0}]}";
-//        Gson gson = new Gson();
-//        AuthCarInfo carListInfo = gson.fromJson(json, AuthCarInfo.class);
         List<AuthCarInfo.MyCarBean> infos = new ArrayList<>();
         if (carListInfo != null && carListInfo.myCar != null) {
             if (carListInfo.myCar.size() >= 5) {
@@ -147,7 +148,7 @@ public class MyCarFragment extends BaseMvpFragment {
     private void certification() {
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         Intent intent = new Intent();
-        if (user.alipayAuth == 1) {
+        if (user.alipayAuth == 1||user.identityAuth == 1) {
             intent.setClass(mContext, UserIdChooseActivity.class);
             startActivity(intent);
         } else if (user.faceId == 0) {
