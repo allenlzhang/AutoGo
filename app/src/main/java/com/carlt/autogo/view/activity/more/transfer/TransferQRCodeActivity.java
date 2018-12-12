@@ -66,7 +66,7 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
     }
 
     private Disposable disposable;
-    private int duration = 10 * 60 * 60;
+    private int duration = 10 * 60 ;
 
     @SuppressLint("CheckResult")
     private void checkQrCodeState(final int id) {

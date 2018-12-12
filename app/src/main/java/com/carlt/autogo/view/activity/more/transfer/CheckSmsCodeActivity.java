@@ -84,7 +84,7 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
                     doSendCode(8);
                 } else {
                     //授权
-                    doSendCode(15);
+                    doSendCode(14);
                 }
 
                 break;
