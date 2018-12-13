@@ -27,8 +27,8 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="30dp"
             android:layout_marginStart="30dp"
-            android:orientation="vertical">
-
+            android:orientation="vertical"
+            >
             <TextView
                 android:id="@+id/item_myCar_model"
                 android:layout_width="wrap_content"
@@ -36,16 +36,21 @@
                 android:layout_marginTop="@dimen/dp_10"
                 android:text="大乘 G70S"
                 android:textColor="@color/textColorGray1"
-                android:textSize="@dimen/sp_14" />
+                android:textSize="@dimen/sp_14"
+                />
 
             <TextView
                 android:id="@+id/item_myCar_brandCar"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="2019款 2.0T 自动尊贵型"
                 android:textColor="@color/textColorGray"
-                android:textSize="@dimen/sp_12" />
+                android:textSize="@dimen/sp_12"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:layout_marginRight="50dp"
+                />
 
             <TextView
                 android:id="@+id/item_myCar_authEndTime"
@@ -55,7 +60,10 @@
                 android:text="授权截止时间：2018-11-08 11:32"
                 android:textColor="@color/textColorGray"
                 android:textSize="@dimen/sp_13"
-                android:visibility="gone" />
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:visibility="gone"
+                />
 
             <LinearLayout
                 android:id="@+id/item_ll_state"
@@ -63,7 +71,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                >
 
                 <ImageView
                     android:id="@+id/item_myCar_remote"
@@ -89,7 +98,6 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
     <ImageView
         android:id="@+id/item_myCar_auth_state"
         android:layout_width="wrap_content"

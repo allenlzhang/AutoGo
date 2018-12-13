@@ -14,6 +14,7 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.MyCarAdapter;
 import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.entry.car.AuthCarInfo;
+import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
@@ -128,6 +129,9 @@ public class MyCarFragment extends BaseMvpFragment {
                     startActivity(intent);
                 }
             });
+            if (list.size()>0){
+                SingletonCar.getInstance().setBound(true);
+            }
         }
     }
 
@@ -148,7 +152,7 @@ public class MyCarFragment extends BaseMvpFragment {
     private void certification() {
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         Intent intent = new Intent();
-        if (user.alipayAuth == 1||user.identityAuth == 1) {
+        if (user.alipayAuth == 1&&user.identityAuth == 1) {
             intent.setClass(mContext, UserIdChooseActivity.class);
             startActivity(intent);
         } else if (user.faceId == 0) {

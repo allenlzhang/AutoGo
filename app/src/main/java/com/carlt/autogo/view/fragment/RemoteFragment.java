@@ -150,7 +150,7 @@ public class RemoteFragment extends BaseMvpFragment {
     private void certification(){
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         Intent intent = new Intent();
-        if (user.alipayAuth == 1||user.identityAuth == 1){ //身份认证
+        if (user.alipayAuth == 1&&user.identityAuth == 1){ //身份认证
             intent.setClass(mContext,UserIdChooseActivity.class);
         }else if (user.faceId == 0){//人脸认证
             intent.setClass(mContext,FaceRecognitionSettingFirstActivity.class);

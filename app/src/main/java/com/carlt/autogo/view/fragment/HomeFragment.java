@@ -156,6 +156,8 @@ public class HomeFragment extends BaseMvpFragment {
                 }else if (info.authCar!=null&&info.authCar.size()>0){
                     tvCarType.setText(info.authCar.get(0).carName);
                     singletonCar.setMyCarBean(info.authCar.get(0));
+                }else {
+                    tvCarType.setText("品牌车型");
                 }
             }
             isBindCar(info);
@@ -172,6 +174,10 @@ public class HomeFragment extends BaseMvpFragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (singletonCar.getMyCarBean() == null){
+            adapter = new CarPopupAdapter(null,mContext);
+            tvCarType.setText("品牌车型");
+        }
         ClientGetData();
     }
 
@@ -268,7 +274,7 @@ public class HomeFragment extends BaseMvpFragment {
     private void certification() {
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         Intent intent = new Intent();
-        if (user.alipayAuth == 1||user.identityAuth == 1) {
+        if (user.alipayAuth == 1&&user.identityAuth == 1) {
             intent.setClass(mContext, UserIdChooseActivity.class);
         } else if (user.faceId == 0) {
             intent.setClass(mContext, FaceRecognitionSettingFirstActivity.class);
