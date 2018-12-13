@@ -19,11 +19,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="45dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="40dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:text="待授权车辆"
             android:textColor="@color/colorEdtext"
@@ -44,12 +45,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="45dp"
+        android:layout_marginLeft="35dp"
         android:gravity="center_vertical"
         android:layout_marginTop="10dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:text="授权时长"
             android:textColor="@color/colorEdtext"
@@ -68,12 +69,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="45dp"
+        android:layout_marginLeft="35dp"
         android:gravity="center_vertical"
         android:layout_marginTop="10dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:text="授权账户"
             android:textColor="@color/colorEdtext"

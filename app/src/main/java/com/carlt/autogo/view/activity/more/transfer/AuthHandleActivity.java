@@ -1,6 +1,7 @@
 package com.carlt.autogo.view.activity.more.transfer;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,8 @@ import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.utils.ActivityControl;
+import com.carlt.autogo.utils.MyTimeUtils;
 import com.carlt.autogo.view.activity.login.FaceLiveCheckActivity;
 
 import java.util.HashMap;
@@ -69,7 +72,8 @@ public class AuthHandleActivity extends BaseMvpActivity {
                         LogUtils.e(carBaseInfo);
                         tvAuthAccount.setText(carBaseInfo.mobile);
                         tvAuthCar.setText(carBaseInfo.carName);
-                        tvAuthDuration.setText(carBaseInfo.duration + "");
+                        String s = MyTimeUtils.formatDateTime(carBaseInfo.duration);
+                        tvAuthDuration.setText(s);
                         dialog.dismiss();
                     }
                 }, new Consumer<Throwable>() {
@@ -84,7 +88,7 @@ public class AuthHandleActivity extends BaseMvpActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnAgree:
-//                doAuthState(3);
+                //                doAuthState(3);
                 Intent intent = new Intent(this, FaceLiveCheckActivity.class);
                 intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.Auth_Handle_Activity);
                 intent.putExtra("authId", id);
@@ -120,6 +124,7 @@ public class AuthHandleActivity extends BaseMvpActivity {
                         dialog.dismiss();
                         if (carBaseInfo.code == 0) {
                             showToast("操作成功");
+                            closeActivity();
                         } else {
                             showToast(carBaseInfo.msg);
                         }
@@ -132,6 +137,28 @@ public class AuthHandleActivity extends BaseMvpActivity {
                         showToast("操作失败");
                     }
                 });
+    }
+
+    @Override
+    public void finish() {
+        for (Activity activity : ActivityControl.mActivityList) {
+            if (activity instanceof AuthQRCodeActivity) {
+                activity.finish();
+            }
+
+        }
+        super.finish();
+
+    }
+
+    private void closeActivity() {
+        for (Activity activity : ActivityControl.mActivityList) {
+            if (activity instanceof AuthQRCodeActivity) {
+                activity.finish();
+            }
+
+        }
+        finish();
     }
 
 

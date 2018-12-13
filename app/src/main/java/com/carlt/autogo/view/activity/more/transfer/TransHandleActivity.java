@@ -1,6 +1,7 @@
 package com.carlt.autogo.view.activity.more.transfer;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.login.FaceLiveCheckActivity;
 
@@ -99,6 +101,7 @@ public class TransHandleActivity extends BaseMvpActivity {
                         dialog.dismiss();
                         if (carBaseInfo.err == null) {
                             showToast("操作成功");
+                            closeActivity();
                         } else {
                             showToast("操作失败");
                         }
@@ -112,4 +115,26 @@ public class TransHandleActivity extends BaseMvpActivity {
                     }
                 });
     }
+
+    @Override
+    public void finish() {
+        for (Activity activity : ActivityControl.mActivityList) {
+            if (activity instanceof TransferQRCodeActivity) {
+                activity.finish();
+            }
+
+        }
+        super.finish();
+    }
+
+    private void closeActivity() {
+        for (Activity activity : ActivityControl.mActivityList) {
+            if (activity instanceof TransferQRCodeActivity) {
+                activity.finish();
+            }
+
+        }
+        finish();
+    }
+
 }

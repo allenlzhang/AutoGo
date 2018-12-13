@@ -62,16 +62,31 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
         setTitleText("生成二维码");
         //        Bitmap qrCode = QRCodeUtils.createQRCode("sdfsdf");
         //        ivQRCode.setImageBitmap(qrCode);
+        String carName = getIntent().getStringExtra("carName");
+        tvCarName.setText(carName);
         initQRCode(0);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        interval();
+    }
+
     private Disposable disposable;
-    private int duration = 10 * 60 ;
+    private int                     duration = 10 * 60;
+    private HashMap<String, Object> map      = new HashMap<>();
+    private int mId;
 
     @SuppressLint("CheckResult")
     private void checkQrCodeState(final int id) {
         final HashMap<String, Object> map = new HashMap<>();
         map.put("transferId", id);
+        this.map = map;
+        mId = id;
+    }
+
+    private void interval() {
         disposable = Observable.interval(5, TimeUnit.SECONDS)
 
                 .flatMap(new Function<Long, ObservableSource<CarBaseInfo>>() {
@@ -90,7 +105,7 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
                             if (carBaseInfo.status == 2) {
                                 disposable.dispose();
                                 Intent intent = new Intent(TransferQRCodeActivity.this, TransHandleActivity.class);
-                                intent.putExtra("id", id);
+                                intent.putExtra("id", mId);
                                 intent.putExtra("carName", tvCarName.getText().toString().trim());
                                 startActivity(intent);
 
@@ -112,8 +127,7 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
         dialog.show();
         int carId = getIntent().getIntExtra("carId", 0);
         //        mCarId = carId;
-        String carName = getIntent().getStringExtra("carName");
-        tvCarName.setText(carName);
+
         HashMap<String, Object> map = new HashMap<>();
         if (id == 0) {
             map.put("carId", carId);
@@ -237,7 +251,7 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode== KeyEvent.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             setResult(RESULT_OK);
         }
         return super.onKeyDown(keyCode, event);

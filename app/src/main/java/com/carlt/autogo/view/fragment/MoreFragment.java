@@ -291,6 +291,7 @@ public class MoreFragment extends BaseMvpFragment {
 
     @SuppressLint("CheckResult")
     private void checkTransferCode(String contents) {
+
          String[] split = contents.split("=");
         final Integer id = Integer.valueOf(split[1]);
         HashMap<String, Object> map = new HashMap<>();

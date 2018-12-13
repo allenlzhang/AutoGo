@@ -64,6 +64,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     private int                   mTimeType;
     private AuthCarInfo.MyCarBean carInfo;
 
+
     @Override
     protected int getContentView() {
         return R.layout.activity_qrcode;
@@ -72,18 +73,35 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("生成二维码");
-
+        carInfo = SingletonCar.getInstance().getMyCarBean();
+        tvCarName.setText(carInfo.carName);
+        tvTime.setText("1小时");
         initQrCode(0, 0);
         //        checkQrCodeState();
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        interval();
     }
 
     private Disposable disposable;
-    private int duration = 10 * 60 ;
+    private int                     duration = 10 * 60;
+    private HashMap<String, Object> map      = new HashMap<>();
+    private int mId;
 
     @SuppressLint("CheckResult")
     private void checkQrCodeState(final int id) {
         final HashMap<String, Object> map = new HashMap<>();
         map.put("id", id);
+        this.map = map;
+        mId = id;
+    }
+
+    private void interval() {
         disposable = Observable.interval(5, TimeUnit.SECONDS)
 
                 .flatMap(new Function<Long, ObservableSource<CarBaseInfo>>() {
@@ -100,11 +118,11 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                             disposable.dispose();
                         } else {
                             if (carBaseInfo.checkStatus == 2) {
-                                disposable.dispose();
-                                Intent intent = new Intent(AuthQRCodeActivity.this, AuthHandleActivity.class);
-                                intent.putExtra("id", id);
-                                startActivity(intent);
 
+                                Intent intent = new Intent(AuthQRCodeActivity.this, AuthHandleActivity.class);
+                                intent.putExtra("id", mId);
+                                startActivity(intent);
+                                disposable.dispose();
                             }
                             duration--;
                         }
@@ -122,8 +140,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     private void initQrCode(int carId, int authType) {
         carInfo = SingletonCar.getInstance().getMyCarBean();
 
-        tvCarName.setText(carInfo.carName);
-        tvTime.setText("1小时");
+
         dialog.show();
         HashMap<String, Object> map = new HashMap<>();
         if (carId == 0) {
@@ -319,6 +336,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                                     CarAuthTimeInfo.ListBean info = (CarAuthTimeInfo.ListBean) adapter.getData().get(position);
                                     timeCurrentSelect = position;
                                     authTimeAdapter.setDefSelect(position);
+                                    LogUtils.e(info.name);
                                     tvTime.setText(info.name);
                                     easyPopup.dismiss();
                                     initQrCode(0, info.type);

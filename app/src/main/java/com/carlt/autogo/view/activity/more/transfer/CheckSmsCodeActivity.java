@@ -58,7 +58,7 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
 
     @Override
     protected int getContentView() {
-        return R.layout.activity_logout_account;
+        return R.layout.activity_check_sms_code;
     }
 
     @Override
