@@ -3,6 +3,7 @@ package com.carlt.autogo.view.activity.user.accept;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.text.method.ReplacementTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,13 +51,26 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("身份认证");
+        edIdcardAcceptNum.setTransformationMethod(new ReplacementTransformationMethod() {
+                @Override
+                protected char[] getOriginal() {
+                    char[] small = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+                    return small;
+                }
+
+                @Override
+                protected char[] getReplacement() {
+                    char[] big = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+                    return big;
+                }
+            });
     }
 
     @SuppressLint("CheckResult")
     @OnClick(R.id.btn_idcard_accepte)
     public void onClick() {
-        name = edIdAcceptName.getText().toString().trim();
-        idCardNum = edIdcardAcceptNum.getText().toString().trim();
+        name = edIdAcceptName.getText().toString().trim().toUpperCase();
+        idCardNum = edIdcardAcceptNum.getText().toString().trim().toUpperCase();
 
         if (TextUtils.isEmpty(name)) {
             ToastUtils.showShort("姓名为空");

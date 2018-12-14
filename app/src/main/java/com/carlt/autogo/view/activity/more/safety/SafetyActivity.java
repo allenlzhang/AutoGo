@@ -171,19 +171,31 @@ public class SafetyActivity extends BaseMvpActivity {
     protected void onResume() {
         super.onResume();
         //        String isIdentity = SharepUtil.getPreferences().getString(GlobalKey.IDENTITY_AUTH, "");
-        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        final UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         boolean faceLogin = SharepUtil.getPreferences().getBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
         LogUtils.e("----" + user.toString());
-        if (user.identityAuth == 2 || user.alipayAuth == 2 && user.faceId != 0) {
-            mTvIdentityAuthentication.setText("已认证");
-            mLlIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent safety_identity = new Intent(SafetyActivity.this, IdfCompleteActivity.class);
-                    safety_identity.putExtra("idcard", false);
-                    startActivity(safety_identity);
-                }
-            });
+        if (user.identityAuth == 2 || user.alipayAuth == 2) {
+            if (user.faceId !=0){
+                mTvIdentityAuthentication.setText("已认证");
+                mLlIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent safety_identity = new Intent(SafetyActivity.this, IdfCompleteActivity.class);
+                        safety_identity.putExtra("idcard", false);
+                        startActivity(safety_identity);
+                    }
+                });
+            }else {
+                mTvIdentityAuthentication.setText("未认证");
+                mLlIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent safety_identity = new Intent(SafetyActivity.this, FaceAuthSettingActivity.class);
+                        startActivity(safety_identity);
+                    }
+                });
+            }
+
         } else {
             mTvIdentityAuthentication.setText("未认证");
             mLlIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
@@ -194,7 +206,7 @@ public class SafetyActivity extends BaseMvpActivity {
                 }
             });
         }
-        if (faceLogin && user.identityAuth == 2 ||user.alipayAuth == 2 && user.faceId != 0) {
+        if ((faceLogin && user.identityAuth == 2 ||user.alipayAuth == 2) && user.faceId != 0) {
             mTvFaceRecognition.setText("已开启");
             mIvFaceRecognition.setVisibility(View.VISIBLE);
         } else {

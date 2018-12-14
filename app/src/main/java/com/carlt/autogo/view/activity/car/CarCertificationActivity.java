@@ -349,7 +349,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
         } else {
             map.put("brandCarId", dataBean.id);
         }
-        if (TextUtils.isEmpty(editVehicleCertificationVin.getText())) {
+        if (TextUtils.isEmpty(editVehicleCertificationVin.getText().toString().toUpperCase())) {
             ToastUtils.showShort("请输入车辆车架号");
             return false;
         } else {

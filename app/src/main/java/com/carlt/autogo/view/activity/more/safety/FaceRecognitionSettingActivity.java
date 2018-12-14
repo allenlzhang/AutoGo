@@ -42,7 +42,7 @@ public class FaceRecognitionSettingActivity extends BaseMvpActivity {
         setTitleText("人脸识别");
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         LogUtils.e("----" + user.toString());
-        if (user.alipayAuth == 2 && user.faceId != 0) {
+        if ((user.identityAuth == 2||user.alipayAuth == 2) && user.faceId != 0) {
             cbFaceLogin.setEnabled(true);
             cbSafe.setEnabled(true);
             cbFaceLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
