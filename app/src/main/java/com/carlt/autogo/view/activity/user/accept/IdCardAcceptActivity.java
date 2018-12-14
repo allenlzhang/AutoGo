@@ -67,23 +67,17 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
             ToastUtils.showShort("身份证号码不正确");
             return;
         }
+        hideName = encrypt(name);
+        hideIdNume = encrypt(idCardNum);
+        Intent intent = new Intent(this, UploadIdCardPhotoActivity2.class);
+        //        intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.FROM_ID_CARDACCEPT_ACTIVITY);
+        intent.putExtra("name", hideName);
+        intent.putExtra("idcard", hideIdNume);
+        intent.putExtra("idNum", idCardNum);
+        intent.putExtra("realName", name);
+        startActivity(intent);
+        finish();
 
-
-//        Observable.create(new ObservableOnSubscribe<Integer>() {
-//            @Override
-//            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-//                emitter.onNext(1);
-//            }
-//        })
-//                .delay(3, TimeUnit.SECONDS)
-//                .subscribeOn(Schedulers.newThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<Integer>() {
-//                    @Override
-//                    public void accept(Integer integer) throws Exception {
-//                        beginingAccept();
-//                    }
-//                });
 
     }
 
@@ -117,39 +111,5 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
         return n.toString();
     }
 
-    //人脸识别认证
-    @SuppressLint("CheckResult")
-    @OnClick(R.id.btn_idcard_accepte)
-    public void commitFaceAccept() {
-        //        Observable.create(new ObservableOnSubscribe<Integer>() {
-        //            @Override
-        //            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-        //                emitter.onNext(1);
-        //            }
-        //        })
-        //                .delay(3, TimeUnit.SECONDS)
-        //                .subscribeOn(Schedulers.newThread())
-        //                .observeOn(AndroidSchedulers.mainThread())
-        //                .subscribe(new Consumer<Integer>() {
-        //                    @Override
-        //                    public void accept(Integer integer) throws Exception {
-        //                        ToastUtils.showShort("采集成功");
-        //                        Intent intent =new Intent(IdCardAcceptActivity.this, UploadIdCardPhotoActivity.class);
-        //                        intent.putExtra("name",hideName);
-        //                        intent.putExtra("idcard",hideIdNume);
-        //                        startActivity(intent);
-        //                    }
-        //                });
-        hideName = encrypt(name);
-        hideIdNume = encrypt(idCardNum);
-        Intent intent = new Intent(this, UploadIdCardPhotoActivity2.class);
-//        intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.FROM_ID_CARDACCEPT_ACTIVITY);
-        intent.putExtra("name", hideName);
-        intent.putExtra("idcard", hideIdNume);
-        intent.putExtra("idNum", idCardNum);
-        intent.putExtra("realName", name);
-        startActivity(intent);
-        finish();
 
-    }
 }
