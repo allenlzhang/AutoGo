@@ -241,10 +241,10 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
         //        }
         //        String certid = identityInfo.getCertid();
         //        String cardName = identityInfo.getName();
-        //        if (!realName.equals(scanName)) {
-        //            showToast("您上传的身份证和您填写的姓名不一致");
-        //            return;
-        //        }
+        if (!realName.equals(scanName)) {
+            showToast("您上传的身份证和您填写的姓名不一致");
+            return;
+        }
         LogUtils.e("姓名====" + scanName + "---身份号码--" + scanIDNum);
         if (!idNum.equals(scanIDNum)) {
             showToast("您上传的身份证和您填写的身份证号不一致");
@@ -255,7 +255,7 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
             showToast("您的身份证签发机关不正确");
             return;
         }
-        if (facepath == null && nationalpath == null) {
+        if (facepath == null || nationalpath == null) {
             showToast("请上传身份证");
             return;
         }
