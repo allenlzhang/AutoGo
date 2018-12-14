@@ -74,7 +74,6 @@
                 style="@style/EdCommonLoginAndRegister"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:text="张磊"
                 android:layout_centerVertical="true"
                 android:hint="请填写真实姓名"
                 android:layout_marginLeft="10dp"
@@ -111,9 +110,7 @@
             android:layout_height="60dp"
             android:background="@color/colorWhite"
             android:layout_below="@+id/rl_head4"
-            android:layout_marginTop="10dp"
-
-            >
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:id="@+id/tv_idcard_num"
@@ -123,8 +120,7 @@
                 android:textColor="@color/colorEdtext"
                 android:textSize="17dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                />
+                android:layout_marginLeft="10dp"/>
 
 
 
@@ -135,11 +131,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
-                android:text="612321198810092315"
                 android:hint="请填写证件号码"
                 android:layout_marginLeft="10dp"
-                android:maxLength="18"
-                />
+                android:maxLength="18"/>
 
         </RelativeLayout>
 
