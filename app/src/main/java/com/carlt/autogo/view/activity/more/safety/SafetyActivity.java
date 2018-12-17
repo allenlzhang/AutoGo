@@ -175,23 +175,25 @@ public class SafetyActivity extends BaseMvpActivity {
         boolean faceLogin = SharepUtil.getPreferences().getBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
         LogUtils.e("----" + user.toString());
         if (user.identityAuth == 2 || user.alipayAuth == 2) {
-            if (user.faceId !=0){
+            if (user.faceId != 0) {
                 mTvIdentityAuthentication.setText("已认证");
                 mLlIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent safety_identity = new Intent(SafetyActivity.this, IdfCompleteActivity.class);
-                        safety_identity.putExtra("idcard", false);
+                        safety_identity.putExtra("idcard", user.identityAuth == 2);
                         startActivity(safety_identity);
                     }
                 });
-            }else {
+            } else {
                 mTvIdentityAuthentication.setText("未认证");
+
                 mLlIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent safety_identity = new Intent(SafetyActivity.this, FaceAuthSettingActivity.class);
-                        startActivity(safety_identity);
+                        //                        Intent safety_identity = new Intent(SafetyActivity.this, FaceAuthSettingActivity.class);
+                        //                        startActivity(safety_identity);
+                        startActivity(UserIdChooseActivity.class, false);
                     }
                 });
             }
@@ -201,12 +203,13 @@ public class SafetyActivity extends BaseMvpActivity {
             mLlIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent safety_identity = new Intent(SafetyActivity.this, UserIdChooseActivity.class);
-                    startActivity(safety_identity);
+                    //                    Intent safety_identity = new Intent(SafetyActivity.this, UserIdChooseActivity.class);
+                    //                    startActivity(safety_identity);
+                    startActivity(UserIdChooseActivity.class, false);
                 }
             });
         }
-        if ((faceLogin && user.identityAuth == 2 ||user.alipayAuth == 2) && user.faceId != 0) {
+        if ((user.identityAuth == 2 || user.alipayAuth == 2) && faceLogin && user.faceId != 0) {
             mTvFaceRecognition.setText("已开启");
             mIvFaceRecognition.setVisibility(View.VISIBLE);
         } else {
@@ -225,21 +228,24 @@ public class SafetyActivity extends BaseMvpActivity {
                     @Override
                     public void accept(ShareLoginList info) throws Exception {
                         LogUtils.e(info.toString());
-                        List<ShareLoginList.ListBean> list = info.list;
-                        for (ShareLoginList.ListBean listBean : list) {
-                            if (listBean.openType == 1) {
-                                //支付宝绑定
-                                cbALiPayLogin.setChecked(true);
-                            } else if (listBean.openType == 2) {
-                                //微信绑定
-                                cbWechatLogin.setChecked(true);
+                        if (info.err == null) {
+                            List<ShareLoginList.ListBean> list = info.list;
+                            for (ShareLoginList.ListBean listBean : list) {
+                                if (listBean.openType == 1) {
+                                    //支付宝绑定
+                                    cbALiPayLogin.setChecked(true);
+                                } else if (listBean.openType == 2) {
+                                    //微信绑定
+                                    cbWechatLogin.setChecked(true);
+                                }
                             }
                         }
+
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                            LogUtils.e(throwable);
+                        LogUtils.e(throwable);
                     }
                 });
     }
@@ -310,7 +316,7 @@ public class SafetyActivity extends BaseMvpActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_safety_identity_authentication:
-
+                //                startActivity(UserIdChooseActivity.class, false);
                 break;
             case R.id.ll_safety_face_recognition:
                 startActivity(FaceRecognitionSettingActivity.class, false);
@@ -402,6 +408,7 @@ public class SafetyActivity extends BaseMvpActivity {
                 public void onComplete(Platform platform, final int i, HashMap<String, Object> hashMap) {
                     LogUtils.e(hashMap);
                     final String unionid = (String) hashMap.get("unionid");
+                    LogUtils.e(unionid);
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("openId", unionid);
                     params.put("openType", 2);
@@ -410,6 +417,7 @@ public class SafetyActivity extends BaseMvpActivity {
                             .subscribe(new Consumer<BaseError>() {
                                 @Override
                                 public void accept(BaseError er) throws Exception {
+                                    LogUtils.e(er);
                                     if (er.code == 0) {
                                         showToast("绑定成功");
                                         cbWechatLogin.setChecked(true);

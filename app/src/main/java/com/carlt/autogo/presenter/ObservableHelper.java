@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.base.BaseMvpActivity;
@@ -49,13 +50,13 @@ public class ObservableHelper {
         params.put("loginSoftType", "Android");
         params.put("moveDeviceid", AutoGoApp.IMEI);
 
-      //  判断token 是否过期   false 没有过期   true，token 过期
-//        if(!SharepUtil.getPreferences().getBoolean(GlobalKey.TOKENT_OUTOF_TIME,false)){
-//            String token = SharepUtil.getPreferences().getString("token","");
-//            HashMap map = new HashMap() ;
-//            map.put("token", token);
-//            return ObservableHelper.getUserInfoByToken(map, (int) params.get("loginType"), (String) params.get("pwdReally"));
-//        }
+        //  判断token 是否过期   false 没有过期   true，token 过期
+        //        if(!SharepUtil.getPreferences().getBoolean(GlobalKey.TOKENT_OUTOF_TIME,false)){
+        //            String token = SharepUtil.getPreferences().getString("token","");
+        //            HashMap map = new HashMap() ;
+        //            map.put("token", token);
+        //            return ObservableHelper.getUserInfoByToken(map, (int) params.get("loginType"), (String) params.get("pwdReally"));
+        //        }
 
         return ClientFactory.def(UserService.class).commonLogin(params)
                 .flatMap(new Function<User, ObservableSource<String>>() {
@@ -70,6 +71,7 @@ public class ObservableHelper {
                                 intent.putExtra("openType", (Integer) params.get("openType"));
                                 //保存微信或者支付宝登录请求参数
                                 context.startActivity(intent);
+
                             }
                             return null;
                         } else {
@@ -140,6 +142,8 @@ public class ObservableHelper {
                 .map(new Function<UserInfo, String>() {
                     @Override
                     public String apply(UserInfo userInfo) throws Exception {
+                        LogUtils.e(userInfo.toString());
+                        LogUtils.e(pwd);
                         if (userInfo.err != null) {
                             errorMsg = userInfo.err.msg;
                             return null;
@@ -149,10 +153,11 @@ public class ObservableHelper {
                             if (index >= 0 && index < sexs.length) {
                                 userInfo.sex = sexs[index];
                                 userInfo.loginState = loginState;
-                                userInfo.password = pwd;
+//                                userInfo.password = pwd;
                             }
                             SharepUtil.<UserInfo>putByBean(GlobalKey.USER_INFO, userInfo);
                             GlobalKey.FACE_LOGIN_SWITCH = userInfo.mobile;
+                            GlobalKey.ID_CARD_NAME = userInfo.mobile.concat("id_card_name");
                             GlobalKey.Remote_Switch = userInfo.mobile.concat("Remote_Switch");
                         }
                         errorMsg = "";

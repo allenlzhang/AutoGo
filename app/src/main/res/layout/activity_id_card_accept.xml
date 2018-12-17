@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.activity.user.accept.IdCardAcceptActivity"
-    android:background="@color/colorRegistBg"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorRegistBg"
+                tools:context=".view.activity.user.accept.IdCardAcceptActivity"
     >
 
     <RelativeLayout
@@ -18,29 +18,29 @@
             android:id="@+id/tv_head"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="请确认是您本人,验证完后不可修改"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
+            android:text="请确认是您本人,验证完后不可修改"
             />
 
         <RelativeLayout
             android:id="@+id/rl_head2"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@color/colorWhite"
             android:layout_below="@+id/tv_head"
             android:layout_marginTop="10dp"
+            android:background="@color/colorWhite"
 
             >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
                 android:text="国籍(地区)    中国大陆"
                 android:textColor="@color/colorEdtext"
                 android:textSize="17dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
                 />
 
 
@@ -50,9 +50,9 @@
             android:id="@+id/rl_head3"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@color/colorWhite"
             android:layout_below="@+id/rl_head2"
             android:layout_marginTop="10dp"
+            android:background="@color/colorWhite"
 
             >
 
@@ -60,23 +60,23 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
                 android:text="真实姓名"
                 android:textColor="@color/colorEdtext"
                 android:textSize="17dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
                 />
 
 
             <EditText
                 android:id="@+id/ed_id_accept_name"
-                android:layout_toRightOf="@+id/tv_name"
                 style="@style/EdCommonLoginAndRegister"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
-                android:hint="请填写真实姓名"
                 android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/tv_name"
+                android:hint="请填写真实姓名"
                 android:inputType="text"
 
                 />
@@ -87,19 +87,19 @@
             android:id="@+id/rl_head4"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@color/colorWhite"
             android:layout_below="@+id/rl_head3"
             android:layout_marginTop="10dp"
+            android:background="@color/colorWhite"
             >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
                 android:text="证件类型    身份证"
                 android:textColor="@color/colorEdtext"
                 android:textSize="17dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
                 />
 
         </RelativeLayout>
@@ -108,53 +108,54 @@
             android:id="@+id/rl_head5"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@color/colorWhite"
             android:layout_below="@+id/rl_head4"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:background="@color/colorWhite">
 
             <TextView
                 android:id="@+id/tv_idcard_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
                 android:text="证件号码"
                 android:textColor="@color/colorEdtext"
-                android:textSize="17dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"/>
-
+                android:textSize="17dp"/>
 
 
             <EditText
                 android:id="@+id/ed_idcard_accept_num"
-                android:layout_toRightOf="@+id/tv_idcard_num"
                 style="@style/EdCommonLoginAndRegister"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
-                android:hint="请填写证件号码"
                 android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/tv_idcard_num"
+                android:hint="请填写证件号码"
                 android:inputType="text"
-                android:maxLength="18"/>
+                android:maxLength="18"
+                android:digits="0123456789x"/>
 
         </RelativeLayout>
 
         <Button
             android:id="@+id/btn_idcard_accepte"
+            style="@style/BtnCommonCommit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/BtnCommonCommit"
             android:layout_below="@+id/rl_head5"
-            android:text="确认并提交"
             android:layout_marginTop="40dp"
+            android:text="确认并提交"
             />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/textColorGray"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
             android:text="信息仅用于身份认证"
+            android:textColor="@color/textColorGray"
 
             />
     </RelativeLayout>
@@ -170,12 +171,13 @@
             android:id="@+id/tv_r2_head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="拍摄您本人人脸,请确保正对手机,光线充足"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
-           android:layout_centerHorizontal="true"
+            android:text="拍摄您本人人脸,请确保正对手机,光线充足"
             android:textColor="@color/colorEdtext"
             />
+
         <TextView
             android:id="@+id/tv_user_name"
             android:layout_width="wrap_content"
@@ -191,14 +193,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_user_name"
             android:layout_centerHorizontal="true"
-            android:src="@mipmap/accept_from_face"
             android:layout_marginTop="40dp"
+            android:src="@mipmap/accept_from_face"
             />
 
         <Button
             android:id="@+id/btn_accept_face"
-            android:layout_width="match_parent"
             style="@style/BtnCommonCommit"
+            android:layout_width="match_parent"
             android:layout_below="@+id/img_face"
             android:layout_marginTop="60dp"
             android:text="采集本人人脸"
@@ -209,15 +211,14 @@
             android:id="@+id/tv_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/textColorGray"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
             android:text="信息仅用于身份认证"
+            android:textColor="@color/textColorGray"
 
             />
     </RelativeLayout>
-
 
 
 </RelativeLayout>
