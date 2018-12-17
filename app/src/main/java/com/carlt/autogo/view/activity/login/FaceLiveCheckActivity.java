@@ -27,7 +27,6 @@ import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
-import com.carlt.autogo.view.activity.LoginActivity;
 import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.more.transfer.AuthHandleActivity;
 import com.carlt.autogo.view.activity.more.transfer.AuthQRCodeActivity;
@@ -413,7 +412,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                             dialog.dismiss();
                             ToastUtils.showShort(user.err.msg);
                             ActivityControl.removeAllActivity(FaceLiveCheckActivity.this);
-                            startActivity(new Intent(FaceLiveCheckActivity.this, LoginActivity.class));
+                            startActivity(new Intent(FaceLiveCheckActivity.this, FaceLoginActivity.class));
                             finish();
                             return null;
                         } else {
@@ -510,9 +509,11 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
             case FROM_ID_CARDACCEPT_ACTIVITY:
                 //                    tvFaceTitle.setText(getString(R.string.face_login_activity_title2));
                 info.identityAuth = 2;
+                String hideName = getIntent().getStringExtra("hideName");
                 Intent intent = new Intent(this, IdfCompleteActivity.class);
                 //                intent.putExtra("name", name);
                 intent.putExtra("idcard", true);
+                intent.putExtra("hideName", hideName);
                 startActivity(intent);
                 break;
             case FROM_ALIPAY_AUTH:

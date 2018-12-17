@@ -66,9 +66,10 @@ public class ActivityControl {
                 //                SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
                 //                SharepUtil.putBoolean(GlobalKey.PROCESS_SAFE_SWITCH, false);
                 UserInfo userInfo = SharepUtil.getBeanFromSp("user");
+                userInfo.password = "";
+                SharepUtil.putByBean(GlobalKey.USER_INFO,userInfo);
                 boolean faceSwitch = SharepUtil.getPreferences().getBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
-
-                if (userInfo != null) {
+//                if (userInfo != null) {
                     Intent intent;
                     if (userInfo.faceId != 0 && faceSwitch) {
                         intent = new Intent(context, FaceLoginActivity.class);
@@ -77,7 +78,7 @@ public class ActivityControl {
                     }
                     context.startActivity(intent);
                     context.finish();
-                }
+//                }
 
             }
         });

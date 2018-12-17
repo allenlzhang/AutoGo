@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
@@ -79,7 +78,7 @@ public abstract class BaseRestClient implements Iservice {
                                 @Override
                                 public boolean test(Object o) throws Exception {
 
-                                    LogUtils.e(o+ "==========================================");
+//                                    LogUtils.e(o+ "==========================================");
                                     if(o instanceof BaseError){
                                         BaseError error = (BaseError) o;
                                         if(error != null && error.code != 0){
@@ -101,7 +100,7 @@ public abstract class BaseRestClient implements Iservice {
                                         }
 
                                     }else {
-                                       return doelse( o);
+                                        return doelse( o);
 
                                     }
                                 }
@@ -128,14 +127,14 @@ public abstract class BaseRestClient implements Iservice {
             if(baseError != null && baseError.code != 0 ){
                 if(baseError.code == GlobalKey.TOKEN_OUT ){
                     ActivityControl.removeAll();
-                  Activity activity =  ActivityControl.mActivityList.get(0);
-                  Intent intent = new Intent(activity, LoginActivity.class);
+                    Activity activity =  ActivityControl.mActivityList.get(0);
+                    Intent intent = new Intent(activity, LoginActivity.class);
                     ToastUtils.showShort(R.string.token_err);
                     activity.startActivity(intent);
 
                     return false;
                 }else {
-                   return true;
+                    return true;
                 }
 
             }
