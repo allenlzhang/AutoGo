@@ -2,7 +2,6 @@ package com.carlt.autogo.view.activity.user.accept;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,33 +9,40 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import android.text.method.ReplacementTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.DialogIdcardAccept;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.entry.user.User;
-import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
-import com.carlt.autogo.utils.ActivityControl;
-import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.utils.PhotoUtils;
 import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,8 +54,11 @@ import io.github.dltech21.ocr.IdentityInfo;
 import io.github.dltech21.ocr.OcrCameraActivity;
 import io.github.dltech21.ocr.OcrConfig;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -110,7 +119,6 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
     DialogIdcardAccept dialogIdcardAccept;
 
     MultipartBody.Builder MultipartBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-    private String hideName;
 
     @Override
     protected int getContentView() {
@@ -120,12 +128,12 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("上传身份证件");
-        hideName = getIntent().getStringExtra("name");
+        String name = getIntent().getStringExtra("name");
         idNum = getIntent().getStringExtra("idNum");
         realName = getIntent().getStringExtra("realName");
         String idCardNum = getIntent().getStringExtra("idcard");
-        LogUtils.e("idNum = " + idNum + "\trealName = " + realName);
-        tvName.setText(hideName + "\t" + idCardNum);
+        LogUtils.e("idNum = "+idNum+"\trealName = "+realName);
+        tvName.setText(name + "\t" + idCardNum);
         dialogIdcardAccept = new DialogIdcardAccept(this);
         if (!AotugoImage.exists()) {
             AotugoImage.mkdirs();
@@ -245,11 +253,11 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
         //        }
         //        String certid = identityInfo.getCertid();
         //        String cardName = identityInfo.getName();
-        if (TextUtils.isEmpty(facepath)) {
+        if (TextUtils.isEmpty(facepath)){
             showToast("请上传身份证人像页照片");
             return;
         }
-        if (TextUtils.isEmpty(nationalpath)) {
+        if (TextUtils.isEmpty(nationalpath)){
             showToast("请上传国徽页照片");
             return;
         }
@@ -267,10 +275,10 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
             showToast("您的身份证签发机关不正确");
             return;
         }
-        //        if (facepath == null || nationalpath == null) {
-        //            showToast("请上传身份证");
-        //            return;
-        //        }
+//        if (facepath == null || nationalpath == null) {
+//            showToast("请上传身份证");
+//            return;
+//        }
         File faceFile = new File(facepath);
         File nationalFile = new File(nationalpath);
         dialog.show();
@@ -309,24 +317,13 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
                     @Override
                     public void accept(User user) throws Exception {
                         dialog.dismiss();
-                        LogUtils.e("成功后返回--" + user);
+                        LogUtils.e("成功后返回--"+user);
                         if (user.code == 0) {
-                            UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
                             showToast("上传成功");
-                            info.identityAuth = 2;
-                            SharepUtil.putByBean(GlobalKey.USER_INFO, info);
                             Intent intent = new Intent(UploadIdCardPhotoActivity2.this, FaceAuthSettingActivity.class);
                             intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ID_Card);
-                            intent.putExtra("hideName", hideName);
-                            SharepUtil.put(GlobalKey.ID_CARD_NAME, hideName);
                             startActivity(intent);
-                            for (Activity activity : ActivityControl.mActivityList) {
-                                if (activity instanceof IdCardAcceptActivity) {
-                                    activity.finish();
-                                }
-                            }
 
-                            finish();
                         } else {
                             showToast(user.msg);
                         }
@@ -385,21 +382,21 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
         }
     }
 
-    //    private void doCarmera() {
-    //
-    //
-    //        imageUri = Uri.fromFile(fileUri);
-    //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-    //            //通过FileProvider创建一个content类型的Uri
-    //            imageUri = FileProvider.getUriForFile(UploadIdCardPhotoActivity2.this, "com.carlt.autogo.fileprovider", fileUri);
-    //        }
-    //        PhotoUtils.takePicture(UploadIdCardPhotoActivity2.this, imageUri, CODE_CAMERA_REQUEST);
-    //    }
-    //
-    //    public void doPhoto() {
-    //        PhotoUtils.openPic(UploadIdCardPhotoActivity2.this, CODE_GALLERY_REQUEST);
-    //
-    //    }
+//    private void doCarmera() {
+//
+//
+//        imageUri = Uri.fromFile(fileUri);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            //通过FileProvider创建一个content类型的Uri
+//            imageUri = FileProvider.getUriForFile(UploadIdCardPhotoActivity2.this, "com.carlt.autogo.fileprovider", fileUri);
+//        }
+//        PhotoUtils.takePicture(UploadIdCardPhotoActivity2.this, imageUri, CODE_CAMERA_REQUEST);
+//    }
+//
+//    public void doPhoto() {
+//        PhotoUtils.openPic(UploadIdCardPhotoActivity2.this, CODE_GALLERY_REQUEST);
+//
+//    }
 
     @OnClick({R.id.ivPerson, R.id.ivIDBack})
     public void onViewClicked(View view) {
@@ -465,65 +462,65 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
         }
     }
 
-    //    @SuppressLint("CheckResult")
-    //    public void setPicToView(final Bitmap picToView) {
-    //        dialog.show();
-    //        Disposable disposableImage = Observable.create(new ObservableOnSubscribe<Bitmap>() {
-    //            @Override
-    //            public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
-    //                emitter.onNext(picToView);
-    //            }
-    //        })
-    //                .map(new Function<Bitmap, Bitmap>() {
-    //                    @Override
-    //                    public Bitmap apply(Bitmap bitmap) throws Exception {
-    //                        return creatWaterMarkBitmap(bitmap);
-    //                    }
-    //                })
-    //                .observeOn(AndroidSchedulers.mainThread())
-    //                .map(new Function<Bitmap, Bitmap>() {
-    //                    @Override
-    //                    public Bitmap apply(Bitmap bitmap) throws Exception {
-    //                        showImg(bitmap);
-    //                        return bitmap;
-    //                    }
-    //                })
-    //                .observeOn(Schedulers.newThread())
-    //                .map(new Function<Bitmap, File>() {
-    //                    @Override
-    //                    public File apply(Bitmap bitmap) throws Exception {
-    //                        File filePic = saveWaterMarkBitmap(bitmap);
-    //                        if (filePic == null)
-    //                            return null;
-    //                        return filePic;
-    //                    }
-    //                })
-    //                .flatMap(new Function<File, ObservableSource<UpdateImageResultInfo>>() {
-    //                    @Override
-    //                    public ObservableSource<UpdateImageResultInfo> apply(File file) throws Exception {
-    //                        return getUpdateImageResultInfoObservableSource(file);
-    //                    }
-    //                })
-    //                .subscribeOn(Schedulers.newThread())
-    //                .observeOn(AndroidSchedulers.mainThread())
-    //                .subscribe(new Consumer<UpdateImageResultInfo>() {
-    //                               @Override
-    //                               public void accept(UpdateImageResultInfo updateImageResultInfo) throws Exception {
-    //                                   ToastUtils.showShort("上传成功");
-    //                                   dialog.dismiss();
-    //                                   LogUtils.e(updateImageResultInfo.toString());
-    //                               }
-    //                           }
-    //                        , new Consumer<Throwable>() {
-    //                            @Override
-    //                            public void accept(Throwable throwable) throws Exception {
-    //                                dialog.dismiss();
-    //                                ToastUtils.showShort("上传失败");
-    //                                LogUtils.e(throwable.toString());
-    //                            }
-    //                        });
-    //        disposables.add(disposableImage);
-    //    }
+//    @SuppressLint("CheckResult")
+//    public void setPicToView(final Bitmap picToView) {
+//        dialog.show();
+//        Disposable disposableImage = Observable.create(new ObservableOnSubscribe<Bitmap>() {
+//            @Override
+//            public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
+//                emitter.onNext(picToView);
+//            }
+//        })
+//                .map(new Function<Bitmap, Bitmap>() {
+//                    @Override
+//                    public Bitmap apply(Bitmap bitmap) throws Exception {
+//                        return creatWaterMarkBitmap(bitmap);
+//                    }
+//                })
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .map(new Function<Bitmap, Bitmap>() {
+//                    @Override
+//                    public Bitmap apply(Bitmap bitmap) throws Exception {
+//                        showImg(bitmap);
+//                        return bitmap;
+//                    }
+//                })
+//                .observeOn(Schedulers.newThread())
+//                .map(new Function<Bitmap, File>() {
+//                    @Override
+//                    public File apply(Bitmap bitmap) throws Exception {
+//                        File filePic = saveWaterMarkBitmap(bitmap);
+//                        if (filePic == null)
+//                            return null;
+//                        return filePic;
+//                    }
+//                })
+//                .flatMap(new Function<File, ObservableSource<UpdateImageResultInfo>>() {
+//                    @Override
+//                    public ObservableSource<UpdateImageResultInfo> apply(File file) throws Exception {
+//                        return getUpdateImageResultInfoObservableSource(file);
+//                    }
+//                })
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<UpdateImageResultInfo>() {
+//                               @Override
+//                               public void accept(UpdateImageResultInfo updateImageResultInfo) throws Exception {
+//                                   ToastUtils.showShort("上传成功");
+//                                   dialog.dismiss();
+//                                   LogUtils.e(updateImageResultInfo.toString());
+//                               }
+//                           }
+//                        , new Consumer<Throwable>() {
+//                            @Override
+//                            public void accept(Throwable throwable) throws Exception {
+//                                dialog.dismiss();
+//                                ToastUtils.showShort("上传失败");
+//                                LogUtils.e(throwable.toString());
+//                            }
+//                        });
+//        disposables.add(disposableImage);
+//    }
 
     /**
      * @param file
@@ -545,54 +542,54 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
     /**
      * 都为示意图按钮不可点击
      */
-    private void enabledCommit() {
-        if (TextUtils.isEmpty(facepath) && TextUtils.isEmpty(nationalpath)) {
+    private void enabledCommit(){
+        if (TextUtils.isEmpty(facepath)&&TextUtils.isEmpty(nationalpath)){
             idcardUploadCommit.setEnabled(false);
-        } else {
+        }else {
             idcardUploadCommit.setEnabled(true);
         }
     }
 
 
-    //    /**
-    //     * @param bitmap
-    //     *         水印bitmap
-    //     * @return 返回水印图片保存地址
-    //     */
-    //    @Nullable
-    //    private File saveWaterMarkBitmap(Bitmap bitmap) {
-    //        File filePic;
-    //        if (carmeraTag == 0) {
-    //            filePic = (fileCropUriface);
-    //        } else {
-    //            filePic = (fileCropUriBalce);
-    //        }
-    //        try {
-    //            FileOutputStream fos = new FileOutputStream(filePic);
-    //            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-    //            fos.flush();
-    //            fos.close();
-    //        } catch (IOException e) {
-    //            // TODO Auto-generated catch block
-    //            e.printStackTrace();
-    //            return null;
-    //        }
-    //        return filePic;
-    //    }
+//    /**
+//     * @param bitmap
+//     *         水印bitmap
+//     * @return 返回水印图片保存地址
+//     */
+//    @Nullable
+//    private File saveWaterMarkBitmap(Bitmap bitmap) {
+//        File filePic;
+//        if (carmeraTag == 0) {
+//            filePic = (fileCropUriface);
+//        } else {
+//            filePic = (fileCropUriBalce);
+//        }
+//        try {
+//            FileOutputStream fos = new FileOutputStream(filePic);
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+//            fos.flush();
+//            fos.close();
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//            return null;
+//        }
+//        return filePic;
+//    }
 
-    //    private void showImg(Bitmap bitmap) {
-    //        if (carmeraTag == 0) {
-    //            imgPerson.setImageBitmap(bitmap);
-    //            rlCenter1.setVisibility(View.GONE);
-    //            imgDeletPersonPhoto.setVisibility(View.VISIBLE);
-    //        }
-    //        if (carmeraTag == 1) {
-    //            imgIdcardBack.setImageBitmap(bitmap);
-    //            // imgBackWatermark.setVisibility(View.VISIBLE);
-    //            rlCenter2.setVisibility(View.GONE);
-    //            imgDeletBackPhoto.setVisibility(View.VISIBLE);
-    //        }
-    //    }
+//    private void showImg(Bitmap bitmap) {
+//        if (carmeraTag == 0) {
+//            imgPerson.setImageBitmap(bitmap);
+//            rlCenter1.setVisibility(View.GONE);
+//            imgDeletPersonPhoto.setVisibility(View.VISIBLE);
+//        }
+//        if (carmeraTag == 1) {
+//            imgIdcardBack.setImageBitmap(bitmap);
+//            // imgBackWatermark.setVisibility(View.VISIBLE);
+//            rlCenter2.setVisibility(View.GONE);
+//            imgDeletBackPhoto.setVisibility(View.VISIBLE);
+//        }
+//    }
 
     /**
      * @param bitmap

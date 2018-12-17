@@ -35,10 +35,8 @@ public class FaceAuthSettingActivity extends BaseMvpActivity {
     public void onViewClicked() {
         switch (isFrom) {
             case From_ID_Card:
-                String hideName = getIntent().getStringExtra("hideName");
                 Intent intent1 = new Intent(this, FaceLiveCheckActivity.class);
                 intent1.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.FROM_ID_CARDACCEPT_ACTIVITY);
-                intent1.putExtra("hideName", hideName);
                 startActivity(intent1);
                 break;
             case From_ALiPay_Auth:

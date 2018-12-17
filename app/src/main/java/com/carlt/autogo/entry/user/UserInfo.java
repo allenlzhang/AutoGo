@@ -40,7 +40,6 @@ public class UserInfo implements Serializable {
                 ", mobile='" + mobile + '\'' +
                 ", gender=" + gender +
                 ", realName='" + realName + '\'' +
-                ", remotePwd='" + remotePwd + '\'' +
                 ", token='" + token + '\'' +
                 ", err=" + err +
                 ", sex='" + sex + '\'' +
@@ -53,8 +52,8 @@ public class UserInfo implements Serializable {
                 ", faceFile='" + faceFile + '\'' +
                 ", faceId=" + faceId +
                 ", logoutState=" + logoutState +
-                ", identityAuth=" + identityAuth +
                 ", loginState=" + loginState +
+                ", remotePwd =" + remotePwd +
                 '}';
     }
 }

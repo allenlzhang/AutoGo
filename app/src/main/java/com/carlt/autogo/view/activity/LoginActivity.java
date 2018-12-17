@@ -161,13 +161,13 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     protected void onResume() {
         super.onResume();
         UserInfo userInfo = SharepUtil.getBeanFromSp("user");
-        //        boolean faceSwitch = SharepUtil.getPreferences().getBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
+//        boolean faceSwitch = SharepUtil.getPreferences().getBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
 
         if (userInfo != null) {
-            //            if (userInfo.faceId != 0 && faceSwitch) {
-            //                startActivity(FaceLoginActivity.class);
-            //            }
-            if (userInfo.loginState == GlobalKey.loginStateByPWd || userInfo.loginState == GlobalKey.loginStateByOther) {
+//            if (userInfo.faceId != 0 && faceSwitch) {
+//                startActivity(FaceLoginActivity.class);
+//            }
+            if (userInfo.loginState == GlobalKey.loginStateByPWd) {
                 userPhone.setText(userInfo.mobile);
                 userPWd.setText(userInfo.password);
                 savePwd = userInfo.password;
@@ -182,7 +182,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
         switch (view.getId()) {
             case R.id.btn_more:
                 String phone = userPhone.getText().toString().trim();
-                BaseDialog baseDialog = new LoginMoreDialog(this, false, phone);
+                BaseDialog baseDialog = new LoginMoreDialog(this, false,phone);
                 baseDialog.show();
                 break;
             case R.id.user_regist:
@@ -246,9 +246,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     @Override
     public void loginFinish() {
-        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-        user.password = userPWd.getText().toString().trim();
-        SharepUtil.putByBean(GlobalKey.USER_INFO, user);
+
         startActivity(MainActivity.class);
     }
 

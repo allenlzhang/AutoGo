@@ -11,7 +11,7 @@ import java.util.List;
 public class ShareLoginList {
 
     public List<ListBean> list;
-    public BaseError err;
+    BaseError err;
 
     @Override
     public String toString() {

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,15 +20,12 @@ import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.basemvp.PresenterVariable;
 import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.alipay.AuthResult;
-import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.presenter.register.IOtherRegisterView;
 import com.carlt.autogo.presenter.register.OtherRegisterPresenter;
-import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.alipay.OrderInfoUtil2_0;
 import com.carlt.autogo.view.activity.MainActivity;
-import com.carlt.autogo.view.activity.user.UserBindPwdActivity;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -110,6 +108,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
             "8WIzdo8RIXSTegItyq/XSMeFthpZVgNfwM7pRR1UAb0+IACP1XKs";
 
 
+
     HashMap<String, Object> params = new HashMap<>();
     @PresenterVariable
     private OtherRegisterPresenter otherRegisterPresenter;
@@ -145,7 +144,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 break;
 
             case R.id.login_wechat:
-                //    dialog.show();
+            //    dialog.show();
                 otherRegisterPresenter.weChatLogin();
                 doAuthorize(plat, new MyPlatformActionListener(dialog));
                 break;
@@ -153,7 +152,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
 
     }
 
-    public static void doAuthorize(Platform plat, MyPlatformActionListener listener) {
+    public static void doAuthorize(Platform plat ,MyPlatformActionListener listener) {
 
         plat.setPlatformActionListener((listener));
         plat.removeAccount(true);
@@ -163,13 +162,13 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
     }
 
     public class MyPlatformActionListener implements PlatformActionListener {
-        Dialog dialog;
+        Dialog dialog ;
 
-        public MyPlatformActionListener(Dialog dialog) {
-            this.dialog = dialog;
-        }
+       public MyPlatformActionListener(Dialog dialog) {
+           this.dialog = dialog;
+       }
 
-        @Override
+       @Override
         public void onComplete(final Platform platform, int i, final HashMap<String, Object> hashMap) {
             LogUtils.e("onComplete");
 
@@ -184,20 +183,13 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     params.put("openType", 2);
                     params.put("loginType", GlobalKey.loginStateByOther);
                     LogUtils.e(params);
-                    ObservableHelper.commonLogin(params, OtherActivity.this)
+                    ObservableHelper.commonLogin(params ,OtherActivity.this)
                             .subscribe(new Consumer<String>() {
                                 @Override
                                 public void accept(String s) throws Exception {
                                     dialog.dismiss();
-
-                                    UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-                                    LogUtils.e(user.toString());
-                                    if (TextUtils.isEmpty(user.password)) {
-                                        startActivity(UserBindPwdActivity.class);
-                                    } else {
-                                        ToastUtils.showShort(s);
-                                        startActivity(MainActivity.class);
-                                    }
+                                    ToastUtils.showShort(s);
+                                    startActivity(MainActivity.class);
                                 }
                             }, new Consumer<Throwable>() {
                                 @Override
@@ -235,14 +227,16 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
 
             String error = throwable.toString();
             LogUtils.e(error);
-            if (error.contains("NotExistException")) {
+            if(error.contains("NotExistException")){
                 ToastUtils.setMsgTextSize(13);
                 ToastUtils.showShort("请先在应用商店下载该应用再进行该操作");
 
-            } else if (!NetworkUtils.isConnected() && !NetworkUtils.isAvailableByPing()) {
+            }  else if (!NetworkUtils.isConnected() && !NetworkUtils.isAvailableByPing()) {
                 ToastUtils.showShort("网络错误，请检查网络");
 
-            } else {
+            }
+
+            else {
                 ToastUtils.showShort("登录失败");
             }
 
@@ -314,7 +308,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                             if (!NetworkUtils.isConnected() && !NetworkUtils.isAvailableByPing()) {
                                 ToastUtils.showShort("网络错误，请检查网络");
 
-                            } else {
+                            }else {
                                 ToastUtils.showShort("登录失败");
                             }
 
@@ -338,16 +332,8 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                     @Override
                     public void accept(String s) throws Exception {
                         dialog.dismiss();
-
-                        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-                        LogUtils.e(user.toString());
-                        if (TextUtils.isEmpty(user.password)) {
-                            startActivity(UserBindPwdActivity.class);
-                        } else {
-                            ToastUtils.showShort(s);
-                            startActivity(MainActivity.class);
-                        }
-//                        startActivity(MainActivity.class);
+                        ToastUtils.showShort(s);
+                        startActivity(MainActivity.class);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

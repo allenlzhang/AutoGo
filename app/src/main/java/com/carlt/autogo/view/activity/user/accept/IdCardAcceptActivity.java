@@ -114,7 +114,7 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
         StringBuilder n = new StringBuilder();
         int len = str.length();
         if (len <= 2) {
-            n.append( "*"+str.charAt(1));
+            n.append(str.charAt(0) + "*");
             return n.toString();
         }
         n.append(str.charAt(0));

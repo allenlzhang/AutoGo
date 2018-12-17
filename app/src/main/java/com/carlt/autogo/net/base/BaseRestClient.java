@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
@@ -78,7 +79,7 @@ public abstract class BaseRestClient implements Iservice {
                                 @Override
                                 public boolean test(Object o) throws Exception {
 
-//                                    LogUtils.e(o+ "==========================================");
+                                    LogUtils.e(o+ "==========================================");
                                     if(o instanceof BaseError){
                                         BaseError error = (BaseError) o;
                                         if(error != null && error.code != 0){
