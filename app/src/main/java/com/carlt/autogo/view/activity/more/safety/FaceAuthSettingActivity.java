@@ -47,7 +47,12 @@ public class FaceAuthSettingActivity extends BaseMvpActivity {
                 startActivity(intent);
                 break;
             default:
-
+                String hideName3 = getIntent().getStringExtra("hideName");
+                Intent intent3 = new Intent(this, FaceLiveCheckActivity.class);
+                intent3.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.FROM_ID_CARDACCEPT_ACTIVITY);
+                intent3.putExtra("hideName", hideName3);
+                startActivity(intent3);
+                break;
         }
 
         finish();

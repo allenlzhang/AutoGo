@@ -22,7 +22,7 @@ import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
 import com.carlt.autogo.view.activity.car.CarDetailsActivity;
-import com.carlt.autogo.view.activity.more.safety.FaceRecognitionSettingFirstActivity;
+import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 
 import java.util.ArrayList;
@@ -152,15 +152,28 @@ public class MyCarFragment extends BaseMvpFragment {
     private void certification() {
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         Intent intent = new Intent();
-        if (user.alipayAuth == 1&&user.identityAuth == 1) {
+        if (user.alipayAuth == 2) {
+            if (user.faceId == 0) {
+                intent.setClass(mContext, FaceAuthSettingActivity.class);
+                intent.putExtra(GlobalKey.FROM_ACTIVITY,FaceAuthSettingActivity.From_ALiPay_Auth);
+                startActivity(intent);
+            }else {
+                intent.setClass(mContext, CarCertificationActivity.class);
+                startActivityForResult(intent,CODE_ADDCAR_REQUEST);
+            }
+        }else if (user.identityAuth == 2){
+            if (user.faceId == 0) {
+                intent.setClass(mContext, FaceAuthSettingActivity.class);
+                intent.putExtra(GlobalKey.FROM_ACTIVITY,FaceAuthSettingActivity.From_ID_Card);
+                startActivity(intent);
+            }else {
+                intent.setClass(mContext, CarCertificationActivity.class);
+                startActivityForResult(intent,CODE_ADDCAR_REQUEST);
+            }
+
+        }else {
             intent.setClass(mContext, UserIdChooseActivity.class);
             startActivity(intent);
-        } else if (user.faceId == 0) {
-            intent.setClass(mContext, FaceRecognitionSettingFirstActivity.class);
-            startActivity(intent);
-        } else {
-            intent.setClass(mContext, CarCertificationActivity.class);
-            startActivityForResult(intent,CODE_ADDCAR_REQUEST);
         }
     }
 }

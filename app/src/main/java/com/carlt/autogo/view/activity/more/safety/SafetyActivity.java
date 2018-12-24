@@ -123,6 +123,7 @@ public class SafetyActivity extends BaseMvpActivity {
     @BindView(R.id.rlAliSwitch)
     RelativeLayout rlAliSwitch;
     //    private LogoutTipDialog mTipDialog;
+    UserInfo user;
 
     @Override
     protected int getContentView() {
@@ -171,43 +172,13 @@ public class SafetyActivity extends BaseMvpActivity {
     protected void onResume() {
         super.onResume();
         //        String isIdentity = SharepUtil.getPreferences().getString(GlobalKey.IDENTITY_AUTH, "");
-        final UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         boolean faceLogin = SharepUtil.getPreferences().getBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
         LogUtils.e("----" + user.toString());
-        if (user.identityAuth == 2 || user.alipayAuth == 2) {
-            if (user.faceId != 0) {
-                mTvIdentityAuthentication.setText("已认证");
-                mLlIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent safety_identity = new Intent(SafetyActivity.this, IdfCompleteActivity.class);
-                        safety_identity.putExtra("idcard", user.identityAuth == 2);
-                        startActivity(safety_identity);
-                    }
-                });
-            } else {
-                mTvIdentityAuthentication.setText("未认证");
-
-                mLlIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent safety_identity = new Intent(SafetyActivity.this, FaceAuthSettingActivity.class);
-                        safety_identity.putExtra(GlobalKey.FROM_ACTIVITY,FaceAuthSettingActivity.From_ID_Card);
-                        startActivity(safety_identity);
-                    }
-                });
-            }
-
+        if ((user.identityAuth == 2 || user.alipayAuth == 2) && user.faceId != 0) {
+            mTvIdentityAuthentication.setText("已认证");
         } else {
             mTvIdentityAuthentication.setText("未认证");
-            mLlIdentityAuthentication.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //                    Intent safety_identity = new Intent(SafetyActivity.this, UserIdChooseActivity.class);
-                    //                    startActivity(safety_identity);
-                    startActivity(UserIdChooseActivity.class, false);
-                }
-            });
         }
         if ((user.identityAuth == 2 || user.alipayAuth == 2) && faceLogin && user.faceId != 0) {
             mTvFaceRecognition.setText("已开启");
@@ -318,6 +289,27 @@ public class SafetyActivity extends BaseMvpActivity {
         switch (view.getId()) {
             case R.id.ll_safety_identity_authentication:
                 //                startActivity(UserIdChooseActivity.class, false);
+                Intent intent = new Intent();
+                if (user.alipayAuth == 2) {
+                    if (user.faceId == 0) {
+                        intent.setClass(SafetyActivity.this, FaceAuthSettingActivity.class);
+                        intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ALiPay_Auth);
+                    } else {
+                        intent.setClass(SafetyActivity.this, IdfCompleteActivity.class);
+                        intent.putExtra("idcard", user.identityAuth == 2);
+                    }
+                } else if (user.identityAuth == 2) {
+                    if (user.faceId == 0) {
+                        intent.setClass(SafetyActivity.this, FaceAuthSettingActivity.class);
+                        intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ID_Card);
+                    } else {
+                        intent.setClass(SafetyActivity.this, IdfCompleteActivity.class);
+                        intent.putExtra("idcard", user.identityAuth == 2);
+                    }
+                } else {
+                    intent.setClass(SafetyActivity.this, UserIdChooseActivity.class);
+                }
+                startActivity(intent);
                 break;
             case R.id.ll_safety_face_recognition:
                 startActivity(FaceRecognitionSettingActivity.class, false);

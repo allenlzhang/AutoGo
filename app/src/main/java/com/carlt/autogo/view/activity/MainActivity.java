@@ -14,6 +14,7 @@ import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.model.TabEntity;
+import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.more.safety.FreezeActivity;
 import com.carlt.autogo.view.fragment.FragmentFactory;
@@ -59,6 +60,7 @@ public class MainActivity extends BaseMvpActivity {
         super.onCreate(savedInstanceState);
         initSavedInstanceState(savedInstanceState);
         initBottomTabs();
+        ActivityControl.removeAllActivity(MainActivity.this);
     }
 
     private void initSavedInstanceState(Bundle savedInstanceState) {

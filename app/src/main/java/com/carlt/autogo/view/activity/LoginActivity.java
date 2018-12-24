@@ -169,8 +169,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
             //            }
             if (userInfo.loginState == GlobalKey.loginStateByPWd || userInfo.loginState == GlobalKey.loginStateByOther) {
                 userPhone.setText(userInfo.mobile);
-                userPWd.setText(userInfo.password);
-                savePwd = userInfo.password;
+//                userPWd.setText(userInfo.password);
+//                savePwd = userInfo.password;
             } else {
                 userPhone.setText(userInfo.mobile);
             }

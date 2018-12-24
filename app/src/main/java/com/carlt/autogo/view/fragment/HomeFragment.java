@@ -29,7 +29,7 @@ import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
 import com.carlt.autogo.view.activity.car.DeviceActivateActivity;
-import com.carlt.autogo.view.activity.more.safety.FaceRecognitionSettingFirstActivity;
+import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 import com.carlt.autogo.widget.MaxListView;
 
@@ -95,13 +95,14 @@ public class HomeFragment extends BaseMvpFragment {
 
     /**
      * 是否绑定车辆
+     *
      * @param info
      */
-    private void isBindCar(AuthCarInfo info){
+    private void isBindCar(AuthCarInfo info) {
         if (info != null) {
-            if (info.myCar!= null&&info.myCar.size() > 0 ){
+            if (info.myCar != null && info.myCar.size() > 0) {
                 singletonCar.setBound(true);
-            }else if (info.authCar != null && info.authCar.size() > 0) {
+            } else if (info.authCar != null && info.authCar.size() > 0) {
                 singletonCar.setBound(true);
             } else {
                 singletonCar.setBound(false);
@@ -112,9 +113,9 @@ public class HomeFragment extends BaseMvpFragment {
     }
 
     @SuppressLint("CheckResult")
-    private void ClientGetData(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("type",3);
+    private void ClientGetData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", 3);
         ClientFactory.def(CarService.class).getMyCarList(map)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -131,10 +132,10 @@ public class HomeFragment extends BaseMvpFragment {
                 });
     }
 
-    private void parseGetMyList(AuthCarInfo info){
-        if (info.err!=null){
+    private void parseGetMyList(AuthCarInfo info) {
+        if (info.err != null) {
             ToastUtils.showShort(info.err.msg);
-        }else {
+        } else {
             adapter = new CarPopupAdapter(info, getContext());
             adapter.setClick(new CarPopupAdapter.OnItemClick() {
                 @Override
@@ -147,22 +148,22 @@ public class HomeFragment extends BaseMvpFragment {
                 }
             });
             int tag = singletonCar.getCarTag();
-            if (tag != 0){
+            if (tag != 0) {
                 adapter.setSelected_position(tag);
-            }else {
-                if (info.myCar!=null&&info.myCar.size()>0){
+            } else {
+                if (info.myCar != null && info.myCar.size() > 0) {
                     tvCarType.setText(info.myCar.get(0).carName);
                     singletonCar.setMyCarBean(info.myCar.get(0));
-                }else if (info.authCar!=null&&info.authCar.size()>0){
+                } else if (info.authCar != null && info.authCar.size() > 0) {
                     tvCarType.setText(info.authCar.get(0).carName);
                     singletonCar.setMyCarBean(info.authCar.get(0));
-                }else {
+                } else {
                     tvCarType.setText("品牌车型");
                 }
             }
             isBindCar(info);
             boolean isBound = singletonCar.isBound();
-            if (isBound){
+            if (isBound) {
                 homeRlLock.setVisibility(View.GONE);
             } else {
                 homeRlLock.setVisibility(View.VISIBLE);
@@ -174,8 +175,8 @@ public class HomeFragment extends BaseMvpFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (singletonCar.getMyCarBean() == null){
-            adapter = new CarPopupAdapter(null,mContext);
+        if (singletonCar.getMyCarBean() == null) {
+            adapter = new CarPopupAdapter(null, mContext);
             tvCarType.setText("品牌车型");
         }
         ClientGetData();
@@ -197,21 +198,22 @@ public class HomeFragment extends BaseMvpFragment {
 
     /**
      * 根据屏幕适配PopupWindow显示高度
+     *
      * @param view
      * @return
      */
-    private int getPopupWindowHeight(View view){
+    private int getPopupWindowHeight(View view) {
         DisplayMetrics dm = getResources().getDisplayMetrics();
         int windowHeight = dm.heightPixels;
-        int bottomLayoutHeight = ((MainActivity)getActivity()).bottomTabs.getHeight();
-        int [] location = new int[2];
+        int bottomLayoutHeight = ((MainActivity) getActivity()).bottomTabs.getHeight();
+        int[] location = new int[2];
         view.getLocationInWindow(location);
-        int viewBottom = location[1]+view.getHeight();
-        return windowHeight-bottomLayoutHeight-viewBottom-50;
+        int viewBottom = location[1] + view.getHeight();
+        return windowHeight - bottomLayoutHeight - viewBottom - 50;
     }
 
-    @OnClick({R.id.rl_home_chose_car_type, R.id.rlCarLocation, R.id.home_btn_lock,R.id.rlCarState,
-    R.id.rlTirePressure,R.id.rlCarLog,R.id.rlNav})
+    @OnClick({R.id.rl_home_chose_car_type, R.id.rlCarLocation, R.id.home_btn_lock, R.id.rlCarState,
+            R.id.rlTirePressure, R.id.rlCarLog, R.id.rlNav})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_home_chose_car_type:
@@ -220,7 +222,7 @@ public class HomeFragment extends BaseMvpFragment {
 
                 break;
             case R.id.rlCarLocation:
-                if (isActivated()){
+                if (isActivated()) {
 
                 }
                 break;
@@ -228,38 +230,38 @@ public class HomeFragment extends BaseMvpFragment {
                 certification();
                 break;
             case R.id.rlCarState:
-                if (isActivated()){
+                if (isActivated()) {
 
                 }
                 break;
             case R.id.rlTirePressure:
-                if (isActivated()){
+                if (isActivated()) {
 
                 }
                 break;
             case R.id.rlCarLog:
-                if (isActivated()){
+                if (isActivated()) {
 
                 }
                 break;
             case R.id.rlNav:
-                if (isActivated()){
+                if (isActivated()) {
 
                 }
                 break;
         }
     }
 
-    private boolean isActivated(){
+    private boolean isActivated() {
         // 远程激活状态,设备激活状态 0-未激活  1-正在激活  2-激活成功  3-激活失败
         AuthCarInfo.MyCarBean dataBean = singletonCar.getMyCarBean();
-        if (dataBean!=null) {
+        if (dataBean != null) {
             int remoteStatus = dataBean.remoteStatus;
             if (remoteStatus == 0) {
-                showCommonDialog("设备还未激活","去激活",false);
+                showCommonDialog("设备还未激活", "去激活", false);
                 return false;
             } else if (remoteStatus == 1) {
-                showCommonDialog("设备正在激活","查看详情",true);
+                showCommonDialog("设备正在激活", "查看详情", true);
                 return false;
             } else {
                 return true;
@@ -274,17 +276,27 @@ public class HomeFragment extends BaseMvpFragment {
     private void certification() {
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         Intent intent = new Intent();
-        if (user.alipayAuth == 1&&user.identityAuth == 1) {
+        if (user.alipayAuth == 2) {
+            if (user.faceId == 0) {
+                intent.setClass(mContext, FaceAuthSettingActivity.class);
+                intent.putExtra(GlobalKey.FROM_ACTIVITY,FaceAuthSettingActivity.From_ALiPay_Auth);
+            }else {
+                intent.setClass(mContext, CarCertificationActivity.class);
+            }
+        }else if (user.identityAuth == 2){
+            if (user.faceId == 0) {
+                intent.setClass(mContext, FaceAuthSettingActivity.class);
+                intent.putExtra(GlobalKey.FROM_ACTIVITY,FaceAuthSettingActivity.From_ID_Card);
+            }else {
+                intent.setClass(mContext, CarCertificationActivity.class);
+            }
+        }else {
             intent.setClass(mContext, UserIdChooseActivity.class);
-        } else if (user.faceId == 0) {
-            intent.setClass(mContext, FaceRecognitionSettingFirstActivity.class);
-        } else {
-            intent.setClass(mContext, CarCertificationActivity.class);
         }
         startActivity(intent);
     }
 
-    private void showCommonDialog(String title,String rightTxt,final boolean isActivated) {
+    private void showCommonDialog(String title, String rightTxt, final boolean isActivated) {
         CommonDialog.createDialogNotitle(mContext, title, "", "确定", rightTxt, true, new CommonDialog.DialogWithTitleClick() {
             @Override
             public void onLeftClick() {
@@ -294,9 +306,9 @@ public class HomeFragment extends BaseMvpFragment {
             @Override
             public void onRightClick() {
                 Intent intent = new Intent();
-                if (isActivated){
-                    intent.setClass(mContext,ActivateStepActivity.class);
-                }else {
+                if (isActivated) {
+                    intent.setClass(mContext, ActivateStepActivity.class);
+                } else {
                     intent.setClass(mContext, DeviceActivateActivity.class);
                     startActivity(intent);
                 }

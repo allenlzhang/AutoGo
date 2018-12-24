@@ -1,8 +1,10 @@
 package com.carlt.autogo.view.activity;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 import android.view.View;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.UserInfo;
@@ -11,6 +13,7 @@ import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.TokenUtil;
 import com.carlt.autogo.view.activity.login.FaceLoginActivity;
+import com.carlt.autogo.view.activity.user.UserBindPwdActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +43,13 @@ public class SplashActivity extends BaseMvpActivity {
                     .subscribe(new Consumer<String>() {
                         @Override
                         public void accept(String s) throws Exception {
-                            startActivity(MainActivity.class);
+                            LogUtils.e("SplashActivity ===== "+s);
+                            UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+                            if (TextUtils.isEmpty(info.password)){
+                                startActivity(UserBindPwdActivity.class);
+                            }else {
+                                startActivity(MainActivity.class);
+                            }
                         }
                     }, new Consumer<Throwable>() {
                         @Override

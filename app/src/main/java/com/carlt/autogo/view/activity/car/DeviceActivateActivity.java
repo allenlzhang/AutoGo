@@ -1,5 +1,6 @@
 package com.carlt.autogo.view.activity.car;
 
+import android.content.Intent;
 import android.widget.Button;
 
 import com.carlt.autogo.R;
@@ -15,6 +16,7 @@ import butterknife.OnClick;
 public class DeviceActivateActivity extends BaseMvpActivity {
     @BindView(R.id.btnACCNext)
     Button btnACCNext;
+    private int carId;
 
     @Override
     protected int getContentView() {
@@ -24,10 +26,14 @@ public class DeviceActivateActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("设备激活");
+        carId = getIntent().getIntExtra("carId", 0);
     }
 
     @OnClick(R.id.btnACCNext)
     public void onViewClicked() {
-        startActivity(DeviceActivateEditActivity.class,false);
+        Intent intent = new Intent(DeviceActivateActivity.this,DeviceActivateEditActivity.class);
+        intent.putExtra("carId",carId);
+        startActivity(intent);
+        finish();
     }
 }

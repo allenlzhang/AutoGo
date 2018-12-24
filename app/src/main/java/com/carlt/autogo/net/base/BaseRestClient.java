@@ -83,7 +83,7 @@ public abstract class BaseRestClient implements Iservice {
                                         BaseError error = (BaseError) o;
                                         if(error != null && error.code != 0){
 
-                                            if(error.code == GlobalKey.TOKEN_OUT){
+                                            if(error.code == GlobalKey.TOKEN_OUT||error.code == GlobalKey.TOKEN_ERROR){
                                                 ActivityControl.removeAll();
                                                 Activity activity =   ActivityControl.mActivityList.get(0);
                                                 Intent intent = new Intent(activity, LoginActivity.class);
@@ -125,7 +125,7 @@ public abstract class BaseRestClient implements Iservice {
             BaseError baseError = (BaseError) field.get(o);
 
             if(baseError != null && baseError.code != 0 ){
-                if(baseError.code == GlobalKey.TOKEN_OUT ){
+                if(baseError.code == GlobalKey.TOKEN_OUT || baseError.code == GlobalKey.TOKEN_ERROR){
                     ActivityControl.removeAll();
                     Activity activity =  ActivityControl.mActivityList.get(0);
                     Intent intent = new Intent(activity, LoginActivity.class);

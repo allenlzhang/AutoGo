@@ -48,9 +48,9 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
     @BindView(R.id.ll_management_without_encryption_date)
     LinearLayout llManagementWithoutEncryptionDate;
     @BindView(R.id.tv_management_without_encryption_date)
-    TextView     tvManagementWithoutEncryptionDate;
+    TextView tvManagementWithoutEncryptionDate;
     @BindView(R.id.cb_management_without_encryption)
-    CheckBox     cbManagementRemoteSwitch;
+    CheckBox cbManagementRemoteSwitch;
 
     public static final int SETREMOTEPWD = 0;   //设置远程密码
 
@@ -59,7 +59,7 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
     public static final int FORGETPWD = 2;      //忘记远程密码
 
     private WithOutCodeDialog mDialog;
-    private UserInfo          user;
+    private UserInfo user;
 
 
     @Override
@@ -76,9 +76,29 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
         boolean aBoolean = SharepUtil.preferences.getBoolean(GlobalKey.Remote_Switch, false);
         cbManagementRemoteSwitch.setChecked(aBoolean);
         cbManagementRemoteSwitch.setOnCheckedChangeListener(this);
-        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        final UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         LogUtils.e("----" + user.toString());
-        if ((user.alipayAuth == 2 || user.identityAuth == 2) && user.faceId != 0) {
+        if (user.alipayAuth == 2 || user.identityAuth == 2) {
+            if (user.faceId == 0) {
+                CommonDialog.createDialogNotitle(this, "温馨提示", "请进行身份认证", "取消", "确定", false, new CommonDialog.DialogWithTitleClick() {
+                    @Override
+                    public void onRightClick() {
+                        Intent intent = new Intent(RemotePwdManagementActivity.this, FaceAuthSettingActivity.class);
+                        if (user.identityAuth == 2) {
+                            intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ID_Card);
+                        }else {
+                            intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ALiPay_Auth);
+                        }
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLeftClick() {
+                        finish();
+                    }
+                });
+            }
         } else {
             CommonDialog.createDialogNotitle(this, "温馨提示", "请进行身份认证", "取消", "确定", false, new CommonDialog.DialogWithTitleClick() {
                 @Override

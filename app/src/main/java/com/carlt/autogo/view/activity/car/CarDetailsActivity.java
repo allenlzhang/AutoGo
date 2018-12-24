@@ -99,6 +99,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
     public static final int DETAILS_TYPE4 = 3;  //（被授权车辆详情）
     private int remoteStatus = 0;   //远程状态
     private int authId = 0; //授权id
+    private int carId = 0;  //车辆id
     @Override
     protected int getContentView() {
         return R.layout.activity_car_details;
@@ -146,8 +147,8 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 btnCancelAuth.setVisibility(View.GONE);
                 break;
         }
-        int id = intent.getIntExtra("id", 0);
-        ClientGetCarInfo(id);
+        carId = intent.getIntExtra("id", 0);
+        ClientGetCarInfo(carId);
     }
 
     /**
@@ -240,13 +241,16 @@ public class CarDetailsActivity extends BaseMvpActivity {
 //        } else {
 //            startActivity(ActivateStepActivity.class,false);
 //        }
+        Intent intent = new Intent();
         if (remoteStatus == 1){
-            startActivity(ActivateStepActivity.class,false);
+            intent.setClass(CarDetailsActivity.this,ActivateStepActivity.class);
         }else if(remoteStatus == 2){
-            startActivity(ActivateStepActivity.class,false);
+            intent.setClass(CarDetailsActivity.this,ActivateStepActivity.class);
         }else {
-            startActivity(DeviceActivateActivity.class,false);
+            intent.setClass(CarDetailsActivity.this,DeviceActivateActivity.class);
         }
+        intent.putExtra("carId",carId);
+        startActivity(intent);
     }
 
     public void setData(CarInfo data) {

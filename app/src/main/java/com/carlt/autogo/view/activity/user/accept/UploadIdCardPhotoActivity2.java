@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
@@ -324,6 +326,9 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
                                 if (activity instanceof IdCardAcceptActivity) {
                                     activity.finish();
                                 }
+                                if (activity instanceof UserIdChooseActivity){
+                                    activity.finish();
+                                }
                             }
 
                             finish();
@@ -611,8 +616,10 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
         //确定secondBitmap大小比例
         //  m.setScale(w / imgPerson.getWidth(), h / imgPerson.getHeight());
         //  m.setScale(w / secondBitmap.getWidth(), h / secondBitmap.getHeight());
+        RectF rectF = new RectF(w/5,h/4,w/5*4,h/4*3);
         canvas.drawBitmap(firstBitmap, 0, 0, null);
-        canvas.drawBitmap(secondBitmap, (w - secondBitmap.getWidth()) / 2, (h - secondBitmap.getHeight()) / 2, null);
+//        canvas.drawBitmap(secondBitmap, (w - secondBitmap.getWidth()) / 2, (h - secondBitmap.getHeight()) / 2, null);
+        canvas.drawBitmap(secondBitmap,null,rectF,null);
         firstBitmap.recycle();
         return b;
     }

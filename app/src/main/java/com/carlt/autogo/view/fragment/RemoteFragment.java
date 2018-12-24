@@ -22,7 +22,7 @@ import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
 import com.carlt.autogo.view.activity.car.DeviceActivateActivity;
-import com.carlt.autogo.view.activity.more.safety.FaceRecognitionSettingFirstActivity;
+import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -150,12 +150,22 @@ public class RemoteFragment extends BaseMvpFragment {
     private void certification(){
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         Intent intent = new Intent();
-        if (user.alipayAuth == 1&&user.identityAuth == 1){ //身份认证
-            intent.setClass(mContext,UserIdChooseActivity.class);
-        }else if (user.faceId == 0){//人脸认证
-            intent.setClass(mContext,FaceRecognitionSettingFirstActivity.class);
+        if (user.alipayAuth == 2) {
+            if (user.faceId == 0) {
+                intent.setClass(mContext, FaceAuthSettingActivity.class);
+                intent.putExtra(GlobalKey.FROM_ACTIVITY,FaceAuthSettingActivity.From_ALiPay_Auth);
+            }else {
+                intent.setClass(mContext, CarCertificationActivity.class);
+            }
+        }else if (user.identityAuth == 2){
+            if (user.faceId == 0) {
+                intent.setClass(mContext, FaceAuthSettingActivity.class);
+                intent.putExtra(GlobalKey.FROM_ACTIVITY,FaceAuthSettingActivity.From_ID_Card);
+            }else {
+                intent.setClass(mContext, CarCertificationActivity.class);
+            }
         }else {
-            intent.setClass(mContext, CarCertificationActivity.class);
+            intent.setClass(mContext, UserIdChooseActivity.class);
         }
         startActivity(intent);
     }

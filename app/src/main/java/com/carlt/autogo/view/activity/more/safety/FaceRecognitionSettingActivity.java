@@ -40,23 +40,49 @@ public class FaceRecognitionSettingActivity extends BaseMvpActivity {
         cbFaceLogin.setChecked(aBoolean);
         cbSafe.setChecked(safe);
         setTitleText("人脸识别");
-        UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        final UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         LogUtils.e("----" + user.toString());
-        if ((user.identityAuth == 2||user.alipayAuth == 2) && user.faceId != 0) {
-            cbFaceLogin.setEnabled(true);
-            cbSafe.setEnabled(true);
-            cbFaceLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, isChecked);
-                }
-            });
-            cbSafe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    SharepUtil.putBoolean(GlobalKey.PROCESS_SAFE_SWITCH, isChecked);
-                }
-            });
+        if (user.identityAuth == 2||user.alipayAuth == 2) {
+            if (user.faceId != 0){
+                cbFaceLogin.setEnabled(true);
+                cbSafe.setEnabled(true);
+                cbFaceLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        SharepUtil.putBoolean(GlobalKey.FACE_LOGIN_SWITCH, isChecked);
+                    }
+                });
+                cbSafe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        SharepUtil.putBoolean(GlobalKey.PROCESS_SAFE_SWITCH, isChecked);
+                    }
+                });
+            }else {
+                cbFaceLogin.setEnabled(false);
+                cbSafe.setEnabled(false);
+                cbSafe.setChecked(false);
+                cbFaceLogin.setChecked(false);
+                CommonDialog.createDialogNotitle(this, "温馨提示", "请进行身份认证", "取消", "确定", false, new CommonDialog.DialogWithTitleClick() {
+                    @Override
+                    public void onRightClick() {
+                        Intent intent = new Intent(FaceRecognitionSettingActivity.this, FaceAuthSettingActivity.class);
+                        if (user.identityAuth == 2) {
+                            intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ID_Card);
+                        }else {
+                            intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ALiPay_Auth);
+                        }
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLeftClick() {
+                        finish();
+                    }
+                });
+            }
+
         } else {
             cbFaceLogin.setEnabled(false);
             cbSafe.setEnabled(false);

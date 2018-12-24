@@ -44,8 +44,9 @@ public class GlobalKey {
     public static final int RegStateByOther = 2;
 
     //账号token 被踢 error key
-    public static final int TOKEN_OUT = 2066;
+    public static final int TOKEN_OUT = 1002;
 
+    public static final int TOKEN_ERROR = 1003; //TOKEN 错误
 
     public static final String CAR_INFO = "carInfo";    //车辆基本信息
 
