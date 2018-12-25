@@ -248,10 +248,21 @@
         >
 
         <TextView
+            android:id="@+id/tv1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="微信"
+            android:textColor="@color/colorEdtext"
+            android:textSize="14dp"
+            />
+
+        <TextView
+            android:id="@+id/tvWechatName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv1"
             android:textColor="@color/colorEdtext"
             android:textSize="14dp"
             />
@@ -262,8 +273,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:checked="false"
-            android:enabled="false"
-            android:clickable="false"/>
+            android:clickable="false"
+            android:enabled="false"/>
     </RelativeLayout>
 
     <View
@@ -283,10 +294,21 @@
         android:paddingRight="12dp">
 
         <TextView
+            android:id="@+id/tv2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="支付宝"
+            android:textColor="@color/colorEdtext"
+            android:textSize="14dp"
+            />
+
+        <TextView
+            android:id="@+id/tvAliPayName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv2"
             android:textColor="@color/colorEdtext"
             android:textSize="14dp"
             />
@@ -297,8 +319,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:checked="false"
-            android:enabled="false"
-            android:clickable="false"/>
+            android:clickable="false"
+            android:enabled="false"/>
     </RelativeLayout>
 
     <LinearLayout

@@ -113,15 +113,19 @@ public class SafetyActivity extends BaseMvpActivity {
      * 注销账户
      */
     @BindView(R.id.ll_safety_cancellation_account)
-    LinearLayout mLlCancellationAccount;
+    LinearLayout   mLlCancellationAccount;
     @BindView(R.id.cbWechatLogin)
-    CheckBox cbWechatLogin;
+    CheckBox       cbWechatLogin;
     @BindView(R.id.cbALiPayLogin)
-    CheckBox cbALiPayLogin;
+    CheckBox       cbALiPayLogin;
     @BindView(R.id.rlWechatSwitch)
     RelativeLayout rlWechatSwitch;
     @BindView(R.id.rlAliSwitch)
     RelativeLayout rlAliSwitch;
+    @BindView(R.id.tvAliPayName)
+    TextView       tvAliPayName;
+    @BindView(R.id.tvWechatName)
+    TextView       tvWechatName;
     //    private LogoutTipDialog mTipDialog;
     UserInfo user;
 
@@ -208,6 +212,8 @@ public class SafetyActivity extends BaseMvpActivity {
                                 } else if (listBean.openType == 2) {
                                     //微信绑定
                                     cbWechatLogin.setChecked(true);
+                                    String name = SharepUtil.getPreferences().getString(GlobalKey.WECHAT_NICKNAME,"");
+                                    tvWechatName.setText("(" + name + ")");
                                 }
                             }
                         }
@@ -250,6 +256,7 @@ public class SafetyActivity extends BaseMvpActivity {
                                 cbALiPayLogin.setChecked(false);
                             } else {
                                 cbWechatLogin.setChecked(false);
+                                tvWechatName.setText("");
                             }
                         } else {
                             showToast(error.msg);
@@ -266,7 +273,6 @@ public class SafetyActivity extends BaseMvpActivity {
 
     /**
      * 手机号中间*展示
-     *
      * @param mobile
      */
     private void showBindingPhone(String mobile) {
@@ -401,6 +407,8 @@ public class SafetyActivity extends BaseMvpActivity {
                 public void onComplete(Platform platform, final int i, HashMap<String, Object> hashMap) {
                     LogUtils.e(hashMap);
                     final String unionid = (String) hashMap.get("unionid");
+                    final String nickname = (String) hashMap.get("nickname");
+                    SharepUtil.put(GlobalKey.WECHAT_NICKNAME, nickname);
                     LogUtils.e(unionid);
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("openId", unionid);
@@ -413,6 +421,7 @@ public class SafetyActivity extends BaseMvpActivity {
                                     LogUtils.e(er);
                                     if (er.code == 0) {
                                         showToast("绑定成功");
+                                        tvWechatName.setText("(" + nickname + ")");
                                         cbWechatLogin.setChecked(true);
                                     } else {
                                         showToast(er.msg);
@@ -474,19 +483,20 @@ public class SafetyActivity extends BaseMvpActivity {
         }
     }
 
+    public static final String ALIPAY_USER_URL = "https://openapi.alipay.com/gateway.do";
     /**
      * 支付宝支付业务：入参app_id
      */
-    public static final String APPID = "2018090661230641";
+    public static final String APPID           = "2018090661230641";
 
     /**
      * 支付宝账户登录授权业务：入参pid值
      */
-    public static final String PID = "2088131979649430";
+    public static final String PID             = "2088131979649430";
     /**
      * 支付宝账户登录授权业务：入参target_id值
      */
-    public static final String TARGET_ID = System.currentTimeMillis() + "";
+    public static final String TARGET_ID       = System.currentTimeMillis() + "";
     /** 商户私钥，pkcs8格式 */
     /** 如下私钥，RSA2_PRIVATE 或者 RSA_PRIVATE 只需要填入一个 */
     /** 如果商户两个都设置了，优先使用 RSA2_PRIVATE */
@@ -495,9 +505,9 @@ public class SafetyActivity extends BaseMvpActivity {
     /**
      * 工具地址：https://doc.open.alipay.com/docs/doc.htm?treeId=291&articleId=106097&docType=1
      */
-    public static final String RSA2_PRIVATE = "";
+    public static final String RSA2_PRIVATE    = "";
     public static final String AliPay_Auth_URL = "http://test.linewin.cc:8888/app/User/AlipayAuth";
-    public static final String RSA_PRIVATE = "MIIEowIBAAKCAQEA1LUwhOyN1hOnrV3g2COyqpcUax8Fq1/0Xuy74ZphNpszZ21c\n" +
+    public static final String RSA_PRIVATE     = "MIIEowIBAAKCAQEA1LUwhOyN1hOnrV3g2COyqpcUax8Fq1/0Xuy74ZphNpszZ21c\n" +
             "2CnzXjzbD54kyW8EOOGeDPJvNsWrjyas9VsSxE0nXVARz3yyMBMtNEq42+o8Sd+F\n" +
             "l2PWHOc/uH3BjXM80kmqvonD5sGCYR4wRcThXKuZR9t0ahEZkiH5WNFghSyQEWXH\n" +
             "xvoNNfR5sElArZLS86Ey1R7U5Z0BX9GcRyfXldER61oA71EfOnLoh/XXjtr78ja4\n" +
@@ -525,7 +535,6 @@ public class SafetyActivity extends BaseMvpActivity {
 
     /**
      * 支付宝账户授权业务
-     *
      * @param
      */
     @SuppressLint("CheckResult")
@@ -548,12 +557,12 @@ public class SafetyActivity extends BaseMvpActivity {
          *
          * authInfo的获取必须来自服务端；
          */
-        boolean rsa2 = (RSA2_PRIVATE.length() > 0);
+        final boolean rsa2 = (RSA2_PRIVATE.length() > 0);
         Map<String, String> authInfoMap = OrderInfoUtil2_0.buildAuthInfoMap(PID, APPID, TARGET_ID, rsa2);
         String info = OrderInfoUtil2_0.buildOrderParam(authInfoMap);
 
         String privateKey = rsa2 ? RSA2_PRIVATE : RSA_PRIVATE;
-        String sign = OrderInfoUtil2_0.getSign(authInfoMap, privateKey, rsa2);
+        final String sign = OrderInfoUtil2_0.getSign(authInfoMap, privateKey, rsa2);
         final String authInfo = info + "&" + sign;
 
         Observable.create(new ObservableOnSubscribe<AuthResult>() {
@@ -562,6 +571,7 @@ public class SafetyActivity extends BaseMvpActivity {
                 AuthTask authTask = new AuthTask(SafetyActivity.this);
                 // 调用授权接口，获取授权结果
                 Map<String, String> result = authTask.authV2(authInfo, true);
+                LogUtils.e(result.toString());
                 AuthResult authResult = new AuthResult(result, true);
                 emitter.onNext(authResult);
 
@@ -593,7 +603,24 @@ public class SafetyActivity extends BaseMvpActivity {
                         Map<String, Object> map = new HashMap<>();
                         map.put("openType", 1);
                         map.put("openId", authResult.user_id);
+                        //                        Map<String, String> map1 = OrderInfoUtil2_0.buildAuthTokenMap(APPID, authResult.authCode, rsa2);
+                        //                        String s = OrderInfoUtil2_0.buildOrderParam(map1);
+                        //                        String tokenInfo = s + "&" + sign;
 
+                        //                        OkGo.<String>post(ALIPAY_USER_URL)
+                        //                                .upJson(tokenInfo)
+                        //                                .execute(new StringCallback() {
+                        //                                    @Override
+                        //                                    public void onSuccess(Response<String> response) {
+                        //                                        LogUtils.e(response.body());
+                        //                                    }
+                        //
+                        //                                    @Override
+                        //                                    public void onError(Response<String> response) {
+                        //                                        super.onError(response);
+                        //                                        LogUtils.e(response);
+                        //                                    }
+                        //                                });
                         return ClientFactory.def(UserService.class).shareLoginBind(map);
                     }
                 })

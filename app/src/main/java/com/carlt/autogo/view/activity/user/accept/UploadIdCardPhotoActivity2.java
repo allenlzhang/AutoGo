@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -611,7 +610,8 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
         Canvas canvas = new Canvas(b);
         float w = b.getWidth();
         float h = b.getHeight();
-        LogUtils.e(secondBitmap.getWidth() + "========" + secondBitmap.getHeight());
+//        LogUtils.e(secondBitmap.getWidth() + "========" + secondBitmap.getHeight());
+        LogUtils.e(firstBitmap.getWidth() + "========" + firstBitmap.getHeight());
         Matrix m = new Matrix();
         //确定secondBitmap大小比例
         //  m.setScale(w / imgPerson.getWidth(), h / imgPerson.getHeight());

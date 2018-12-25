@@ -65,6 +65,12 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
         String carName = getIntent().getStringExtra("carName");
         tvCarName.setText(carName);
         initQRCode(0);
+//        ivBaseBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
     }
 
     @Override
@@ -143,7 +149,8 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         LogUtils.e(carBaseInfo.transferId);
-                        Bitmap qrCode = QRCodeUtils.createQRCode(GlobalKey.TRANSFER_REGEX + carBaseInfo.transferId);
+                        long l = System.currentTimeMillis() / 1000;
+                        Bitmap qrCode = QRCodeUtils.createQRCode(GlobalKey.TRANSFER_REGEX + carBaseInfo.transferId + "&time=" + l);
                         ivQRCode.setImageBitmap(qrCode);
                         checkQrCodeState(carBaseInfo.transferId);
                         dialog.dismiss();
@@ -245,8 +252,9 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
 
     @Override
     public void finish() {
-        super.finish();
         setResult(RESULT_OK);
+        super.finish();
+
     }
 
     @Override

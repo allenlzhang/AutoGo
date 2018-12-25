@@ -161,7 +161,8 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                     @Override
                     public void accept(CarBaseInfo carInfo) throws Exception {
                         if (carInfo.id != 0) {
-                            Bitmap codeBit = QRCodeUtils.createQRCode(GlobalKey.AUTH_REGEX + carInfo.id);
+                            long l = System.currentTimeMillis() / 1000;
+                            Bitmap codeBit = QRCodeUtils.createQRCode(GlobalKey.AUTH_REGEX + carInfo.id + "&time=" + l);
                             checkQrCodeState(carInfo.id);
                             ivQRCode.setImageBitmap(codeBit);
                         } else {
@@ -288,12 +289,13 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == resCode) {
-                CommonDialog.createOneBtnDialog(AuthQRCodeActivity.this, "授权码已过期，请稍后重试", false, new CommonDialog.DialogOneBtnClick() {
-                    @Override
-                    public void onOneBtnClick() {
-                        finish();
-                    }
-                });
+                //                CommonDialog.createOneBtnDialog(AuthQRCodeActivity.this, "授权码已过期，请稍后重试", false, new CommonDialog.DialogOneBtnClick() {
+                //                    @Override
+                //                    public void onOneBtnClick() {
+                //                        finish();
+                //                    }
+                //                });
+                initQrCode(mCarId, mTimeType);
             }
         }
     }

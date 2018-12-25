@@ -20,6 +20,7 @@ public class GlobalKey {
     public static       String FACE_LOGIN_SWITCH   = "FACE_LOGIN_SWITCH";
     public static final String PROCESS_SAFE_SWITCH = "PROCESS_SAFE_SWITCH";
     public static       String Remote_Switch       = "Remote_Switch";
+    public static       String WECHAT_NICKNAME       = "nickname";
     public static String ID_CARD_NAME;
     public static final String IDENTITY_AUTH           = "IDENTITY_AUTH";
     public static final String REMOTE_SECRET_FREE_TIME = "REMOTE_SECRET_FREE_TIME";

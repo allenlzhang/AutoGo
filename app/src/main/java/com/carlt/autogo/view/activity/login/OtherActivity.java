@@ -179,7 +179,8 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 public void onComplete(Platform platform, final int i, HashMap<String, Object> hashMap) {
                     LogUtils.e(hashMap);
                     final String unionid = (String) hashMap.get("unionid");
-
+                    final String nickname = (String) hashMap.get("nickname");
+                    SharepUtil.put(GlobalKey.WECHAT_NICKNAME, nickname);
                     params.put("openId", unionid);
                     params.put("openType", 2);
                     params.put("loginType", GlobalKey.loginStateByOther);
@@ -347,7 +348,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                             ToastUtils.showShort(s);
                             startActivity(MainActivity.class);
                         }
-//                        startActivity(MainActivity.class);
+                        //                        startActivity(MainActivity.class);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

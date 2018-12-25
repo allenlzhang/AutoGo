@@ -155,7 +155,7 @@ public class MoreFragment extends BaseMvpFragment {
             llMoreRemoteUpdate.setVisibility(View.GONE);
             llMoreServiceRenewal.setVisibility(View.GONE);
             llMoreContact.setVisibility(View.GONE);
-        }else {
+        } else {
             llMoreLayout1.setVisibility(View.VISIBLE);
             llMoreRemoteUpdate.setVisibility(View.VISIBLE);
             llMoreServiceRenewal.setVisibility(View.VISIBLE);
@@ -166,18 +166,18 @@ public class MoreFragment extends BaseMvpFragment {
 
     @SuppressLint("CheckResult")
     private void getIdentity() {
-         ClientFactory.def(UserService.class).getIdentity(new HashMap<String, Object>())
-                 .subscribe(new Consumer<User>() {
-                     @Override
-                     public void accept(User user) throws Exception {
+        ClientFactory.def(UserService.class).getIdentity(new HashMap<String, Object>())
+                .subscribe(new Consumer<User>() {
+                    @Override
+                    public void accept(User user) throws Exception {
 
-                     }
-                 }, new Consumer<Throwable>() {
-                     @Override
-                     public void accept(Throwable throwable) throws Exception {
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
 
-                     }
-                 });
+                    }
+                });
     }
 
     @OnClick({R.id.ll_more_remote_update, R.id.ivAdd, R.id.ll_more_myCar, R.id.tv_more_edit_profile, R.id.ll_more_accounts_and_security, R.id.ll_more_log_out})
@@ -271,9 +271,14 @@ public class MoreFragment extends BaseMvpFragment {
             //            ToastUtils.showShort("扫码成功---" + result.getContents());
             //            Toast.makeText(this,"扫码成功",Toast.LENGTH_LONG).show();
             String contents = result.getContents();
+
             if (contents.startsWith(GlobalKey.AUTH_REGEX)) {
+                if (checkTime(contents))
+                    return;
                 checkQRCodeState(contents);
             } else if (contents.startsWith(GlobalKey.TRANSFER_REGEX)) {
+                if (checkTime(contents))
+                    return;
                 checkTransferCode(contents);
             } else {
                 Intent intent = new Intent(mActivity, ScannerResultActivity.class);
@@ -289,10 +294,26 @@ public class MoreFragment extends BaseMvpFragment {
 
     }
 
+    private boolean checkTime(String contents) {
+        String[] split1 = contents.split("&");
+
+//        String time = contents.substring(contents.indexOf("&") + 1);
+        String[] split = split1[1].split("=");
+        long currentTime = System.currentTimeMillis() / 1000;
+        Long aLong = Long.valueOf(split[1]);
+        if (currentTime - aLong > 300) {
+            //五分钟失效
+            ToastUtils.showShort("二维码已失效");
+            return true;
+        }
+        return false;
+    }
+
     @SuppressLint("CheckResult")
     private void checkTransferCode(String contents) {
 
-         String[] split = contents.split("=");
+        String[] split1 = contents.split("&");
+        String[] split = split1[0].split("=");
         final Integer id = Integer.valueOf(split[1]);
         HashMap<String, Object> map = new HashMap<>();
         map.put("transferId", id);
@@ -305,7 +326,7 @@ public class MoreFragment extends BaseMvpFragment {
                         if (carBaseInfo.status == 1) {
                             Intent intent = new Intent(mActivity, WaitAuthActivity.class);
                             intent.putExtra("code", 1);
-                            intent.putExtra("transferId",id);
+                            intent.putExtra("transferId", id);
                             startActivity(intent);
 
                         } else {
@@ -322,7 +343,8 @@ public class MoreFragment extends BaseMvpFragment {
 
     @SuppressLint("CheckResult")
     private void checkQRCodeState(String contents) {
-        String[] split = contents.split("=");
+        String[] split1 = contents.split("&");
+        String[] split = split1[0].split("=");
         final Integer id = Integer.valueOf(split[1]);
         LogUtils.e(id);
         HashMap<String, Object> map = new HashMap<>();
