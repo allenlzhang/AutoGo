@@ -65,8 +65,8 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
         dialog.show();
         Map<String,Object> params = new HashMap<>();
         params.put("carID",carId);
-        params.put("PIN",etPin.getText().toString());
-        params.put("deviceNum",etDeviceNum.getText().toString());
+        params.put("PIN",etPin.getText().toString().toUpperCase());
+        params.put("deviceNum",etDeviceNum.getText().toString().toUpperCase());
         ClientFactory.def(CarService.class).active(params)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -12,6 +12,7 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.CarBrandAdapter;
 import com.carlt.autogo.adapter.OnItemClickCallback;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.CarBrandInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
@@ -61,9 +62,7 @@ public class BrandCarActivity extends BaseMvpActivity {
                 @Override
                 public void onItemClick(Object o) {
                     CarBrandInfo.DataBean dataBean = (CarBrandInfo.DataBean) o;
-                    Intent intent1 = new Intent();
-                    intent1.putExtra("carName", dataBean.title);
-                    BrandCarActivity.this.setResult(RESULT_OK, intent1);
+                    showCommonDialog(dataBean);
                 }
             });
         }
@@ -113,10 +112,8 @@ public class BrandCarActivity extends BaseMvpActivity {
                                     @Override
                                     public void onItemClick(Object o) {
                                         CarBrandInfo.DataBean dataBean = (CarBrandInfo.DataBean) o;
-                                        Intent intent1 = new Intent();
-                                        intent1.putExtra("carName", dataBean);
-                                        BrandCarActivity.this.setResult(RESULT_OK,intent1);
-                                        BrandCarActivity.this.finish();
+                                        showCommonDialog(dataBean);
+
                                     }
                                 });
                             }
@@ -131,6 +128,23 @@ public class BrandCarActivity extends BaseMvpActivity {
                 });
         disposables.add(disposable);
 
+    }
+
+    private void showCommonDialog(final CarBrandInfo.DataBean dataBean){
+        CommonDialog.createTwoBtnDialog(this, "当前选择" + dataBean.title + "是否确定", true, new CommonDialog.DialogWithTitleClick() {
+            @Override
+            public void onLeftClick() {
+
+            }
+
+            @Override
+            public void onRightClick() {
+                Intent intent = new Intent();
+                intent.putExtra("carName",dataBean);
+                BrandCarActivity.this.setResult(RESULT_OK,intent);
+                BrandCarActivity.this.finish();
+            }
+        });
     }
 
 }

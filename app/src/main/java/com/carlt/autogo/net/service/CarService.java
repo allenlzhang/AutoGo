@@ -80,6 +80,10 @@ public interface CarService {
         //获取车辆信息
     Observable<CarInfo> getCarInfo(@Body Map<String, Integer> param);
 
+    @POST("Car/Modify")
+        //编辑车辆
+    Observable<BaseError> modify(@Body Map<String,Integer> param);
+
     @POST("CarAuth/CancelAuth")
         //取消授权
     Observable<BaseError> cancelAuth(@Body Map<String,Integer> param);

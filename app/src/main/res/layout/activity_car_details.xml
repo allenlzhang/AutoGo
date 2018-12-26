@@ -31,7 +31,9 @@
             android:layout_marginTop="@dimen/dp_10"
             android:orientation="vertical">
 
-            <LinearLayout style="@style/BaseOneLineLinerStyle">
+            <LinearLayout
+                android:id="@+id/llDetailsBuyTime"
+                style="@style/BaseOneLineLinerStyle">
 
                 <TextView
                     style="@style/BaseOneLineTxtLeftStyle"
@@ -44,7 +46,9 @@
 
             <View style="@style/BaseHorizontalLineStyle" />
 
-            <LinearLayout style="@style/BaseOneLineLinerStyle">
+            <LinearLayout
+                android:id="@+id/llDetailsServiceCycle"
+                style="@style/BaseOneLineLinerStyle">
 
                 <TextView
                     style="@style/BaseOneLineTxtLeftStyle"
@@ -57,7 +61,9 @@
 
             <View style="@style/BaseHorizontalLineStyle" />
 
-            <LinearLayout style="@style/BaseOneLineLinerStyle">
+            <LinearLayout
+                android:id="@+id/llDetailsServiceTime"
+                style="@style/BaseOneLineLinerStyle">
 
                 <TextView
                     style="@style/BaseOneLineTxtLeftStyle"
@@ -70,7 +76,9 @@
 
             <View style="@style/BaseHorizontalLineStyle" />
 
-            <LinearLayout style="@style/BaseOneLineLinerStyle">
+            <LinearLayout
+                android:id="@+id/llDetailsInsureTime"
+                style="@style/BaseOneLineLinerStyle">
 
                 <TextView
                     style="@style/BaseOneLineTxtLeftStyle"
@@ -83,7 +91,9 @@
 
             <View style="@style/BaseHorizontalLineStyle" />
 
-            <LinearLayout style="@style/BaseOneLineLinerStyle">
+            <LinearLayout
+                android:id="@+id/llDetailsAnnualTime"
+                style="@style/BaseOneLineLinerStyle">
 
                 <TextView
                     style="@style/BaseOneLineTxtLeftStyle"

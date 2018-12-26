@@ -12,9 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.carlt.autogo.R;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.utils.MyTimeUtils;
+import com.carlt.autogo.utils.gildutils.GlideCircleTransform;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,10 +39,13 @@ public class MyCarAdapter extends BaseAdapter {
 
     private int TYPE = MYCAR;
 
+    private Context mContext;
+
     private long time;
 
     public MyCarAdapter(Context context, List<AuthCarInfo.MyCarBean> list, int TYPE) {
         this.list = list;
+        this.mContext = context;
         inflater = LayoutInflater.from(context);
         this.TYPE = TYPE;
         try {
@@ -81,7 +87,14 @@ public class MyCarAdapter extends BaseAdapter {
         }
         AuthCarInfo.MyCarBean info = list.get(i);
         if (!TextUtils.isEmpty(info.carLogo)) {
-
+            Glide.with(mContext)
+                    .load(info.carLogo)
+                    .placeholder(R.mipmap.ic_dorcen_logo)
+                    .error(R.mipmap.ic_dorcen_logo)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .skipMemoryCache(true)
+                    .transform(new GlideCircleTransform(mContext))
+                    .into(holder.mLogo);
         } else {
             holder.mLogo.setImageResource(R.mipmap.ic_dorcen_logo);
         }

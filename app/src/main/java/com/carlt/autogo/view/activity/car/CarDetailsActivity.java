@@ -1,10 +1,15 @@
 package com.carlt.autogo.view.activity.car;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.icu.math.BigDecimal;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +18,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.common.dialog.DialogEdit;
 import com.carlt.autogo.entry.car.CarInfo;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.net.base.ClientFactory;
@@ -20,16 +26,16 @@ import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.utils.MyTimeUtils;
 import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.internal.schedulers.NewThreadScheduler;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -44,14 +50,24 @@ public class CarDetailsActivity extends BaseMvpActivity {
     LinearLayout llDetails;//详情模块
     @BindView(R.id.tvDetailsBuyTime)
     TextView tvDetailsBuyTime;//购车时间
+    @BindView(R.id.llDetailsBuyTime)
+    LinearLayout llDetailsBuyTime;
     @BindView(R.id.tvDetailsServiceCycle)
     TextView tvDetailsServiceCycle;//上次保养里程
+    @BindView(R.id.llDetailsServiceCycle)
+    LinearLayout llDetailsServiceCycle;
     @BindView(R.id.tvDetailsServiceTime)
     TextView tvDetailsServiceTime;//上次保养时间
+    @BindView(R.id.llDetailsServiceTime)
+    LinearLayout llDetailsServiceTime;
     @BindView(R.id.tvDetailsInsureTime)
     TextView tvDetailsInsureTime;//上次投保时间
+    @BindView(R.id.llDetailsInsureTime)
+    LinearLayout llDetailsInsureTime;
     @BindView(R.id.tvDetailsAnnualTime)
     TextView tvDetailsAnnualTime;//上次年检时间
+    @BindView(R.id.llDetailsAnnualTime)
+    LinearLayout llDetailsAnnualTime;
     @BindView(R.id.tvDetailsAuthStartTime)
     TextView tvDetailsAuthStartTime;//授权开始时间
     @BindView(R.id.llDetailsAuthStart)
@@ -91,6 +107,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
     @BindView(R.id.btnCancelAuth)
     Button btnCancelAuth;//取消授权
 
+
     private int type = DETAILS_TYPE1;
     private boolean isRemoteActivating = false;  //远程是否激活中
     public static final int DETAILS_TYPE1 = 0;  //未激活未授权（我的爱车详情）
@@ -100,6 +117,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
     private int remoteStatus = 0;   //远程状态
     private int authId = 0; //授权id
     private int carId = 0;  //车辆id
+
     @Override
     protected int getContentView() {
         return R.layout.activity_car_details;
@@ -112,6 +130,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
     }
 
     private void initView() {
+
         Intent intent = getIntent();
         type = intent.getIntExtra("type", DETAILS_TYPE1);
         isRemoteActivating = intent.getBooleanExtra("remoteActivating", false);
@@ -149,10 +168,12 @@ public class CarDetailsActivity extends BaseMvpActivity {
         }
         carId = intent.getIntExtra("id", 0);
         ClientGetCarInfo(carId);
+
     }
 
     /**
      * 获取车辆信息
+     *
      * @param id
      */
     @SuppressLint("CheckResult")
@@ -165,17 +186,69 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<CarInfo>() {
                     @Override
-                    public void accept(CarInfo carInfo){
+                    public void accept(CarInfo carInfo) {
                         dialog.dismiss();
-                        if (carInfo.err!=null){
+                        if (carInfo.err != null) {
                             ToastUtils.showShort(carInfo.err.msg);
-                        }else {
+                        } else {
                             setData(carInfo);
                         }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
-                    public void accept(Throwable throwable){
+                    public void accept(Throwable throwable) {
+                        dialog.dismiss();
+                        LogUtils.e(throwable);
+                    }
+                });
+    }
+
+    /**
+     * 编辑车辆
+     *
+     * @param buyDate 购买时间
+     * @param maintenMiles  保养里程
+     * @param maintenDate 上次保养时间
+     * @param applicantDate 上次投保时间
+     * @param inspectTime   上次年检时间
+     */
+    @SuppressLint("CheckResult")
+    private void modify(int buyDate, int maintenMiles,int maintenDate,int applicantDate,int inspectTime) {
+        dialog.show();
+        Map<String, Integer> map = new HashMap<>();
+        map.put("id", carId);
+        if (buyDate != 0) {
+            map.put("buyDate", buyDate);
+        }
+        if (maintenMiles != 0) {
+            map.put("maintenMiles", maintenMiles);
+        }
+        if (maintenDate !=0){
+            map.put("maintenDate",maintenDate);
+        }
+        if (applicantDate != 0){
+            map.put("applicantDate",applicantDate);
+        }
+        if (inspectTime != 0){
+            map.put("inspectTime",inspectTime);
+        }
+
+        ClientFactory.def(CarService.class).modify(map)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseError>() {
+                    @Override
+                    public void accept(BaseError baseError) throws Exception {
+                        dialog.dismiss();
+                        if (baseError.msg != null) {
+                            ToastUtils.showShort(baseError.msg);
+                        } else {
+                            ToastUtils.showShort("修改成功");
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
                         LogUtils.e(throwable);
                     }
@@ -186,7 +259,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
      * 取消授权
      */
     @SuppressLint("CheckResult")
-    private void cancelAuth(){
+    private void cancelAuth() {
         dialog.show();
         Map<String, Integer> map = new HashMap<>();
         map.put("id", authId);
@@ -196,10 +269,10 @@ public class CarDetailsActivity extends BaseMvpActivity {
                     @Override
                     public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
-                        if (baseError!=null) {
+                        if (baseError != null) {
                             if (!TextUtils.isEmpty(baseError.msg)) {
                                 ToastUtils.showShort(baseError.msg);
-                            }else {
+                            } else {
                                 ToastUtils.showShort("取消授权成功");
                                 finish();
                             }
@@ -214,42 +287,66 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 });
 
     }
-
-    @OnClick({R.id.llDetailsRemote, R.id.llDetailsRecorder, R.id.llDetailsMachine, R.id.btnCancelAuth})
+    int themeResId = AlertDialog.THEME_HOLO_LIGHT;
+    @OnClick({R.id.llDetailsRemote, R.id.llDetailsRecorder, R.id.llDetailsMachine, R.id.btnCancelAuth, R.id.llDetailsBuyTime
+            , R.id.llDetailsServiceCycle, R.id.llDetailsServiceTime, R.id.llDetailsInsureTime, R.id.llDetailsAnnualTime})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llDetailsRemote:
                 clickRemote();
                 break;
             case R.id.llDetailsRecorder:
+//                if (themeResId == AlertDialog.THEME_DEVICE_DEFAULT_DARK) {
+//                    showDatePicker(themeResId);
+//                    themeResId = AlertDialog.THEME_DEVICE_DEFAULT_LIGHT;
+//                }else if (themeResId == AlertDialog.THEME_DEVICE_DEFAULT_LIGHT){
+//                    showDatePicker(themeResId);
+//                    themeResId = AlertDialog.THEME_HOLO_DARK;
+//                }else if (themeResId == AlertDialog.THEME_HOLO_DARK){
+//                    showDatePicker(themeResId);
+//                    themeResId = AlertDialog.THEME_HOLO_LIGHT;
+//                }else if (themeResId == AlertDialog.THEME_HOLO_LIGHT){
+//                    showDatePicker(themeResId);
+//                    themeResId = AlertDialog.THEME_TRADITIONAL;
+//                }else if (themeResId == AlertDialog.THEME_TRADITIONAL){
+//                    showDatePicker(themeResId);
+//                    themeResId = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
+//                }
                 break;
             case R.id.llDetailsMachine:
+//                showEditDilog();
                 break;
             case R.id.btnCancelAuth:
                 cancelAuth();
+                break;
+            case R.id.llDetailsBuyTime:
+                showDatePicker(themeResId);
+                break;
+            case R.id.llDetailsServiceCycle:
+                showEditDilog();
+                break;
+            case R.id.llDetailsServiceTime:
+                showDatePicker(themeResId);
+                break;
+            case R.id.llDetailsInsureTime:
+                showDatePicker(themeResId);
+                break;
+            case R.id.llDetailsAnnualTime:
+                showDatePicker(themeResId);
                 break;
         }
     }
 
     private void clickRemote() {
-//        if (type == DETAILS_TYPE1) {
-//            if (isRemoteActivating) {
-//                startActivity(DeviceActivateEditActivity.class, false);
-//            } else {
-//                startActivity(DeviceActivateActivity.class, false);
-//            }
-//        } else {
-//            startActivity(ActivateStepActivity.class,false);
-//        }
         Intent intent = new Intent();
-        if (remoteStatus == 1){
-            intent.setClass(CarDetailsActivity.this,ActivateStepActivity.class);
-        }else if(remoteStatus == 2){
-            intent.setClass(CarDetailsActivity.this,ActivateStepActivity.class);
-        }else {
-            intent.setClass(CarDetailsActivity.this,DeviceActivateActivity.class);
+        if (remoteStatus == 1) {
+            intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
+        } else if (remoteStatus == 2) {
+            intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
+        } else {
+            intent.setClass(CarDetailsActivity.this, DeviceActivateActivity.class);
         }
-        intent.putExtra("carId",carId);
+        intent.putExtra("carId", carId);
         startActivity(intent);
     }
 
@@ -259,49 +356,92 @@ public class CarDetailsActivity extends BaseMvpActivity {
         if (!TextUtils.isEmpty(data.carName)) {
             tvDetailsModel.setText(data.carName);
         }
-        if (data.buyDate != 0){
-            tvDetailsBuyTime.setText(String.valueOf(data.buyDate));
+        if (data.buyDate != 0) {
+            tvDetailsBuyTime.setText(MyTimeUtils.formatDateGetDaySecend(data.buyDate));
+        } else {
+            tvDetailsBuyTime.setText("--");
         }
-        if (data.maintenMiles != 0){
+        if (data.maintenMiles != 0) {
             tvDetailsServiceCycle.setText(String.valueOf(data.maintenMiles));
+        } else {
+            tvDetailsServiceCycle.setText("--");
         }
-        if (data.maintenDate != 0){
-            tvDetailsServiceTime.setText(String.valueOf(data.maintenDate));
+        if (data.maintenDate != 0) {
+            tvDetailsServiceTime.setText(MyTimeUtils.formatDateGetDaySecend(data.maintenDate));
+        } else {
+            tvDetailsServiceTime.setText("--");
         }
-        if (data.applicantDate != 0){
-            tvDetailsInsureTime.setText(String.valueOf(data.applicantDate));
+        if (data.applicantDate != 0) {
+            tvDetailsInsureTime.setText(MyTimeUtils.formatDateGetDaySecend(data.applicantDate));
+        } else {
+            tvDetailsInsureTime.setText("--");
         }
-        if (data.inspectTime != 0){
-            tvDetailsAnnualTime.setText(String.valueOf(data.inspectTime));
+        if (data.inspectTime != 0) {
+            tvDetailsAnnualTime.setText(MyTimeUtils.formatDateGetDaySecend(data.inspectTime));
+        } else {
+            tvDetailsAnnualTime.setText("--");
         }
-        if (data.authStartTime != 0){
+        if (data.authStartTime != 0) {
             tvDetailsAuthStartTime.setText(MyTimeUtils.formatDateSecend(data.authStartTime));
+        } else {
+            tvDetailsAuthStartTime.setText("--");
         }
-        if (data.authEndTime != 0){
+        if (data.authEndTime != 0) {
             long time = 0;
             try {
                 time = MyTimeUtils.FORMAT_DAY.parse("2038-01-01").getTime();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if (data.authEndTime*1000 >= time){
+            if (data.authEndTime * 1000 >= time) {
                 tvDetailsAuthEndTime.setText("永久");
-            }else {
+            } else {
                 tvDetailsAuthEndTime.setText(MyTimeUtils.formatDateSecend(data.authEndTime));
             }
+        } else {
+            tvDetailsAuthEndTime.setText("--");
         }
-        if (data.remoteStatus == 1){
+        if (data.remoteStatus == 1) {
             ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activating_big);
             tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorActivating));
             tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorActivating));
-        }else if (data.remoteStatus == 2){
+        } else if (data.remoteStatus == 2) {
             ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activated_big);
             tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorBlue));
             tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorBlue));
-        }else {
+        } else {
             ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activate_big);
             tvDetailsRemote.setTextColor(getResources().getColor(R.color.textColorGray));
             tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.textColorGray));
         }
+
     }
+
+    private void showEditDilog() {
+        DialogEdit dialogEdit = new DialogEdit(this, R.style.DialogCommon);
+        dialogEdit.setTitle("上次保养里程");
+        dialogEdit.setOnClickListener(new DialogEdit.DialogConfirmClickListener() {
+            @SuppressLint("NewApi")
+            @Override
+            public void onClick(String txt) {
+//                DecimalFormat format = new DecimalFormat("0.00");
+//                txt = format.format(new BigDecimal(txt));
+//                modify(Integer.parseInt(txt));
+                ToastUtils.showShort(txt);
+            }
+        });
+        dialogEdit.show();
+    }
+
+    private void showDatePicker(int themeResId){
+        DatePickerDialog dialog = new DatePickerDialog(this, themeResId,new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                ToastUtils.showShort(i+"-"+i1+"-"+i2);
+            }
+        },2018,11,26);
+        dialog.show();
+        ToastUtils.showShort(themeResId+"");
+    }
+
 }
