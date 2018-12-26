@@ -4,8 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.icu.math.BigDecimal;
-import android.os.Bundle;
+
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +27,8 @@ import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -117,6 +118,11 @@ public class CarDetailsActivity extends BaseMvpActivity {
     private int remoteStatus = 0;   //远程状态
     private int authId = 0; //授权id
     private int carId = 0;  //车辆id
+
+    private static final int BUYTIME = 0;   //购车时间触发日期弹窗
+    private static final int MAINTENDATE = 1;//上次保养时间触发日期弹窗
+    private static final int APPLICANTDATE = 2;//上次投保时间触发日期弹窗
+    private static final int INSPECTTIME = 3;//上次年检时间触发日期弹窗
 
     @Override
     protected int getContentView() {
@@ -213,23 +219,24 @@ public class CarDetailsActivity extends BaseMvpActivity {
      * @param inspectTime   上次年检时间
      */
     @SuppressLint("CheckResult")
-    private void modify(int buyDate, int maintenMiles,int maintenDate,int applicantDate,int inspectTime) {
+    private void modify(final long buyDate, final long maintenMiles, final long maintenDate, final long applicantDate, final long inspectTime) {
         dialog.show();
-        Map<String, Integer> map = new HashMap<>();
+
+        Map<String, Object> map = new HashMap<>();
         map.put("id", carId);
-        if (buyDate != 0) {
+        if (buyDate >= 0) {
             map.put("buyDate", buyDate);
         }
-        if (maintenMiles != 0) {
+        if (maintenMiles >= 0) {
             map.put("maintenMiles", maintenMiles);
         }
-        if (maintenDate !=0){
+        if (maintenDate >=0){
             map.put("maintenDate",maintenDate);
         }
-        if (applicantDate != 0){
+        if (applicantDate >= 0){
             map.put("applicantDate",applicantDate);
         }
-        if (inspectTime != 0){
+        if (inspectTime >= 0){
             map.put("inspectTime",inspectTime);
         }
 
@@ -244,6 +251,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
                             ToastUtils.showShort(baseError.msg);
                         } else {
                             ToastUtils.showShort("修改成功");
+                            modifySuccess(buyDate,maintenMiles,maintenDate,applicantDate,inspectTime);
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -253,6 +261,24 @@ public class CarDetailsActivity extends BaseMvpActivity {
                         LogUtils.e(throwable);
                     }
                 });
+    }
+
+    public void modifySuccess(long buyDate, long maintenMiles,long maintenDate,long applicantDate,long inspectTime) {
+        if (buyDate >= 0) {
+            tvDetailsBuyTime.setText(MyTimeUtils.formatDateSecend(buyDate));
+        }
+        if (maintenMiles >= 0) {
+            tvDetailsServiceCycle.setText(String.valueOf(maintenMiles));
+        }
+        if (maintenDate >=0){
+            tvDetailsServiceTime.setText(MyTimeUtils.formatDateSecend(maintenDate));
+        }
+        if (applicantDate >= 0){
+            tvDetailsInsureTime.setText(MyTimeUtils.formatDateSecend(applicantDate));
+        }
+        if (inspectTime >= 0){
+            tvDetailsAnnualTime.setText(MyTimeUtils.formatDateSecend(inspectTime));
+        }
     }
 
     /**
@@ -296,22 +322,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 clickRemote();
                 break;
             case R.id.llDetailsRecorder:
-//                if (themeResId == AlertDialog.THEME_DEVICE_DEFAULT_DARK) {
-//                    showDatePicker(themeResId);
-//                    themeResId = AlertDialog.THEME_DEVICE_DEFAULT_LIGHT;
-//                }else if (themeResId == AlertDialog.THEME_DEVICE_DEFAULT_LIGHT){
-//                    showDatePicker(themeResId);
-//                    themeResId = AlertDialog.THEME_HOLO_DARK;
-//                }else if (themeResId == AlertDialog.THEME_HOLO_DARK){
-//                    showDatePicker(themeResId);
-//                    themeResId = AlertDialog.THEME_HOLO_LIGHT;
-//                }else if (themeResId == AlertDialog.THEME_HOLO_LIGHT){
-//                    showDatePicker(themeResId);
-//                    themeResId = AlertDialog.THEME_TRADITIONAL;
-//                }else if (themeResId == AlertDialog.THEME_TRADITIONAL){
-//                    showDatePicker(themeResId);
-//                    themeResId = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
-//                }
+//                showDatePicker("--",themeResId);
                 break;
             case R.id.llDetailsMachine:
 //                showEditDilog();
@@ -320,19 +331,19 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 cancelAuth();
                 break;
             case R.id.llDetailsBuyTime:
-                showDatePicker(themeResId);
+                showDatePicker(BUYTIME,tvDetailsBuyTime.getText().toString());
                 break;
             case R.id.llDetailsServiceCycle:
                 showEditDilog();
                 break;
             case R.id.llDetailsServiceTime:
-                showDatePicker(themeResId);
+                showDatePicker(MAINTENDATE,tvDetailsServiceTime.getText().toString());
                 break;
             case R.id.llDetailsInsureTime:
-                showDatePicker(themeResId);
+                showDatePicker(APPLICANTDATE,tvDetailsInsureTime.getText().toString());
                 break;
             case R.id.llDetailsAnnualTime:
-                showDatePicker(themeResId);
+                showDatePicker(INSPECTTIME,tvDetailsAnnualTime.getText().toString());
                 break;
         }
     }
@@ -427,21 +438,46 @@ public class CarDetailsActivity extends BaseMvpActivity {
 //                DecimalFormat format = new DecimalFormat("0.00");
 //                txt = format.format(new BigDecimal(txt));
 //                modify(Integer.parseInt(txt));
-                ToastUtils.showShort(txt);
+                modify(-1,Long.valueOf(txt),-1,-1,-1);
+//                ToastUtils.showShort(txt);
             }
         });
         dialogEdit.show();
     }
 
-    private void showDatePicker(int themeResId){
-        DatePickerDialog dialog = new DatePickerDialog(this, themeResId,new DatePickerDialog.OnDateSetListener() {
+    private void showDatePicker(final int modifyType, String date){
+        final Calendar calendar = Calendar.getInstance();
+        try {
+            Date date1 = MyTimeUtils.FORMAT_DAY.parse(date);
+            calendar.setTime(date1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        DatePickerDialog dialog = new DatePickerDialog(this, AlertDialog.THEME_HOLO_LIGHT,new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                ToastUtils.showShort(i+"-"+i1+"-"+i2);
+                calendar.set(i,i1-1,i2);
+                modifyType(modifyType,calendar.getTimeInMillis()/1000);
             }
-        },2018,11,26);
+        },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
         dialog.show();
-        ToastUtils.showShort(themeResId+"");
     }
 
+    private void modifyType(int modifyType,long date){
+        switch (modifyType){
+            case BUYTIME:
+                modify(date,-1,-1,-1,-1);
+                break;
+            case MAINTENDATE:
+                modify(-1,-1,date,-1,-1);
+                break;
+            case APPLICANTDATE:
+                modify(-1,-1,-1,date,-1);
+                break;
+            case INSPECTTIME:
+                modify(-1,-1,-1,-1,date);
+                break;
+
+        }
+    }
 }

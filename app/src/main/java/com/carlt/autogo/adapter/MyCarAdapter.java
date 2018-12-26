@@ -11,17 +11,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.carlt.autogo.R;
+import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.utils.MyTimeUtils;
 import com.carlt.autogo.utils.gildutils.GlideCircleTransform;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -87,7 +85,7 @@ public class MyCarAdapter extends BaseAdapter {
         }
         AuthCarInfo.MyCarBean info = list.get(i);
         if (!TextUtils.isEmpty(info.carLogo)) {
-            Glide.with(mContext)
+            Glide.with(AutoGoApp.mAppContext)
                     .load(info.carLogo)
                     .placeholder(R.mipmap.ic_dorcen_logo)
                     .error(R.mipmap.ic_dorcen_logo)

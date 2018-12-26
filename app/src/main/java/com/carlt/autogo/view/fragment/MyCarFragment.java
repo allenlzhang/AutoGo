@@ -106,7 +106,7 @@ public class MyCarFragment extends BaseMvpFragment {
             if (list.size() >= 5) {
                 fragmentIvMyCarAdd.setVisibility(View.GONE);
             }
-            adapter = new MyCarAdapter(getContext(), list, MyCarAdapter.MYCAR);
+            adapter = new MyCarAdapter(mContext, list, MyCarAdapter.MYCAR);
             fragmentLvMyCar.setAdapter(adapter);
             fragmentLvMyCar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

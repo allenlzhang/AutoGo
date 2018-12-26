@@ -82,7 +82,7 @@ public interface CarService {
 
     @POST("Car/Modify")
         //编辑车辆
-    Observable<BaseError> modify(@Body Map<String,Integer> param);
+    Observable<BaseError> modify(@Body Map<String,Object> param);
 
     @POST("CarAuth/CancelAuth")
         //取消授权
