@@ -144,7 +144,7 @@ public class HomeFragment extends BaseMvpFragment {
                     adapter.setSelected_position(tag);
                     singletonCar.setCarTag(tag);
                     tvCarType.setText(dataBean.carName);
-                    singletonCar.setMyCarBean(dataBean);
+                    singletonCar.setCarBean(dataBean);
                 }
             });
             int tag = singletonCar.getCarTag();
@@ -153,10 +153,10 @@ public class HomeFragment extends BaseMvpFragment {
             } else {
                 if (info.myCar != null && info.myCar.size() > 0) {
                     tvCarType.setText(info.myCar.get(0).carName);
-                    singletonCar.setMyCarBean(info.myCar.get(0));
+                    singletonCar.setCarBean(info.myCar.get(0));
                 } else if (info.authCar != null && info.authCar.size() > 0) {
                     tvCarType.setText(info.authCar.get(0).carName);
-                    singletonCar.setMyCarBean(info.authCar.get(0));
+                    singletonCar.setCarBean(info.authCar.get(0));
                 } else {
                     tvCarType.setText("品牌车型");
                 }
@@ -175,7 +175,7 @@ public class HomeFragment extends BaseMvpFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (singletonCar.getMyCarBean() == null) {
+        if (singletonCar.getCarBean() == null) {
             adapter = new CarPopupAdapter(null, mContext);
             tvCarType.setText("品牌车型");
         }
@@ -254,7 +254,7 @@ public class HomeFragment extends BaseMvpFragment {
 
     private boolean isActivated() {
         // 远程激活状态,设备激活状态 0-未激活  1-正在激活  2-激活成功  3-激活失败
-        AuthCarInfo.MyCarBean dataBean = singletonCar.getMyCarBean();
+        AuthCarInfo.MyCarBean dataBean = singletonCar.getCarBean();
         if (dataBean != null) {
             int remoteStatus = dataBean.remoteStatus;
             if (remoteStatus == 0) {

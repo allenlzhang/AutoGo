@@ -20,18 +20,18 @@ public class SingletonCar {
         return singletonCar;
     }
 
-    private AuthCarInfo.MyCarBean myCarBean;    //当前车辆基本信息
+    private AuthCarInfo.MyCarBean carBean;    //当前车辆基本信息
 
     private boolean isBound;    //是否绑定车辆
 
     private int carTag;     //当前车辆标记
 
-    public AuthCarInfo.MyCarBean getMyCarBean() {
-        return myCarBean;
+    public AuthCarInfo.MyCarBean getCarBean() {
+        return carBean;
     }
 
-    public void setMyCarBean(AuthCarInfo.MyCarBean myCarBean) {
-        this.myCarBean = myCarBean;
+    public void setCarBean(AuthCarInfo.MyCarBean carBean) {
+        this.carBean = carBean;
     }
 
     public boolean isBound() {
@@ -51,7 +51,7 @@ public class SingletonCar {
     }
 
     public void initCar(){
-        myCarBean = null;
+        carBean = null;
         isBound = false;
         carTag = 0;
     }

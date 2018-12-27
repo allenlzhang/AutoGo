@@ -209,10 +209,10 @@ public class WaitAuthActivity extends BaseMvpActivity {
         if (info != null) {
             if (info.myCar!= null&&info.myCar.size() > 0 ){
                 SingletonCar.getInstance().setBound(true);
-                SingletonCar.getInstance().setMyCarBean(info.myCar.get(0));
+                SingletonCar.getInstance().setCarBean(info.myCar.get(0));
             }else if (info.authCar != null && info.authCar.size() > 0) {
                 SingletonCar.getInstance().setBound(true);
-                SingletonCar.getInstance().setMyCarBean(info.authCar.get(0));
+                SingletonCar.getInstance().setCarBean(info.authCar.get(0));
             } else {
                 SingletonCar.getInstance().setBound(false);
             }

@@ -73,7 +73,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("生成二维码");
-        carInfo = SingletonCar.getInstance().getMyCarBean();
+        carInfo = SingletonCar.getInstance().getCarBean();
         tvCarName.setText(carInfo.carName);
         tvTime.setText("1小时");
         initQrCode(0, 0);
@@ -138,7 +138,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
 
     @SuppressLint("CheckResult")
     private void initQrCode(int carId, int authType) {
-        carInfo = SingletonCar.getInstance().getMyCarBean();
+        carInfo = SingletonCar.getInstance().getCarBean();
 
 
         dialog.show();

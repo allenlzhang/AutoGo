@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bigkoo.pickerview.TimePickerView;
+import com.bigkoo.pickerview.listener.CustomListener;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
@@ -25,6 +27,7 @@ import com.carlt.autogo.utils.MyTimeUtils;
 import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -117,11 +120,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
     private             int     authId             = 0; //授权id
     private             int     carId              = 0;  //车辆id
 
-    private static final int BUYTIME       = 0;   //购车时间触发日期弹窗
-    private static final int MAINTENDATE   = 1;//上次保养时间触发日期弹窗
-    private static final int APPLICANTDATE = 2;//上次投保时间触发日期弹窗
-    private static final int INSPECTTIME   = 3;//上次年检时间触发日期弹窗
-
+    private TimePickerView pvCustomTime;
     @Override
     protected int getContentView() {
         return R.layout.activity_car_details;
@@ -168,6 +167,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
             case DETAILS_TYPE4:
                 llDetailsDevice.setVisibility(View.GONE);
                 btnCancelAuth.setVisibility(View.GONE);
+                llDetails.setClickable(true);
                 break;
         }
         carId = intent.getIntExtra("id", 0);
@@ -266,19 +266,19 @@ public class CarDetailsActivity extends BaseMvpActivity {
 
     public void modifySuccess(long buyDate, long maintenMiles, long maintenDate, long applicantDate, long inspectTime) {
         if (buyDate >= 0) {
-            tvDetailsBuyTime.setText(MyTimeUtils.formatDateSecend(buyDate));
+            tvDetailsBuyTime.setText(MyTimeUtils.formatDateGetDaySecend(buyDate));
         }
         if (maintenMiles >= 0) {
             tvDetailsServiceCycle.setText(String.valueOf(maintenMiles));
         }
-        if (maintenDate >= 0) {
-            tvDetailsServiceTime.setText(MyTimeUtils.formatDateSecend(maintenDate));
+        if (maintenDate >=0){
+            tvDetailsServiceTime.setText(MyTimeUtils.formatDateGetDaySecend(maintenDate));
         }
-        if (applicantDate >= 0) {
-            tvDetailsInsureTime.setText(MyTimeUtils.formatDateSecend(applicantDate));
+        if (applicantDate >= 0){
+            tvDetailsInsureTime.setText(MyTimeUtils.formatDateGetDaySecend(applicantDate));
         }
-        if (inspectTime >= 0) {
-            tvDetailsAnnualTime.setText(MyTimeUtils.formatDateSecend(inspectTime));
+        if (inspectTime >= 0){
+            tvDetailsAnnualTime.setText(MyTimeUtils.formatDateGetDaySecend(inspectTime));
         }
     }
 
@@ -314,9 +314,6 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 });
 
     }
-
-    int themeResId = AlertDialog.THEME_HOLO_LIGHT;
-
     @OnClick({R.id.llDetailsRemote, R.id.llDetailsRecorder, R.id.llDetailsMachine, R.id.btnCancelAuth, R.id.llDetailsBuyTime
             , R.id.llDetailsServiceCycle, R.id.llDetailsServiceTime, R.id.llDetailsInsureTime, R.id.llDetailsAnnualTime})
     public void onViewClicked(View view) {
@@ -334,19 +331,24 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 cancelAuth();
                 break;
             case R.id.llDetailsBuyTime:
-                showDatePicker(BUYTIME, tvDetailsBuyTime.getText().toString());
+//                showDatePicker(BUYTIME,tvDetailsBuyTime.getText().toString());
+                initCustomTimePicker(tvDetailsBuyTime.getText().toString());
+                pvCustomTime.show(tvDetailsBuyTime);
                 break;
             case R.id.llDetailsServiceCycle:
                 showEditDilog();
                 break;
             case R.id.llDetailsServiceTime:
-                showDatePicker(MAINTENDATE, tvDetailsServiceTime.getText().toString());
+                initCustomTimePicker(tvDetailsServiceTime.getText().toString());
+                pvCustomTime.show(tvDetailsServiceTime);
                 break;
             case R.id.llDetailsInsureTime:
-                showDatePicker(APPLICANTDATE, tvDetailsInsureTime.getText().toString());
+                initCustomTimePicker(tvDetailsInsureTime.getText().toString());
+                pvCustomTime.show(tvDetailsInsureTime);
                 break;
             case R.id.llDetailsAnnualTime:
-                showDatePicker(INSPECTTIME, tvDetailsAnnualTime.getText().toString());
+                initCustomTimePicker(tvDetailsAnnualTime.getText().toString());
+                pvCustomTime.show(tvDetailsAnnualTime);
                 break;
         }
     }
@@ -473,49 +475,91 @@ public class CarDetailsActivity extends BaseMvpActivity {
             @SuppressLint("NewApi")
             @Override
             public void onClick(String txt) {
-                //                DecimalFormat format = new DecimalFormat("0.00");
-                //                txt = format.format(new BigDecimal(txt));
-                //                modify(Integer.parseInt(txt));
                 modify(-1, Long.valueOf(txt), -1, -1, -1);
-                //                ToastUtils.showShort(txt);
             }
         });
         dialogEdit.show();
     }
 
-    private void showDatePicker(final int modifyType, String date) {
-        final Calendar calendar = Calendar.getInstance();
-        try {
-            Date date1 = MyTimeUtils.FORMAT_DAY.parse(date);
-            calendar.setTime(date1);
-        } catch (ParseException e) {
-            e.printStackTrace();
+    private void initCustomTimePicker(String date) {
+
+        /**
+         * @description
+         *
+         * 注意事项：
+         * 1.自定义布局中，id为 optionspicker 或者 timepicker 的布局以及其子控件必须要有，否则会报空指针.
+         * 具体可参考demo 里面的两个自定义layout布局。
+         * 2.因为系统Calendar的月份是从0-11的,所以如果是调用Calendar的set方法来设置时间,月份的范围也要是从0-11
+         * setRangDate方法控制起始终止时间(如果不设置范围，则使用默认时间1900-2100年，此段代码可注释)
+         */
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar selectedDate = Calendar.getInstance();//系统当前时间
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        Date time = endDate.getTime();
+        if (TextUtils.isEmpty(date)||date.equals("--")) {
+            date = dateFormat.format(time);
         }
-        DatePickerDialog dialog = new DatePickerDialog(this, AlertDialog.THEME_HOLO_LIGHT, new DatePickerDialog.OnDateSetListener() {
+        startDate.set(2000,0,1);
+        String format = dateFormat.format(time);
+        String[] split = format.split("-");
+        String[] selectedSplit = date.split("-");
+        selectedDate.set(Integer.parseInt(selectedSplit[0]), Integer.parseInt(selectedSplit[1]) - 1, Integer.parseInt(selectedSplit[2]));
+        endDate.set(Integer.valueOf(split[0]), Integer.valueOf(split[1]) - 1, Integer.valueOf(split[2]));
+        //时间选择器 ，自定义布局
+        pvCustomTime = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                calendar.set(i, i1 - 1, i2);
-                modifyType(modifyType, calendar.getTimeInMillis() / 1000);
+            public void onTimeSelect(Date date, View v) {//选中事件回调
+                LogUtils.e(date.getTime()+"");
+                switch (v.getId()){
+                    case R.id.tvDetailsBuyTime:
+                        modify(date.getTime()/1000,-1,-1,-1,-1);
+                        break;
+                    case R.id.tvDetailsServiceTime:
+                        modify(-1,-1,date.getTime()/1000,-1,-1);
+                        break;
+                    case R.id.tvDetailsInsureTime:
+                        modify(-1,-1,-1,date.getTime()/1000,-1);
+                        break;
+                    case R.id.tvDetailsAnnualTime:
+                        modify(-1,-1,-1,-1,date.getTime()/1000);
+                        break;
+                }
             }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        dialog.show();
-    }
+        })
 
-    private void modifyType(int modifyType, long date) {
-        switch (modifyType) {
-            case BUYTIME:
-                modify(date, -1, -1, -1, -1);
-                break;
-            case MAINTENDATE:
-                modify(-1, -1, date, -1, -1);
-                break;
-            case APPLICANTDATE:
-                modify(-1, -1, -1, date, -1);
-                break;
-            case INSPECTTIME:
-                modify(-1, -1, -1, -1, date);
-                break;
-
-        }
+                .setDate(selectedDate)
+//                .setLayoutRes(R.layout.time_edit_dialog, new CustomListener() {
+//                    @Override
+//                    public void customLayout(View v) {
+//                        final TextView _OK = (TextView) v.findViewById(R.id.sex_change_OK);
+//                        final TextView _cancel = (TextView) v.findViewById(R.id.sex_change_cancel);
+//                        _OK.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                pvCustomTime.returnData();
+//                                pvCustomTime.dismiss();
+//                            }
+//                        });
+//
+//                        _cancel.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                pvCustomTime.dismiss();
+//                            }
+//                        });
+//
+//                    }
+//                })
+                .setSubCalSize(14)
+                .setContentSize(18)
+                .setRangDate(startDate,endDate)
+                .setType(new boolean[]{true, true, true, false, false, false})
+                .setLabel("年", "月", "日", "时", "分", "秒")
+                .setLineSpacingMultiplier(2.0f)
+                .setTextXOffset(0, 0, 0, 40, 0, -40)
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .setDividerColor(0xFFFFFFFF)
+                .build();
     }
 }

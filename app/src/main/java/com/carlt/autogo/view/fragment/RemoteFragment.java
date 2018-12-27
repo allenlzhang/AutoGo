@@ -175,7 +175,7 @@ public class RemoteFragment extends BaseMvpFragment {
      * @return
      */
     private boolean isActivated(){
-        AuthCarInfo.MyCarBean carInfo = singletonCar.getMyCarBean();
+        AuthCarInfo.MyCarBean carInfo = singletonCar.getCarBean();
         if (carInfo!=null) {
             int remoteStatus = carInfo.remoteStatus;
             if (remoteStatus == 0) {
