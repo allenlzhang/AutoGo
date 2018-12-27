@@ -26,7 +26,6 @@ import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.gildutils.GlideCircleTransform;
-import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 import com.carlt.autogo.view.activity.car.MyCarActivity;
 import com.carlt.autogo.view.activity.more.safety.SafetyActivity;
 import com.carlt.autogo.view.activity.more.transfer.AuthQRCodeActivity;
@@ -203,7 +202,7 @@ public class MoreFragment extends BaseMvpFragment {
                 showPop(ivAdd);
                 break;
             case R.id.ll_more_remote_update:
-                startActivity(new Intent(mActivity, ActivateStepActivity.class));
+//                startActivity(new Intent(mActivity, ActivateStepActivity.class));
                 break;
             default:
         }

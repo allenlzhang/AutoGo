@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +24,6 @@ import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.utils.MyTimeUtils;
 import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,7 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -50,31 +47,31 @@ public class CarDetailsActivity extends BaseMvpActivity {
     @BindView(R.id.llDetails)
     LinearLayout llDetails;//详情模块
     @BindView(R.id.tvDetailsBuyTime)
-    TextView tvDetailsBuyTime;//购车时间
+    TextView     tvDetailsBuyTime;//购车时间
     @BindView(R.id.llDetailsBuyTime)
     LinearLayout llDetailsBuyTime;
     @BindView(R.id.tvDetailsServiceCycle)
-    TextView tvDetailsServiceCycle;//上次保养里程
+    TextView     tvDetailsServiceCycle;//上次保养里程
     @BindView(R.id.llDetailsServiceCycle)
     LinearLayout llDetailsServiceCycle;
     @BindView(R.id.tvDetailsServiceTime)
-    TextView tvDetailsServiceTime;//上次保养时间
+    TextView     tvDetailsServiceTime;//上次保养时间
     @BindView(R.id.llDetailsServiceTime)
     LinearLayout llDetailsServiceTime;
     @BindView(R.id.tvDetailsInsureTime)
-    TextView tvDetailsInsureTime;//上次投保时间
+    TextView     tvDetailsInsureTime;//上次投保时间
     @BindView(R.id.llDetailsInsureTime)
     LinearLayout llDetailsInsureTime;
     @BindView(R.id.tvDetailsAnnualTime)
-    TextView tvDetailsAnnualTime;//上次年检时间
+    TextView     tvDetailsAnnualTime;//上次年检时间
     @BindView(R.id.llDetailsAnnualTime)
     LinearLayout llDetailsAnnualTime;
     @BindView(R.id.tvDetailsAuthStartTime)
-    TextView tvDetailsAuthStartTime;//授权开始时间
+    TextView     tvDetailsAuthStartTime;//授权开始时间
     @BindView(R.id.llDetailsAuthStart)
     LinearLayout llDetailsAuthStart;
     @BindView(R.id.tvDetailsAuthEndTime)
-    TextView tvDetailsAuthEndTime;//授权结束时间
+    TextView     tvDetailsAuthEndTime;//授权结束时间
     @BindView(R.id.llDetailsAuthEnd)
     LinearLayout llDetailsAuthEnd;
 
@@ -83,46 +80,47 @@ public class CarDetailsActivity extends BaseMvpActivity {
     @BindView(R.id.llDetailsRemote)
     LinearLayout llDetailsRemote;//远程
     @BindView(R.id.ivDetailsRemoteState)
-    ImageView ivDetailsRemoteState;//远程激活icon
+    ImageView    ivDetailsRemoteState;//远程激活icon
     @BindView(R.id.tvDetailsRemoteState)
-    TextView tvDetailsRemoteState;//远程激活状态
+    TextView     tvDetailsRemoteState;//远程激活状态
     @BindView(R.id.llDetailsRecorder)
     LinearLayout llDetailsRecorder;//记录仪
     @BindView(R.id.ivDetailsRecorderState)
-    ImageView ivDetailsRecorderState;//记录仪icon
+    ImageView    ivDetailsRecorderState;//记录仪icon
     @BindView(R.id.tvDetailsRecorderState)
-    TextView tvDetailsRecorderState;//记录仪状态
+    TextView     tvDetailsRecorderState;//记录仪状态
     @BindView(R.id.llDetailsMachine)
     LinearLayout llDetailsMachine;//车机
     @BindView(R.id.ivDetailsMachineState)
-    ImageView ivDetailsMachineState;//车机icon
+    ImageView    ivDetailsMachineState;//车机icon
     @BindView(R.id.tvDetailsMachineState)
-    TextView tvDetailsMachineState;//车机状态
+    TextView     tvDetailsMachineState;//车机状态
     @BindView(R.id.tvDetailsRemote)
-    TextView tvDetailsRemote;//远程txt
+    TextView     tvDetailsRemote;//远程txt
     @BindView(R.id.tvDetailsRecorder)
-    TextView tvDetailsRecorder;//记录仪txt
+    TextView     tvDetailsRecorder;//记录仪txt
     @BindView(R.id.tvDetailsMachine)
-    TextView tvDetailsMachine;//车机txt
+    TextView     tvDetailsMachine;//车机txt
 
     @BindView(R.id.btnCancelAuth)
     Button btnCancelAuth;//取消授权
 
 
-    private int type = DETAILS_TYPE1;
-    private boolean isRemoteActivating = false;  //远程是否激活中
-    public static final int DETAILS_TYPE1 = 0;  //未激活未授权（我的爱车详情）
-    public static final int DETAILS_TYPE2 = 1;  //已激活未授权（我的爱车详情）
-    public static final int DETAILS_TYPE3 = 2;  //已激活授权中（我的爱车详情）
-    public static final int DETAILS_TYPE4 = 3;  //（被授权车辆详情）
-    private int remoteStatus = 0;   //远程状态
-    private int authId = 0; //授权id
-    private int carId = 0;  //车辆id
+    private             int     type               = DETAILS_TYPE1;
+    private             boolean isRemoteActivating = false;  //远程是否激活中
+    public static final int     DETAILS_TYPE1      = 0;  //未激活未授权（我的爱车详情）
+    public static final int     DETAILS_TYPE2      = 1;  //已激活未授权（我的爱车详情）
+    public static final int     DETAILS_TYPE3      = 2;  //已激活授权中（我的爱车详情）
+    public static final int     DETAILS_TYPE4      = 3;  //（被授权车辆详情）
+    private             int     remoteStatus       = -1;   //远程状态
+    private             int     withTbox           = -1;   //前后装
+    private             int     authId             = 0; //授权id
+    private             int     carId              = 0;  //车辆id
 
-    private static final int BUYTIME = 0;   //购车时间触发日期弹窗
-    private static final int MAINTENDATE = 1;//上次保养时间触发日期弹窗
+    private static final int BUYTIME       = 0;   //购车时间触发日期弹窗
+    private static final int MAINTENDATE   = 1;//上次保养时间触发日期弹窗
     private static final int APPLICANTDATE = 2;//上次投保时间触发日期弹窗
-    private static final int INSPECTTIME = 3;//上次年检时间触发日期弹窗
+    private static final int INSPECTTIME   = 3;//上次年检时间触发日期弹窗
 
     @Override
     protected int getContentView() {
@@ -144,28 +142,28 @@ public class CarDetailsActivity extends BaseMvpActivity {
             case DETAILS_TYPE1:
                 llDetails.setVisibility(View.GONE);
                 btnCancelAuth.setVisibility(View.GONE);
-//                if (isRemoteActivating) {
-//                    ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activating_big);
-//                    tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorActivating));
-//                    tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorActivating));
-//                } else {
-//                    ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activate_big);
-//                    tvDetailsRemote.setTextColor(getResources().getColor(R.color.textColorGray));
-//                    tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.textColorGray));
-//                }
+                //                if (isRemoteActivating) {
+                //                    ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activating_big);
+                //                    tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorActivating));
+                //                    tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorActivating));
+                //                } else {
+                //                    ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activate_big);
+                //                    tvDetailsRemote.setTextColor(getResources().getColor(R.color.textColorGray));
+                //                    tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.textColorGray));
+                //                }
                 break;
             case DETAILS_TYPE2:
                 llDetailsAuthStart.setVisibility(View.GONE);
                 llDetailsAuthEnd.setVisibility(View.GONE);
                 btnCancelAuth.setVisibility(View.GONE);
-//                ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activated_big);
-//                tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorBlue));
-//                tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorBlue));
+                //                ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activated_big);
+                //                tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorBlue));
+                //                tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorBlue));
                 break;
             case DETAILS_TYPE3:
-//                ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activated_big);
-//                tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorBlue));
-//                tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorBlue));
+                //                ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activated_big);
+                //                tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorBlue));
+                //                tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorBlue));
                 break;
             case DETAILS_TYPE4:
                 llDetailsDevice.setVisibility(View.GONE);
@@ -179,7 +177,6 @@ public class CarDetailsActivity extends BaseMvpActivity {
 
     /**
      * 获取车辆信息
-     *
      * @param id
      */
     @SuppressLint("CheckResult")
@@ -211,12 +208,16 @@ public class CarDetailsActivity extends BaseMvpActivity {
 
     /**
      * 编辑车辆
-     *
-     * @param buyDate 购买时间
-     * @param maintenMiles  保养里程
-     * @param maintenDate 上次保养时间
-     * @param applicantDate 上次投保时间
-     * @param inspectTime   上次年检时间
+     * @param buyDate
+     *         购买时间
+     * @param maintenMiles
+     *         保养里程
+     * @param maintenDate
+     *         上次保养时间
+     * @param applicantDate
+     *         上次投保时间
+     * @param inspectTime
+     *         上次年检时间
      */
     @SuppressLint("CheckResult")
     private void modify(final long buyDate, final long maintenMiles, final long maintenDate, final long applicantDate, final long inspectTime) {
@@ -230,14 +231,14 @@ public class CarDetailsActivity extends BaseMvpActivity {
         if (maintenMiles >= 0) {
             map.put("maintenMiles", maintenMiles);
         }
-        if (maintenDate >=0){
-            map.put("maintenDate",maintenDate);
+        if (maintenDate >= 0) {
+            map.put("maintenDate", maintenDate);
         }
-        if (applicantDate >= 0){
-            map.put("applicantDate",applicantDate);
+        if (applicantDate >= 0) {
+            map.put("applicantDate", applicantDate);
         }
-        if (inspectTime >= 0){
-            map.put("inspectTime",inspectTime);
+        if (inspectTime >= 0) {
+            map.put("inspectTime", inspectTime);
         }
 
         ClientFactory.def(CarService.class).modify(map)
@@ -251,7 +252,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
                             ToastUtils.showShort(baseError.msg);
                         } else {
                             ToastUtils.showShort("修改成功");
-                            modifySuccess(buyDate,maintenMiles,maintenDate,applicantDate,inspectTime);
+                            modifySuccess(buyDate, maintenMiles, maintenDate, applicantDate, inspectTime);
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -263,20 +264,20 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 });
     }
 
-    public void modifySuccess(long buyDate, long maintenMiles,long maintenDate,long applicantDate,long inspectTime) {
+    public void modifySuccess(long buyDate, long maintenMiles, long maintenDate, long applicantDate, long inspectTime) {
         if (buyDate >= 0) {
             tvDetailsBuyTime.setText(MyTimeUtils.formatDateSecend(buyDate));
         }
         if (maintenMiles >= 0) {
             tvDetailsServiceCycle.setText(String.valueOf(maintenMiles));
         }
-        if (maintenDate >=0){
+        if (maintenDate >= 0) {
             tvDetailsServiceTime.setText(MyTimeUtils.formatDateSecend(maintenDate));
         }
-        if (applicantDate >= 0){
+        if (applicantDate >= 0) {
             tvDetailsInsureTime.setText(MyTimeUtils.formatDateSecend(applicantDate));
         }
-        if (inspectTime >= 0){
+        if (inspectTime >= 0) {
             tvDetailsAnnualTime.setText(MyTimeUtils.formatDateSecend(inspectTime));
         }
     }
@@ -313,7 +314,9 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 });
 
     }
+
     int themeResId = AlertDialog.THEME_HOLO_LIGHT;
+
     @OnClick({R.id.llDetailsRemote, R.id.llDetailsRecorder, R.id.llDetailsMachine, R.id.btnCancelAuth, R.id.llDetailsBuyTime
             , R.id.llDetailsServiceCycle, R.id.llDetailsServiceTime, R.id.llDetailsInsureTime, R.id.llDetailsAnnualTime})
     public void onViewClicked(View view) {
@@ -322,48 +325,83 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 clickRemote();
                 break;
             case R.id.llDetailsRecorder:
-//                showDatePicker("--",themeResId);
+                //                showDatePicker("--",themeResId);
                 break;
             case R.id.llDetailsMachine:
-//                showEditDilog();
+                //                showEditDilog();
                 break;
             case R.id.btnCancelAuth:
                 cancelAuth();
                 break;
             case R.id.llDetailsBuyTime:
-                showDatePicker(BUYTIME,tvDetailsBuyTime.getText().toString());
+                showDatePicker(BUYTIME, tvDetailsBuyTime.getText().toString());
                 break;
             case R.id.llDetailsServiceCycle:
                 showEditDilog();
                 break;
             case R.id.llDetailsServiceTime:
-                showDatePicker(MAINTENDATE,tvDetailsServiceTime.getText().toString());
+                showDatePicker(MAINTENDATE, tvDetailsServiceTime.getText().toString());
                 break;
             case R.id.llDetailsInsureTime:
-                showDatePicker(APPLICANTDATE,tvDetailsInsureTime.getText().toString());
+                showDatePicker(APPLICANTDATE, tvDetailsInsureTime.getText().toString());
                 break;
             case R.id.llDetailsAnnualTime:
-                showDatePicker(INSPECTTIME,tvDetailsAnnualTime.getText().toString());
+                showDatePicker(INSPECTTIME, tvDetailsAnnualTime.getText().toString());
                 break;
         }
     }
 
     private void clickRemote() {
         Intent intent = new Intent();
-        if (remoteStatus == 1) {
-            intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
-        } else if (remoteStatus == 2) {
-            intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
-        } else {
-            intent.setClass(CarDetailsActivity.this, DeviceActivateActivity.class);
+        switch (remoteStatus) {
+            case 0:
+
+                intent.setClass(CarDetailsActivity.this, DeviceActivateActivity.class);
+                break;
+            case 1:
+                intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
+                break;
+            case 2:
+                break;
+            case 3:
+                intent.setClass(CarDetailsActivity.this, DeviceActivateActivity.class);
+                break;
+            default:
+                break;
         }
+        //        if (remoteStatus == 1) {
+        //            intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
+        //        } else if (remoteStatus == 2) {
+        //            intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
+        //        } else {
+        //            intent.setClass(CarDetailsActivity.this, DeviceActivateActivity.class);
+        //        }
         intent.putExtra("carId", carId);
+        intent.putExtra("withTbox", withTbox);
         startActivity(intent);
     }
 
     public void setData(CarInfo data) {
         remoteStatus = data.remoteStatus;
         authId = data.authId;
+        withTbox = data.withTbox;
+        switch (remoteStatus) {
+            case 0:
+                tvDetailsRemoteState.setText("未激活");
+
+                break;
+            case 1:
+                tvDetailsRemoteState.setText("正在激活");
+                break;
+            case 2:
+                tvDetailsRemoteState.setText("已激活");
+                break;
+            case 3:
+                tvDetailsRemoteState.setText("激活失败");
+                break;
+            default:
+                break;
+        }
         if (!TextUtils.isEmpty(data.carName)) {
             tvDetailsModel.setText(data.carName);
         }
@@ -435,17 +473,17 @@ public class CarDetailsActivity extends BaseMvpActivity {
             @SuppressLint("NewApi")
             @Override
             public void onClick(String txt) {
-//                DecimalFormat format = new DecimalFormat("0.00");
-//                txt = format.format(new BigDecimal(txt));
-//                modify(Integer.parseInt(txt));
-                modify(-1,Long.valueOf(txt),-1,-1,-1);
-//                ToastUtils.showShort(txt);
+                //                DecimalFormat format = new DecimalFormat("0.00");
+                //                txt = format.format(new BigDecimal(txt));
+                //                modify(Integer.parseInt(txt));
+                modify(-1, Long.valueOf(txt), -1, -1, -1);
+                //                ToastUtils.showShort(txt);
             }
         });
         dialogEdit.show();
     }
 
-    private void showDatePicker(final int modifyType, String date){
+    private void showDatePicker(final int modifyType, String date) {
         final Calendar calendar = Calendar.getInstance();
         try {
             Date date1 = MyTimeUtils.FORMAT_DAY.parse(date);
@@ -453,29 +491,29 @@ public class CarDetailsActivity extends BaseMvpActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        DatePickerDialog dialog = new DatePickerDialog(this, AlertDialog.THEME_HOLO_LIGHT,new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog dialog = new DatePickerDialog(this, AlertDialog.THEME_HOLO_LIGHT, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                calendar.set(i,i1-1,i2);
-                modifyType(modifyType,calendar.getTimeInMillis()/1000);
+                calendar.set(i, i1 - 1, i2);
+                modifyType(modifyType, calendar.getTimeInMillis() / 1000);
             }
-        },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         dialog.show();
     }
 
-    private void modifyType(int modifyType,long date){
-        switch (modifyType){
+    private void modifyType(int modifyType, long date) {
+        switch (modifyType) {
             case BUYTIME:
-                modify(date,-1,-1,-1,-1);
+                modify(date, -1, -1, -1, -1);
                 break;
             case MAINTENDATE:
-                modify(-1,-1,date,-1,-1);
+                modify(-1, -1, date, -1, -1);
                 break;
             case APPLICANTDATE:
-                modify(-1,-1,-1,date,-1);
+                modify(-1, -1, -1, date, -1);
                 break;
             case INSPECTTIME:
-                modify(-1,-1,-1,-1,date);
+                modify(-1, -1, -1, -1, date);
                 break;
 
         }

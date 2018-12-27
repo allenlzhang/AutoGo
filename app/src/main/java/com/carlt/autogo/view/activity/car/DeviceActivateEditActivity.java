@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.text.method.ReplacementTransformationMethod;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -35,8 +36,11 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
     @BindView(R.id.etDeviceNum)
     EditText etDeviceNum;//16位
     @BindView(R.id.btnActivate)
-    Button btnActivate;
-    private int carId;
+    Button   btnActivate;
+    private int    carId;
+    private int    withTbox;
+    private String deviceNum;
+
     @Override
     protected int getContentView() {
         return R.layout.activity_activate_edit;
@@ -47,26 +51,43 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
         setTitleText("设备激活");
         etPin.setTransformationMethod(method);
         etDeviceNum.setTransformationMethod(method);
-        carId = getIntent().getIntExtra("carId",0);
+        carId = getIntent().getIntExtra("carId", 0);
+        withTbox = getIntent().getIntExtra("withTbox", 0);
+        if (withTbox == 1) {
+            //前装
+            etDeviceNum.setVisibility(View.GONE);
+        } else {
+            etDeviceNum.setVisibility(View.VISIBLE);
+        }
     }
 
     @OnClick(R.id.btnActivate)
     public void onViewClicked() {
-        if (TextUtils.isEmpty(etPin.getText())){
+        if (TextUtils.isEmpty(etPin.getText())) {
             ToastUtils.showShort("PIN码输入不能为空");
-        }else if (TextUtils.isEmpty(etDeviceNum.getText())){
-            ToastUtils.showShort("设备号输入不能为空");
-        }else {
-            deviceActive();
+            return;
         }
+        if (etDeviceNum.getVisibility() == View.VISIBLE) {
+            deviceNum = etDeviceNum.getText().toString().trim();
+            if (TextUtils.isEmpty(deviceNum)) {
+                ToastUtils.showShort("设备号输入不能为空");
+                return;
+            }
+        }
+
+        deviceActive();
+
     }
+
     @SuppressLint("CheckResult")
-    private void deviceActive(){
+    private void deviceActive() {
         dialog.show();
-        Map<String,Object> params = new HashMap<>();
-        params.put("carID",carId);
-        params.put("PIN",etPin.getText().toString().toUpperCase());
-        params.put("deviceNum",etDeviceNum.getText().toString().toUpperCase());
+        Map<String, Object> params = new HashMap<>();
+        params.put("carID", carId);
+        params.put("PIN", etPin.getText().toString().toUpperCase());
+        if (deviceNum != null) {
+            params.put("deviceNum", deviceNum.toUpperCase());
+        }
         ClientFactory.def(CarService.class).active(params)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -74,13 +95,18 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
                     @Override
                     public void accept(BaseError baseError) throws Exception {
                         dialog.dismiss();
-                        if (baseError!=null) {
+                        if (baseError != null) {
                             if (!TextUtils.isEmpty(baseError.msg)) {
                                 ToastUtils.showShort(baseError.msg);
-                            }else {
+                                if (baseError.code == 2213) {
+                                    Intent intent = new Intent(DeviceActivateEditActivity.this, ActivateStepActivity.class);
+                                    intent.putExtra("carId", carId);
+                                    startActivity(intent);
+                                }
+                            } else {
                                 ToastUtils.showShort("开始激活");
                                 Intent intent = new Intent(DeviceActivateEditActivity.this, ActivateStepActivity.class);
-                                intent.putExtra("carId",carId);
+                                intent.putExtra("carId", carId);
                                 startActivity(intent);
                                 finish();
                             }
@@ -94,6 +120,7 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
                     }
                 });
     }
+
     ReplacementTransformationMethod method = new ReplacementTransformationMethod() {
         @Override
         protected char[] getOriginal() {

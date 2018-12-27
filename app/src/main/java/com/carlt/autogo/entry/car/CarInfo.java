@@ -40,6 +40,7 @@ public class CarInfo {
     public int register_time; // 注册到车管所时间
     public int next_inspect_time; // 下次年检时间
     public int authId;  //授权id
+    public int withTbox;  // 出厂是否内置T-box（前后装） 1-是(前装) 2-否(后装)
     public BaseError err; // 错误描述
 
     @Override

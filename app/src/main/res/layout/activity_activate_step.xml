@@ -39,9 +39,9 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_below="@+id/step_view"
-            android:src="@mipmap/iv_activate_ing"
             android:layout_centerHorizontal="true"
-            android:layout_margin="15dp"/>
+            android:layout_margin="15dp"
+            android:src="@mipmap/iv_activate_ing"/>
 
         <TextView
             android:id="@+id/tvState"
@@ -54,6 +54,17 @@
             android:textColor="@color/textColorGray"
             android:textSize="14dp"/>
 
+        <TextView
+            android:id="@+id/tvDes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvState"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:drawablePadding="8dp"
+            android:textColor="@color/textColorGray"
+            android:textSize="12dp"/>
+
     </RelativeLayout>
 
     <Button
@@ -63,7 +74,8 @@
         android:layout_height="40dp"
         android:layout_marginTop="25dp"
         android:text="发起授权"
-        android:textSize="16dp"/>
+        android:textSize="16dp"
+        android:visibility="gone"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -75,5 +87,6 @@
         android:gravity="center"
         android:text="多次重试后仍无法连接设备，请拔打400000000"
         android:textColor="@color/textColorGray"
-        android:textSize="12dp"/>
+        android:textSize="12dp"
+        android:visibility="gone"/>
 </LinearLayout>

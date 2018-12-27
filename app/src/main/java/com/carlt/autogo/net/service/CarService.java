@@ -1,5 +1,6 @@
 package com.carlt.autogo.net.service;
 
+import com.carlt.autogo.entry.car.ActivateStepInfo;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.CarAuthTimeInfo;
 import com.carlt.autogo.entry.car.CarBaseInfo;
@@ -86,9 +87,12 @@ public interface CarService {
 
     @POST("CarAuth/CancelAuth")
         //取消授权
-    Observable<BaseError> cancelAuth(@Body Map<String,Integer> param);
+    Observable<BaseError> cancelAuth(@Body Map<String, Integer> param);
 
+    // 激活设备
     @POST("DeviceActive/active")
-        // 激活设备
-    Observable<BaseError>active(@Body Map<String,Object> param);
+    Observable<BaseError> active(@Body Map<String, Object> param);
+    // 获取激活日志
+    @POST("DeviceActive/getLogs")
+    Observable<ActivateStepInfo> getLogs(@Body Map<String, Object> param);
 }
