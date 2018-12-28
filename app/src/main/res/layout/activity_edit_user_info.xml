@@ -84,12 +84,11 @@
         </RelativeLayout>
 
 
-        <TextView
+        <View
             android:id="@+id/line"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/textColorGray"
-            android:layout_centerVertical="true"
+            android:layout_height="0.5dp"
+            android:background="@color/color_c"
             android:layout_marginRight="15dp"
             android:layout_marginLeft="15dp"
             />

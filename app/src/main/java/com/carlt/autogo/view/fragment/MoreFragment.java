@@ -18,6 +18,7 @@ import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.entry.user.User;
+import com.carlt.autogo.entry.user.UserIdentity;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
@@ -166,9 +167,9 @@ public class MoreFragment extends BaseMvpFragment {
     @SuppressLint("CheckResult")
     private void getIdentity() {
         ClientFactory.def(UserService.class).getIdentity(new HashMap<String, Object>())
-                .subscribe(new Consumer<User>() {
+                .subscribe(new Consumer<UserIdentity>() {
                     @Override
-                    public void accept(User user) throws Exception {
+                    public void accept(UserIdentity userIdentity) throws Exception {
 
                     }
                 }, new Consumer<Throwable>() {

@@ -6,6 +6,7 @@ import com.carlt.autogo.entry.user.ShareLoginList;
 import com.carlt.autogo.entry.user.SmsToken;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.entry.user.User;
+import com.carlt.autogo.entry.user.UserIdentity;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.entry.user.UserRegister;
 
@@ -156,5 +157,5 @@ public interface UserService {
     Observable<User> addIdentity(@Body Map<String, Object> params);
 
     @POST("Identity/GetIdentity")
-    Observable<User> getIdentity(@Body Map<String, Object> params);
+    Observable<UserIdentity> getIdentity(@Body Map<String, Object> params);
 }

@@ -1,19 +1,28 @@
 package com.carlt.autogo.view.activity.user.accept;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.entry.user.User;
+import com.carlt.autogo.entry.user.UserIdentity;
 import com.carlt.autogo.global.GlobalKey;
+import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author wsq
@@ -43,16 +52,34 @@ public class IdfCompleteActivity extends BaseMvpActivity {
 
         if (isByIdcard) {
             img.setImageDrawable(getResources().getDrawable(R.mipmap.accepted_by_idcard));
-            String name = SharepUtil.getPreferences().getString(GlobalKey.ID_CARD_NAME, "");
-            tvUserName.setText(name);
+//            String name = SharepUtil.getPreferences().getString(GlobalKey.ID_CARD_NAME, "");
+//            tvUserName.setText(name);
             tvUserName.setVisibility(View.VISIBLE);
         } else {
             img.setImageDrawable(getResources().getDrawable(R.mipmap.accepted_by_payment));
             tvUserName.setVisibility(View.GONE);
         }
-
+        getIdentity();
     }
+    @SuppressLint("CheckResult")
+    private void getIdentity() {
+        ClientFactory.def(UserService.class).getIdentity(new HashMap<String, Object>())
+                .subscribe(new Consumer<UserIdentity>() {
+                    @Override
+                    public void accept(UserIdentity userIdentity) throws Exception {
+                        if (userIdentity.err!=null){
+                            ToastUtils.showShort(userIdentity.err.msg);
+                        }else {
+                            tvUserName.setText(encrypt(userIdentity.name));
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
 
+                    }
+                });
+    }
 
     @OnClick(R.id.btn_back)
     public void onViewClicked() {
@@ -74,5 +101,20 @@ public class IdfCompleteActivity extends BaseMvpActivity {
 
         }
         super.finish();
+    }
+
+    private String encrypt(String str) {
+        StringBuilder n = new StringBuilder();
+        int len = str.length();
+        if (len <= 2) {
+            n.append( str.charAt(0)+"*");
+            return n.toString();
+        }
+        n.append(str.charAt(0));
+        for (int i = 1; i <= len - 2; i++) {
+            n.append("*");
+        }
+        n.append(str.charAt(len - 1));
+        return n.toString();
     }
 }
