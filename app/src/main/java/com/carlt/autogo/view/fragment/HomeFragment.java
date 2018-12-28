@@ -28,6 +28,7 @@ import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
+import com.carlt.autogo.view.activity.car.CarDetailsActivity;
 import com.carlt.autogo.view.activity.car.DeviceActivateActivity;
 import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
@@ -115,7 +116,8 @@ public class HomeFragment extends BaseMvpFragment {
     @SuppressLint("CheckResult")
     private void ClientGetData() {
         Map<String, Object> map = new HashMap<>();
-        map.put("type", 3);
+        map.put("type", 3);//1我的车辆 2被授权车辆 3我的车辆和被授权车辆
+        map.put("isShowActive",2);//默认1不显示，2显示设备等激活状态
         ClientFactory.def(CarService.class).getMyCarList(map)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -260,7 +262,7 @@ public class HomeFragment extends BaseMvpFragment {
             if (remoteStatus == 0) {
                 showCommonDialog("设备还未激活", "去激活", false);
                 return false;
-            } else if (remoteStatus == 1) {
+            } else if (remoteStatus == 1||remoteStatus == 3) {
                 showCommonDialog("设备正在激活", "查看详情", true);
                 return false;
             } else {
@@ -309,9 +311,11 @@ public class HomeFragment extends BaseMvpFragment {
                 if (isActivated) {
                     intent.setClass(mContext, ActivateStepActivity.class);
                 } else {
-                    intent.setClass(mContext, DeviceActivateActivity.class);
-                    startActivity(intent);
+                    intent.setClass(mContext, CarDetailsActivity.class);
+                    intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
+                    intent.putExtra("id",singletonCar.getCarBean().id);
                 }
+                startActivity(intent);
             }
         });
     }

@@ -58,8 +58,8 @@ public class AuthFragment extends BaseMvpFragment {
     @SuppressLint("CheckResult")
     private void ClientGetMyCar(){
         Map<String,Object> map = new HashMap<>();
-        map.put("type",2);
-        map.put("isShowActive",2);
+        map.put("type",2);  //1我的车辆 2被授权车辆 3我的车辆和被授权车辆
+        map.put("isShowActive",2);//默认1不显示，2显示设备等激活状态
         ClientFactory.def(CarService.class).getMyCarList(map)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -21,6 +21,7 @@ import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
+import com.carlt.autogo.view.activity.car.CarDetailsActivity;
 import com.carlt.autogo.view.activity.car.DeviceActivateActivity;
 import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
@@ -99,7 +100,9 @@ public class RemoteFragment extends BaseMvpFragment {
                 if (isActivated){
                     intent.setClass(mContext, ActivateStepActivity.class);
                 }else {
-                    intent.setClass(mContext,DeviceActivateActivity.class);
+                    intent.setClass(mContext,CarDetailsActivity.class);
+                    intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
+                    intent.putExtra("id",singletonCar.getCarBean().id);
                 }
                 startActivity(intent);
             }
@@ -181,7 +184,7 @@ public class RemoteFragment extends BaseMvpFragment {
             if (remoteStatus == 0) {
                 showCommonDialog("设备还未激活","去激活",false);
                 return false;
-            } else if (remoteStatus == 1) {
+            } else if (remoteStatus == 1||remoteStatus == 3) {
                 showCommonDialog("设备正在激活中","查看详情",true);
                 return false;
             }else {

@@ -110,7 +110,6 @@ public class CarDetailsActivity extends BaseMvpActivity {
 
 
     private             int     type               = DETAILS_TYPE1;
-    private             boolean isRemoteActivating = false;  //远程是否激活中
     public static final int     DETAILS_TYPE1      = 0;  //未激活未授权（我的爱车详情）
     public static final int     DETAILS_TYPE2      = 1;  //已激活未授权（我的爱车详情）
     public static final int     DETAILS_TYPE3      = 2;  //已激活授权中（我的爱车详情）
@@ -136,7 +135,6 @@ public class CarDetailsActivity extends BaseMvpActivity {
 
         Intent intent = getIntent();
         type = intent.getIntExtra("type", DETAILS_TYPE1);
-        isRemoteActivating = intent.getBooleanExtra("remoteActivating", false);
         switch (type) {
             case DETAILS_TYPE1:
                 llDetails.setVisibility(View.GONE);
