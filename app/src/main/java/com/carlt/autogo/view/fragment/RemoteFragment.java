@@ -99,6 +99,7 @@ public class RemoteFragment extends BaseMvpFragment {
                 Intent intent = new Intent();
                 if (isActivated){
                     intent.setClass(mContext, ActivateStepActivity.class);
+                    intent.putExtra("carId",singletonCar.getCarBean().id);
                 }else {
                     intent.setClass(mContext,CarDetailsActivity.class);
                     intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
