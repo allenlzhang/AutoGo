@@ -2,6 +2,8 @@ package com.carlt.autogo.view.activity.user.accept;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.ReplacementTransformationMethod;
 import android.view.View;
@@ -64,6 +66,20 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
                 return big;
             }
         });
+        setEditTextInhibitInputSpace(edIdAcceptName);
+    }
+
+    public static void setEditTextInhibitInputSpace(EditText editText) {
+        InputFilter filter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                if (source.equals(" "))
+                    return "";
+                else
+                    return null;
+            }
+        };
+        editText.setFilters(new InputFilter[]{filter});
     }
 
     @SuppressLint("CheckResult")
@@ -114,7 +130,7 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
         StringBuilder n = new StringBuilder();
         int len = str.length();
         if (len <= 2) {
-            n.append( str.charAt(0)+"*");
+            n.append(str.charAt(0) + "*");
             return n.toString();
         }
         n.append(str.charAt(0));

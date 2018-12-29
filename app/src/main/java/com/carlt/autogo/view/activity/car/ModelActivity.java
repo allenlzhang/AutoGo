@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.ListView;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -42,6 +41,8 @@ public class ModelActivity extends BaseMvpActivity {
     private static final int CODE_MODEL_RESULT = 0xb5;
 
     private CarModelAdapter adapter;
+    private int brandId;
+
     @Override
     protected int getContentView() {
         return R.layout.layout_list;
@@ -65,11 +66,12 @@ public class ModelActivity extends BaseMvpActivity {
                     NewCarModelInfo newCarModelInfo = (NewCarModelInfo) o;
                     Intent intent1 = new Intent(ModelActivity.this,BrandCarActivity.class);
                     intent1.putExtra("modelId",newCarModelInfo.dataBeanId);
+                    intent1.putExtra("brandId",brandId);
                     startActivityForResult(intent1,CODE_MODEL_RESULT);
                 }
             });
         }
-        int brandId = intent.getIntExtra("brandId",-1);
+        brandId = intent.getIntExtra("brandId",-1);
         if (brandId != -1){
             clientGetData(brandId);
         }
@@ -125,6 +127,7 @@ public class ModelActivity extends BaseMvpActivity {
                                         NewCarModelInfo newCarModelInfo = (NewCarModelInfo) o;
                                         Intent intent1 = new Intent(ModelActivity.this,BrandCarActivity.class);
                                         intent1.putExtra("modelId",newCarModelInfo.dataBeanId);
+                                        LogUtils.e(newCarModelInfo.dataBeanId);
                                         startActivityForResult(intent1,CODE_MODEL_RESULT);
                                     }
                                 });

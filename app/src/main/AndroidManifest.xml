@@ -74,6 +74,7 @@
         <activity android:name=".view.activity.car.CarDetailsActivity"/>
         <activity android:name=".view.activity.car.DeviceActivateActivity"/>
         <activity android:name=".view.activity.car.DeviceActivateEditActivity"/>
+        <activity android:name=".view.activity.car.ModifyCarActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

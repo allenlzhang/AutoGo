@@ -212,8 +212,13 @@ public class SafetyActivity extends BaseMvpActivity {
                                 } else if (listBean.openType == 2) {
                                     //微信绑定
                                     cbWechatLogin.setChecked(true);
-                                    String name = SharepUtil.getPreferences().getString(GlobalKey.WECHAT_NICKNAME,"");
-                                    tvWechatName.setText("(" + name + ")");
+                                    String name = SharepUtil.getPreferences().getString(GlobalKey.WECHAT_NICKNAME, "");
+                                    if (TextUtils.isEmpty(name)) {
+                                        tvWechatName.setText("");
+                                    } else {
+                                        tvWechatName.setText("(" + name + ")");
+                                    }
+
                                 }
                             }
                         }
@@ -406,7 +411,7 @@ public class SafetyActivity extends BaseMvpActivity {
                 @Override
                 public void onComplete(Platform platform, final int i, HashMap<String, Object> hashMap) {
                     LogUtils.e(hashMap);
-                    final String unionid = (String) hashMap.get("unionid");
+                    String unionid = (String) hashMap.get("unionid");
                     final String nickname = (String) hashMap.get("nickname");
                     SharepUtil.put(GlobalKey.WECHAT_NICKNAME, nickname);
                     LogUtils.e(unionid);
@@ -421,6 +426,7 @@ public class SafetyActivity extends BaseMvpActivity {
                                     LogUtils.e(er);
                                     if (er.code == 0) {
                                         showToast("绑定成功");
+
                                         tvWechatName.setText("(" + nickname + ")");
                                         cbWechatLogin.setChecked(true);
                                     } else {

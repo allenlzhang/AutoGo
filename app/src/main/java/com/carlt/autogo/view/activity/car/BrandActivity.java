@@ -5,8 +5,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.widget.ListView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.BrandAdapter;
 import com.carlt.autogo.adapter.OnItemClickCallback;
@@ -33,6 +33,7 @@ public class BrandActivity extends BaseMvpActivity {
     private BrandAdapter adapter;
 
     private static final int CODE_BRAND_REQUEST = 0xb6;
+
     @Override
     protected int getContentView() {
         return R.layout.layout_list;
@@ -45,7 +46,7 @@ public class BrandActivity extends BaseMvpActivity {
         BrandInfo info = (BrandInfo) intent.getSerializableExtra("brand");
         layoutList.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        layoutList.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        layoutList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         layoutList.setLayoutManager(linearLayoutManager);
         adapter = new BrandAdapter(getData(info));
         layoutList.setAdapter(adapter);
@@ -53,9 +54,10 @@ public class BrandActivity extends BaseMvpActivity {
             @Override
             public void onItemClick(Object o) {
                 BrandInfo.BrandData info = (BrandInfo.BrandData) o;
-                Intent intent1 = new Intent(BrandActivity.this,ModelActivity.class);
-                intent1.putExtra("brandId",info.id);
-                startActivityForResult(intent1,CODE_BRAND_REQUEST);
+                Intent intent1 = new Intent(BrandActivity.this, ModelActivity.class);
+                intent1.putExtra("brandId", info.id);
+                LogUtils.e(info.id);
+                startActivityForResult(intent1, CODE_BRAND_REQUEST);
             }
         });
     }
@@ -65,8 +67,8 @@ public class BrandActivity extends BaseMvpActivity {
         Collections.sort(list);
         List<BrandInfo.BrandData> list1 = new ArrayList<>();
         String initial = "";
-        for (int i = 0; i < list.size() ; i++) {
-            if (!TextUtils.equals(initial,list.get(i).initial)){
+        for (int i = 0; i < list.size(); i++) {
+            if (!TextUtils.equals(initial, list.get(i).initial)) {
                 BrandInfo.BrandData info = new BrandInfo.BrandData();
                 info.initial = list.get(i).initial;
                 list1.add(info);
@@ -79,12 +81,12 @@ public class BrandActivity extends BaseMvpActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK){
-            if (requestCode == CODE_BRAND_REQUEST){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CODE_BRAND_REQUEST) {
                 CarBrandInfo.DataBean dataBean = (CarBrandInfo.DataBean) data.getSerializableExtra("carName");
                 Intent intent = new Intent();
-                intent.putExtra("carName",dataBean);
-                this.setResult(RESULT_OK,intent);
+                intent.putExtra("carName", dataBean);
+                this.setResult(RESULT_OK, intent);
                 this.finish();
             }
         }

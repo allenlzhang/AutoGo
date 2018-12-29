@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.ListView;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -16,7 +15,6 @@ import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.CarBrandInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +38,8 @@ public class BrandCarActivity extends BaseMvpActivity {
     RecyclerView layoutList;
 
     private CarBrandAdapter adapter;
+    private int modelId;
+    private int brandId;
 
     @Override
     protected int getContentView() {
@@ -66,7 +66,8 @@ public class BrandCarActivity extends BaseMvpActivity {
                 }
             });
         }
-        int modelId = intent.getIntExtra("modelId", -1);
+        modelId = intent.getIntExtra("modelId", -1);
+        brandId = intent.getIntExtra("brandId", -1);
         if (modelId != -1) {
             clientGetData(modelId);
         }
@@ -101,6 +102,7 @@ public class BrandCarActivity extends BaseMvpActivity {
                 .subscribe(new Consumer<CarBrandInfo>() {
                     @Override
                     public void accept(CarBrandInfo carBrandInfo) throws Exception {
+                        LogUtils.e(carBrandInfo.toString());
                         dialog.dismiss();
                         if (carBrandInfo.err != null) {
                             ToastUtils.showShort(carBrandInfo.err.msg);
@@ -140,7 +142,12 @@ public class BrandCarActivity extends BaseMvpActivity {
             @Override
             public void onRightClick() {
                 Intent intent = new Intent();
+                int Optionid = dataBean.id;
+                LogUtils.e(Optionid);
                 intent.putExtra("carName",dataBean);
+                intent.putExtra("Optionid",Optionid);
+                intent.putExtra("modelId",modelId);
+                intent.putExtra("brandId",brandId);
                 BrandCarActivity.this.setResult(RESULT_OK,intent);
                 BrandCarActivity.this.finish();
             }

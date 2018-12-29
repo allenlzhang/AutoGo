@@ -28,7 +28,7 @@
                 android:id="@+id/iv_more_head_sculpture"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@mipmap/iv_more_head_sculpture_def"
+                android:src="@mipmap/iv_def_head"
                 tools:ignore="ContentDescription"/>
 
             <ImageView

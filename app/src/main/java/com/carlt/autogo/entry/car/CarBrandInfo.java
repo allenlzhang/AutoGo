@@ -19,6 +19,15 @@ public class CarBrandInfo implements Serializable{
 
     public BaseError err;
 
+    @Override
+    public String toString() {
+        return "CarBrandInfo{" +
+                "items=" + items +
+                ", level=" + level +
+                ", err=" + err +
+                '}';
+    }
+
     public static class DataBean implements Comparable<DataBean>,Serializable{
         /**
          * id : 2179033

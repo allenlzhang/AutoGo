@@ -1,19 +1,15 @@
 package com.carlt.autogo.view.activity.car;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
-import com.bigkoo.pickerview.listener.CustomListener;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
@@ -109,17 +105,18 @@ public class CarDetailsActivity extends BaseMvpActivity {
     Button btnCancelAuth;//取消授权
 
 
-    private             int     type               = DETAILS_TYPE1;
-    public static final int     DETAILS_TYPE1      = 0;  //未激活未授权（我的爱车详情）
-    public static final int     DETAILS_TYPE2      = 1;  //已激活未授权（我的爱车详情）
-    public static final int     DETAILS_TYPE3      = 2;  //已激活授权中（我的爱车详情）
-    public static final int     DETAILS_TYPE4      = 3;  //（被授权车辆详情）
-    private             int     remoteStatus       = -1;   //远程状态
-    private             int     withTbox           = -1;   //前后装
-    private             int     authId             = 0; //授权id
-    private             int     carId              = 0;  //车辆id
+    private             int type          = DETAILS_TYPE1;
+    public static final int DETAILS_TYPE1 = 0;  //未激活未授权（我的爱车详情）
+    public static final int DETAILS_TYPE2 = 1;  //已激活未授权（d）
+    public static final int DETAILS_TYPE3 = 2;  //已激活授权中（我的爱车详情）
+    public static final int DETAILS_TYPE4 = 3;  //（被授权车辆详情）
+    private             int remoteStatus  = -1;   //远程状态
+    private             int withTbox      = -1;   //前后装
+    private             int authId        = 0; //授权id
+    private             int carId         = 0;  //车辆id
 
     private TimePickerView pvCustomTime;
+
     @Override
     protected int getContentView() {
         return R.layout.activity_car_details;
@@ -269,13 +266,13 @@ public class CarDetailsActivity extends BaseMvpActivity {
         if (maintenMiles >= 0) {
             tvDetailsServiceCycle.setText(String.valueOf(maintenMiles));
         }
-        if (maintenDate >=0){
+        if (maintenDate >= 0) {
             tvDetailsServiceTime.setText(MyTimeUtils.formatDateGetDaySecend(maintenDate));
         }
-        if (applicantDate >= 0){
+        if (applicantDate >= 0) {
             tvDetailsInsureTime.setText(MyTimeUtils.formatDateGetDaySecend(applicantDate));
         }
-        if (inspectTime >= 0){
+        if (inspectTime >= 0) {
             tvDetailsAnnualTime.setText(MyTimeUtils.formatDateGetDaySecend(inspectTime));
         }
     }
@@ -312,6 +309,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 });
 
     }
+
     @OnClick({R.id.llDetailsRemote, R.id.llDetailsRecorder, R.id.llDetailsMachine, R.id.btnCancelAuth, R.id.llDetailsBuyTime
             , R.id.llDetailsServiceCycle, R.id.llDetailsServiceTime, R.id.llDetailsInsureTime, R.id.llDetailsAnnualTime})
     public void onViewClicked(View view) {
@@ -329,7 +327,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 cancelAuth();
                 break;
             case R.id.llDetailsBuyTime:
-//                showDatePicker(BUYTIME,tvDetailsBuyTime.getText().toString());
+                //                showDatePicker(BUYTIME,tvDetailsBuyTime.getText().toString());
                 initCustomTimePicker(tvDetailsBuyTime.getText().toString());
                 pvCustomTime.show(tvDetailsBuyTime);
                 break;
@@ -362,9 +360,10 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
                 break;
             case 2:
+                intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
                 break;
             case 3:
-                intent.setClass(CarDetailsActivity.this, DeviceActivateActivity.class);
+                intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
                 break;
             default:
                 break;
@@ -391,7 +390,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
 
                 break;
             case 1:
-                tvDetailsRemoteState.setText("正在激活");
+                tvDetailsRemoteState.setText("激活中");
                 break;
             case 2:
                 tvDetailsRemoteState.setText("已激活");
@@ -495,10 +494,10 @@ public class CarDetailsActivity extends BaseMvpActivity {
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
         Date time = endDate.getTime();
-        if (TextUtils.isEmpty(date)||date.equals("--")) {
+        if (TextUtils.isEmpty(date) || date.equals("--")) {
             date = dateFormat.format(time);
         }
-        startDate.set(2000,0,1);
+        startDate.set(2000, 0, 1);
         String format = dateFormat.format(time);
         String[] split = format.split("-");
         String[] selectedSplit = date.split("-");
@@ -508,50 +507,50 @@ public class CarDetailsActivity extends BaseMvpActivity {
         pvCustomTime = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
-                LogUtils.e(date.getTime()+"");
-                switch (v.getId()){
+                LogUtils.e(date.getTime() + "");
+                switch (v.getId()) {
                     case R.id.tvDetailsBuyTime:
-                        modify(date.getTime()/1000,-1,-1,-1,-1);
+                        modify(date.getTime() / 1000, -1, -1, -1, -1);
                         break;
                     case R.id.tvDetailsServiceTime:
-                        modify(-1,-1,date.getTime()/1000,-1,-1);
+                        modify(-1, -1, date.getTime() / 1000, -1, -1);
                         break;
                     case R.id.tvDetailsInsureTime:
-                        modify(-1,-1,-1,date.getTime()/1000,-1);
+                        modify(-1, -1, -1, date.getTime() / 1000, -1);
                         break;
                     case R.id.tvDetailsAnnualTime:
-                        modify(-1,-1,-1,-1,date.getTime()/1000);
+                        modify(-1, -1, -1, -1, date.getTime() / 1000);
                         break;
                 }
             }
         })
 
                 .setDate(selectedDate)
-//                .setLayoutRes(R.layout.time_edit_dialog, new CustomListener() {
-//                    @Override
-//                    public void customLayout(View v) {
-//                        final TextView _OK = (TextView) v.findViewById(R.id.sex_change_OK);
-//                        final TextView _cancel = (TextView) v.findViewById(R.id.sex_change_cancel);
-//                        _OK.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                pvCustomTime.returnData();
-//                                pvCustomTime.dismiss();
-//                            }
-//                        });
-//
-//                        _cancel.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                pvCustomTime.dismiss();
-//                            }
-//                        });
-//
-//                    }
-//                })
+                //                .setLayoutRes(R.layout.time_edit_dialog, new CustomListener() {
+                //                    @Override
+                //                    public void customLayout(View v) {
+                //                        final TextView _OK = (TextView) v.findViewById(R.id.sex_change_OK);
+                //                        final TextView _cancel = (TextView) v.findViewById(R.id.sex_change_cancel);
+                //                        _OK.setOnClickListener(new View.OnClickListener() {
+                //                            @Override
+                //                            public void onClick(View v) {
+                //                                pvCustomTime.returnData();
+                //                                pvCustomTime.dismiss();
+                //                            }
+                //                        });
+                //
+                //                        _cancel.setOnClickListener(new View.OnClickListener() {
+                //                            @Override
+                //                            public void onClick(View v) {
+                //                                pvCustomTime.dismiss();
+                //                            }
+                //                        });
+                //
+                //                    }
+                //                })
                 .setSubCalSize(14)
                 .setContentSize(18)
-                .setRangDate(startDate,endDate)
+                .setRangDate(startDate, endDate)
                 .setType(new boolean[]{true, true, true, false, false, false})
                 .setLabel("年", "月", "日", "时", "分", "秒")
                 .setLineSpacingMultiplier(2.0f)

@@ -51,6 +51,7 @@ public class ActivateStepInfo {
          * description : 此过程视运营商网络状况，可能需要15分钟至24小时
          */
         public int isSuccess = -1;
+        public int failCode  = -1; //2226-车型排量错误 2201-PIN码错误
         public String title;
         public String description = "";
         public String failReason  = "";

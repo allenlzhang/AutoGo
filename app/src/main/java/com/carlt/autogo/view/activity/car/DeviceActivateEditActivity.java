@@ -53,11 +53,14 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
         etDeviceNum.setTransformationMethod(method);
         carId = getIntent().getIntExtra("carId", 0);
         withTbox = getIntent().getIntExtra("withTbox", 0);
+        LogUtils.e("withTbox----" + withTbox);
         if (withTbox == 1) {
             //前装
             etDeviceNum.setVisibility(View.GONE);
-        } else {
+        } else if (withTbox == 2) {
             etDeviceNum.setVisibility(View.VISIBLE);
+        } else {
+            etDeviceNum.setVisibility(View.GONE);
         }
     }
 
@@ -98,11 +101,11 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
                         if (baseError != null) {
                             if (!TextUtils.isEmpty(baseError.msg)) {
                                 ToastUtils.showShort(baseError.msg);
-                                if (baseError.code == 2213) {
-                                    Intent intent = new Intent(DeviceActivateEditActivity.this, ActivateStepActivity.class);
-                                    intent.putExtra("carId", carId);
-                                    startActivity(intent);
-                                }
+                                //                                if (baseError.code == 2213) {
+                                //                                    Intent intent = new Intent(DeviceActivateEditActivity.this, ActivateStepActivity.class);
+                                //                                    intent.putExtra("carId", carId);
+                                //                                    startActivity(intent);
+                                //                                }
                             } else {
                                 ToastUtils.showShort("开始激活");
                                 Intent intent = new Intent(DeviceActivateEditActivity.this, ActivateStepActivity.class);

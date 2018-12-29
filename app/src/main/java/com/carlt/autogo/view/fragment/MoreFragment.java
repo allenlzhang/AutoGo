@@ -17,7 +17,6 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.entry.car.SingletonCar;
-import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserIdentity;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
@@ -144,8 +143,8 @@ public class MoreFragment extends BaseMvpFragment {
 
         Glide.with(mContext)
                 .load(userInfo.avatarFile)
-                .placeholder(R.mipmap.ic_head_normal_bg)
-                .error(R.mipmap.ic_head_normal_bg)
+                .placeholder(R.mipmap.iv_def_head)
+                .error(R.mipmap.iv_def_head)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .skipMemoryCache(true)
                 .transform(new GlideCircleTransform(mContext))
