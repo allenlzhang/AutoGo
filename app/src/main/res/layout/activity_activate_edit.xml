@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,12 +10,14 @@
         style="@style/baseEditStyle"
         android:layout_marginTop="15dp"
         android:hint="请输入车辆PIN码"
-        />
+        android:inputType="textEmailAddress"
+        tools:ignore="TextFields" />
     <EditText
         android:id="@+id/etDeviceNum"
         style="@style/baseEditStyle"
         android:layout_marginTop="@dimen/dp_10"
         android:hint="请输入设备号"
+        android:inputType="textEmailAddress"
         />
     <Button
         android:id="@+id/btnActivate"

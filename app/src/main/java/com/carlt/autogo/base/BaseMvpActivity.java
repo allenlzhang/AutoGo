@@ -91,7 +91,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
 
 
         dialog = new UUDialog(this,R.style.DialogCommon);
-
+        dialog.setCanceledOnTouchOutside(false);
     }
 
     protected void setTitleText(String text) {

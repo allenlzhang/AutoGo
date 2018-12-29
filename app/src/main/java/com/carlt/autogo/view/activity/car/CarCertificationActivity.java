@@ -10,9 +10,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.ReplacementTransformationMethod;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -113,19 +116,20 @@ public class CarCertificationActivity extends BaseMvpActivity {
     public void init() {
         setTitleText("车辆认证");
         initPopup();
-        editVehicleCertificationVin.setTransformationMethod(new ReplacementTransformationMethod() {
-            @Override
-            protected char[] getOriginal() {
-                char[] small = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-                return small;
-            }
+        editVehicleCertificationVin.setTransformationMethod(method);
+        editVehicleCertificationVin.addTextChangedListener(textWatcher);
+        editVehicleCertificationEngineNum.setTransformationMethod(method);
+        editVehicleCertificationEngineNum.addTextChangedListener(textWatcher);
+    }
 
-            @Override
-            protected char[] getReplacement() {
-                char[] big = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-                return big;
-            }
-        });
+    private void enableBtn(){
+        if (!TextUtils.isEmpty(txtVehicleCertificationAdd.getText())&&!TextUtils.isEmpty(editVehicleCertificationVin.getText())
+                &&!TextUtils.isEmpty(editVehicleCertificationEngineNum.getText())&&avatarId!=0){
+            btnVehicleCertification.setEnabled(true);
+        }else {
+            btnVehicleCertification.setEnabled(false);
+        }
+
     }
 
     private void initPopup() {
@@ -253,6 +257,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
                 case CODE_ADDCAR_REQUEST:
                     dataBean = (CarBrandInfo.DataBean) data.getSerializableExtra("carName");
                     txtVehicleCertificationAdd.setText(dataBean.title);
+                    enableBtn();
                     break;
             }
         }
@@ -341,29 +346,29 @@ public class CarCertificationActivity extends BaseMvpActivity {
      * @return
      */
     @SuppressLint("CheckResult")
-    private boolean addCar() {
+    private void addCar() {
         Map<String, Object> map = new HashMap<>();
         if (TextUtils.isEmpty(txtVehicleCertificationAdd.getText())) {
             ToastUtils.showShort("请添加爱车");
-            return false;
+            return;
         } else {
             map.put("brandCarId", dataBean.id);
         }
-        if (TextUtils.isEmpty(editVehicleCertificationVin.getText().toString().toUpperCase())) {
-            ToastUtils.showShort("请输入车辆车架号");
-            return false;
+        if (editVehicleCertificationVin.getText().toString().toUpperCase().length() != 17) {
+            ToastUtils.showShort("请输入正确的车架号");
+            return;
         } else {
-            map.put("vin", editVehicleCertificationVin.getText().toString());
+            map.put("vin", editVehicleCertificationVin.getText().toString().toUpperCase());
         }
-        if (TextUtils.isEmpty(editVehicleCertificationEngineNum.getText())) {
-            TextUtils.isEmpty("请输入车辆发动机号");
-            return false;
+        if (editVehicleCertificationEngineNum.getText().toString().toUpperCase().length() != 7) {
+            ToastUtils.showShort("请输入正确的发动机号");
+            return;
         } else {
-            map.put("engineNum", editVehicleCertificationEngineNum.getText().toString());
+            map.put("engineNum", editVehicleCertificationEngineNum.getText().toString().toUpperCase());
         }
         if (avatarId == 0) {
             ToastUtils.showShort("请上传购车凭证");
-            return false;
+            return;
         } else {
             map.put("certificateId", avatarId);
         }
@@ -389,7 +394,6 @@ public class CarCertificationActivity extends BaseMvpActivity {
                         LogUtils.e(throwable);
                     }
                 });
-        return true;
     }
 
     /**
@@ -422,6 +426,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
                                 avatarId = updateImageResultInfo.message.id;
                                 Bitmap bitmap = PhotoUtils.getBitmapFromUri(cropImageUri, CarCertificationActivity.this);
                                 ivVehicleCertification.setImageBitmap(bitmap);
+                                enableBtn();
                             }
                         }
                     }
@@ -433,4 +438,33 @@ public class CarCertificationActivity extends BaseMvpActivity {
                     }
                 });
     }
+     ReplacementTransformationMethod method = new ReplacementTransformationMethod() {
+        @Override
+        protected char[] getOriginal() {
+            char[] small = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+            return small;
+        }
+
+        @Override
+        protected char[] getReplacement() {
+            char[] big = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+            return big;
+        }
+    };
+    TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            enableBtn();
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+    };
 }

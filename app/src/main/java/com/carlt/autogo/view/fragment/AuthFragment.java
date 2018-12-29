@@ -2,10 +2,14 @@ package com.carlt.autogo.view.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -22,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -34,6 +40,8 @@ public class AuthFragment extends BaseMvpFragment {
     ListView fragmentLvMyCar;
     @BindView(R.id.fragment_iv_myCar_add)
     ImageView fragmentIvMyCarAdd;
+    @BindView(R.id.fragment_ll_not_data)
+    RelativeLayout fragmentLlNotData;
 
     private MyCarAdapter adapter;
 
@@ -47,6 +55,7 @@ public class AuthFragment extends BaseMvpFragment {
     @Override
     protected void init() {
         fragmentIvMyCarAdd.setVisibility(View.GONE);
+        fragmentLlNotData.setVisibility(View.GONE);
     }
 
     @Override
@@ -56,10 +65,10 @@ public class AuthFragment extends BaseMvpFragment {
     }
 
     @SuppressLint("CheckResult")
-    private void ClientGetMyCar(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("type",2);  //1我的车辆 2被授权车辆 3我的车辆和被授权车辆
-        map.put("isShowActive",2);//默认1不显示，2显示设备等激活状态
+    private void ClientGetMyCar() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", 2);  //1我的车辆 2被授权车辆 3我的车辆和被授权车辆
+        map.put("isShowActive", 2);//默认1不显示，2显示设备等激活状态
         ClientFactory.def(CarService.class).getMyCarList(map)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -71,28 +80,36 @@ public class AuthFragment extends BaseMvpFragment {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        fragmentLlNotData.setVisibility(View.VISIBLE);
                         LogUtils.e(throwable);
                     }
                 });
     }
 
-    private void parseGetMyCarList(AuthCarInfo authCarInfo){
+    private void parseGetMyCarList(AuthCarInfo authCarInfo) {
         if (authCarInfo.err != null) {
             ToastUtils.showShort(authCarInfo.err.msg);
         } else {
             fragmentIvMyCarAdd.setVisibility(View.GONE);
             listInfos = authCarInfo.authCar;
-            adapter = new MyCarAdapter(getContext(), listInfos, MyCarAdapter.AUTHCAR);
-            fragmentLvMyCar.setAdapter(adapter);
-            fragmentLvMyCar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(mContext, CarDetailsActivity.class);
-                    intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE4);
-                    intent.putExtra("id",listInfos.get(i).id);
-                    startActivity(intent);
-                }
-            });
+            if (listInfos != null && listInfos.size() > 0) {
+                adapter = new MyCarAdapter(getContext(), listInfos, MyCarAdapter.AUTHCAR);
+                fragmentLvMyCar.setAdapter(adapter);
+                fragmentLvMyCar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Intent intent = new Intent(mContext, CarDetailsActivity.class);
+                        intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE4);
+                        intent.putExtra("id", listInfos.get(i).id);
+                        startActivity(intent);
+                    }
+                });
+                fragmentLlNotData.setVisibility(View.GONE);
+            } else {
+                fragmentLlNotData.setVisibility(View.VISIBLE);
+            }
         }
+
     }
+
 }

@@ -309,13 +309,12 @@ public class HomeFragment extends BaseMvpFragment {
             public void onRightClick() {
                 Intent intent = new Intent();
                 if (isActivated) {
-                    intent.setClass(mContext, ActivateStepActivity.class);
-                    intent.putExtra("carId",singletonCar.getCarBean().id);
+                    intent.setClass(mContext, CarDetailsActivity.class);
                 } else {
                     intent.setClass(mContext, CarDetailsActivity.class);
-                    intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
-                    intent.putExtra("id",singletonCar.getCarBean().id);
                 }
+                intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
+                intent.putExtra("id",singletonCar.getCarBean().id);
                 startActivity(intent);
             }
         });

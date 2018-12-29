@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/colorGray"
     >
     <ListView
@@ -16,7 +15,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/my_car_add_bg"
-        android:layout_gravity="center_horizontal"
+        android:layout_below="@id/fragment_lv_myCar"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         />
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/fragment_ll_not_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+        <ImageView
+            android:id="@+id/fragment_iv_myCar_not_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/ic_not_data"
+            android:scaleType="centerInside"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="暂无授权车辆"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/textColorGray2"
+            android:layout_below="@id/fragment_iv_myCar_not_data"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

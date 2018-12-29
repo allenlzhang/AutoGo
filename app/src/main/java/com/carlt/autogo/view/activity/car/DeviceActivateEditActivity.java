@@ -19,6 +19,8 @@ import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -36,9 +38,9 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
     @BindView(R.id.etDeviceNum)
     EditText etDeviceNum;//16位
     @BindView(R.id.btnActivate)
-    Button   btnActivate;
-    private int    carId;
-    private int    withTbox;
+    Button btnActivate;
+    private int carId;
+    private int withTbox;
     private String deviceNum;
 
     @Override
@@ -67,17 +69,24 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
     @OnClick(R.id.btnActivate)
     public void onViewClicked() {
         if (TextUtils.isEmpty(etPin.getText())) {
-            ToastUtils.showShort("PIN码输入不能为空");
+            ToastUtils.showShort("请输入PIN码");
             return;
         }
         if (etDeviceNum.getVisibility() == View.VISIBLE) {
-            deviceNum = etDeviceNum.getText().toString().trim();
+            deviceNum = etDeviceNum.getText().toString();
             if (TextUtils.isEmpty(deviceNum)) {
-                ToastUtils.showShort("设备号输入不能为空");
+                ToastUtils.showShort("请输入设备号");
                 return;
             }
         }
-
+        if (!checkTxt(etPin.getText().toString())||etPin.getText().length() != 8) {
+            ToastUtils.showShort("PIN码输入有误");
+            return;
+        }
+        if (!checkTxt(etDeviceNum.getText().toString())||etDeviceNum.getText().length() != 16) {
+            ToastUtils.showShort("设备号输入有误");
+            return;
+        }
         deviceActive();
 
     }
@@ -137,4 +146,12 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
             return big;
         }
     };
+
+    public boolean checkTxt(String str) {
+        String strPattern = "^[A-Za-z0-9]*";
+        Pattern p = Pattern.compile(strPattern);
+        Matcher m = p.matcher(str);
+        return m.matches();
+    }
+
 }

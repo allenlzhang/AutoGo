@@ -133,7 +133,7 @@ public class BrandCarActivity extends BaseMvpActivity {
     }
 
     private void showCommonDialog(final CarBrandInfo.DataBean dataBean){
-        CommonDialog.createTwoBtnDialog(this, "当前选择" + dataBean.title + "是否确定", true, new CommonDialog.DialogWithTitleClick() {
+        CommonDialog.createTwoBtnDialog(this, "您选择的车型是:" + dataBean.title, true, new CommonDialog.DialogWithTitleClick() {
             @Override
             public void onLeftClick() {
 

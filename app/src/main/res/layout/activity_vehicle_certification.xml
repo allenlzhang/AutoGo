@@ -53,12 +53,17 @@
         android:maxLength="17"
         android:layout_marginTop="10dp"
         android:hint="@string/vehicle_certification_vin"
+        android:inputType="textEmailAddress"
+        android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         tools:ignore="TextFields"/>
     <EditText
         android:id="@+id/edit_vehicle_certification_engine_num"
         style="@style/baseEditStyle"
         android:layout_marginTop="10dp"
         android:hint="@string/vehicle_certification_engine_num"
+        android:maxLength="7"
+        android:inputType="textEmailAddress"
+        android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         tools:ignore="TextFields"/>
     <TextView
         android:layout_width="wrap_content"
