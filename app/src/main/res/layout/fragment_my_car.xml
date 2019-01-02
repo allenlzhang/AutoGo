@@ -10,15 +10,6 @@
         android:layout_height="wrap_content"
         android:divider="@null"
         />
-    <ImageView
-        android:id="@+id/fragment_iv_myCar_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/my_car_add_bg"
-        android:layout_below="@id/fragment_lv_myCar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        />
     <RelativeLayout
         android:id="@+id/fragment_ll_not_data"
         android:layout_width="match_parent"

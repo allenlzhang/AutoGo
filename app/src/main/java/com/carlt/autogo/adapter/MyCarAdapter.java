@@ -53,6 +53,13 @@ public class MyCarAdapter extends BaseAdapter {
         }
     }
 
+    public void update(List<AuthCarInfo.MyCarBean> list){
+        if (list!=null) {
+            this.list = list;
+            notifyDataSetChanged();
+        }
+    }
+
     @Override
     public int getCount() {
         if (list != null) {

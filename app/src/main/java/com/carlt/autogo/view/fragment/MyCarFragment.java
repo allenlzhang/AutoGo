@@ -3,6 +3,7 @@ package com.carlt.autogo.view.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -42,11 +43,10 @@ import io.reactivex.schedulers.Schedulers;
 public class MyCarFragment extends BaseMvpFragment {
     @BindView(R.id.fragment_lv_myCar)
     ListView fragmentLvMyCar;
-    @BindView(R.id.fragment_iv_myCar_add)
-    ImageView fragmentIvMyCarAdd;
-
+    View bottomView;
     private MyCarAdapter adapter;
-    private static final  int CODE_ADDCAR_REQUEST = 1111;
+    private static final int CODE_ADDCAR_REQUEST = 1111;
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_my_car;
@@ -54,7 +54,21 @@ public class MyCarFragment extends BaseMvpFragment {
 
     @Override
     protected void init() {
-
+        adapter = new MyCarAdapter(mContext, null, MyCarAdapter.MYCAR);
+        if (bottomView == null) {
+            bottomView = LayoutInflater.from(mContext).inflate(R.layout.layout_add_car_bottom, null);
+            ImageView mIvAdd = bottomView.findViewById(R.id.layout_iv_myCar_add);
+            if (fragmentLvMyCar.getFooterViewsCount() == 0) {
+                fragmentLvMyCar.addFooterView(bottomView);
+            }
+            mIvAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    certification();
+                }
+            });
+        }
+        fragmentLvMyCar.setAdapter(adapter);
     }
 
     @Override
@@ -78,10 +92,10 @@ public class MyCarFragment extends BaseMvpFragment {
     }
 
     @SuppressLint("CheckResult")
-    private void ClientGetMyCar(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("type",1);//1我的车辆 2被授权车辆 3我的车辆和被授权车辆
-        map.put("isShowActive",2);//默认1不显示，2显示设备等激活状态
+    private void ClientGetMyCar() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", 1);//1我的车辆 2被授权车辆 3我的车辆和被授权车辆
+        map.put("isShowActive", 2);//默认1不显示，2显示设备等激活状态
         ClientFactory.def(CarService.class).getMyCarList(map)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -98,22 +112,24 @@ public class MyCarFragment extends BaseMvpFragment {
                 });
     }
 
-    private void parseGetMyCarList(AuthCarInfo authCarInfo){
+    private void parseGetMyCarList(AuthCarInfo authCarInfo) {
         if (authCarInfo.err != null) {
             ToastUtils.showShort(authCarInfo.err.msg);
         } else {
             List<AuthCarInfo.MyCarBean> list = getData(authCarInfo);
-            if (list.size() >= 5) {
-                fragmentIvMyCarAdd.setVisibility(View.GONE);
+            if (list.size() >= 5 && bottomView != null) {
+                fragmentLvMyCar.removeFooterView(bottomView);
             }
-            adapter = new MyCarAdapter(mContext, list, MyCarAdapter.MYCAR);
-            fragmentLvMyCar.setAdapter(adapter);
+//            adapter = new MyCarAdapter(mContext, list, MyCarAdapter.MYCAR);
+//            fragmentLvMyCar.setAdapter(adapter);
+            adapter.update(list);
+            LogUtils.e("listView---count---" + adapter.getCount());
             fragmentLvMyCar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     AuthCarInfo.MyCarBean item = (AuthCarInfo.MyCarBean) adapterView.getItemAtPosition(i);
                     Intent intent = new Intent(mContext, CarDetailsActivity.class);
-                    intent.putExtra("id",item.id);
+                    intent.putExtra("id", item.id);
                     if (item.authStatus != 2) {
                         if (item.remoteStatus == 1) {
                             intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
@@ -128,21 +144,16 @@ public class MyCarFragment extends BaseMvpFragment {
                     startActivity(intent);
                 }
             });
-            if (list.size()>0){
+            if (list.size() > 0) {
                 SingletonCar.getInstance().setBound(true);
             }
         }
     }
 
-    @OnClick(R.id.fragment_iv_myCar_add)
-    public void onViewClicked() {
-        certification();
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK){
-            if(requestCode == CODE_ADDCAR_REQUEST){
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == CODE_ADDCAR_REQUEST) {
                 ClientGetMyCar();
             }
         }
@@ -154,23 +165,23 @@ public class MyCarFragment extends BaseMvpFragment {
         if (user.alipayAuth == 2) {
             if (user.faceId == 0) {
                 intent.setClass(mContext, FaceAuthSettingActivity.class);
-                intent.putExtra(GlobalKey.FROM_ACTIVITY,FaceAuthSettingActivity.From_ALiPay_Auth);
+                intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ALiPay_Auth);
                 startActivity(intent);
-            }else {
+            } else {
                 intent.setClass(mContext, CarCertificationActivity.class);
-                startActivityForResult(intent,CODE_ADDCAR_REQUEST);
+                startActivityForResult(intent, CODE_ADDCAR_REQUEST);
             }
-        }else if (user.identityAuth == 2){
+        } else if (user.identityAuth == 2) {
             if (user.faceId == 0) {
                 intent.setClass(mContext, FaceAuthSettingActivity.class);
-                intent.putExtra(GlobalKey.FROM_ACTIVITY,FaceAuthSettingActivity.From_ID_Card);
+                intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ID_Card);
                 startActivity(intent);
-            }else {
+            } else {
                 intent.setClass(mContext, CarCertificationActivity.class);
-                startActivityForResult(intent,CODE_ADDCAR_REQUEST);
+                startActivityForResult(intent, CODE_ADDCAR_REQUEST);
             }
 
-        }else {
+        } else {
             intent.setClass(mContext, UserIdChooseActivity.class);
             startActivity(intent);
         }

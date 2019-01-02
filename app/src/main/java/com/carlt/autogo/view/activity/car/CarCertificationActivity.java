@@ -53,6 +53,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -354,13 +356,15 @@ public class CarCertificationActivity extends BaseMvpActivity {
         } else {
             map.put("brandCarId", dataBean.id);
         }
-        if (editVehicleCertificationVin.getText().toString().toUpperCase().length() != 17) {
+        String vin = editVehicleCertificationVin.getText().toString().toUpperCase();
+        if (!checkTxt(vin)||vin.length() != 17) {
             ToastUtils.showShort("请输入正确的车架号");
             return;
         } else {
             map.put("vin", editVehicleCertificationVin.getText().toString().toUpperCase());
         }
-        if (editVehicleCertificationEngineNum.getText().toString().toUpperCase().length() != 7) {
+        String engineNum = editVehicleCertificationEngineNum.getText().toString().toUpperCase();
+        if (!checkTxt(engineNum)||engineNum.length() != 7) {
             ToastUtils.showShort("请输入正确的发动机号");
             return;
         } else {
@@ -467,4 +471,10 @@ public class CarCertificationActivity extends BaseMvpActivity {
 
         }
     };
+    public boolean checkTxt(String str) {
+        String strPattern = "^[A-Za-z0-9]*";
+        Pattern p = Pattern.compile(strPattern);
+        Matcher m = p.matcher(str);
+        return m.matches();
+    }
 }

@@ -264,7 +264,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
             tvDetailsBuyTime.setText(MyTimeUtils.formatDateGetDaySecend(buyDate));
         }
         if (maintenMiles >= 0) {
-            tvDetailsServiceCycle.setText(String.valueOf(maintenMiles));
+            tvDetailsServiceCycle.setText(String.valueOf(maintenMiles)+" km");
         }
         if (maintenDate >= 0) {
             tvDetailsServiceTime.setText(MyTimeUtils.formatDateGetDaySecend(maintenDate));
@@ -328,23 +328,33 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 break;
             case R.id.llDetailsBuyTime:
                 //                showDatePicker(BUYTIME,tvDetailsBuyTime.getText().toString());
-                initCustomTimePicker(tvDetailsBuyTime.getText().toString());
-                pvCustomTime.show(tvDetailsBuyTime);
+                if (type != DETAILS_TYPE4) {
+                    initCustomTimePicker(tvDetailsBuyTime.getText().toString());
+                    pvCustomTime.show(tvDetailsBuyTime);
+                }
                 break;
             case R.id.llDetailsServiceCycle:
-                showEditDilog();
+//                if (type != DETAILS_TYPE4) {
+                    showEditDilog();
+//                }
                 break;
             case R.id.llDetailsServiceTime:
-                initCustomTimePicker(tvDetailsServiceTime.getText().toString());
-                pvCustomTime.show(tvDetailsServiceTime);
+                if (type != DETAILS_TYPE4) {
+                    initCustomTimePicker(tvDetailsServiceTime.getText().toString());
+                    pvCustomTime.show(tvDetailsServiceTime);
+                }
                 break;
             case R.id.llDetailsInsureTime:
-                initCustomTimePicker(tvDetailsInsureTime.getText().toString());
-                pvCustomTime.show(tvDetailsInsureTime);
+                if (type != DETAILS_TYPE4) {
+                    initCustomTimePicker(tvDetailsInsureTime.getText().toString());
+                    pvCustomTime.show(tvDetailsInsureTime);
+                }
                 break;
             case R.id.llDetailsAnnualTime:
-                initCustomTimePicker(tvDetailsAnnualTime.getText().toString());
-                pvCustomTime.show(tvDetailsAnnualTime);
+                if (type != DETAILS_TYPE4) {
+                    initCustomTimePicker(tvDetailsAnnualTime.getText().toString());
+                    pvCustomTime.show(tvDetailsAnnualTime);
+                }
                 break;
         }
     }
@@ -410,7 +420,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
             tvDetailsBuyTime.setText("--");
         }
         if (data.maintenMiles != 0) {
-            tvDetailsServiceCycle.setText(String.valueOf(data.maintenMiles));
+            tvDetailsServiceCycle.setText(String.valueOf(data.maintenMiles)+" km");
         } else {
             tvDetailsServiceCycle.setText("--");
         }

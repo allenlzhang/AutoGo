@@ -38,8 +38,6 @@ import io.reactivex.schedulers.Schedulers;
 public class AuthFragment extends BaseMvpFragment {
     @BindView(R.id.fragment_lv_myCar)
     ListView fragmentLvMyCar;
-    @BindView(R.id.fragment_iv_myCar_add)
-    ImageView fragmentIvMyCarAdd;
     @BindView(R.id.fragment_ll_not_data)
     RelativeLayout fragmentLlNotData;
 
@@ -54,7 +52,6 @@ public class AuthFragment extends BaseMvpFragment {
 
     @Override
     protected void init() {
-        fragmentIvMyCarAdd.setVisibility(View.GONE);
         fragmentLlNotData.setVisibility(View.GONE);
     }
 
@@ -90,7 +87,6 @@ public class AuthFragment extends BaseMvpFragment {
         if (authCarInfo.err != null) {
             ToastUtils.showShort(authCarInfo.err.msg);
         } else {
-            fragmentIvMyCarAdd.setVisibility(View.GONE);
             listInfos = authCarInfo.authCar;
             if (listInfos != null && listInfos.size() > 0) {
                 adapter = new MyCarAdapter(getContext(), listInfos, MyCarAdapter.AUTHCAR);

@@ -236,7 +236,7 @@ public class UserIdChooseActivity extends BaseMvpActivity {
                         if (er.code == 0) {
                             user.alipayAuth = 2;
                             SharepUtil.putByBean(GlobalKey.USER_INFO, user);
-                            startActivity(FaceAuthSettingActivity.class, false);
+                            startActivity(FaceAuthSettingActivity.class, true);
                         } else {
                             showToast(er.msg);
                         }

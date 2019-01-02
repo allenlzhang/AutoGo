@@ -28,6 +28,8 @@
             android:id="@+id/tvDialogEdit"
             style="@style/baseEditStyle"
             android:layout_height="40dp"
+            android:inputType="number"
+            android:digits="0123456789"
             android:hint="请输入"
             android:layout_marginTop="10dp"/>
     </LinearLayout>
