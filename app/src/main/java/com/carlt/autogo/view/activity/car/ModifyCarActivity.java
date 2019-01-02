@@ -24,8 +24,6 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.car.BrandInfo;
@@ -41,7 +39,6 @@ import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.PhotoUtils;
 import com.carlt.autogo.utils.SharepUtil;
-import com.carlt.autogo.utils.gildutils.GlideCircleTransform;
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -149,6 +146,7 @@ public class ModifyCarActivity extends BaseMvpActivity {
                 .subscribe(new Consumer<CarInfo>() {
                     @Override
                     public void accept(CarInfo carInfo) {
+                        LogUtils.e(carInfo.toString());
                         dialog.dismiss();
                         if (carInfo.err != null) {
                             ToastUtils.showShort(carInfo.err.msg);
@@ -165,16 +163,21 @@ public class ModifyCarActivity extends BaseMvpActivity {
                 });
     }
 
+    private CarInfo mCarInfo;
+
     private void setData(CarInfo carInfo) {
+        mCarInfo = carInfo;
         txtVehicleCertificationAdd.setText(carInfo.carName);
-        editVehicleCertificationVin.setText(carInfo.standCarNo);
-        Glide.with(this)
-                .load(carInfo.buyCarImgUrl)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .skipMemoryCache(true)
-                //                .error(R.mipmap.iv_def_head)
-                .transform(new GlideCircleTransform(this))
-                .into(ivVehicleCertification);
+        editVehicleCertificationVin.setText(carInfo.vin);
+        //        dataBean = new CarBrandInfo.DataBean();
+        //        dataBean.id = carInfo.id;
+        //        dataBean.title = carInfo.carName;
+        //        Glide.with(this)
+        //                .load(carInfo.buyCarImgUrl)
+        //                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+        //                .skipMemoryCache(true)
+        //                .transform(new GlideCircleTransform(this))
+        //                .into(ivVehicleCertification);
     }
 
     private void initPopup() {
@@ -280,18 +283,26 @@ public class ModifyCarActivity extends BaseMvpActivity {
     @SuppressLint("CheckResult")
     private void modifyCar() {
         Map<String, Object> map = new HashMap<>();
+        map.put("id", mCarInfo.id);
         if (TextUtils.isEmpty(txtVehicleCertificationAdd.getText())) {
             ToastUtils.showShort("请添加爱车");
             return;
         } else {
-            map.put("brandCarId", dataBean.id);
+            if (dataBean == null) {
+                showToast("你还没有更换车款");
+                return;
+                //                map.put("brandCarId", 0);
+            } else {
+                map.put("brandCarId", dataBean.id);
+            }
+
         }
-        if (TextUtils.isEmpty(editVehicleCertificationVin.getText().toString().toUpperCase())) {
-            ToastUtils.showShort("请输入车辆车架号");
-            return;
-        } else {
-            map.put("vin", editVehicleCertificationVin.getText().toString());
-        }
+        //        if (TextUtils.isEmpty(editVehicleCertificationVin.getText().toString().toUpperCase())) {
+        //            ToastUtils.showShort("请输入车辆车架号");
+        //            return;
+        //        } else {
+        //            map.put("vin", editVehicleCertificationVin.getText().toString());
+        //        }
         //        if (TextUtils.isEmpty(editVehicleCertificationEngineNum.getText())) {
         //            TextUtils.isEmpty("请输入车辆发动机号");
         //            return;
@@ -318,6 +329,7 @@ public class ModifyCarActivity extends BaseMvpActivity {
                             intent.putExtra("carId", carId);
                             intent.putExtra("withTbox", withTbox);
                             startActivity(intent);
+                            finish();
                             //                            ModifyCarActivity.this.setResult(RESULT_OK);
                             //                            ModifyCarActivity.this.finish();
                         }

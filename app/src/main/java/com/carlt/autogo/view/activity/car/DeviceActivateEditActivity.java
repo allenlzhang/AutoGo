@@ -119,6 +119,7 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
                                 ToastUtils.showShort("开始激活");
                                 Intent intent = new Intent(DeviceActivateEditActivity.this, ActivateStepActivity.class);
                                 intent.putExtra("carId", carId);
+                                intent.putExtra("withTbox", withTbox);
                                 startActivity(intent);
                                 finish();
                             }

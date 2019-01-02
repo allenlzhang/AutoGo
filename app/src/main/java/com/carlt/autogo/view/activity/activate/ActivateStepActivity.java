@@ -106,7 +106,7 @@ public class ActivateStepActivity extends BaseMvpActivity {
                 }
             }
             ActivateStepInfo.StepsBean sixStep = steps.get(4);
-            sixStep.failCode = 2226;
+            //            sixStep.failCode = 2226;
             if (sixStep.isSuccess == 2) {
                 if (sixStep.failCode == 2226) {
                     ERR_TYPE = 1;
@@ -200,8 +200,11 @@ public class ActivateStepActivity extends BaseMvpActivity {
 
     @OnClick(R.id.btnRetry)
     public void onViewClicked() {
-        int withTbox = getIntent().getIntExtra("withTbox", 0);
+        int withTbox = getIntent().getIntExtra("withTbox", -1);
+        LogUtils.e(withTbox);
         Intent intent = new Intent();
+        intent.putExtra("withTbox", withTbox);
+        intent.putExtra("carId", carId);
         switch (ERR_TYPE) {
             case 0:
                 intent.setClass(this, DeviceActivateActivity.class);
@@ -212,8 +215,7 @@ public class ActivateStepActivity extends BaseMvpActivity {
             default:
                 break;
         }
-        intent.putExtra("withTbox", withTbox);
-        intent.putExtra("carId", carId);
+
         startActivity(intent);
         finish();
     }

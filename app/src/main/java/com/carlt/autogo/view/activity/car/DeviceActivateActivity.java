@@ -28,14 +28,14 @@ public class DeviceActivateActivity extends BaseMvpActivity {
     public void init() {
         setTitleText("设备激活");
         carId = getIntent().getIntExtra("carId", 0);
-        withTbox = getIntent().getIntExtra("withTbox", 0);
+        withTbox = getIntent().getIntExtra("withTbox", -1);
     }
 
     @OnClick(R.id.btnACCNext)
     public void onViewClicked() {
-        Intent intent = new Intent(DeviceActivateActivity.this,DeviceActivateEditActivity.class);
-        intent.putExtra("carId",carId);
-        intent.putExtra("withTbox",withTbox);
+        Intent intent = new Intent(DeviceActivateActivity.this, DeviceActivateEditActivity.class);
+        intent.putExtra("carId", carId);
+        intent.putExtra("withTbox", withTbox);
         startActivity(intent);
         finish();
     }

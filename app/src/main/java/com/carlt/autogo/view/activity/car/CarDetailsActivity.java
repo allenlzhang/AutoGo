@@ -166,8 +166,14 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 break;
         }
         carId = intent.getIntExtra("id", 0);
-        ClientGetCarInfo(carId);
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ClientGetCarInfo(carId);
     }
 
     /**
