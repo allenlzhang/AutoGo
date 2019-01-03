@@ -215,7 +215,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
                 params.put("pwdReally", pwd);
 
                 getPresenter().login(params);
-
                 break;
             case R.id.passwd_toggle:
 

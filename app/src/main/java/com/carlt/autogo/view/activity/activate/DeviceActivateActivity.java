@@ -1,4 +1,4 @@
-package com.carlt.autogo.view.activity.car;
+package com.carlt.autogo.view.activity.activate;
 
 import android.content.Intent;
 import android.widget.Button;

@@ -39,6 +39,7 @@ import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.PhotoUtils;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.activate.DeviceActivateActivity;
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;

@@ -12,10 +12,10 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.entry.car.ActivateStepInfo;
-import com.carlt.autogo.net.base.ClientFactory;
-import com.carlt.autogo.net.service.CarService;
-import com.carlt.autogo.view.activity.car.DeviceActivateActivity;
+import com.carlt.autogo.presenter.activite.ActivateStepPresenter;
+import com.carlt.autogo.presenter.activite.IActivateStepView;
 import com.carlt.autogo.view.activity.car.ModifyCarActivity;
 import com.shuhart.stepview.StepView;
 
@@ -26,9 +26,9 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.functions.Consumer;
 
-public class ActivateStepActivity extends BaseMvpActivity {
+@CreatePresenter(presenter = ActivateStepPresenter.class)
+public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter> implements IActivateStepView {
 
     @BindView(R.id.step_view)
     StepView  stepView;
@@ -69,25 +69,26 @@ public class ActivateStepActivity extends BaseMvpActivity {
 
     @SuppressLint("CheckResult")
     private void initActivateLogs() {
-        dialog.show();
+//        dialog.show();
         carId = getIntent().getIntExtra("carId", 0);
         LogUtils.e(carId);
         Map<String, Object> params = new HashMap<>();
         params.put("carID", carId);
-        ClientFactory.def(CarService.class).getLogs(params)
-                .subscribe(new Consumer<ActivateStepInfo>() {
-                    @Override
-                    public void accept(ActivateStepInfo info) throws Exception {
-                        LogUtils.e(info);
-                        initStepView(info);
-                        dialog.dismiss();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        dialog.dismiss();
-                    }
-                });
+        getPresenter().getStepInfos(params);
+        //        ClientFactory.def(CarService.class).getLogs(params)
+        //                .subscribe(new Consumer<ActivateStepInfo>() {
+        //                    @Override
+        //                    public void accept(ActivateStepInfo info) throws Exception {
+        //                        LogUtils.e(info);
+        //                        initStepView(info);
+        //                        dialog.dismiss();
+        //                    }
+        //                }, new Consumer<Throwable>() {
+        //                    @Override
+        //                    public void accept(Throwable throwable) throws Exception {
+        //                        dialog.dismiss();
+        //                    }
+        //                });
 
     }
 
@@ -226,5 +227,15 @@ public class ActivateStepActivity extends BaseMvpActivity {
         if (mAnimator != null) {
             mAnimator.cancel();
         }
+    }
+
+    @Override
+    public void getStepInfoFinish(ActivateStepInfo info) {
+        initStepView(info);
+    }
+
+    @Override
+    public void getStepInfoErr(Throwable throwable) {
+
     }
 }

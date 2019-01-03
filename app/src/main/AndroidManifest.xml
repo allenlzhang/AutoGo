@@ -72,8 +72,8 @@
         <activity android:name=".view.activity.car.BrandCarActivity"/>
         <activity android:name=".view.activity.car.MyCarActivity"/>
         <activity android:name=".view.activity.car.CarDetailsActivity"/>
-        <activity android:name=".view.activity.car.DeviceActivateActivity"/>
-        <activity android:name=".view.activity.car.DeviceActivateEditActivity"/>
+        <activity android:name=".view.activity.activate.DeviceActivateActivity"/>
+        <activity android:name=".view.activity.activate.DeviceActivateEditActivity"/>
         <activity android:name=".view.activity.car.ModifyCarActivity"/>
 
         <provider

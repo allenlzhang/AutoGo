@@ -1,4 +1,4 @@
-package com.carlt.autogo.view.activity.car;
+package com.carlt.autogo.view.activity.activate;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -15,7 +15,6 @@ import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
-import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
 
 import java.util.HashMap;
 import java.util.Map;

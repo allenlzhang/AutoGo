@@ -21,6 +21,7 @@ import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.utils.MyTimeUtils;
 import com.carlt.autogo.view.activity.activate.ActivateStepActivity;
+import com.carlt.autogo.view.activity.activate.DeviceActivateActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
