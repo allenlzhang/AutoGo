@@ -27,6 +27,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
@@ -122,13 +123,17 @@ public class CarCertificationActivity extends BaseMvpActivity {
         editVehicleCertificationVin.addTextChangedListener(textWatcher);
         editVehicleCertificationEngineNum.setTransformationMethod(method);
         editVehicleCertificationEngineNum.addTextChangedListener(textWatcher);
+        if (!AotugoImage.exists()) {
+            AotugoImage.mkdirs();
+        }
+        enableBtn();
     }
 
-    private void enableBtn(){
-        if (!TextUtils.isEmpty(txtVehicleCertificationAdd.getText())&&!TextUtils.isEmpty(editVehicleCertificationVin.getText())
-                &&!TextUtils.isEmpty(editVehicleCertificationEngineNum.getText())&&avatarId!=0){
+    private void enableBtn() {
+        if (!TextUtils.isEmpty(txtVehicleCertificationAdd.getText()) && !TextUtils.isEmpty(editVehicleCertificationVin.getText())
+                && !TextUtils.isEmpty(editVehicleCertificationEngineNum.getText()) && avatarId != 0) {
             btnVehicleCertification.setEnabled(true);
-        }else {
+        } else {
             btnVehicleCertification.setEnabled(false);
         }
 
@@ -144,6 +149,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
         popupWindow.setAnimationStyle(R.style.BottomDialogAnimation);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(true);
         popupWindow.setTouchable(true);
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -183,6 +189,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
 
     /**
      * 屏幕透明度
+     *
      * @param bgAlpha
      */
     public void backgroundAlpha(float bgAlpha) {
@@ -224,12 +231,8 @@ public class CarCertificationActivity extends BaseMvpActivity {
                 filter();
                 break;
             case R.id.iv_vehicle_certification:
-                if (popupWindow.isShowing()){
-                    popupWindow.dismiss();
-                }else {
-                    popupWindow.showAtLocation(llVehicleCertification, Gravity.BOTTOM, 0, 0);
-                    backgroundAlpha(0.7f);
-                }
+                popupWindow.showAtLocation(llVehicleCertification, Gravity.BOTTOM, 0, 0);
+                backgroundAlpha(0.7f);
                 break;
         }
     }
@@ -273,27 +276,32 @@ public class CarCertificationActivity extends BaseMvpActivity {
     private void filter() {
         dialog.show();
         Gson gson = new Gson();
-        OkGo.<String>post(GlobalUrl.TEST_BASE_URL + "BrandProduct/AutoFilter")
-                .headers("Content-Type", "application/json")
-                .headers("Carlt-Access-Id", GlobalKey.TEST_ACCESSID)
-                .headers("Carlt-Token", SharepUtil.getPreferences().getString("token", ""))
-                .upJson(gson.toJson(new HashMap<>()))
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        dialog.dismiss();
-                        parseFilter(response.body());
-                    }
+        if (!NetworkUtils.isConnected() && !NetworkUtils.isAvailableByPing()) {
+            ToastUtils.showShort("网络错误，请检查网络");
+            dialog.dismiss();
+        }else {
+            OkGo.<String>post(GlobalUrl.TEST_BASE_URL + "BrandProduct/AutoFilter")
+                    .headers("Content-Type", "application/json")
+                    .headers("Carlt-Access-Id", GlobalKey.TEST_ACCESSID)
+                    .headers("Carlt-Token", SharepUtil.getPreferences().getString("token", ""))
+                    .upJson(gson.toJson(new HashMap<>()))
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onSuccess(Response<String> response) {
+                            dialog.dismiss();
+                            parseFilter(response.body());
+                        }
 
-                    @Override
-                    public void onError(Response<String> response) {
-                        super.onError(response);
-                        dialog.dismiss();
-                        LogUtils.e(response);
-                    }
+                        @Override
+                        public void onError(Response<String> response) {
+                            super.onError(response);
+                            dialog.dismiss();
+                            LogUtils.e(response);
+                        }
 
 
-                });
+                    });
+        }
     }
 
     private void parseFilter(String body) {
@@ -357,14 +365,14 @@ public class CarCertificationActivity extends BaseMvpActivity {
             map.put("brandCarId", dataBean.id);
         }
         String vin = editVehicleCertificationVin.getText().toString().toUpperCase();
-        if (!checkTxt(vin)||vin.length() != 17) {
+        if (!checkTxt(vin) || vin.length() != 17) {
             ToastUtils.showShort("请输入正确的车架号");
             return;
         } else {
             map.put("vin", editVehicleCertificationVin.getText().toString().toUpperCase());
         }
         String engineNum = editVehicleCertificationEngineNum.getText().toString().toUpperCase();
-        if (!checkTxt(engineNum)||engineNum.length() != 7) {
+        if (!checkTxt(engineNum) || engineNum.length() != 7) {
             ToastUtils.showShort("请输入正确的发动机号");
             return;
         } else {
@@ -442,7 +450,8 @@ public class CarCertificationActivity extends BaseMvpActivity {
                     }
                 });
     }
-     ReplacementTransformationMethod method = new ReplacementTransformationMethod() {
+
+    ReplacementTransformationMethod method = new ReplacementTransformationMethod() {
         @Override
         protected char[] getOriginal() {
             char[] small = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
@@ -471,6 +480,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
 
         }
     };
+
     public boolean checkTxt(String str) {
         String strPattern = "^[A-Za-z0-9]*";
         Pattern p = Pattern.compile(strPattern);

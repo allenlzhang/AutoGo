@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -67,6 +66,10 @@ public class MyCarFragment extends BaseMvpFragment {
                     certification();
                 }
             });
+        }else {
+            if (fragmentLvMyCar.getFooterViewsCount() == 0) {
+                fragmentLvMyCar.addFooterView(bottomView);
+            }
         }
         fragmentLvMyCar.setAdapter(adapter);
     }
