@@ -54,7 +54,7 @@
         android:layout_marginTop="10dp"
         android:hint="@string/vehicle_certification_vin"
         android:inputType="textEmailAddress"
-        android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:digits="@string/digits1"
         tools:ignore="TextFields"/>
     <EditText
         android:id="@+id/edit_vehicle_certification_engine_num"
@@ -62,7 +62,7 @@
         android:layout_marginTop="10dp"
         android:hint="@string/vehicle_certification_engine_num"
         android:maxLength="8"
-        android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:digits="@string/digits1"
         android:inputType="textEmailAddress"
         tools:ignore="TextFields"/>
     <TextView

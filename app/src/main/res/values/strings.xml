@@ -84,4 +84,5 @@
     <string name="token_err">您的账户已在其他设备登录，如非本人操作，请通过忘记密码功能，进行密码修改</string>
     <!-- 密码输入限制-->
     <string name="digits">0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-+=;,./~!@#$%^*"\>"'</string>
+    <string name="digits1">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 </resources>

@@ -372,7 +372,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
             map.put("vin", editVehicleCertificationVin.getText().toString().toUpperCase());
         }
         String engineNum = editVehicleCertificationEngineNum.getText().toString().toUpperCase();
-        if (!checkTxt(engineNum) || engineNum.length() != 7) {
+        if (!checkTxt(engineNum) || engineNum.length() < 7) {
             ToastUtils.showShort("请输入正确的发动机号");
             return;
         } else {

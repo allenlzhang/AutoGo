@@ -78,7 +78,7 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
                 return;
             }
         }
-        if (!checkTxt(etPin.getText().toString())||etPin.getText().length() != 8) {
+        if (!checkTxt(etPin.getText().toString())||!(etPin.getText().length() == 8||etPin.getText().length() == 6)) {
             ToastUtils.showShort("PIN码输入有误");
             return;
         }
