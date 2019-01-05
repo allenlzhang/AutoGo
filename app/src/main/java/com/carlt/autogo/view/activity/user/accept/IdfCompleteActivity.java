@@ -10,13 +10,10 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
-import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserIdentity;
-import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.ActivityControl;
-import com.carlt.autogo.utils.SharepUtil;
 
 import java.util.HashMap;
 
@@ -38,7 +35,7 @@ public class IdfCompleteActivity extends BaseMvpActivity {
     Button    btnBack;
     @BindView(R.id.tv)
     TextView  tv;
-    private boolean isByIdcard = false;
+    private boolean isByIdcard;
 
     @Override
     protected int getContentView() {

@@ -2,6 +2,7 @@ package com.carlt.autogo.view.activity.activate;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -16,6 +17,8 @@ import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.entry.car.ActivateStepInfo;
 import com.carlt.autogo.presenter.activite.ActivateStepPresenter;
 import com.carlt.autogo.presenter.activite.IActivateStepView;
+import com.carlt.autogo.utils.ActivityControl;
+import com.carlt.autogo.view.activity.car.CarDetailsActivity;
 import com.carlt.autogo.view.activity.car.ModifyCarActivity;
 import com.shuhart.stepview.StepView;
 
@@ -23,9 +26,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 @CreatePresenter(presenter = ActivateStepPresenter.class)
 public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter> implements IActivateStepView {
@@ -67,14 +76,41 @@ public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter>
         initAnimator();
     }
 
+    Disposable disposable;
+    int        time = 1800;
+
     @SuppressLint("CheckResult")
     private void initActivateLogs() {
-//        dialog.show();
+        //        dialog.show();
         carId = getIntent().getIntExtra("carId", 0);
         LogUtils.e(carId);
-        Map<String, Object> params = new HashMap<>();
+        final Map<String, Object> params = new HashMap<>();
         params.put("carID", carId);
-        getPresenter().getStepInfos(params);
+        getPresenter().getStepInfos(params, true);
+        disposable = Observable.interval(5, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        getPresenter().getStepInfos(params, false);
+                    }
+                })
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        time--;
+                        if (time <= 0) {
+                            disposable.dispose();
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable.getMessage());
+                    }
+                });
+
         //        ClientFactory.def(CarService.class).getLogs(params)
         //                .subscribe(new Consumer<ActivateStepInfo>() {
         //                    @Override
@@ -104,6 +140,7 @@ public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter>
                 } else if (step.isSuccess == 2) {
                     btnRetry.setVisibility(View.VISIBLE);
                     tvTip.setVisibility(View.VISIBLE);
+                    disposable.dispose();
                 }
             }
             ActivateStepInfo.StepsBean sixStep = steps.get(4);
@@ -118,7 +155,12 @@ public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter>
 
             stepView.setStepsNumber(steps.size());
             ActivateStepInfo.StepsBean stepsBean;
+            LogUtils.e(logs.size() + steps.size());
             if (logs.size() == steps.size()) {
+                btnRetry.setText("开启智能驾驶之旅");
+                btnRetry.setVisibility(View.VISIBLE);
+                ERR_TYPE = 2;
+                disposable.dispose();
                 stepView.go(logs.size() - 1, true);
                 stepView.done(true);
                 stepsBean = steps.get(logs.size() - 1);
@@ -144,41 +186,6 @@ public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter>
                 ivLoading.setVisibility(View.GONE);
                 ivState.setImageResource(R.mipmap.iv_activate_success);
             }
-
-            //            stepView.setOnStepClickListener(new StepView.OnStepClickListener() {
-            //                @Override
-            //                public void onStepClick(int step) {
-            //                    if (step < logs.size()) {
-            //                        ActivateStepInfo.StepsBean logsBean = logs.get(step);
-            //                        tvState.setText(logsBean.title);
-            //                        tvDes.setText(logsBean.description);
-            //                        tvErr.setText(logsBean.failReason);
-            //                        if (logsBean.isSuccess == 1) {
-            //                            ivState.setImageResource(R.mipmap.iv_activate_success);
-            //                        } else {
-            //                            ivState.setImageResource(R.mipmap.iv_activate_err);
-            //                        }
-            //                    } else if (step == logs.size()) {
-            //                        ActivateStepInfo.StepsBean stepsBean = steps.get(step);
-            //                        if (stepsBean.isSuccess == -1) {
-            //                            tvState.setText(stepsBean.title);
-            //                            ivState.setImageResource(R.mipmap.iv_activate_ing);
-            //                        } else if (stepsBean.isSuccess == 2) {
-            //                            tvState.setText(stepsBean.title);
-            //                            ivState.setImageResource(R.mipmap.iv_activate_err);
-            //                        }
-            //
-            //                        tvDes.setText(stepsBean.description);
-            //                        tvErr.setText(stepsBean.failReason);
-            //                    } else {
-            //                        ActivateStepInfo.StepsBean stepsBean = steps.get(step);
-            //                        tvState.setText(stepsBean.title);
-            //                        ivState.setImageResource(R.mipmap.iv_activate_no_conn);
-            //                        tvDes.setText(stepsBean.description);
-            //                    }
-            //
-            //                }
-            //            });
         } else {
             showToast(info.err.msg);
         }
@@ -202,22 +209,36 @@ public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter>
     @OnClick(R.id.btnRetry)
     public void onViewClicked() {
         int withTbox = getIntent().getIntExtra("withTbox", -1);
-        LogUtils.e(withTbox);
-        Intent intent = new Intent();
-        intent.putExtra("withTbox", withTbox);
-        intent.putExtra("carId", carId);
+//        LogUtils.e(withTbox);
+
         switch (ERR_TYPE) {
             case 0:
+                Intent intent = new Intent();
+                intent.putExtra("withTbox", withTbox);
+                intent.putExtra("carId", carId);
                 intent.setClass(this, DeviceActivateActivity.class);
+                startActivity(intent);
                 break;
             case 1:
-                intent.setClass(this, ModifyCarActivity.class);
+                Intent intent1 = new Intent();
+                intent1.putExtra("withTbox", withTbox);
+                intent1.putExtra("carId", carId);
+                intent1.setClass(this, ModifyCarActivity.class);
+                startActivity(intent1);
+                break;
+            case 2:
+                for (Activity activity : ActivityControl.mActivityList) {
+                    if (activity instanceof CarDetailsActivity) {
+                        activity.finish();
+                    }
+
+                }
                 break;
             default:
                 break;
         }
 
-        startActivity(intent);
+
         finish();
     }
 
@@ -226,6 +247,9 @@ public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter>
         super.onPause();
         if (mAnimator != null) {
             mAnimator.cancel();
+        }
+        if (disposable != null) {
+            disposable.dispose();
         }
     }
 

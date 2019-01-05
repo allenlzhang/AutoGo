@@ -37,9 +37,9 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
     @BindView(R.id.etDeviceNum)
     EditText etDeviceNum;//16位
     @BindView(R.id.btnActivate)
-    Button btnActivate;
-    private int carId;
-    private int withTbox;
+    Button   btnActivate;
+    private int    carId;
+    private int    withTbox;
     private String deviceNum;
 
     @Override
@@ -77,15 +77,24 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
                 ToastUtils.showShort("请输入设备号");
                 return;
             }
+            if (!checkTxt(etDeviceNum.getText().toString()) || etDeviceNum.getText().length() != 16) {
+                ToastUtils.showShort("设备号输入有误");
+                return;
+            }
         }
-        if (!checkTxt(etPin.getText().toString())||!(etPin.getText().length() == 8||etPin.getText().length() == 6)) {
+//        if (!checkTxt(etPin.getText().toString())||!(etPin.getText().length() == 8||etPin.getText().length() == 6)) {
+//            ToastUtils.showShort("PIN码输入有误");
+//            return;
+//        }
+//        if (!checkTxt(etDeviceNum.getText().toString())||etDeviceNum.getText().length() != 16) {
+//            ToastUtils.showShort("设备号输入有误");
+//
+//        }
+        if (!checkTxt(etPin.getText().toString()) || etPin.getText().length() != 8) {
             ToastUtils.showShort("PIN码输入有误");
             return;
         }
-        if (!checkTxt(etDeviceNum.getText().toString())||etDeviceNum.getText().length() != 16) {
-            ToastUtils.showShort("设备号输入有误");
-            return;
-        }
+
         deviceActive();
 
     }

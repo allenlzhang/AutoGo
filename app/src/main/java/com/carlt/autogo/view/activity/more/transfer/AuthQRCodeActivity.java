@@ -19,6 +19,7 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.CarAuthTimeAdapter;
 import com.carlt.autogo.adapter.CarNameItemAdapter;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.CarAuthTimeInfo;
@@ -27,6 +28,8 @@ import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.presenter.carauth.AuthQRCodePresenter;
+import com.carlt.autogo.presenter.carauth.IAuthQRCodeView;
 import com.carlt.autogo.utils.QRCodeUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.zyyoona7.popup.EasyPopup;
@@ -48,7 +51,8 @@ import io.reactivex.functions.Function;
  * Author     : zhanglei
  * Date       : 2018/11/22
  */
-public class AuthQRCodeActivity extends BaseMvpActivity {
+@CreatePresenter(presenter = AuthQRCodePresenter.class)
+public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> implements IAuthQRCodeView {
 
     @BindView(R.id.ivQRCode)
     ImageView ivQRCode;
@@ -88,10 +92,10 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
         interval();
     }
 
-    private Disposable disposable;
+    private Disposable              disposable;
     private int                     duration = 10 * 60;
     private HashMap<String, Object> map      = new HashMap<>();
-    private int mId;
+    private int                     mId;
 
     @SuppressLint("CheckResult")
     private void checkQrCodeState(final int id) {
@@ -141,7 +145,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
         carInfo = SingletonCar.getInstance().getCarBean();
 
 
-        dialog.show();
+        //        dialog.show();
         HashMap<String, Object> map = new HashMap<>();
         if (carId == 0) {
             map.put("carId", carInfo.id);
@@ -155,61 +159,100 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
         } else {
             map.put("authType", authType);
         }
+        getPresenter().createAuthQrcode(map);
+        //        ClientFactory.def(CarService.class).createAuthQrcode(map)
+        //                .subscribe(new Consumer<CarBaseInfo>() {
+        //                    @Override
+        //                    public void accept(CarBaseInfo carInfo) throws Exception {
+        //                        if (carInfo.id != 0) {
+        //                            long l = System.currentTimeMillis() / 1000;
+        //                            Bitmap codeBit = QRCodeUtils.createQRCode(GlobalKey.AUTH_REGEX + carInfo.id + "&time=" + l);
+        //                            checkQrCodeState(carInfo.id);
+        //                            ivQRCode.setImageBitmap(codeBit);
+        //                        } else {
+        //                            showToast(carInfo.err.msg);
+        //
+        //                            CommonDialog.createOneBtnDialog(AuthQRCodeActivity.this, carInfo.err.msg, false, new CommonDialog.DialogOneBtnClick() {
+        //                                @Override
+        //                                public void onOneBtnClick() {
+        //                                    finish();
+        //                                }
+        //                            });
+        //                        }
+        //                        dialog.dismiss();
+        //                        LogUtils.e(carInfo);
+        //                    }
+        //                }, new Consumer<Throwable>() {
+        //                    @Override
+        //                    public void accept(Throwable throwable) throws Exception {
+        //                        LogUtils.e(throwable);
+        //                        dialog.dismiss();
+        //                    }
+        //                });
+    }
 
-        ClientFactory.def(CarService.class).createAuthQrcode(map)
-                .subscribe(new Consumer<CarBaseInfo>() {
-                    @Override
-                    public void accept(CarBaseInfo carInfo) throws Exception {
-                        if (carInfo.id != 0) {
-                            long l = System.currentTimeMillis() / 1000;
-                            Bitmap codeBit = QRCodeUtils.createQRCode(GlobalKey.AUTH_REGEX + carInfo.id + "&time=" + l);
-                            checkQrCodeState(carInfo.id);
-                            ivQRCode.setImageBitmap(codeBit);
-                        } else {
-                            showToast(carInfo.err.msg);
+    @Override
+    public void createAuthQRCode(CarBaseInfo info) {
+        if (info.id != 0) {
+            long l = System.currentTimeMillis() / 1000;
+            Bitmap codeBit = QRCodeUtils.createQRCode(GlobalKey.AUTH_REGEX + info.id + "&time=" + l);
+            checkQrCodeState(info.id);
+            ivQRCode.setImageBitmap(codeBit);
+        } else {
+            showToast(info.err.msg);
 
-                            CommonDialog.createOneBtnDialog(AuthQRCodeActivity.this, carInfo.err.msg, false, new CommonDialog.DialogOneBtnClick() {
-                                @Override
-                                public void onOneBtnClick() {
-                                    finish();
-                                }
-                            });
-                        }
-                        dialog.dismiss();
-                        LogUtils.e(carInfo);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        LogUtils.e(throwable);
-                        dialog.dismiss();
-                    }
-                });
+            CommonDialog.createOneBtnDialog(AuthQRCodeActivity.this, info.err.msg, false, new CommonDialog.DialogOneBtnClick() {
+                @Override
+                public void onOneBtnClick() {
+                    finish();
+                }
+            });
+        }
+        dialog.dismiss();
+        LogUtils.e(info);
+    }
+
+    @Override
+    public void getMyCarList(AuthCarInfo info, View v) {
+        LogUtils.e(info);
+        List<AuthCarInfo.MyCarBean> myCar = info.myCar;
+        carNameItemAdapter = new CarNameItemAdapter(myCar, carCurrentSelect);
+        showCarPop(v, "请选择授权车辆", carNameItemAdapter);
+    }
+
+    @Override
+    public void getAuthTimes(CarAuthTimeInfo info, View v) {
+        LogUtils.e(info);
+        authTimeAdapter = new CarAuthTimeAdapter(info.list, timeCurrentSelect);
+        showCarPop(v, "请选择授权时长", authTimeAdapter);
     }
 
     @SuppressLint("CheckResult")
     private void initCarName(final View v) {
-        dialog.show();
+//        dialog.show();
         HashMap<String, Object> map = new HashMap<>();
         map.put("type", 1);//1我的车辆 2被授权车辆 3我的车辆和被授权车辆
-        map.put("isShowActive",2);//默认1不显示，2显示设备等激活状态
-        ClientFactory.def(CarService.class).getMyCarList(map)
-                .subscribe(new Consumer<AuthCarInfo>() {
-                    @Override
-                    public void accept(AuthCarInfo carInfo) throws Exception {
-                        dialog.dismiss();
-                        LogUtils.e(carInfo);
-                        List<AuthCarInfo.MyCarBean> myCar = carInfo.myCar;
-                        carNameItemAdapter = new CarNameItemAdapter(myCar, carCurrentSelect);
-                        showCarPop(v, "请选择授权车辆", carNameItemAdapter);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        dialog.dismiss();
-                        LogUtils.e(throwable);
-                    }
-                });
+        map.put("isShowActive", 2);//默认1不显示，2显示设备等激活状态
+        getPresenter().getMyCarList(map, v);
+        //        ClientFactory.def(CarService.class).getMyCarList(map)
+        //                .subscribe(new Consumer<AuthCarInfo>() {
+        //                    @Override
+        //                    public void accept(AuthCarInfo carInfo) throws Exception {
+        //                        dialog.dismiss();
+        //                        LogUtils.e(carInfo);
+        //                        List<AuthCarInfo.MyCarBean> myCar = carInfo.myCar;
+        //                        carNameItemAdapter = new CarNameItemAdapter(myCar, carCurrentSelect);
+        //                        showCarPop(v, "请选择授权车辆", carNameItemAdapter);
+        //                    }
+        //                }, new Consumer<Throwable>() {
+        //                    @Override
+        //                    public void accept(Throwable throwable) throws Exception {
+        //                        dialog.dismiss();
+        //                        LogUtils.e(throwable);
+        //                    }
+        //                });
+
+
         //                Gson gson=new Gson();
         //                OkGo.<String>post(url)
         //                        .headers("Carlt-Access-Id", GlobalKey.TEST_ACCESSID)
@@ -231,30 +274,31 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
     }
 
     public static final String url = "http://test.linewin.cc:8888/app/CarAuth/GetMyCarList";
-    private int timeCurrentSelect;
-    private int carCurrentSelect;
+    private             int    timeCurrentSelect;
+    private             int    carCurrentSelect;
 
     @SuppressLint("CheckResult")
-    private void initAuthTime(final View view) {
-        dialog.show();
+    private void initAuthTime(View view) {
+//        dialog.show();
         HashMap<String, Object> map = new HashMap<>();
-        ClientFactory.def(CarService.class).getAuthSetting(map)
-                .subscribe(new Consumer<CarAuthTimeInfo>() {
-                    @Override
-                    public void accept(CarAuthTimeInfo carAuthTimeInfo) throws Exception {
-                        dialog.dismiss();
-                        LogUtils.e(carAuthTimeInfo);
-                        authTimeAdapter = new CarAuthTimeAdapter(carAuthTimeInfo.list, timeCurrentSelect);
-                        showCarPop(view, "请选择授权时长", authTimeAdapter);
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        dialog.dismiss();
-                        LogUtils.e(throwable);
-                    }
-                });
+        getPresenter().getAuthTimes(map, view);
+        //        ClientFactory.def(CarService.class).getAuthSetting(map)
+        //                .subscribe(new Consumer<CarAuthTimeInfo>() {
+        //                    @Override
+        //                    public void accept(CarAuthTimeInfo carAuthTimeInfo) throws Exception {
+        //                        dialog.dismiss();
+        //                        LogUtils.e(carAuthTimeInfo);
+        //                        authTimeAdapter = new CarAuthTimeAdapter(carAuthTimeInfo.list, timeCurrentSelect);
+        //                        showCarPop(view, "请选择授权时长", authTimeAdapter);
+        //
+        //                    }
+        //                }, new Consumer<Throwable>() {
+        //                    @Override
+        //                    public void accept(Throwable throwable) throws Exception {
+        //                        dialog.dismiss();
+        //                        LogUtils.e(throwable);
+        //                    }
+        //                });
 
 
     }
@@ -268,12 +312,10 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
                 refreshQrCode();
                 break;
             case R.id.tvCarName:
-                //                carNameItemAdapter = new CarNameItemAdapter(carNames);
-                //                showCarPop(view, "请选择授权车辆", carNameItemAdapter);
+
                 initCarName(view);
                 break;
             case R.id.tvTime:
-                //                showCarPop(view, "请选择授权时长", times);
                 initAuthTime(view);
                 break;
             case R.id.llTransfer:
@@ -290,12 +332,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == resCode) {
-                //                CommonDialog.createOneBtnDialog(AuthQRCodeActivity.this, "授权码已过期，请稍后重试", false, new CommonDialog.DialogOneBtnClick() {
-                //                    @Override
-                //                    public void onOneBtnClick() {
-                //                        finish();
-                //                    }
-                //                });
+
                 initQrCode(mCarId, mTimeType);
             }
         }

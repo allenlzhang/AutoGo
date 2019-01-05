@@ -1,13 +1,11 @@
 package com.carlt.autogo.view.activity.more.transfer;
 
 import android.annotation.SuppressLint;
-import android.view.View;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
-import com.carlt.autogo.adapter.CarPopupAdapter;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.AuthCarInfo;
@@ -29,6 +27,11 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * Description : 授权过户登录页面
+ * Author     : zhanglei
+ * Date       : 2019/1/4
+ */
 public class WaitAuthActivity extends BaseMvpActivity {
     @BindView(R.id.tvDes)
     TextView tvDes;
@@ -66,7 +69,7 @@ public class WaitAuthActivity extends BaseMvpActivity {
 
 
     private Disposable disposable;
-    private int duration = 10 * 60 ;
+    private int        duration = 10 * 60;
 
     @SuppressLint("CheckResult")
     private void pollingAuthResult() {
@@ -95,9 +98,9 @@ public class WaitAuthActivity extends BaseMvpActivity {
                                 CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "授权成功", false, new CommonDialog.DialogOneBtnClick() {
                                     @Override
                                     public void onOneBtnClick() {
-                                        if (!SingletonCar.getInstance().isBound()){
+                                        if (!SingletonCar.getInstance().isBound()) {
                                             GetCarList();
-                                        }else {
+                                        } else {
                                             finish();
                                         }
                                     }
@@ -172,10 +175,10 @@ public class WaitAuthActivity extends BaseMvpActivity {
     }
 
     @SuppressLint("CheckResult")
-    private void GetCarList(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("type",3);//1我的车辆 2被授权车辆 3我的车辆和被授权车辆
-        map.put("isShowActive",2);//默认1不显示，2显示设备等激活状态
+    private void GetCarList() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", 3);//1我的车辆 2被授权车辆 3我的车辆和被授权车辆
+        map.put("isShowActive", 2);//默认1不显示，2显示设备等激活状态
         ClientFactory.def(CarService.class).getMyCarList(map)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -194,10 +197,10 @@ public class WaitAuthActivity extends BaseMvpActivity {
                 });
     }
 
-    private void parseGetMyList(AuthCarInfo info){
-        if (info.err!=null){
+    private void parseGetMyList(AuthCarInfo info) {
+        if (info.err != null) {
             ToastUtils.showShort(info.err.msg);
-        }else {
+        } else {
             isBindCar(info);
         }
     }
@@ -206,12 +209,12 @@ public class WaitAuthActivity extends BaseMvpActivity {
      * 是否绑定车辆
      * @param info
      */
-    private void isBindCar(AuthCarInfo info){
+    private void isBindCar(AuthCarInfo info) {
         if (info != null) {
-            if (info.myCar!= null&&info.myCar.size() > 0 ){
+            if (info.myCar != null && info.myCar.size() > 0) {
                 SingletonCar.getInstance().setBound(true);
                 SingletonCar.getInstance().setCarBean(info.myCar.get(0));
-            }else if (info.authCar != null && info.authCar.size() > 0) {
+            } else if (info.authCar != null && info.authCar.size() > 0) {
                 SingletonCar.getInstance().setBound(true);
                 SingletonCar.getInstance().setCarBean(info.authCar.get(0));
             } else {

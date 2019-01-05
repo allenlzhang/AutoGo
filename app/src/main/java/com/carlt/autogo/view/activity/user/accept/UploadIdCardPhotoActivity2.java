@@ -38,8 +38,12 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -98,8 +102,8 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
     private              File fileUri              = new File(AotugoImage + "/photo.jpg");
     private              File fileCropUriface      = new File(AotugoImage + "/crop_photo_face.jpg");
     private              File fileCropUriBalce     = new File(AotugoImage + "/crop_photo_back.jpg");
-    private Uri imageUri;
-    private Uri cropImageUri;
+    private              Uri  imageUri;
+    private              Uri  cropImageUri;
 
     //    private String name;
     //    private String idCardNum;
@@ -268,10 +272,32 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
             showToast("您的身份证签发机关不正确");
             return;
         }
-        //        if (facepath == null || nationalpath == null) {
-        //            showToast("请上传身份证");
-        //            return;
-        //        }
+        if (!TextUtils.isEmpty(vaildPriod)) {
+            String[] split = vaildPriod.split("-");
+            String endDateStr = split[1];
+            LogUtils.e(endDateStr);
+            if (!endDateStr.equals("长期")) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd", Locale.CHINA);
+
+                try {
+                    Date endDate = format.parse(endDateStr);
+                    long time = endDate.getTime();
+                    long currentTimeMillis = System.currentTimeMillis();
+//                    currentTimeMillis = 2127916800000L;
+                    if (currentTimeMillis > time) {
+                        showToast("您的身份证已过期");
+                        return;
+                    }
+                    LogUtils.e(time + "---currentTimeMillis---" + currentTimeMillis);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+//        if (true) {
+//            return;
+//        }
         File faceFile = new File(facepath);
         File nationalFile = new File(nationalpath);
         dialog.show();
@@ -325,7 +351,7 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
                                 if (activity instanceof IdCardAcceptActivity) {
                                     activity.finish();
                                 }
-                                if (activity instanceof UserIdChooseActivity){
+                                if (activity instanceof UserIdChooseActivity) {
                                     activity.finish();
                                 }
                             }
@@ -425,6 +451,7 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
     String scanIDNum;
     String scanName;
     String scanNational;
+    String vaildPriod;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -442,6 +469,12 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
             String issue_authority = identityInfo.getIssue_authority();
             if (issue_authority != null) {
                 scanNational = issue_authority;
+            }
+            //有效期
+            String vaild_priod = identityInfo.getVaild_priod();
+            if (vaild_priod != null) {
+                LogUtils.e(vaild_priod);
+                vaildPriod = vaild_priod;
             }
             switch (requestCode) {
                 case Face_Code:
@@ -610,16 +643,16 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
         Canvas canvas = new Canvas(b);
         float w = b.getWidth();
         float h = b.getHeight();
-//        LogUtils.e(secondBitmap.getWidth() + "========" + secondBitmap.getHeight());
+        //        LogUtils.e(secondBitmap.getWidth() + "========" + secondBitmap.getHeight());
         LogUtils.e(firstBitmap.getWidth() + "========" + firstBitmap.getHeight());
         Matrix m = new Matrix();
         //确定secondBitmap大小比例
         //  m.setScale(w / imgPerson.getWidth(), h / imgPerson.getHeight());
         //  m.setScale(w / secondBitmap.getWidth(), h / secondBitmap.getHeight());
-        RectF rectF = new RectF(w/5,h/4,w/5*4,h/4*3);
+        RectF rectF = new RectF(w / 5, h / 4, w / 5 * 4, h / 4 * 3);
         canvas.drawBitmap(firstBitmap, 0, 0, null);
-//        canvas.drawBitmap(secondBitmap, (w - secondBitmap.getWidth()) / 2, (h - secondBitmap.getHeight()) / 2, null);
-        canvas.drawBitmap(secondBitmap,null,rectF,null);
+        //        canvas.drawBitmap(secondBitmap, (w - secondBitmap.getWidth()) / 2, (h - secondBitmap.getHeight()) / 2, null);
+        canvas.drawBitmap(secondBitmap, null, rectF, null);
         firstBitmap.recycle();
         return b;
     }

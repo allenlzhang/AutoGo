@@ -18,11 +18,14 @@ import com.blankj.utilcode.util.SizeUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.CarNameItemAdapter;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.presenter.cartransfer.ITransferQRCodeView;
+import com.carlt.autogo.presenter.cartransfer.TransferQRCodePresenter;
 import com.carlt.autogo.utils.QRCodeUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.zyyoona7.popup.EasyPopup;
@@ -44,7 +47,8 @@ import io.reactivex.functions.Function;
  * Author     : zhanglei
  * Date       : 2018/11/23
  */
-public class TransferQRCodeActivity extends BaseMvpActivity {
+@CreatePresenter(presenter = TransferQRCodePresenter.class)
+public class TransferQRCodeActivity extends BaseMvpActivity<TransferQRCodePresenter> implements ITransferQRCodeView {
 
     @BindView(R.id.ivQRCode)
     ImageView ivQRCode;
@@ -60,17 +64,10 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("生成二维码");
-        //        Bitmap qrCode = QRCodeUtils.createQRCode("sdfsdf");
-        //        ivQRCode.setImageBitmap(qrCode);
         String carName = getIntent().getStringExtra("carName");
         tvCarName.setText(carName);
         initQRCode(0);
-//        ivBaseBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
+
     }
 
     @Override
@@ -79,10 +76,10 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
         interval();
     }
 
-    private Disposable disposable;
+    private Disposable              disposable;
     private int                     duration = 10 * 60;
     private HashMap<String, Object> map      = new HashMap<>();
-    private int mId;
+    private int                     mId;
 
     @SuppressLint("CheckResult")
     private void checkQrCodeState(final int id) {
@@ -130,7 +127,7 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
 
     @SuppressLint("CheckResult")
     private void initQRCode(int id) {
-        dialog.show();
+        //        dialog.show();
         int carId = getIntent().getIntExtra("carId", 0);
         //        mCarId = carId;
 
@@ -142,26 +139,26 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
             map.put("carId", id);
             mCarId = id;
         }
+        getPresenter().createTransferQrcode(map);
 
-
-        ClientFactory.def(CarService.class).launchTransfer(map)
-                .subscribe(new Consumer<CarBaseInfo>() {
-                    @Override
-                    public void accept(CarBaseInfo carBaseInfo) throws Exception {
-                        LogUtils.e(carBaseInfo.transferId);
-                        long l = System.currentTimeMillis() / 1000;
-                        Bitmap qrCode = QRCodeUtils.createQRCode(GlobalKey.TRANSFER_REGEX + carBaseInfo.transferId + "&time=" + l);
-                        ivQRCode.setImageBitmap(qrCode);
-                        checkQrCodeState(carBaseInfo.transferId);
-                        dialog.dismiss();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        LogUtils.e(throwable);
-                        dialog.dismiss();
-                    }
-                });
+        //        ClientFactory.def(CarService.class).launchTransfer(map)
+        //                .subscribe(new Consumer<CarBaseInfo>() {
+        //                    @Override
+        //                    public void accept(CarBaseInfo carBaseInfo) throws Exception {
+        //                        LogUtils.e(carBaseInfo.transferId);
+        //                        long l = System.currentTimeMillis() / 1000;
+        //                        Bitmap qrCode = QRCodeUtils.createQRCode(GlobalKey.TRANSFER_REGEX + carBaseInfo.transferId + "&time=" + l);
+        //                        ivQRCode.setImageBitmap(qrCode);
+        //                        checkQrCodeState(carBaseInfo.transferId);
+        //                        dialog.dismiss();
+        //                    }
+        //                }, new Consumer<Throwable>() {
+        //                    @Override
+        //                    public void accept(Throwable throwable) throws Exception {
+        //                        LogUtils.e(throwable);
+        //                        dialog.dismiss();
+        //                    }
+        //                });
     }
 
     @OnClick({R.id.tvRefreshCode, R.id.tvCarName})
@@ -171,7 +168,7 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
                 initQRCode(mCarId);
                 break;
             case R.id.tvCarName:
-                initCarName(view);
+                initCarName();
                 break;
         }
     }
@@ -179,34 +176,35 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
     private CarNameItemAdapter carNameItemAdapter;
 
     @SuppressLint("CheckResult")
-    private void initCarName(final View v) {
-        dialog.show();
+    private void initCarName() {
+        //        dialog.show();
         HashMap<String, Object> map = new HashMap<>();
         map.put("type", 1);//1我的车辆 2被授权车辆 3我的车辆和被授权车辆
-        map.put("isShowActive",2);//默认1不显示，2显示设备等激活状态
-        ClientFactory.def(CarService.class).getMyCarList(map)
-                .subscribe(new Consumer<AuthCarInfo>() {
-                    @Override
-                    public void accept(AuthCarInfo carInfo) throws Exception {
-                        dialog.dismiss();
-                        LogUtils.e(carInfo);
-                        List<AuthCarInfo.MyCarBean> myCar = carInfo.myCar;
-                        carNameItemAdapter = new CarNameItemAdapter(myCar, carCurrentSelect);
-                        showCarPop(v, "请选择授权车辆", carNameItemAdapter);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        dialog.dismiss();
-                        LogUtils.e(throwable);
-                    }
-                });
+        map.put("isShowActive", 2);//默认1不显示，2显示设备等激活状态
+        getPresenter().getMyCarList(map);
+        //        ClientFactory.def(CarService.class).getMyCarList(map)
+        //                .subscribe(new Consumer<AuthCarInfo>() {
+        //                    @Override
+        //                    public void accept(AuthCarInfo carInfo) throws Exception {
+        //                        dialog.dismiss();
+        //                        LogUtils.e(carInfo);
+        //                        List<AuthCarInfo.MyCarBean> myCar = carInfo.myCar;
+        //                        carNameItemAdapter = new CarNameItemAdapter(myCar, carCurrentSelect);
+        //                        showCarPop(v, "请选择授权车辆", carNameItemAdapter);
+        //                    }
+        //                }, new Consumer<Throwable>() {
+        //                    @Override
+        //                    public void accept(Throwable throwable) throws Exception {
+        //                        dialog.dismiss();
+        //                        LogUtils.e(throwable);
+        //                    }
+        //                });
 
     }
 
     private int carCurrentSelect;
 
-    private void showCarPop(View v, final String title, final BaseQuickAdapter adapter) {
+    private void showCarPop(final BaseQuickAdapter adapter) {
         EasyPopup.create()
                 .setContext(this)
                 .setContentView(R.layout.layout_car_name_pop, ViewGroup.LayoutParams.MATCH_PARENT, SizeUtils.dp2px(250))
@@ -224,7 +222,7 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
                             }
                         });
                         TextView tvTitle = view.findViewById(R.id.tvPopTitle);
-                        tvTitle.setText(title);
+                        tvTitle.setText("请选择授权车辆");
                         RecyclerView rv = view.findViewById(R.id.recyclerView);
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(TransferQRCodeActivity.this);
                         rv.setLayoutManager(linearLayoutManager);
@@ -248,7 +246,7 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
 
                     }
                 })
-                .showAtLocation(v, Gravity.BOTTOM, 0, 0);
+                .showAtLocation(tvCarName, Gravity.BOTTOM, 0, 0);
     }
 
     @Override
@@ -273,4 +271,22 @@ public class TransferQRCodeActivity extends BaseMvpActivity {
             disposable.dispose();
         }
     }
+
+    @Override
+    public void createTransferQRCode(CarBaseInfo info) {
+        LogUtils.e(info.transferId);
+        long l = System.currentTimeMillis() / 1000;
+        Bitmap qrCode = QRCodeUtils.createQRCode(GlobalKey.TRANSFER_REGEX + info.transferId + "&time=" + l);
+        ivQRCode.setImageBitmap(qrCode);
+        checkQrCodeState(info.transferId);
+    }
+
+    @Override
+    public void getMyCarList(AuthCarInfo info) {
+        List<AuthCarInfo.MyCarBean> myCar = info.myCar;
+        carNameItemAdapter = new CarNameItemAdapter(myCar, carCurrentSelect);
+        showCarPop(carNameItemAdapter);
+    }
+
+
 }

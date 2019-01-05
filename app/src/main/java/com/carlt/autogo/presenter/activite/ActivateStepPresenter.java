@@ -22,9 +22,12 @@ import io.reactivex.functions.Consumer;
 
 public class ActivateStepPresenter extends BasePresenter<IActivateStepView> {
     @SuppressLint("CheckResult")
-    public void getStepInfos(final Map<String, Object> params) {
-        uuDialog.show();
-
+    public void getStepInfos(Map<String, Object> params, boolean isLoading) {
+        if (isLoading) {
+            uuDialog.show();
+        } else {
+            uuDialog.dismiss();
+        }
         ClientFactory.def(CarService.class).getLogs(params)
                 .subscribe(new Consumer<ActivateStepInfo>() {
                     @Override

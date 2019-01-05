@@ -12,7 +12,6 @@
     <string name="more_nickname">车主昵称</string>
     <string name="more_edit_profile">编辑资料</string>
     <string name="more_accounts_and_security">账号与安全</string>
-    <string name="more_setting">设置</string>
     <string name="more_log_out">退出登录</string>
     <string name="more_my_car">我的爱车</string>
     <string name="more_remote_update">远程升级</string>
@@ -44,7 +43,6 @@
     <!-- 远程密码管理 -->
     <string name="management_remote_pwd">远程密码管理</string>
     <string name="management_set_remote_pwd">设置远程密码</string>
-    <string name="management_change_pwd">修改密码</string>
     <string name="management_reset_remote_pwd">修改远程密码</string>
     <string name="management_forget_remote_pwd">忘记远程密码</string>
     <string name="management_set_remote_control_pwd">设置远程控制密码</string>
@@ -64,7 +62,6 @@
     <!-- 冻结账户 -->
     <string name="freeze_tv_status_free">瞬间保护账号安全 </string>
     <string name="freeze_tv_status_unfree">账号已经冻结 </string>
-    <string name="freeze_tv_free_info">账号冻结解除前任何人都无法使用应用 </string>
     <string name="freeze_tv_unfree_info">账号冻结解除前任何人都无法使用应用 </string>
     <string name="freeze_btn_free">立即冻结</string>
     <string name="freeze_btn_unfree">解冻账号</string>
