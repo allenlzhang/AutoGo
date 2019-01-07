@@ -35,7 +35,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-
+ /**
+  * Description : 激活步骤展示页面
+  * Author     : zhanglei
+  * Date       : 2019/1/5
+  */
 @CreatePresenter(presenter = ActivateStepPresenter.class)
 public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter> implements IActivateStepView {
 
@@ -57,12 +61,7 @@ public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter>
     Button    btnRetry;
     private int carId;
 
-    //    @Override
-    //    protected void onCreate(Bundle savedInstanceState) {
-    //        super.onCreate(savedInstanceState);
-    //        setContentView(R.layout.activity_activate_step);
-    //        ButterKnife.bind(this);
-    //    }
+
 
     @Override
     protected int getContentView() {

@@ -20,8 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="10dp">
 
         <TextView
             android:layout_width="85dp"
@@ -35,9 +35,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
+            android:layout_marginRight="15dp"
             android:lines="2"
             android:text="--"
-            android:layout_marginRight="15dp"
             android:textColor="@color/textColorGray"
             android:textSize="16dp"/>
     </LinearLayout>
@@ -46,8 +46,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"
-        android:gravity="center_vertical"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical">
 
         <TextView
             android:layout_width="85dp"
@@ -70,8 +70,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"
-        android:gravity="center_vertical"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical">
 
         <TextView
             android:layout_width="85dp"
@@ -101,10 +101,13 @@
 
     <Button
         android:id="@+id/btnRefuseAgree"
-        style="@style/BtnCommonCommit"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="25dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/auth_refuse_bg_shape"
         android:text="拒绝授权"
+        android:textColor="@color/colorWhite"
         android:textSize="16dp"/>
 </LinearLayout>

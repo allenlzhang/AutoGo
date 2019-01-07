@@ -252,6 +252,8 @@ public class HomeFragment extends BaseMvpFragment {
         }
     }
 
+
+
     private boolean isActivated() {
         // 远程激活状态,设备激活状态 0-未激活  1-正在激活  2-激活成功  3-激活失败
         AuthCarInfo.MyCarBean dataBean = singletonCar.getCarBean();

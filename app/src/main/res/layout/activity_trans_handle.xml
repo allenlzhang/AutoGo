@@ -102,10 +102,13 @@
 
     <Button
         android:id="@+id/btnRefuseAgree"
-        style="@style/BtnCommonCommit"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="25dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/auth_refuse_bg_shape"
         android:text="拒绝过户"
+        android:textColor="@color/colorWhite"
         android:textSize="16dp"/>
 </LinearLayout>

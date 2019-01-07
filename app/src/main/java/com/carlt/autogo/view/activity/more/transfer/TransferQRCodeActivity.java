@@ -161,10 +161,13 @@ public class TransferQRCodeActivity extends BaseMvpActivity<TransferQRCodePresen
         //                });
     }
 
-    @OnClick({R.id.tvRefreshCode, R.id.tvCarName})
+    @OnClick({R.id.tvRefreshCode, R.id.tvCarName, R.id.ivQRCode})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvRefreshCode:
+                //                initQRCode(mCarId);
+                //                break;
+            case R.id.ivQRCode:
                 initQRCode(mCarId);
                 break;
             case R.id.tvCarName:

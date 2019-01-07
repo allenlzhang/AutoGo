@@ -229,7 +229,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
 
     @SuppressLint("CheckResult")
     private void initCarName(final View v) {
-//        dialog.show();
+        //        dialog.show();
         HashMap<String, Object> map = new HashMap<>();
         map.put("type", 1);//1我的车辆 2被授权车辆 3我的车辆和被授权车辆
         map.put("isShowActive", 2);//默认1不显示，2显示设备等激活状态
@@ -279,7 +279,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
 
     @SuppressLint("CheckResult")
     private void initAuthTime(View view) {
-//        dialog.show();
+        //        dialog.show();
         HashMap<String, Object> map = new HashMap<>();
         getPresenter().getAuthTimes(map, view);
         //        ClientFactory.def(CarService.class).getAuthSetting(map)
@@ -305,14 +305,15 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
 
     public static final int resCode = 101;
 
-    @OnClick({R.id.tvRefreshCode, R.id.tvTime, R.id.tvCarName, R.id.llTransfer})
+    @OnClick({R.id.tvRefreshCode, R.id.tvTime, R.id.tvCarName, R.id.llTransfer, R.id.ivQRCode})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvRefreshCode:
+//                refreshQrCode();
+            case R.id.ivQRCode:
                 refreshQrCode();
                 break;
             case R.id.tvCarName:
-
                 initCarName(view);
                 break;
             case R.id.tvTime:
