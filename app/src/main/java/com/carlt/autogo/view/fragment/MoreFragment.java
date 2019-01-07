@@ -160,23 +160,6 @@ public class MoreFragment extends BaseMvpFragment {
             llMoreServiceRenewal.setVisibility(View.VISIBLE);
             llMoreContact.setVisibility(View.VISIBLE);
         }
-        getIdentity();
-    }
-
-    @SuppressLint("CheckResult")
-    private void getIdentity() {
-        ClientFactory.def(UserService.class).getIdentity(new HashMap<String, Object>())
-                .subscribe(new Consumer<UserIdentity>() {
-                    @Override
-                    public void accept(UserIdentity userIdentity) throws Exception {
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-
-                    }
-                });
     }
 
     @OnClick({R.id.ll_more_remote_update, R.id.ivAdd, R.id.ll_more_myCar, R.id.tv_more_edit_profile, R.id.ll_more_accounts_and_security, R.id.ll_more_log_out})

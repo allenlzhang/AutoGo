@@ -31,6 +31,7 @@ import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.entry.car.BrandInfo;
 import com.carlt.autogo.entry.car.CarBrandInfo;
 import com.carlt.autogo.entry.car.CarModelInfo;
@@ -41,6 +42,9 @@ import com.carlt.autogo.global.GlobalUrl;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.presenter.car.CarCertificationPresenter;
+import com.carlt.autogo.presenter.car.ICarCertificationView;
+import com.carlt.autogo.presenter.car.ICarListView;
 import com.carlt.autogo.utils.PhotoUtils;
 import com.carlt.autogo.utils.SharepUtil;
 import com.google.gson.Gson;
@@ -67,7 +71,8 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 // 车辆认证
-public class CarCertificationActivity extends BaseMvpActivity {
+@CreatePresenter(presenter = CarCertificationPresenter.class)
+public class CarCertificationActivity extends BaseMvpActivity<CarCertificationPresenter> implements ICarCertificationView{
 
     String[] mPermission = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
     @BindView(R.id.ll_vehicle_certification_add)
@@ -228,7 +233,7 @@ public class CarCertificationActivity extends BaseMvpActivity {
                 addCar();
                 break;
             case R.id.ll_vehicle_certification_add:
-                filter();
+                getPresenter().filter();
                 break;
             case R.id.iv_vehicle_certification:
                 popupWindow.showAtLocation(llVehicleCertification, Gravity.BOTTOM, 0, 0);
@@ -268,40 +273,6 @@ public class CarCertificationActivity extends BaseMvpActivity {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    /**
-     * 添加车辆
-     */
-    private void filter() {
-        dialog.show();
-        Gson gson = new Gson();
-        if (!NetworkUtils.isConnected() && !NetworkUtils.isAvailableByPing()) {
-            ToastUtils.showShort("网络错误，请检查网络");
-            dialog.dismiss();
-        }else {
-            OkGo.<String>post(GlobalUrl.TEST_BASE_URL + "BrandProduct/AutoFilter")
-                    .headers("Content-Type", "application/json")
-                    .headers("Carlt-Access-Id", GlobalKey.TEST_ACCESSID)
-                    .headers("Carlt-Token", SharepUtil.getPreferences().getString("token", ""))
-                    .upJson(gson.toJson(new HashMap<>()))
-                    .execute(new StringCallback() {
-                        @Override
-                        public void onSuccess(Response<String> response) {
-                            dialog.dismiss();
-                            parseFilter(response.body());
-                        }
-
-                        @Override
-                        public void onError(Response<String> response) {
-                            super.onError(response);
-                            dialog.dismiss();
-                            LogUtils.e(response);
-                        }
-
-
-                    });
-        }
     }
 
     private void parseFilter(String body) {
@@ -486,5 +457,10 @@ public class CarCertificationActivity extends BaseMvpActivity {
         Pattern p = Pattern.compile(strPattern);
         Matcher m = p.matcher(str);
         return m.matches();
+    }
+
+    @Override
+    public void selectCarSuccess(String carData) {
+        parseFilter(carData);
     }
 }

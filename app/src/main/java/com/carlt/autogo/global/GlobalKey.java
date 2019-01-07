@@ -49,6 +49,8 @@ public class GlobalKey {
 
     public static final int TOKEN_ERROR = 1003; //TOKEN 错误
 
+    public static final int TOKEN_ERROR1 = 1004; //TOKEN 过期
+
     public static final String CAR_INFO = "carInfo";    //车辆基本信息
 
     public static final String CAR_IS_BOUND = "isBindCar"; //是否绑定车辆

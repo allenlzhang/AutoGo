@@ -47,31 +47,31 @@ public class CarDetailsActivity extends BaseMvpActivity {
     @BindView(R.id.llDetails)
     LinearLayout llDetails;//详情模块
     @BindView(R.id.tvDetailsBuyTime)
-    TextView     tvDetailsBuyTime;//购车时间
+    TextView tvDetailsBuyTime;//购车时间
     @BindView(R.id.llDetailsBuyTime)
     LinearLayout llDetailsBuyTime;
     @BindView(R.id.tvDetailsServiceCycle)
-    TextView     tvDetailsServiceCycle;//上次保养里程
+    TextView tvDetailsServiceCycle;//上次保养里程
     @BindView(R.id.llDetailsServiceCycle)
     LinearLayout llDetailsServiceCycle;
     @BindView(R.id.tvDetailsServiceTime)
-    TextView     tvDetailsServiceTime;//上次保养时间
+    TextView tvDetailsServiceTime;//上次保养时间
     @BindView(R.id.llDetailsServiceTime)
     LinearLayout llDetailsServiceTime;
     @BindView(R.id.tvDetailsInsureTime)
-    TextView     tvDetailsInsureTime;//上次投保时间
+    TextView tvDetailsInsureTime;//上次投保时间
     @BindView(R.id.llDetailsInsureTime)
     LinearLayout llDetailsInsureTime;
     @BindView(R.id.tvDetailsAnnualTime)
-    TextView     tvDetailsAnnualTime;//上次年检时间
+    TextView tvDetailsAnnualTime;//上次年检时间
     @BindView(R.id.llDetailsAnnualTime)
     LinearLayout llDetailsAnnualTime;
     @BindView(R.id.tvDetailsAuthStartTime)
-    TextView     tvDetailsAuthStartTime;//授权开始时间
+    TextView tvDetailsAuthStartTime;//授权开始时间
     @BindView(R.id.llDetailsAuthStart)
     LinearLayout llDetailsAuthStart;
     @BindView(R.id.tvDetailsAuthEndTime)
-    TextView     tvDetailsAuthEndTime;//授权结束时间
+    TextView tvDetailsAuthEndTime;//授权结束时间
     @BindView(R.id.llDetailsAuthEnd)
     LinearLayout llDetailsAuthEnd;
 
@@ -80,41 +80,41 @@ public class CarDetailsActivity extends BaseMvpActivity {
     @BindView(R.id.llDetailsRemote)
     LinearLayout llDetailsRemote;//远程
     @BindView(R.id.ivDetailsRemoteState)
-    ImageView    ivDetailsRemoteState;//远程激活icon
+    ImageView ivDetailsRemoteState;//远程激活icon
     @BindView(R.id.tvDetailsRemoteState)
-    TextView     tvDetailsRemoteState;//远程激活状态
+    TextView tvDetailsRemoteState;//远程激活状态
     @BindView(R.id.llDetailsRecorder)
     LinearLayout llDetailsRecorder;//记录仪
     @BindView(R.id.ivDetailsRecorderState)
-    ImageView    ivDetailsRecorderState;//记录仪icon
+    ImageView ivDetailsRecorderState;//记录仪icon
     @BindView(R.id.tvDetailsRecorderState)
-    TextView     tvDetailsRecorderState;//记录仪状态
+    TextView tvDetailsRecorderState;//记录仪状态
     @BindView(R.id.llDetailsMachine)
     LinearLayout llDetailsMachine;//车机
     @BindView(R.id.ivDetailsMachineState)
-    ImageView    ivDetailsMachineState;//车机icon
+    ImageView ivDetailsMachineState;//车机icon
     @BindView(R.id.tvDetailsMachineState)
-    TextView     tvDetailsMachineState;//车机状态
+    TextView tvDetailsMachineState;//车机状态
     @BindView(R.id.tvDetailsRemote)
-    TextView     tvDetailsRemote;//远程txt
+    TextView tvDetailsRemote;//远程txt
     @BindView(R.id.tvDetailsRecorder)
-    TextView     tvDetailsRecorder;//记录仪txt
+    TextView tvDetailsRecorder;//记录仪txt
     @BindView(R.id.tvDetailsMachine)
-    TextView     tvDetailsMachine;//车机txt
+    TextView tvDetailsMachine;//车机txt
 
     @BindView(R.id.btnCancelAuth)
     Button btnCancelAuth;//取消授权
 
 
-    private             int type          = DETAILS_TYPE1;
+    private int type = DETAILS_TYPE1;
     public static final int DETAILS_TYPE1 = 0;  //未激活未授权（我的爱车详情）
     public static final int DETAILS_TYPE2 = 1;  //已激活未授权（d）
     public static final int DETAILS_TYPE3 = 2;  //已激活授权中（我的爱车详情）
     public static final int DETAILS_TYPE4 = 3;  //（被授权车辆详情）
-    private             int remoteStatus  = -1;   //远程状态
-    private             int withTbox      = -1;   //前后装
-    private             int authId        = 0; //授权id
-    private             int carId         = 0;  //车辆id
+    private int remoteStatus = -1;   //远程状态
+    private int withTbox = -1;   //前后装
+    private int authId = 0; //授权id
+    private int carId = 0;  //车辆id
 
     private TimePickerView pvCustomTime;
 
@@ -179,6 +179,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
 
     /**
      * 获取车辆信息
+     *
      * @param id
      */
     @SuppressLint("CheckResult")
@@ -210,16 +211,12 @@ public class CarDetailsActivity extends BaseMvpActivity {
 
     /**
      * 编辑车辆
-     * @param buyDate
-     *         购买时间
-     * @param maintenMiles
-     *         保养里程
-     * @param maintenDate
-     *         上次保养时间
-     * @param applicantDate
-     *         上次投保时间
-     * @param inspectTime
-     *         上次年检时间
+     *
+     * @param buyDate       购买时间
+     * @param maintenMiles  保养里程
+     * @param maintenDate   上次保养时间
+     * @param applicantDate 上次投保时间
+     * @param inspectTime   上次年检时间
      */
     @SuppressLint("CheckResult")
     private void modify(final long buyDate, final long maintenMiles, final long maintenDate, final long applicantDate, final long inspectTime) {
@@ -271,7 +268,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
             tvDetailsBuyTime.setText(MyTimeUtils.formatDateGetDaySecend(buyDate));
         }
         if (maintenMiles >= 0) {
-            tvDetailsServiceCycle.setText(String.valueOf(maintenMiles)+" km");
+            tvDetailsServiceCycle.setText(String.valueOf(maintenMiles) + " km");
         }
         if (maintenDate >= 0) {
             tvDetailsServiceTime.setText(MyTimeUtils.formatDateGetDaySecend(maintenDate));
@@ -325,7 +322,6 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 clickRemote();
                 break;
             case R.id.llDetailsRecorder:
-                //                showDatePicker("--",themeResId);
                 break;
             case R.id.llDetailsMachine:
                 //                showEditDilog();
@@ -341,9 +337,9 @@ public class CarDetailsActivity extends BaseMvpActivity {
                 }
                 break;
             case R.id.llDetailsServiceCycle:
-//                if (type != DETAILS_TYPE4) {
+                if (type != DETAILS_TYPE4) {
                     showEditDilog();
-//                }
+                }
                 break;
             case R.id.llDetailsServiceTime:
                 if (type != DETAILS_TYPE4) {
@@ -427,7 +423,7 @@ public class CarDetailsActivity extends BaseMvpActivity {
             tvDetailsBuyTime.setText("--");
         }
         if (data.maintenMiles != 0) {
-            tvDetailsServiceCycle.setText(String.valueOf(data.maintenMiles)+" km");
+            tvDetailsServiceCycle.setText(String.valueOf(data.maintenMiles) + " km");
         } else {
             tvDetailsServiceCycle.setText("--");
         }
@@ -489,7 +485,9 @@ public class CarDetailsActivity extends BaseMvpActivity {
             @SuppressLint("NewApi")
             @Override
             public void onClick(String txt) {
-                modify(-1, Long.valueOf(txt), -1, -1, -1);
+                if (!TextUtils.isEmpty(txt)) {
+                    modify(-1, Long.valueOf(txt), -1, -1, -1);
+                }
             }
         });
         dialogEdit.show();

@@ -12,18 +12,21 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.CarPopupAdapter;
 import com.carlt.autogo.base.BaseMvpFragment;
+import com.carlt.autogo.basemvp.CreatePresenter;
+import com.carlt.autogo.basemvp.PresenterVariable;
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
-import com.carlt.autogo.net.base.ClientFactory;
-import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.presenter.car.ICarListView;
+import com.carlt.autogo.presenter.car.MyCarListPresenter;
+import com.carlt.autogo.presenter.fragment.HomePresenter;
+import com.carlt.autogo.presenter.fragment.IHomeView;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
@@ -37,9 +40,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Description: 首页fragment
@@ -47,7 +47,8 @@ import io.reactivex.schedulers.Schedulers;
  * Author     : zhanglei
  * Date       : 2018/9/4 17:42
  */
-public class HomeFragment extends BaseMvpFragment {
+@CreatePresenter(presenter = {HomePresenter.class,MyCarListPresenter.class})
+public class HomeFragment extends BaseMvpFragment implements IHomeView,ICarListView {
 
     @BindView(R.id.tvCarType)
     TextView tvCarType;
@@ -80,6 +81,12 @@ public class HomeFragment extends BaseMvpFragment {
     private PopupWindow popupWindow;
 
     private SingletonCar singletonCar;
+
+    @PresenterVariable
+    HomePresenter homePresenter;
+    @PresenterVariable
+    MyCarListPresenter carListPresenter;
+
 
     @Override
     public int getLayoutId() {
@@ -116,20 +123,7 @@ public class HomeFragment extends BaseMvpFragment {
         Map<String, Object> map = new HashMap<>();
         map.put("type", 3);//1我的车辆 2被授权车辆 3我的车辆和被授权车辆
         map.put("isShowActive",2);//默认1不显示，2显示设备等激活状态
-        ClientFactory.def(CarService.class).getMyCarList(map)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<AuthCarInfo>() {
-                    @Override
-                    public void accept(AuthCarInfo info) throws Exception {
-                        parseGetMyList(info);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        LogUtils.e(throwable);
-                    }
-                });
+        carListPresenter.getCarList(map);
     }
 
     private void parseGetMyList(AuthCarInfo info) {
@@ -217,9 +211,9 @@ public class HomeFragment extends BaseMvpFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_home_chose_car_type:
-                showPopupWindow(view);
-
-
+                if (adapter.getCount()>1) {
+                    showPopupWindow(view);
+                }
                 break;
             case R.id.rlCarLocation:
                 if (isActivated()) {
@@ -320,4 +314,8 @@ public class HomeFragment extends BaseMvpFragment {
         });
     }
 
+    @Override
+    public void getCarListSuccess(AuthCarInfo carInfo) {
+        parseGetMyList(carInfo);
+    }
 }

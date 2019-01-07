@@ -16,11 +16,16 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.MyCarAdapter;
 import com.carlt.autogo.base.BaseMvpFragment;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.presenter.car.ICarListView;
+import com.carlt.autogo.presenter.car.MyCarListPresenter;
 import com.carlt.autogo.view.activity.car.CarDetailsActivity;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +40,8 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by Marlon on 2018/11/22.
  */
-public class AuthFragment extends BaseMvpFragment {
+@CreatePresenter(presenter = MyCarListPresenter.class)
+public class AuthFragment extends BaseMvpFragment<MyCarListPresenter> implements ICarListView{
     @BindView(R.id.fragment_lv_myCar)
     ListView fragmentLvMyCar;
     @BindView(R.id.fragment_ll_not_data)
@@ -43,7 +49,7 @@ public class AuthFragment extends BaseMvpFragment {
 
     private MyCarAdapter adapter;
 
-    private List<AuthCarInfo.MyCarBean> listInfos;
+    private List<AuthCarInfo.MyCarBean> listInfo;
 
     @Override
     public int getLayoutId() {
@@ -53,6 +59,8 @@ public class AuthFragment extends BaseMvpFragment {
     @Override
     protected void init() {
         fragmentLlNotData.setVisibility(View.GONE);
+        adapter = new MyCarAdapter(getContext(), null, MyCarAdapter.AUTHCAR);
+        fragmentLvMyCar.setAdapter(adapter);
     }
 
     @Override
@@ -66,37 +74,22 @@ public class AuthFragment extends BaseMvpFragment {
         Map<String, Object> map = new HashMap<>();
         map.put("type", 2);  //1我的车辆 2被授权车辆 3我的车辆和被授权车辆
         map.put("isShowActive", 2);//默认1不显示，2显示设备等激活状态
-        ClientFactory.def(CarService.class).getMyCarList(map)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<AuthCarInfo>() {
-                    @Override
-                    public void accept(AuthCarInfo authCarInfo) throws Exception {
-                        parseGetMyCarList(authCarInfo);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        fragmentLlNotData.setVisibility(View.VISIBLE);
-                        LogUtils.e(throwable);
-                    }
-                });
+        getPresenter().getCarList(map);
     }
 
     private void parseGetMyCarList(AuthCarInfo authCarInfo) {
         if (authCarInfo.err != null) {
             ToastUtils.showShort(authCarInfo.err.msg);
         } else {
-            listInfos = authCarInfo.authCar;
-            if (listInfos != null && listInfos.size() > 0) {
-                adapter = new MyCarAdapter(getContext(), listInfos, MyCarAdapter.AUTHCAR);
-                fragmentLvMyCar.setAdapter(adapter);
+            listInfo = authCarInfo.authCar;
+            if (listInfo != null && listInfo.size() > 0) {
+                adapter.update(listInfo);
                 fragmentLvMyCar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Intent intent = new Intent(mContext, CarDetailsActivity.class);
                         intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE4);
-                        intent.putExtra("id", listInfos.get(i).id);
+                        intent.putExtra("id", listInfo.get(i).id);
                         startActivity(intent);
                     }
                 });
@@ -108,4 +101,8 @@ public class AuthFragment extends BaseMvpFragment {
 
     }
 
+    @Override
+    public void getCarListSuccess(AuthCarInfo info) {
+        parseGetMyCarList(info);
+    }
 }
