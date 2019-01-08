@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,8 +48,8 @@ import butterknife.OnClick;
  * Author     : zhanglei
  * Date       : 2018/9/4 17:42
  */
-@CreatePresenter(presenter = {HomePresenter.class,MyCarListPresenter.class})
-public class HomeFragment extends BaseMvpFragment implements IHomeView,ICarListView {
+@CreatePresenter(presenter = {HomePresenter.class, MyCarListPresenter.class})
+public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarListView {
 
     @BindView(R.id.tvCarType)
     TextView tvCarType;
@@ -76,6 +77,8 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView,ICarListV
     RelativeLayout rlCarLog;
     @BindView(R.id.rlNav)
     RelativeLayout rlNav;
+    @BindView(R.id.ivCarChose)
+    ImageView ivCarChose;
 
     private CarPopupAdapter adapter;
     private PopupWindow popupWindow;
@@ -122,7 +125,7 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView,ICarListV
     private void ClientGetData() {
         Map<String, Object> map = new HashMap<>();
         map.put("type", 3);//1我的车辆 2被授权车辆 3我的车辆和被授权车辆
-        map.put("isShowActive",2);//默认1不显示，2显示设备等激活状态
+        map.put("isShowActive", 2);//默认1不显示，2显示设备等激活状态
         carListPresenter.getCarList(map);
     }
 
@@ -188,6 +191,13 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView,ICarListV
         popupWindow.setTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.showAsDropDown(view);
+        ivCarChose.setImageResource(R.mipmap.car_list_open);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                ivCarChose.setImageResource(R.mipmap.car_list_close);
+            }
+        });
     }
 
     /**
@@ -211,7 +221,7 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView,ICarListV
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_home_chose_car_type:
-                if (adapter.getCount()>1) {
+                if (adapter.getCount() > 1) {
                     showPopupWindow(view);
                 }
                 break;
@@ -247,7 +257,6 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView,ICarListV
     }
 
 
-
     private boolean isActivated() {
         // 远程激活状态,设备激活状态 0-未激活  1-正在激活  2-激活成功  3-激活失败
         AuthCarInfo.MyCarBean dataBean = singletonCar.getCarBean();
@@ -256,7 +265,7 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView,ICarListV
             if (remoteStatus == 0) {
                 showCommonDialog("设备还未激活", "去激活", false);
                 return false;
-            } else if (remoteStatus == 1||remoteStatus == 3) {
+            } else if (remoteStatus == 1 || remoteStatus == 3) {
                 showCommonDialog("设备正在激活", "查看详情", true);
                 return false;
             } else {
@@ -275,18 +284,18 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView,ICarListV
         if (user.alipayAuth == 2) {
             if (user.faceId == 0) {
                 intent.setClass(mContext, FaceAuthSettingActivity.class);
-                intent.putExtra(GlobalKey.FROM_ACTIVITY,FaceAuthSettingActivity.From_ALiPay_Auth);
-            }else {
+                intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ALiPay_Auth);
+            } else {
                 intent.setClass(mContext, CarCertificationActivity.class);
             }
-        }else if (user.identityAuth == 2){
+        } else if (user.identityAuth == 2) {
             if (user.faceId == 0) {
                 intent.setClass(mContext, FaceAuthSettingActivity.class);
-                intent.putExtra(GlobalKey.FROM_ACTIVITY,FaceAuthSettingActivity.From_ID_Card);
-            }else {
+                intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ID_Card);
+            } else {
                 intent.setClass(mContext, CarCertificationActivity.class);
             }
-        }else {
+        } else {
             intent.setClass(mContext, UserIdChooseActivity.class);
         }
         startActivity(intent);
@@ -308,7 +317,7 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView,ICarListV
                     intent.setClass(mContext, CarDetailsActivity.class);
                 }
                 intent.putExtra("type", CarDetailsActivity.DETAILS_TYPE1);
-                intent.putExtra("id",singletonCar.getCarBean().id);
+                intent.putExtra("id", singletonCar.getCarBean().id);
                 startActivity(intent);
             }
         });
@@ -318,4 +327,5 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView,ICarListV
     public void getCarListSuccess(AuthCarInfo carInfo) {
         parseGetMyList(carInfo);
     }
+
 }

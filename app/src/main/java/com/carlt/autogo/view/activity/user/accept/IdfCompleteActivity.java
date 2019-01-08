@@ -10,9 +10,12 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.entry.user.UserIdentity;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.presenter.safety.IIdentityView;
+import com.carlt.autogo.presenter.safety.IdentityPresenter;
 import com.carlt.autogo.utils.ActivityControl;
 
 import java.util.HashMap;
@@ -24,7 +27,8 @@ import io.reactivex.functions.Consumer;
 /**
  * @author wsq
  */
-public class IdfCompleteActivity extends BaseMvpActivity {
+@CreatePresenter(presenter = IdentityPresenter.class)
+public class IdfCompleteActivity extends BaseMvpActivity<IdentityPresenter> implements IIdentityView{
 
 
     @BindView(R.id.img)
@@ -56,26 +60,7 @@ public class IdfCompleteActivity extends BaseMvpActivity {
             img.setImageDrawable(getResources().getDrawable(R.mipmap.accepted_by_payment));
             tvUserName.setVisibility(View.GONE);
         }
-        getIdentity();
-    }
-    @SuppressLint("CheckResult")
-    private void getIdentity() {
-        ClientFactory.def(UserService.class).getIdentity(new HashMap<String, Object>())
-                .subscribe(new Consumer<UserIdentity>() {
-                    @Override
-                    public void accept(UserIdentity userIdentity) throws Exception {
-                        if (userIdentity.err!=null){
-                            ToastUtils.showShort(userIdentity.err.msg);
-                        }else {
-                            tvUserName.setText(encrypt(userIdentity.name));
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-
-                    }
-                });
+        getPresenter().getIdentity();
     }
 
     @OnClick(R.id.btn_back)
@@ -113,5 +98,14 @@ public class IdfCompleteActivity extends BaseMvpActivity {
         }
         n.append(str.charAt(len - 1));
         return n.toString();
+    }
+
+    @Override
+    public void getIdentity(UserIdentity userIdentity) {
+        if (userIdentity.err!=null){
+            ToastUtils.showShort(userIdentity.err.msg);
+        }else {
+            tvUserName.setText(encrypt(userIdentity.name));
+        }
     }
 }

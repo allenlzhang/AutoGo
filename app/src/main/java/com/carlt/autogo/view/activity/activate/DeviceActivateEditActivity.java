@@ -12,9 +12,10 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.entry.user.BaseError;
-import com.carlt.autogo.net.base.ClientFactory;
-import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.presenter.activite.DeviceActivatePresenter;
+import com.carlt.autogo.presenter.activite.IDeviceActivateView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,15 +24,13 @@ import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Marlon on 2018/12/3.
  * 设备激活
  */
-public class DeviceActivateEditActivity extends BaseMvpActivity {
+@CreatePresenter(presenter = DeviceActivatePresenter.class)
+public class DeviceActivateEditActivity extends BaseMvpActivity<DeviceActivatePresenter> implements IDeviceActivateView {
     @BindView(R.id.etPin)
     EditText etPin; //6位或者8位
     @BindView(R.id.etDeviceNum)
@@ -82,18 +81,18 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
                 return;
             }
         }
-//        if (!checkTxt(etPin.getText().toString())||!(etPin.getText().length() == 8||etPin.getText().length() == 6)) {
-//            ToastUtils.showShort("PIN码输入有误");
-//            return;
-//        }
+        if (!checkTxt(etPin.getText().toString())||!(etPin.getText().length() == 8||etPin.getText().length() == 6)) {
+            ToastUtils.showShort("PIN码输入有误");
+            return;
+        }
 //        if (!checkTxt(etDeviceNum.getText().toString())||etDeviceNum.getText().length() != 16) {
 //            ToastUtils.showShort("设备号输入有误");
 //
 //        }
-        if (!checkTxt(etPin.getText().toString()) || etPin.getText().length() != 8) {
-            ToastUtils.showShort("PIN码输入有误");
-            return;
-        }
+//        if (!checkTxt(etPin.getText().toString()) || etPin.getText().length() != 8) {
+//            ToastUtils.showShort("PIN码输入有误");
+//            return;
+//        }
 
         deviceActive();
 
@@ -101,45 +100,13 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
 
     @SuppressLint("CheckResult")
     private void deviceActive() {
-        dialog.show();
         Map<String, Object> params = new HashMap<>();
         params.put("carID", carId);
         params.put("PIN", etPin.getText().toString().toUpperCase());
         if (deviceNum != null) {
             params.put("deviceNum", deviceNum.toUpperCase());
         }
-        ClientFactory.def(CarService.class).active(params)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseError>() {
-                    @Override
-                    public void accept(BaseError baseError) throws Exception {
-                        dialog.dismiss();
-                        if (baseError != null) {
-                            if (!TextUtils.isEmpty(baseError.msg)) {
-                                ToastUtils.showShort(baseError.msg);
-                                //                                if (baseError.code == 2213) {
-                                //                                    Intent intent = new Intent(DeviceActivateEditActivity.this, ActivateStepActivity.class);
-                                //                                    intent.putExtra("carId", carId);
-                                //                                    startActivity(intent);
-                                //                                }
-                            } else {
-                                ToastUtils.showShort("开始激活");
-                                Intent intent = new Intent(DeviceActivateEditActivity.this, ActivateStepActivity.class);
-                                intent.putExtra("carId", carId);
-                                intent.putExtra("withTbox", withTbox);
-                                startActivity(intent);
-                                finish();
-                            }
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        dialog.dismiss();
-                        LogUtils.e(throwable);
-                    }
-                });
+        getPresenter().deviceActive(params);
     }
 
     ReplacementTransformationMethod method = new ReplacementTransformationMethod() {
@@ -163,4 +130,24 @@ public class DeviceActivateEditActivity extends BaseMvpActivity {
         return m.matches();
     }
 
+    @Override
+    public void activeSuccess(BaseError baseError) {
+        if (baseError != null) {
+            if (!TextUtils.isEmpty(baseError.msg)) {
+                ToastUtils.showShort(baseError.msg);
+                //                                if (baseError.code == 2213) {
+                //                                    Intent intent = new Intent(DeviceActivateEditActivity.this, ActivateStepActivity.class);
+                //                                    intent.putExtra("carId", carId);
+                //                                    startActivity(intent);
+                //                                }
+            } else {
+                ToastUtils.showShort("开始激活");
+                Intent intent = new Intent(DeviceActivateEditActivity.this, ActivateStepActivity.class);
+                intent.putExtra("carId", carId);
+                intent.putExtra("withTbox", withTbox);
+                startActivity(intent);
+                finish();
+            }
+        }
+    }
 }

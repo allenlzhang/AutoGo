@@ -11,28 +11,24 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.CarModelAdapter;
 import com.carlt.autogo.adapter.OnItemClickCallback;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.entry.car.CarBrandInfo;
 import com.carlt.autogo.entry.car.CarModelInfo;
 import com.carlt.autogo.entry.car.NewCarModelInfo;
-import com.carlt.autogo.net.base.ClientFactory;
-import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.presenter.car.CarModelPresenter;
+import com.carlt.autogo.presenter.car.ICarModelView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Marlon on 2018/11/20.
  * 车型车款
  */
-public class ModelActivity extends BaseMvpActivity {
+@CreatePresenter(presenter = CarModelPresenter.class)
+public class ModelActivity extends BaseMvpActivity<CarModelPresenter> implements ICarModelView {
 
 
     @BindView(R.id.layout_list)
@@ -73,7 +69,7 @@ public class ModelActivity extends BaseMvpActivity {
         }
         brandId = intent.getIntExtra("brandId",-1);
         if (brandId != -1){
-            clientGetData(brandId);
+            getPresenter().clientGetData(brandId);
         }
 
 
@@ -104,46 +100,6 @@ public class ModelActivity extends BaseMvpActivity {
         return list;
     }
 
-    private void clientGetData(int brandId){
-        dialog.show();
-        Map<String,Integer>map = new HashMap<>();
-        map.put("brandId",brandId);
-        Disposable disposable = ClientFactory.def(CarService.class).getModel(map)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<CarModelInfo>() {
-                    @Override
-                    public void accept(CarModelInfo carModelInfo) throws Exception {
-                        dialog.dismiss();
-                        if (carModelInfo.err!=null){
-                            ToastUtils.showShort(carModelInfo.err.msg);
-                        }else {
-                            if (carModelInfo.items!=null) {
-                                adapter = new CarModelAdapter(getData(carModelInfo));
-                                layoutList.setAdapter(adapter);
-                                adapter.setCallback(new OnItemClickCallback() {
-                                    @Override
-                                    public void onItemClick(Object o) {
-                                        NewCarModelInfo newCarModelInfo = (NewCarModelInfo) o;
-                                        Intent intent1 = new Intent(ModelActivity.this,BrandCarActivity.class);
-                                        intent1.putExtra("modelId",newCarModelInfo.dataBeanId);
-                                        LogUtils.e(newCarModelInfo.dataBeanId);
-                                        startActivityForResult(intent1,CODE_MODEL_RESULT);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        dialog.dismiss();
-                        LogUtils.e(throwable);
-                    }
-                });
-        disposables.add(disposable);
-
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -158,4 +114,26 @@ public class ModelActivity extends BaseMvpActivity {
                     break;
 
             }}}
+
+    @Override
+    public void getModelSuccess(CarModelInfo carModelInfo) {
+        if (carModelInfo.err!=null){
+            ToastUtils.showShort(carModelInfo.err.msg);
+        }else {
+            if (carModelInfo.items!=null) {
+                adapter = new CarModelAdapter(getData(carModelInfo));
+                layoutList.setAdapter(adapter);
+                adapter.setCallback(new OnItemClickCallback() {
+                    @Override
+                    public void onItemClick(Object o) {
+                        NewCarModelInfo newCarModelInfo = (NewCarModelInfo) o;
+                        Intent intent1 = new Intent(ModelActivity.this,BrandCarActivity.class);
+                        intent1.putExtra("modelId",newCarModelInfo.dataBeanId);
+                        LogUtils.e(newCarModelInfo.dataBeanId);
+                        startActivityForResult(intent1,CODE_MODEL_RESULT);
+                    }
+                });
+            }
+        }
+    }
 }

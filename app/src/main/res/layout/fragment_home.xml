@@ -32,21 +32,28 @@
 
                 <TextView
                     android:id="@+id/tvCarType"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
                     android:text="品牌车型"
                     android:textColor="@color/colorFirstTxtColor2"
-                    android:textSize="18dp"/>
+                    android:textSize="18sp"
+                    android:layout_toLeftOf="@+id/ivCarChose"
+                    android:layout_toStartOf="@+id/ivCarChose" />
 
-                <TextView
+                <ImageView
+                    android:id="@+id/ivCarChose"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:maxLines="1"
-                    android:text="车款"
-                    android:textColor="@color/colorFirstTxtColor2"
-                    android:textSize="16dp"/>
+                    android:layout_marginRight="20dp"
+                    android:layout_alignTop="@id/tvCarType"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:src="@mipmap/car_list_close"/>
             </RelativeLayout>
 
             <View
