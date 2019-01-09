@@ -14,11 +14,14 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.presenter.safety.FreezePresenter;
+import com.carlt.autogo.presenter.safety.IFreezeView;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.SharepUtil;
@@ -34,7 +37,8 @@ import io.reactivex.schedulers.Schedulers;
  * @time 16:52  2018/9/25/025
  * @describe 解冻账户 操作Activity
  */
-public class UnFreeezeActivity extends BaseMvpActivity {
+@CreatePresenter(presenter = FreezePresenter.class)
+public class UnFreezeActivity extends BaseMvpActivity<FreezePresenter> implements IFreezeView{
 
     /**
      * 用户名
@@ -102,54 +106,12 @@ public class UnFreeezeActivity extends BaseMvpActivity {
                     ToastUtils.showShort("密码为空");
                     return;
                 }
-                unFreeze(pwd);
+                getPresenter().freeze(1,pwd);
                 break;
             case R.id.btn_commit:
                 finish();
                 break;
         }
-    }
-
-    /**
-     * 解除冻结
-     * userFreeze 1正常 2冻结
-     *
-     * @param pwd
-     */
-    @SuppressLint("CheckResult")
-    private void unFreeze(String pwd) {
-        dialog.show();
-        HashMap<String, Object> params = new HashMap<>();
-        params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN, ""));
-        params.put("password", CipherUtils.md5(pwd));
-        params.put("isMd5", true);
-        params.put("userFreeze", 1);
-        ClientFactory.def(UserService.class).freeze(params)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseError>() {
-                    @Override
-                    public void accept(BaseError baseError) throws Exception {
-                        dialog.dismiss();
-                        if (baseError.msg == null) {
-                            ActivityControl.removeFreezeActivity();
-                            UserInfo userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-                            userInfo.userFreeze = 1;
-                            SharepUtil.putByBean(GlobalKey.USER_INFO,userInfo);
-                            rlUserUnfreeze.setVisibility(View.GONE);
-                            rlHead2.setVisibility(View.VISIBLE);
-                        } else {
-                            ToastUtils.showShort(baseError.msg);
-                        }
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        dialog.dismiss();
-                        LogUtils.e(throwable.getMessage());
-                    }
-                });
     }
 
     private void passwdToggle(boolean selected, EditText editText, ImageView imageView) {
@@ -164,5 +126,19 @@ public class UnFreeezeActivity extends BaseMvpActivity {
 
         }
 
+    }
+
+    @Override
+    public void freezeSuccess(BaseError baseError) {
+        if (baseError.msg == null) {
+            ActivityControl.removeFreezeActivity();
+            UserInfo userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+            userInfo.userFreeze = 1;
+            SharepUtil.putByBean(GlobalKey.USER_INFO,userInfo);
+            rlUserUnfreeze.setVisibility(View.GONE);
+            rlHead2.setVisibility(View.VISIBLE);
+        } else {
+            ToastUtils.showShort(baseError.msg);
+        }
     }
 }

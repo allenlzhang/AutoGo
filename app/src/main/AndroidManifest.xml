@@ -110,7 +110,7 @@
             android:exported="false"
             android:screenOrientation="behind"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
-        <activity android:name=".view.activity.more.safety.UnFreeezeActivity"/>
+        <activity android:name=".view.activity.more.safety.UnFreezeActivity"/>
         <activity android:name=".view.activity.more.safety.FaceRecognitionSettingFirstActivity"/>
         <activity android:name=".view.activity.more.safety.FaceRecognitionSettingActivity"/>
         <activity

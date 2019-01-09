@@ -14,12 +14,15 @@ import android.widget.RelativeLayout;
 import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
+import com.carlt.autogo.presenter.safety.ChangeLoginPwdPresenter;
+import com.carlt.autogo.presenter.safety.IChangeLoginPwdView;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.MyInputFilter;
@@ -42,7 +45,8 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by Marlon on 2018/9/13.
  */
-public class ChangeLoginPwdActivity extends BaseMvpActivity {
+@CreatePresenter(presenter = ChangeLoginPwdPresenter.class)
+public class ChangeLoginPwdActivity extends BaseMvpActivity<ChangeLoginPwdPresenter> implements IChangeLoginPwdView{
     @BindView(R.id.edit_management_phone)
     EditText       editManagementPhone;
     @BindView(R.id.edit_management_code)
@@ -328,7 +332,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                     showToast("新密码，确认密码不一致");
                     break;
                 }
-                doRememberPwdConfirm(oldPwd, newPwd);
+                getPresenter().doRememberPwdConfirm(oldPwd, newPwd);
                 break;
             case LoginPwdManagementActivity.FORGET:
 //                UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
@@ -365,85 +369,10 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
                     showToast("新密码，确认密码不一致");
                     break;
                 }
-                doForgetPwdConfirm(phone, code, newPwd);
+                getPresenter().doForgetPwdConfirm(phone, code, newPwd);
                 break;
         }
 
-    }
-
-    /**
-     * 记得登录密码  确认
-     * @param oldPwd
-     * @param newPwd
-     */
-    private void doRememberPwdConfirm(String oldPwd, String newPwd) {
-        HashMap<String, Object> params = new HashMap<>();
-        params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN, "'"));
-        params.put("oldPassword", CipherUtils.md5(oldPwd));
-        params.put("newPassword", CipherUtils.md5(newPwd));
-        params.put("isMd5", true);
-        dialog.show();
-        Disposable dispRememberPwd = ClientFactory.def(UserService.class).userResetPwd(params)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseError>() {
-                    @Override
-                    public void accept(BaseError baseError) throws Exception {
-                        dialog.dismiss();
-                        if (baseError.msg == null) {
-                            showToast("修改成功");
-                            ActivityControl.removeAllActivity(ChangeLoginPwdActivity.this);
-                            startActivity(LoginActivity.class);
-                        } else {
-                            showToast(baseError.msg);
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        dialog.dismiss();
-                        LogUtils.e(throwable);
-                    }
-                });
-        disposables.add(dispRememberPwd);
-    }
-
-    /**
-     * 忘记原登录密码 确认
-     * @param mobile
-     * @param validate
-     * @param newPwd
-     */
-    private void doForgetPwdConfirm(String mobile, String validate, String newPwd) {
-        HashMap<String, Object> params = new HashMap<>();
-        params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN, "'"));
-        params.put("mobile", mobile);
-        params.put("validate", validate);
-        params.put("newPassword", CipherUtils.md5(newPwd));
-        params.put("isMd5", true);
-        dialog.show();
-        Disposable disposableForgetPwd = ClientFactory.def(UserService.class).userRetrievePassword(params)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseError>() {
-                    @Override
-                    public void accept(BaseError baseError) throws Exception {
-                        if (baseError.msg == null) {
-                            showToast("修改成功");
-                            ActivityControl.removeAllActivity(ChangeLoginPwdActivity.this);
-                            startActivity(LoginActivity.class);
-                        } else {
-                            showToast(baseError.msg);
-                        }
-                        dialog.dismiss();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        dialog.dismiss();
-                    }
-                });
-        disposables.add(disposableForgetPwd);
     }
 
     /**
@@ -484,4 +413,25 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity {
     }
 
 
+    @Override
+    public void userResetPwdSuccess(BaseError baseError) {
+        if (baseError.msg == null) {
+            showToast("修改成功");
+            ActivityControl.removeAllActivity(ChangeLoginPwdActivity.this);
+            startActivity(LoginActivity.class);
+        } else {
+            showToast(baseError.msg);
+        }
+    }
+
+    @Override
+    public void userRetrievePwdSuccess(BaseError baseError) {
+        if (baseError.msg == null) {
+            showToast("修改成功");
+            ActivityControl.removeAllActivity(ChangeLoginPwdActivity.this);
+            startActivity(LoginActivity.class);
+        } else {
+            showToast(baseError.msg);
+        }
+    }
 }
