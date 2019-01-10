@@ -10,12 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -31,7 +26,6 @@ import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.PhotoUtils;
 import com.carlt.autogo.utils.SharepUtil;
-import com.carlt.autogo.view.activity.user.accept.UploadIdCardPhotoActivity;
 
 import java.io.File;
 import java.util.HashMap;
@@ -164,7 +158,7 @@ public class PersonAvatarActivity extends BaseMvpActivity {
                             params.put("avatarId",updateImageResultInfo.message.id );
 
                             avatarPath = updateImageResultInfo.message.imageUrl;
-                            return ClientFactory.def(UserService.class).userEditInfi(params);
+                            return ClientFactory.def(UserService.class).userEditInfo(params);
 
                         }else {
                             return null;

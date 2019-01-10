@@ -13,6 +13,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.common.dialog.WithOutCodeDialog;
 import com.carlt.autogo.entry.user.BaseError;
@@ -20,6 +21,8 @@ import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.presenter.safety.IRemotePwdManagementView;
+import com.carlt.autogo.presenter.safety.RemotePwdManagementPresenter;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 
@@ -36,7 +39,9 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Marlon on 2018/9/13.
  */
 @SuppressLint("Registered")
-public class RemotePwdManagementActivity extends BaseMvpActivity implements WithOutCodeDialog.WithoutCodeListener, CompoundButton.OnCheckedChangeListener {
+@CreatePresenter(presenter = RemotePwdManagementPresenter.class)
+public class RemotePwdManagementActivity extends BaseMvpActivity<RemotePwdManagementPresenter> implements
+        WithOutCodeDialog.WithoutCodeListener, CompoundButton.OnCheckedChangeListener, IRemotePwdManagementView {
 
 
     @BindView(R.id.ll_management_set_remote_pwd)
@@ -60,7 +65,7 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
 
     private WithOutCodeDialog mDialog;
     private UserInfo user;
-
+    private int remotePwdSwitch = 0;
 
     @Override
     protected int getContentView() {
@@ -86,7 +91,7 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
                         Intent intent = new Intent(RemotePwdManagementActivity.this, FaceAuthSettingActivity.class);
                         if (user.identityAuth == 2) {
                             intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ID_Card);
-                        }else {
+                        } else {
                             intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ALiPay_Auth);
                         }
                         startActivity(intent);
@@ -230,47 +235,27 @@ public class RemotePwdManagementActivity extends BaseMvpActivity implements With
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
         if (!b) {
-            remoteSwitch(2);
+            remotePwdSwitch = 2;
+            getPresenter().remoteSwitch(remotePwdSwitch);
         } else {
-            remoteSwitch(1);
+            remotePwdSwitch = 1;
+            getPresenter().remoteSwitch(remotePwdSwitch);
         }
     }
 
-    /**
-     * 远程开关
-     * remotePwdSwitch 1 开 2 关
-     */
-    private void remoteSwitch(final int remotePwdSwitch) {
-        HashMap<String, Object> params = new HashMap<>();
-        params.put(GlobalKey.USER_TOKEN, SharepUtil.getPreferences().getString(GlobalKey.USER_TOKEN, ""));
-        params.put("remotePwdSwitch", remotePwdSwitch);
-        dialog.show();
-        Disposable disposableRemoteSwitch = ClientFactory.def(UserService.class).modifyRemoteSwitch(params)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseError>() {
-                    @Override
-                    public void accept(BaseError baseError) throws Exception {
-                        dialog.dismiss();
-                        if (baseError.msg == null) {
-                            if (remotePwdSwitch == 1) {
-                                cbManagementRemoteSwitch.setChecked(true);
-                                SharepUtil.putBoolean(GlobalKey.Remote_Switch, true);
-                            } else {
-                                cbManagementRemoteSwitch.setChecked(false);
-                                SharepUtil.putBoolean(GlobalKey.Remote_Switch, false);
-                            }
-                            ToastUtils.showShort("操作成功");
-                        } else {
-                            ToastUtils.showShort(baseError.msg);
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        dialog.dismiss();
-                    }
-                });
-        disposables.add(disposableRemoteSwitch);
+    @Override
+    public void remoteSwitchSuccess(BaseError baseError) {
+        if (baseError.msg == null) {
+            if (remotePwdSwitch == 1) {
+                cbManagementRemoteSwitch.setChecked(true);
+                SharepUtil.putBoolean(GlobalKey.Remote_Switch, true);
+            } else {
+                cbManagementRemoteSwitch.setChecked(false);
+                SharepUtil.putBoolean(GlobalKey.Remote_Switch, false);
+            }
+            ToastUtils.showShort("操作成功");
+        } else {
+            ToastUtils.showShort(baseError.msg);
+        }
     }
 }

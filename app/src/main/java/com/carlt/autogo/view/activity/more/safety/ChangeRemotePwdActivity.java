@@ -12,12 +12,15 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
+import com.carlt.autogo.presenter.safety.ChangeRemotePwdPresenter;
+import com.carlt.autogo.presenter.safety.IChangeRemotePwdView;
 import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.widget.PwdEditText;
@@ -37,7 +40,8 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by Marlon on 2018/9/14.
  */
-public class ChangeRemotePwdActivity extends BaseMvpActivity {
+@CreatePresenter(presenter = ChangeRemotePwdPresenter.class)
+public class ChangeRemotePwdActivity extends BaseMvpActivity<ChangeRemotePwdPresenter> implements IChangeRemotePwdView{
     @BindView(R.id.edit_management_remote_phone)
     EditText       editManagementRemotePhone;
     @BindView(R.id.edit_management_remote_code)
@@ -137,7 +141,8 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                     showToast("两次密码不一致");
                     return;
                 }
-                setRemotePwdClient(token, remoteNewPwd);
+                info.remotePwd = CipherUtils.md5(remoteNewPwd);
+                getPresenter().setRemotePwdClient(token, remoteNewPwd);
 
                 break;
             case RemotePwdManagementActivity.REMEBERPWD:
@@ -153,7 +158,7 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                     showToast("两次密码不一致");
                     return;
                 }
-                modifyRemotePwd(token, remoteOldPwd, remoteNewPwd);
+                getPresenter().modifyRemotePwd(token, remoteOldPwd, remoteNewPwd);
 
                 break;
             case RemotePwdManagementActivity.FORGETPWD:
@@ -178,7 +183,7 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                     showToast("两次密码不一致");
                     return;
                 }
-                remenberRemotePassword(token, mobile, code, remoteNewPwd);
+                getPresenter().remenberRemotePassword(token, mobile, code, remoteNewPwd);
                 break;
         }
     }
@@ -241,7 +246,7 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                     btnManagementRemoteCode.setText("发送验证码");
                     count = 60;
                 } else {
-                    notifSendValidate();
+                    notifySendValidate();
                     showToast("短信下发成功");
                     btnManagementRemoteCode.setClickable(false);
                 }
@@ -312,7 +317,7 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
 
     Disposable disposable;
 
-    private void notifSendValidate() {
+    private void notifySendValidate() {
         disposable = Observable.interval(1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -332,106 +337,34 @@ public class ChangeRemotePwdActivity extends BaseMvpActivity {
                 });
     }
 
-    /**
-     * 设置远程密码
-     */
-    private void setRemotePwdClient(String token, String remoteNewPwd) {
-
-        HashMap<String, String> params = new HashMap();
-        params.put(GlobalKey.USER_TOKEN, token);
-        params.put("remotePwd", CipherUtils.md5(remoteNewPwd));
-        info.remotePwd = CipherUtils.md5(remoteNewPwd);
-        dialog.show();
-        Disposable disposableSetRemotePwd = ClientFactory.def(UserService.class).SetRemotePassword(params)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseError>() {
-                    @Override
-                    public void accept(BaseError baseError) throws Exception {
-                        dialog.dismiss();
-                        if (baseError.msg == null) {
-                            showToast("设置成功");
-                            SharepUtil.putByBean(GlobalKey.USER_INFO, info);
-                            finish();
-                        } else {
-                            showToast(baseError.msg);
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        dialog.dismiss();
-                    }
-                });
-        disposables.add(disposableSetRemotePwd);
+    @Override
+    public void setRemotePwdSuccess(BaseError baseError) {
+        if (baseError.msg == null) {
+            showToast("设置成功");
+            SharepUtil.putByBean(GlobalKey.USER_INFO, info);
+            finish();
+        } else {
+            showToast(baseError.msg);
+        }
     }
 
-    /**
-     * 修改远程密码 记得密码
-     */
-    private void modifyRemotePwd(String token, String remoteOldPwd, String remoteNewPwd) {
-        HashMap<String, String> params = new HashMap();
-        params.put(GlobalKey.USER_TOKEN, token);
-        params.put("oldremotePwd", CipherUtils.md5(remoteOldPwd));
-        params.put("newRemotePwd", CipherUtils.md5(remoteNewPwd));
-        LogUtils.e(params);
-        Log.i("modifyRemotePwd", "{\"token\":\"" + token + "\",\"oldremotePwd\":\"" + CipherUtils.md5(remoteOldPwd) + "\",\"newRemotePwd\":\"" + CipherUtils.md5(remoteNewPwd) + "\"}");
-        dialog.show();
-        Disposable disposableModifyRemotePwd = ClientFactory.def(UserService.class).modifyRemotePassword(params)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseError>() {
-                    @Override
-                    public void accept(BaseError baseError) throws Exception {
-                        dialog.dismiss();
-                        if (baseError.msg == null) {
-                            showToast("修改成功");
-                            finish();
-                        } else {
-                            showToast(baseError.msg);
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        dialog.dismiss();
-                    }
-                });
-        disposables.add(disposableModifyRemotePwd);
+    @Override
+    public void modifyRemotePwd(BaseError baseError) {
+        if (baseError.msg == null) {
+            showToast("修改成功");
+            finish();
+        } else {
+            showToast(baseError.msg);
+        }
     }
 
-    /**
-     * 修改远程密码 忘记密码
-     */
-    private void remenberRemotePassword(String token, String mobile, String validateCode, String remotePwd) {
-        HashMap<String, Object> params = new HashMap();
-        params.put(GlobalKey.USER_TOKEN, token);
-        params.put("mobile", mobile);
-        params.put("validateCode", validateCode);
-        params.put("remotePwd", CipherUtils.md5(remotePwd));
-        params.put("checkIdentity", false);
-        dialog.show();
-        Disposable disposableModifyRemotePwd = ClientFactory.def(UserService.class).resetRemotePassword(params)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseError>() {
-                    @Override
-                    public void accept(BaseError baseError) throws Exception {
-                        dialog.dismiss();
-                        if (baseError.msg == null) {
-                            showToast("修改成功");
-                            finish();
-                        } else {
-                            showToast(baseError.msg);
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        dialog.dismiss();
-                    }
-                });
-        disposables.add(disposableModifyRemotePwd);
+    @Override
+    public void resetRemotePwd(BaseError baseError) {
+        if (baseError.msg == null) {
+            showToast("修改成功");
+            finish();
+        } else {
+            showToast(baseError.msg);
+        }
     }
-
 }

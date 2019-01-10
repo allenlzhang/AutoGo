@@ -165,7 +165,11 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
             } else {
                 homeRlLock.setVisibility(View.VISIBLE);
             }
-
+            if (adapter.getCount()>1){
+                ivCarChose.setVisibility(View.VISIBLE);
+            }else {
+                ivCarChose.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -191,11 +195,11 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
         popupWindow.setTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.showAsDropDown(view);
-        ivCarChose.setImageResource(R.mipmap.car_list_open);
+        ivCarChose.setImageResource(R.mipmap.car_list_close);
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                ivCarChose.setImageResource(R.mipmap.car_list_close);
+                ivCarChose.setImageResource(R.mipmap.car_list_open);
             }
         });
     }

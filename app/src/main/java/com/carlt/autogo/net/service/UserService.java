@@ -38,7 +38,7 @@ public interface UserService {
 
     //编辑用户资料
     @POST("User/Edit")
-    Observable<BaseError> userEditInfi(@Body Map<String, Object> params);
+    Observable<BaseError> userEditInfo(@Body Map<String, Object> params);
 
     //三方登录
     @POST("User/LoginByOpenApi")

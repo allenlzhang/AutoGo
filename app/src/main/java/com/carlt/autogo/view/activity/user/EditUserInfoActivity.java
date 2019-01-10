@@ -12,11 +12,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.DialogChangeSex;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.presenter.user.EditUserInfoPresenter;
+import com.carlt.autogo.presenter.user.IEditUserInfoView;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.gildutils.GlideCircleTransform;
 
@@ -34,7 +37,8 @@ import io.reactivex.schedulers.Schedulers;
  * @time 16:49  2018/9/11/011
  * @describe 修改资料
  */
-public class EditUserInfoActivity extends BaseMvpActivity {
+@CreatePresenter(presenter = EditUserInfoPresenter.class)
+public class EditUserInfoActivity extends BaseMvpActivity<EditUserInfoPresenter> implements IEditUserInfoView{
 
     @BindView(R.id.img_edheader)
     ImageView imgEdHeader;
@@ -101,48 +105,12 @@ public class EditUserInfoActivity extends BaseMvpActivity {
                 @SuppressLint("CheckResult")
                 @Override
                 public void getText(final String text, final int sex) {
-                    dialog.show();
-                    commitEdUerSex(text, sex);
+                    getPresenter().commitEdUerSex(text, sex);
 
                 }
             });
         }
     }
-
-    @SuppressLint("CheckResult")
-    private void commitEdUerSex(final String text, final int sex) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("token", SharepUtil.getPreferences().getString("token", ""));
-        params.put("gender", sex);
-
-        ClientFactory.def(UserService.class).userEditInfi(params)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseError>() {
-                    @Override
-                    public void accept(BaseError baseError) throws Exception {
-                        dialog.dismiss();
-                        if (baseError.msg != null) {
-                            ToastUtils.showLong(baseError.msg);
-                        } else {
-                            ToastUtils.showLong("编辑成功");
-                            UserInfo userInfo = SharepUtil.<UserInfo>getBeanFromSp("user");
-                            userInfo.sex = text;
-                            userInfo.gender = sex;
-                            SharepUtil.putByBean("user", userInfo);
-
-                            tvSex.setText(text);
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        ToastUtils.showLong("编辑失败");
-                        dialog.dismiss();
-                    }
-                });
-    }
-
 
     /**
      * 修改头像
@@ -153,4 +121,17 @@ public class EditUserInfoActivity extends BaseMvpActivity {
         startActivity(PersonAvatarActivity.class, false);
     }
 
+    @Override
+    public void userEditInfoSuccess(BaseError baseError,String text,int sex) {
+        if (baseError.msg != null) {
+            ToastUtils.showLong(baseError.msg);
+        } else {
+            ToastUtils.showLong("编辑成功");
+            UserInfo userInfo = SharepUtil.<UserInfo>getBeanFromSp("user");
+            userInfo.sex = text;
+            userInfo.gender = sex;
+            SharepUtil.putByBean("user", userInfo);
+            tvSex.setText(text);
+        }
+    }
 }

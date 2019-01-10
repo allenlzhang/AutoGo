@@ -53,7 +53,7 @@
                     android:layout_marginRight="20dp"
                     android:layout_alignTop="@id/tvCarType"
                     android:layout_marginTop="@dimen/dp_10"
-                    android:src="@mipmap/car_list_close"/>
+                    android:src="@mipmap/car_list_open"/>
             </RelativeLayout>
 
             <View
