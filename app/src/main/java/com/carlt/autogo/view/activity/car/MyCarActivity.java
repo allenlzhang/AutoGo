@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.base.BaseMvpFragment;
@@ -22,8 +23,10 @@ public class MyCarActivity extends BaseMvpActivity {
     @BindView(R.id.myCarTabs)
     TabLayout myCarTabs;
 
-    private String [] tabs = {"我的爱车","被授权车辆"};
-    private int mCurrentItem = 0;
+    private String[] tabs         = {"我的爱车", "被授权车辆"};
+    private int      mCurrentItem = 0;
+    private int      currentTab;
+
     @Override
     protected int getContentView() {
         return R.layout.activity_my_car;
@@ -32,22 +35,24 @@ public class MyCarActivity extends BaseMvpActivity {
     @Override
     public void init() {
         setTitleText("我的爱车");
-
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initSavedInstanceState(savedInstanceState);
+        currentTab = getIntent().getIntExtra("currentTab", 0);
+        LogUtils.e("currentTab-----" + currentTab);
         initBottomTabs();
     }
 
+    //    @Override
+    //    protected void onCreate(Bundle savedInstanceState) {
+    //        super.onCreate(savedInstanceState);
+    //        initSavedInstanceState(savedInstanceState);
+    //        initBottomTabs();
+    //    }
+
     private void initSavedInstanceState(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-//            LogUtils.e("异常关闭----" + savedInstanceState.toString());
-            int currentIndex = savedInstanceState.getInt("currentItem", 0);
-            setIndexFragment(currentIndex);
-            myCarTabs.getTabAt(currentIndex);
+            //            LogUtils.e("异常关闭----" + savedInstanceState.toString());
+            //            int currentIndex = savedInstanceState.getInt("currentItem", 0);
+            //            setIndexFragment(currentIndex);
+            //            myCarTabs.getTabAt(currentIndex);
         }
 
     }
@@ -56,16 +61,16 @@ public class MyCarActivity extends BaseMvpActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("currentItem", mCurrentItem);
-//        LogUtils.e("异常关闭----" + outState);
+        //        LogUtils.e("异常关闭----" + outState);
 
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        int currentIndex = savedInstanceState.getInt("currentItem", 0);
-        setIndexFragment(currentIndex);
-        myCarTabs.getTabAt(currentIndex);
+        //        int currentIndex = savedInstanceState.getInt("currentItem", 0);
+        //        setIndexFragment(currentIndex);
+        //        myCarTabs.getTabAt(currentIndex);
     }
 
     private void initBottomTabs() {
@@ -88,8 +93,8 @@ public class MyCarActivity extends BaseMvpActivity {
 
             }
         });
-        myCarTabs.getTabAt(0);
-        setIndexFragment(0);
+        myCarTabs.getTabAt(currentTab).select();
+        setIndexFragment(currentTab);
     }
 
     /**
@@ -101,7 +106,9 @@ public class MyCarActivity extends BaseMvpActivity {
         ft.replace(R.id.flMyCar, getFragment(index));
         ft.commitAllowingStateLoss();
     }
+
     public static HashMap<Integer, BaseMvpFragment> saveFragment = new HashMap<>();
+
     public static BaseMvpFragment getFragment(int position) {
         BaseMvpFragment fragment = saveFragment.get(position);
         if (fragment == null) {

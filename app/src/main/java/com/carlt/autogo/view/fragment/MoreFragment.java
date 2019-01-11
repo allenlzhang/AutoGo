@@ -17,12 +17,10 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpFragment;
 import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.entry.car.SingletonCar;
-import com.carlt.autogo.entry.user.UserIdentity;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
-import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.gildutils.GlideCircleTransform;
@@ -185,7 +183,7 @@ public class MoreFragment extends BaseMvpFragment {
                 showPop(ivAdd);
                 break;
             case R.id.ll_more_remote_update:
-//                startActivity(new Intent(mActivity, ActivateStepActivity.class));
+                //                startActivity(new Intent(mActivity, ActivateStepActivity.class));
                 break;
             default:
         }
@@ -247,39 +245,41 @@ public class MoreFragment extends BaseMvpFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if ((userInfo.identityAuth == 2 || userInfo.alipayAuth == 2) && userInfo.faceId != 0) {
+            if (result != null && result.getContents() != null) {
+                LogUtils.e(result.getContents());
+                //            ToastUtils.showShort("扫码成功---" + result.getContents());
+                //            Toast.makeText(this,"扫码成功",Toast.LENGTH_LONG).show();
+                String contents = result.getContents();
 
-        if (result != null && result.getContents() != null) {
-            LogUtils.e(result.getContents());
-            //            ToastUtils.showShort("扫码成功---" + result.getContents());
-            //            Toast.makeText(this,"扫码成功",Toast.LENGTH_LONG).show();
-            String contents = result.getContents();
+                if (contents.startsWith(GlobalKey.AUTH_REGEX)) {
+                    if (checkTime(contents))
+                        return;
+                    checkQRCodeState(contents);
+                } else if (contents.startsWith(GlobalKey.TRANSFER_REGEX)) {
+                    if (checkTime(contents))
+                        return;
+                    checkTransferCode(contents);
+                } else {
+                    Intent intent = new Intent(mActivity, ScannerResultActivity.class);
+                    intent.putExtra("result", result.getContents());
+                    startActivity(intent);
+                }
 
-            if (contents.startsWith(GlobalKey.AUTH_REGEX)) {
-                if (checkTime(contents))
-                    return;
-                checkQRCodeState(contents);
-            } else if (contents.startsWith(GlobalKey.TRANSFER_REGEX)) {
-                if (checkTime(contents))
-                    return;
-                checkTransferCode(contents);
+
             } else {
-                Intent intent = new Intent(mActivity, ScannerResultActivity.class);
-                intent.putExtra("result", result.getContents());
-                startActivity(intent);
+                ToastUtils.showShort("扫码失败");
+                //            Toast.makeText(this, "扫码失败", Toast.LENGTH_LONG).show();
             }
-
-
         } else {
-            ToastUtils.showShort("扫码失败");
-            //            Toast.makeText(this, "扫码失败", Toast.LENGTH_LONG).show();
+            ToastUtils.showShort("请先进行身份认证");
         }
-
     }
 
     private boolean checkTime(String contents) {
         String[] split1 = contents.split("&");
 
-//        String time = contents.substring(contents.indexOf("&") + 1);
+        //        String time = contents.substring(contents.indexOf("&") + 1);
         String[] split = split1[1].split("=");
         long currentTime = System.currentTimeMillis() / 1000;
         Long aLong = Long.valueOf(split[1]);

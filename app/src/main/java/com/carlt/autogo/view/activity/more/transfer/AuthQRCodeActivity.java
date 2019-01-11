@@ -67,7 +67,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
     private int                   mCarId;
     private int                   mTimeType;
     private AuthCarInfo.MyCarBean carInfo;
-
+    private String                carName;
 
     @Override
     protected int getContentView() {
@@ -78,7 +78,8 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
     public void init() {
         setTitleText("生成二维码");
         carInfo = SingletonCar.getInstance().getCarBean();
-        tvCarName.setText(carInfo.carName);
+        carName = carInfo.carName;
+        tvCarName.setText(carName);
         tvTime.setText("1小时");
         initQrCode(0, 0);
         //        checkQrCodeState();
@@ -143,7 +144,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
     @SuppressLint("CheckResult")
     private void initQrCode(int carId, int authType) {
         carInfo = SingletonCar.getInstance().getCarBean();
-
+        ivQRCode.setImageBitmap(null);
 
         //        dialog.show();
         HashMap<String, Object> map = new HashMap<>();
@@ -199,12 +200,12 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
             checkQrCodeState(info.id);
             ivQRCode.setImageBitmap(codeBit);
         } else {
-            showToast(info.err.msg);
+            //            showToast(info.err.msg);
 
             CommonDialog.createOneBtnDialog(AuthQRCodeActivity.this, info.err.msg, false, new CommonDialog.DialogOneBtnClick() {
                 @Override
                 public void onOneBtnClick() {
-                    finish();
+                    //                    finish();
                 }
             });
         }
@@ -309,7 +310,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvRefreshCode:
-//                refreshQrCode();
+                //                refreshQrCode();
             case R.id.ivQRCode:
                 refreshQrCode();
                 break;
@@ -322,7 +323,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
             case R.id.llTransfer:
                 Intent intent = new Intent(this, TransferQRCodeActivity.class);
                 intent.putExtra("carId", mCarId);
-                intent.putExtra("carName", carInfo.carName);
+                intent.putExtra("carName", carName);
                 startActivityForResult(intent, resCode);
                 break;
         }
@@ -391,6 +392,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
                                     AuthCarInfo.MyCarBean carBean = (AuthCarInfo.MyCarBean) adapter.getData().get(position);
                                     carCurrentSelect = position;
                                     tvCarName.setText(carBean.carName);
+                                    carName = carBean.carName;
                                     easyPopup.dismiss();
                                     initQrCode(carBean.id, 0);
                                     mCarId = carBean.id;

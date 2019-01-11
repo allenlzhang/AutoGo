@@ -35,11 +35,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
- /**
-  * Description : 激活步骤展示页面
-  * Author     : zhanglei
-  * Date       : 2019/1/5
-  */
+
+/**
+ * Description : 激活步骤展示页面
+ * Author     : zhanglei
+ * Date       : 2019/1/5
+ */
 @CreatePresenter(presenter = ActivateStepPresenter.class)
 public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter> implements IActivateStepView {
 
@@ -60,7 +61,6 @@ public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter>
     @BindView(R.id.btnRetry)
     Button    btnRetry;
     private int carId;
-
 
 
     @Override
@@ -129,8 +129,8 @@ public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter>
 
     private void initStepView(ActivateStepInfo info) {
         if (info.err == null) {
-            final List<ActivateStepInfo.StepsBean> steps = info.steps;
-            final ArrayList<ActivateStepInfo.StepsBean> logs = new ArrayList<>();
+            List<ActivateStepInfo.StepsBean> steps = info.steps;
+            ArrayList<ActivateStepInfo.StepsBean> logs = new ArrayList<>();
             for (ActivateStepInfo.StepsBean step : steps) {
                 if (step.isSuccess == 1) {
                     btnRetry.setVisibility(View.GONE);
@@ -140,17 +140,32 @@ public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter>
                     btnRetry.setVisibility(View.VISIBLE);
                     tvTip.setVisibility(View.VISIBLE);
                     disposable.dispose();
+                    if (step.failCode == 2226) {
+                        ERR_TYPE = 1;
+                    } else if (step.failCode == 2201) {
+                        ERR_TYPE = 0;
+                    } else {
+                        ERR_TYPE = 0;
+                        btnRetry.setText("重试");
+
+                    }
+                    break;
                 }
             }
-            ActivateStepInfo.StepsBean sixStep = steps.get(4);
-            //            sixStep.failCode = 2226;
-            if (sixStep.isSuccess == 2) {
-                if (sixStep.failCode == 2226) {
-                    ERR_TYPE = 1;
-                } else if (sixStep.failCode == 2201) {
-                    ERR_TYPE = 0;
-                }
+
+            ActivateStepInfo.StepsBean secondStep = steps.get(1);
+            if (secondStep.isSuccess == 2) {
+                tvTip.setVisibility(View.GONE);
             }
+
+            //            ActivateStepInfo.StepsBean sixStep = steps.get(4);
+            //            if (sixStep.isSuccess == 2) {
+            //                if (sixStep.failCode == 2226) {
+            //                    ERR_TYPE = 1;
+            //                } else if (sixStep.failCode == 2201) {
+            //                    ERR_TYPE = 0;
+            //                }
+            //            }
 
             stepView.setStepsNumber(steps.size());
             ActivateStepInfo.StepsBean stepsBean;
@@ -169,18 +184,29 @@ public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter>
             }
 
 
-            tvDes.setText(stepsBean.description);
-            tvErr.setText(stepsBean.failReason);
-            tvState.setText(stepsBean.title);
             if (stepsBean.isSuccess == -1) {
                 tvState.setText(stepsBean.title);
                 ivLoading.setVisibility(View.VISIBLE);
+                tvDes.setText(stepsBean.description);
+                tvErr.setText(stepsBean.failReason);
+                //                tvErr.setVisibility(View.VISIBLE);
+                //                tvTip.setVisibility(View.VISIBLE);
                 //                ivState.setImageResource(R.mipmap.iv_activate_ing);
             } else if (stepsBean.isSuccess == 2) {
+                tvState.setText(stepsBean.failReason);
+                //                tvErr.setVisibility(View.GONE);
+                //                tvTip.setVisibility(View.GONE);
+                //                tvErr.setText(stepsBean.failReason);
+                //                tvState.setText(stepsBean.title);
                 mAnimator.cancel();
                 ivLoading.setVisibility(View.GONE);
                 ivState.setImageResource(R.mipmap.iv_activate_err);
             } else if (stepsBean.isSuccess == 1) {
+                tvDes.setText(stepsBean.description);
+                tvErr.setText(stepsBean.failReason);
+                tvState.setText(stepsBean.title);
+                //                tvErr.setVisibility(View.VISIBLE);
+                //                tvTip.setVisibility(View.VISIBLE);
                 mAnimator.cancel();
                 ivLoading.setVisibility(View.GONE);
                 ivState.setImageResource(R.mipmap.iv_activate_success);
@@ -208,7 +234,7 @@ public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter>
     @OnClick(R.id.btnRetry)
     public void onViewClicked() {
         int withTbox = getIntent().getIntExtra("withTbox", -1);
-//        LogUtils.e(withTbox);
+        //        LogUtils.e(withTbox);
 
         switch (ERR_TYPE) {
             case 0:

@@ -1,6 +1,7 @@
 package com.carlt.autogo.view.activity.more.transfer;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -13,6 +14,7 @@ import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.view.activity.car.MyCarActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -89,6 +91,12 @@ public class WaitAuthActivity extends BaseMvpActivity {
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         LogUtils.e(carBaseInfo.checkStatus);
                         if (duration <= 0) {
+                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "授权已取消", false, new CommonDialog.DialogOneBtnClick() {
+                                @Override
+                                public void onOneBtnClick() {
+                                    finish();
+                                }
+                            });
                             disposable.dispose();
 
                         } else {
@@ -96,19 +104,27 @@ public class WaitAuthActivity extends BaseMvpActivity {
                             if (carBaseInfo.checkStatus == 3) {
                                 disposable.dispose();
                                 CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "授权成功", false, new CommonDialog.DialogOneBtnClick() {
+
                                     @Override
                                     public void onOneBtnClick() {
                                         if (!SingletonCar.getInstance().isBound()) {
                                             GetCarList();
-                                        } else {
-                                            finish();
                                         }
+                                        Intent intent = new Intent(WaitAuthActivity.this, MyCarActivity.class);
+                                        intent.putExtra("currentTab", 1);
+                                        startActivity(intent);
+                                        finish();
+                                        //                                        if (!SingletonCar.getInstance().isBound()) {
+                                        //                                            GetCarList();
+                                        //                                        } else {
+                                        //                                            finish();
+                                        //                                        }
                                     }
                                 });
 
                             } else if (carBaseInfo.checkStatus == 4) {
                                 disposable.dispose();
-                                CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "拒绝授权", false, new CommonDialog.DialogOneBtnClick() {
+                                CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "授权失败", false, new CommonDialog.DialogOneBtnClick() {
                                     @Override
                                     public void onOneBtnClick() {
                                         finish();
@@ -156,7 +172,7 @@ public class WaitAuthActivity extends BaseMvpActivity {
                                 });
                             } else if (carBaseInfo.status == 4) {
                                 disposable.dispose();
-                                CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "拒绝过户", false, new CommonDialog.DialogOneBtnClick() {
+                                CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "过户失败", false, new CommonDialog.DialogOneBtnClick() {
                                     @Override
                                     public void onOneBtnClick() {
                                         finish();
@@ -186,13 +202,13 @@ public class WaitAuthActivity extends BaseMvpActivity {
                     @Override
                     public void accept(AuthCarInfo info) throws Exception {
                         parseGetMyList(info);
-                        finish();
+//                        finish();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         LogUtils.e(throwable);
-                        finish();
+//                        finish();
                     }
                 });
     }

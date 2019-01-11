@@ -111,7 +111,7 @@ public class TransHandleActivity extends BaseMvpActivity {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
-                        showToast("操作失败");
+//                        showToast("操作失败");
                     }
                 });
     }

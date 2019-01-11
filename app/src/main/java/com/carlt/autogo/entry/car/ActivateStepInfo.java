@@ -60,6 +60,7 @@ public class ActivateStepInfo {
         public String toString() {
             return "StepsBean{" +
                     "isSuccess=" + isSuccess +
+                    ", failCode=" + failCode +
                     ", title='" + title + '\'' +
                     ", description='" + description + '\'' +
                     ", failReason='" + failReason + '\'' +

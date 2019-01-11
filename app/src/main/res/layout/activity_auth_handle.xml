@@ -47,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"
         android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
         android:gravity="center_vertical">
 
         <TextView
@@ -70,13 +71,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:gravity="center_vertical">
 
         <TextView
             android:layout_width="85dp"
             android:layout_height="wrap_content"
-            android:text="授权账户"
+            android:text="被授权账户"
             android:textColor="@color/colorEdtext"
             android:textSize="16dp"/>
 

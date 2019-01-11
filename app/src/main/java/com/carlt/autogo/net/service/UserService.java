@@ -77,7 +77,7 @@ public interface UserService {
     Observable<User> setFace(@Body Map<String, Object> params);
 
     @POST("User/CompareFace")
-    Observable<User> compareFace(@Body Map<String, Object> params);
+    Observable<BaseError> compareFace(@Body Map<String, Object> params);
 
 
     //设置远程密码

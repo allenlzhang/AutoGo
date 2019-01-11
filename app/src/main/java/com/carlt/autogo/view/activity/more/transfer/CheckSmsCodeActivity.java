@@ -37,6 +37,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -54,6 +55,7 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
     @BindView(R.id.btnLogoutNext)
     Button   btnLogoutNext;
     private boolean isTransfer;
+    private String  phone;
 
 
     @Override
@@ -90,7 +92,7 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
                 break;
             case R.id.btnLogoutNext:
                 //                unRegister();
-                String phone = etLogoutPhone.getText().toString().trim();
+                phone = etLogoutPhone.getText().toString().trim();
                 String code = etLogoutCode.getText().toString().trim();
                 HashMap<String, Object> map = new HashMap<>();
                 UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
@@ -106,8 +108,10 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
                 map.put("mobile", phone);
                 map.put("smsCode", code);
                 if (isTransfer) {
+                    map.put("type", 8);
                     doTransferCar(map);
                 } else {
+                    map.put("type", 14);
                     doAuthCar(map);
                 }
                 break;
@@ -122,6 +126,19 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
         map1.put("id", authId);
         map1.put("status", 3);
         ClientFactory.def(UserService.class).checkSmsCode(map)
+                .filter(new Predicate<BaseError>() {
+                    @Override
+                    public boolean test(BaseError error) throws Exception {
+                        if (error.code == 0) {
+                            return true;
+                        } else {
+                            showToast(error.msg);
+                            dialog.dismiss();
+                            return false;
+                        }
+
+                    }
+                })
                 .flatMap(new Function<BaseError, ObservableSource<CarBaseInfo>>() {
                     @Override
                     public ObservableSource<CarBaseInfo> apply(BaseError error) throws Exception {
@@ -145,7 +162,7 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
                     public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
                         LogUtils.e(throwable);
-                        ToastUtils.showShort("操作失败");
+//                        ToastUtils.showShort("操作失败");
                     }
                 });
     }
@@ -158,6 +175,19 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
         map1.put("transferId", transferId);
         map1.put("isAgree", 1);
         ClientFactory.def(UserService.class).checkSmsCode(map)
+                .filter(new Predicate<BaseError>() {
+                    @Override
+                    public boolean test(BaseError error) throws Exception {
+                        if (error.code == 0) {
+                            return true;
+                        } else {
+                            showToast(error.msg);
+                            dialog.dismiss();
+                            return false;
+                        }
+
+                    }
+                })
                 .flatMap(new Function<BaseError, ObservableSource<CarBaseInfo>>() {
                     @Override
                     public ObservableSource<CarBaseInfo> apply(BaseError error) throws Exception {
@@ -181,7 +211,7 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
                     public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
                         LogUtils.e(throwable);
-                        ToastUtils.showShort("操作失败");
+//                        ToastUtils.showShort("操作失败");
                     }
                 });
     }
@@ -244,7 +274,7 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
 
     }
 
-    int count = 60;
+    int        count = 60;
     Disposable disposable;
 
     private void notifSendValidate() {

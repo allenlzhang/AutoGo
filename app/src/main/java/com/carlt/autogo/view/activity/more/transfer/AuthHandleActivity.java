@@ -103,6 +103,7 @@ public class AuthHandleActivity extends BaseMvpActivity<AuthHandlePresenter> imp
             closeActivity();
         } else {
             showToast(carBaseInfo.msg);
+            finish();
         }
 
     }
@@ -118,7 +119,8 @@ public class AuthHandleActivity extends BaseMvpActivity<AuthHandlePresenter> imp
                 startActivity(intent);
                 break;
             case R.id.btnRefuseAgree:
-                CommonDialog.createTwoBtnDialog(this, "您确定要拒绝吗", true, new CommonDialog.DialogWithTitleClick() {
+                String mobile = tvAuthAccount.getText().toString().trim();
+                CommonDialog.createTwoBtnDialog(this, "是否拒绝将爱车授权给"+"“"+mobile+"”"+"使用？", true, new CommonDialog.DialogWithTitleClick() {
                     @Override
                     public void onLeftClick() {
 

@@ -19,6 +19,7 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.CarNameItemAdapter;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
+import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.global.GlobalKey;
@@ -65,6 +66,7 @@ public class TransferQRCodeActivity extends BaseMvpActivity<TransferQRCodePresen
     public void init() {
         setTitleText("生成二维码");
         String carName = getIntent().getStringExtra("carName");
+
         tvCarName.setText(carName);
         initQRCode(0);
 
@@ -130,7 +132,7 @@ public class TransferQRCodeActivity extends BaseMvpActivity<TransferQRCodePresen
         //        dialog.show();
         int carId = getIntent().getIntExtra("carId", 0);
         //        mCarId = carId;
-
+        ivQRCode.setImageBitmap(null);
         HashMap<String, Object> map = new HashMap<>();
         if (id == 0) {
             map.put("carId", carId);
@@ -278,10 +280,20 @@ public class TransferQRCodeActivity extends BaseMvpActivity<TransferQRCodePresen
     @Override
     public void createTransferQRCode(CarBaseInfo info) {
         LogUtils.e(info.transferId);
-        long l = System.currentTimeMillis() / 1000;
-        Bitmap qrCode = QRCodeUtils.createQRCode(GlobalKey.TRANSFER_REGEX + info.transferId + "&time=" + l);
-        ivQRCode.setImageBitmap(qrCode);
-        checkQrCodeState(info.transferId);
+        if (info.err != null) {
+            CommonDialog.createOneBtnDialog(this, info.err.msg, false, new CommonDialog.DialogOneBtnClick() {
+                @Override
+                public void onOneBtnClick() {
+                    //                    finish();
+                }
+            });
+        } else {
+            long l = System.currentTimeMillis() / 1000;
+            Bitmap qrCode = QRCodeUtils.createQRCode(GlobalKey.TRANSFER_REGEX + info.transferId + "&time=" + l);
+            ivQRCode.setImageBitmap(qrCode);
+            checkQrCodeState(info.transferId);
+        }
+
     }
 
     @Override

@@ -89,7 +89,7 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
         idCardNum = edIdcardAcceptNum.getText().toString().trim().toUpperCase();
 
         if (TextUtils.isEmpty(name)) {
-            ToastUtils.showShort("姓名为空");
+            ToastUtils.showShort("请输入姓名");
             return;
         }
 

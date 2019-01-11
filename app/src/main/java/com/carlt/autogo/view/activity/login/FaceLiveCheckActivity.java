@@ -17,6 +17,7 @@ import com.carlt.autogo.R;
 import com.carlt.autogo.application.AutoGoApp;
 import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.entry.car.CarBaseInfo;
+import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
@@ -49,6 +50,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -60,15 +62,15 @@ import okhttp3.RequestBody;
  * Date       : 2018/9/19
  */
 public class FaceLiveCheckActivity extends FaceLivenessActivity {
-    public static final int FROM_LOGIN_ACTIVITY         = 11;
-    public static final int FROM_ID_CARDACCEPT_ACTIVITY = 12;
-    public static final int FROM_ALIPAY_AUTH            = 13;
-    public static final int Trans_Handle_Activity       = 14;
-    public static final int Auth_Handle_Activity        = 15;
-    private int      isFrom;
+    public static final int      FROM_LOGIN_ACTIVITY         = 11;
+    public static final int      FROM_ID_CARDACCEPT_ACTIVITY = 12;
+    public static final int      FROM_ALIPAY_AUTH            = 13;
+    public static final int      Trans_Handle_Activity       = 14;
+    public static final int      Auth_Handle_Activity        = 15;
+    private             int      isFrom;
     //    private String   name;
     //    private String   idcard;
-    public  UUDialog dialog;
+    public              UUDialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -261,6 +263,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
                                 LogUtils.e(throwable.toString());
+                                dialog.dismiss();
                             }
                         });
 
@@ -282,12 +285,28 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
         map1.put("id", authId);
         map1.put("status", status);
         ClientFactory.def(UserService.class).compareFace(map)
-                .flatMap(new Function<User, ObservableSource<CarBaseInfo>>() {
+                .filter(new Predicate<BaseError>() {
                     @Override
-                    public ObservableSource<CarBaseInfo> apply(User user) throws Exception {
-                        return ClientFactory.def(CarService.class).modifyStatus(map1);
+                    public boolean test(BaseError error) throws Exception {
+                        if (error.code == 0) {
+                            return true;
+                        } else {
+                            ToastUtils.showShort(error.msg);
+                            dialog.dismiss();
+                            finish();
+                            return false;
+                        }
+                        //                        return error.code == 0;
                     }
                 })
+                .flatMap(new Function<BaseError, ObservableSource<CarBaseInfo>>() {
+                    @Override
+                    public ObservableSource<CarBaseInfo> apply(BaseError error) throws Exception {
+                        return ClientFactory.def(CarService.class).modifyStatus(map1);
+
+                    }
+                })
+
                 .subscribe(new Consumer<CarBaseInfo>() {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
@@ -305,7 +324,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                     public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
                         LogUtils.e(throwable);
-                        ToastUtils.showShort("操作失败");
+//                        ToastUtils.showShort("操作失败");
                     }
                 });
     }
@@ -320,9 +339,24 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
         map1.put("transferId", transferId);
         map1.put("isAgree", status);
         ClientFactory.def(UserService.class).compareFace(map)
-                .flatMap(new Function<User, ObservableSource<CarBaseInfo>>() {
+                .filter(new Predicate<BaseError>() {
                     @Override
-                    public ObservableSource<CarBaseInfo> apply(User user) throws Exception {
+                    public boolean test(BaseError error) throws Exception {
+                        if (error.code == 0) {
+
+                            return true;
+                        } else {
+                            ToastUtils.showShort(error.msg);
+                            dialog.dismiss();
+                            finish();
+                            return false;
+                        }
+                        //                        return error.code == 0;
+                    }
+                })
+                .flatMap(new Function<BaseError, ObservableSource<CarBaseInfo>>() {
+                    @Override
+                    public ObservableSource<CarBaseInfo> apply(BaseError user) throws Exception {
                         return ClientFactory.def(CarService.class).dealTransferCode(map1);
                     }
                 })
@@ -343,7 +377,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                     public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
                         LogUtils.e(throwable);
-                        ToastUtils.showShort("操作失败");
+//                        ToastUtils.showShort("操作失败");
                     }
                 });
 
@@ -484,7 +518,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-
+                        dialog.dismiss();
                     }
                 });
     }

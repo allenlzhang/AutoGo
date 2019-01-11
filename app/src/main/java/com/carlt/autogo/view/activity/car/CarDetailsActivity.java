@@ -39,38 +39,38 @@ import butterknife.OnClick;
  * 车辆详情
  */
 @CreatePresenter(presenter = CarDetailsPresenter.class)
-public class CarDetailsActivity extends BaseMvpActivity<CarDetailsPresenter> implements ICarDetailsView{
+public class CarDetailsActivity extends BaseMvpActivity<CarDetailsPresenter> implements ICarDetailsView {
     @BindView(R.id.tvDetailsModel)
     TextView tvDetailsModel;//车型
 
     @BindView(R.id.llDetails)
     LinearLayout llDetails;//详情模块
     @BindView(R.id.tvDetailsBuyTime)
-    TextView tvDetailsBuyTime;//购车时间
+    TextView     tvDetailsBuyTime;//购车时间
     @BindView(R.id.llDetailsBuyTime)
     LinearLayout llDetailsBuyTime;
     @BindView(R.id.tvDetailsServiceCycle)
-    TextView tvDetailsServiceCycle;//上次保养里程
+    TextView     tvDetailsServiceCycle;//上次保养里程
     @BindView(R.id.llDetailsServiceCycle)
     LinearLayout llDetailsServiceCycle;
     @BindView(R.id.tvDetailsServiceTime)
-    TextView tvDetailsServiceTime;//上次保养时间
+    TextView     tvDetailsServiceTime;//上次保养时间
     @BindView(R.id.llDetailsServiceTime)
     LinearLayout llDetailsServiceTime;
     @BindView(R.id.tvDetailsInsureTime)
-    TextView tvDetailsInsureTime;//上次投保时间
+    TextView     tvDetailsInsureTime;//上次投保时间
     @BindView(R.id.llDetailsInsureTime)
     LinearLayout llDetailsInsureTime;
     @BindView(R.id.tvDetailsAnnualTime)
-    TextView tvDetailsAnnualTime;//上次年检时间
+    TextView     tvDetailsAnnualTime;//上次年检时间
     @BindView(R.id.llDetailsAnnualTime)
     LinearLayout llDetailsAnnualTime;
     @BindView(R.id.tvDetailsAuthStartTime)
-    TextView tvDetailsAuthStartTime;//授权开始时间
+    TextView     tvDetailsAuthStartTime;//授权开始时间
     @BindView(R.id.llDetailsAuthStart)
     LinearLayout llDetailsAuthStart;
     @BindView(R.id.tvDetailsAuthEndTime)
-    TextView tvDetailsAuthEndTime;//授权结束时间
+    TextView     tvDetailsAuthEndTime;//授权结束时间
     @BindView(R.id.llDetailsAuthEnd)
     LinearLayout llDetailsAuthEnd;
 
@@ -79,49 +79,50 @@ public class CarDetailsActivity extends BaseMvpActivity<CarDetailsPresenter> imp
     @BindView(R.id.llDetailsRemote)
     LinearLayout llDetailsRemote;//远程
     @BindView(R.id.ivDetailsRemoteState)
-    ImageView ivDetailsRemoteState;//远程激活icon
+    ImageView    ivDetailsRemoteState;//远程激活icon
     @BindView(R.id.tvDetailsRemoteState)
-    TextView tvDetailsRemoteState;//远程激活状态
+    TextView     tvDetailsRemoteState;//远程激活状态
     @BindView(R.id.llDetailsRecorder)
     LinearLayout llDetailsRecorder;//记录仪
     @BindView(R.id.ivDetailsRecorderState)
-    ImageView ivDetailsRecorderState;//记录仪icon
+    ImageView    ivDetailsRecorderState;//记录仪icon
     @BindView(R.id.tvDetailsRecorderState)
-    TextView tvDetailsRecorderState;//记录仪状态
+    TextView     tvDetailsRecorderState;//记录仪状态
     @BindView(R.id.llDetailsMachine)
     LinearLayout llDetailsMachine;//车机
     @BindView(R.id.ivDetailsMachineState)
-    ImageView ivDetailsMachineState;//车机icon
+    ImageView    ivDetailsMachineState;//车机icon
     @BindView(R.id.tvDetailsMachineState)
-    TextView tvDetailsMachineState;//车机状态
+    TextView     tvDetailsMachineState;//车机状态
     @BindView(R.id.tvDetailsRemote)
-    TextView tvDetailsRemote;//远程txt
+    TextView     tvDetailsRemote;//远程txt
     @BindView(R.id.tvDetailsRecorder)
-    TextView tvDetailsRecorder;//记录仪txt
+    TextView     tvDetailsRecorder;//记录仪txt
     @BindView(R.id.tvDetailsMachine)
-    TextView tvDetailsMachine;//车机txt
+    TextView     tvDetailsMachine;//车机txt
 
     @BindView(R.id.btnCancelAuth)
     Button btnCancelAuth;//取消授权
 
 
-    private int type = DETAILS_TYPE1;
+    private             int type          = DETAILS_TYPE1;
     public static final int DETAILS_TYPE1 = 0;  //未激活未授权（我的爱车详情）
     public static final int DETAILS_TYPE2 = 1;  //已激活未授权（d）
     public static final int DETAILS_TYPE3 = 2;  //已激活授权中（我的爱车详情）
     public static final int DETAILS_TYPE4 = 3;  //（被授权车辆详情）
-    private int remoteStatus = -1;   //远程状态
-    private int withTbox = -1;   //前后装
-    private int authId = 0; //授权id
-    private int carId = 0;  //车辆id
+    private             int remoteStatus  = -1;   //远程状态
+    private             int withTbox      = -1;   //前后装
+    private             int authId        = 0; //授权id
+    private             int carId         = 0;  //车辆id
 
     private TimePickerView pvCustomTime;
 
-    private long buyDate = -1;
-    private long maintenMiles = -1;
-    private long maintenDate = -1;
+    private long buyDate       = -1;
+    private long maintenMiles  = -1;
+    private long maintenDate   = -1;
     private long applicantDate = -1;
-    private long inspectTime = -1;
+    private long inspectTime   = -1;
+
     @Override
     protected int getContentView() {
         return R.layout.activity_car_details;
@@ -168,12 +169,16 @@ public class CarDetailsActivity extends BaseMvpActivity<CarDetailsPresenter> imp
 
     /**
      * 编辑车辆
-     *
-     * @param buyDate       购买时间
-     * @param maintenMiles  保养里程
-     * @param maintenDate   上次保养时间
-     * @param applicantDate 上次投保时间
-     * @param inspectTime   上次年检时间
+     * @param buyDate
+     *         购买时间
+     * @param maintenMiles
+     *         保养里程
+     * @param maintenDate
+     *         上次保养时间
+     * @param applicantDate
+     *         上次投保时间
+     * @param inspectTime
+     *         上次年检时间
      */
     @SuppressLint("CheckResult")
     private void modify(final long buyDate, final long maintenMiles, final long maintenDate, final long applicantDate, final long inspectTime) {
@@ -308,22 +313,30 @@ public class CarDetailsActivity extends BaseMvpActivity<CarDetailsPresenter> imp
         authId = data.authId;
         withTbox = data.withTbox;
         switch (remoteStatus) {
-            case 0:
-                tvDetailsRemoteState.setText("未激活");
 
-                break;
             case 1:
+            case 3:
+                ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activating_big);
+                tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorActivating));
+                tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorActivating));
                 tvDetailsRemoteState.setText("激活中");
                 break;
             case 2:
+                ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activated_big);
+                tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorBlue));
+                tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorBlue));
                 tvDetailsRemoteState.setText("已激活");
                 break;
-            case 3:
-                tvDetailsRemoteState.setText("激活失败");
-                break;
+
+            case 0:
             default:
+                tvDetailsRemoteState.setText("未激活");
+                ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activate_big);
+                tvDetailsRemote.setTextColor(getResources().getColor(R.color.textColorGray));
+                tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.textColorGray));
                 break;
         }
+
         if (!TextUtils.isEmpty(data.carName)) {
             tvDetailsModel.setText(data.carName);
         }
@@ -372,19 +385,7 @@ public class CarDetailsActivity extends BaseMvpActivity<CarDetailsPresenter> imp
         } else {
             tvDetailsAuthEndTime.setText("--");
         }
-        if (data.remoteStatus == 1) {
-            ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activating_big);
-            tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorActivating));
-            tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorActivating));
-        } else if (data.remoteStatus == 2) {
-            ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activated_big);
-            tvDetailsRemote.setTextColor(getResources().getColor(R.color.colorBlue));
-            tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.colorBlue));
-        } else {
-            ivDetailsRemoteState.setImageResource(R.mipmap.ic_remote_activate_big);
-            tvDetailsRemote.setTextColor(getResources().getColor(R.color.textColorGray));
-            tvDetailsRemoteState.setTextColor(getResources().getColor(R.color.textColorGray));
-        }
+
 
     }
 
@@ -530,6 +531,7 @@ public class CarDetailsActivity extends BaseMvpActivity<CarDetailsPresenter> imp
                 ToastUtils.showShort(baseError.msg);
             } else {
                 ToastUtils.showShort("取消授权成功");
+                btnCancelAuth.setVisibility(View.GONE);
                 finish();
             }
         }

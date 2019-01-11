@@ -13,9 +13,13 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
+import com.carlt.autogo.basemvp.PresenterVariable;
+import com.carlt.autogo.entry.car.CarInfo;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.presenter.activite.DeviceActivatePresenter;
 import com.carlt.autogo.presenter.activite.IDeviceActivateView;
+import com.carlt.autogo.presenter.car.CarDetailsPresenter;
+import com.carlt.autogo.presenter.car.ICarDetailsView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,8 +33,8 @@ import butterknife.OnClick;
  * Created by Marlon on 2018/12/3.
  * 设备激活
  */
-@CreatePresenter(presenter = DeviceActivatePresenter.class)
-public class DeviceActivateEditActivity extends BaseMvpActivity<DeviceActivatePresenter> implements IDeviceActivateView {
+@CreatePresenter(presenter = {DeviceActivatePresenter.class, CarDetailsPresenter.class})
+public class DeviceActivateEditActivity extends BaseMvpActivity implements IDeviceActivateView, ICarDetailsView {
     @BindView(R.id.etPin)
     EditText etPin; //6位或者8位
     @BindView(R.id.etDeviceNum)
@@ -40,6 +44,10 @@ public class DeviceActivateEditActivity extends BaseMvpActivity<DeviceActivatePr
     private int    carId;
     private int    withTbox;
     private String deviceNum;
+    @PresenterVariable
+    DeviceActivatePresenter mActivatePresenter;
+    @PresenterVariable
+    CarDetailsPresenter     mCarDetailsPresenter;
 
     @Override
     protected int getContentView() {
@@ -62,8 +70,26 @@ public class DeviceActivateEditActivity extends BaseMvpActivity<DeviceActivatePr
         } else {
             etDeviceNum.setVisibility(View.GONE);
         }
+        mCarDetailsPresenter.ClientGetCarInfo(carId);
     }
 
+    @Override
+    public void getCarInfoSuccess(CarInfo carInfo) {
+        String deviceNum = carInfo.deviceNum;
+        if (!TextUtils.isEmpty(deviceNum)) {
+            etDeviceNum.setEnabled(false);
+            etDeviceNum.setText(deviceNum);
+        }
+    }
+    @Override
+    public void modifySuccess(BaseError baseError) {
+
+    }
+
+    @Override
+    public void cancelAuthSuccess(BaseError baseError) {
+
+    }
     @OnClick(R.id.btnActivate)
     public void onViewClicked() {
         if (TextUtils.isEmpty(etPin.getText())) {
@@ -81,18 +107,18 @@ public class DeviceActivateEditActivity extends BaseMvpActivity<DeviceActivatePr
                 return;
             }
         }
-        if (!checkTxt(etPin.getText().toString())||!(etPin.getText().length() == 8||etPin.getText().length() == 6)) {
+        if (!checkTxt(etPin.getText().toString()) || !(etPin.getText().length() == 8 || etPin.getText().length() == 6)) {
             ToastUtils.showShort("PIN码输入有误");
             return;
         }
-//        if (!checkTxt(etDeviceNum.getText().toString())||etDeviceNum.getText().length() != 16) {
-//            ToastUtils.showShort("设备号输入有误");
-//
-//        }
-//        if (!checkTxt(etPin.getText().toString()) || etPin.getText().length() != 8) {
-//            ToastUtils.showShort("PIN码输入有误");
-//            return;
-//        }
+        //        if (!checkTxt(etDeviceNum.getText().toString())||etDeviceNum.getText().length() != 16) {
+        //            ToastUtils.showShort("设备号输入有误");
+        //
+        //        }
+        //        if (!checkTxt(etPin.getText().toString()) || etPin.getText().length() != 8) {
+        //            ToastUtils.showShort("PIN码输入有误");
+        //            return;
+        //        }
 
         deviceActive();
 
@@ -106,7 +132,7 @@ public class DeviceActivateEditActivity extends BaseMvpActivity<DeviceActivatePr
         if (deviceNum != null) {
             params.put("deviceNum", deviceNum.toUpperCase());
         }
-        getPresenter().deviceActive(params);
+        mActivatePresenter.deviceActive(params);
     }
 
     ReplacementTransformationMethod method = new ReplacementTransformationMethod() {
@@ -150,4 +176,7 @@ public class DeviceActivateEditActivity extends BaseMvpActivity<DeviceActivatePr
             }
         }
     }
+
+
+
 }

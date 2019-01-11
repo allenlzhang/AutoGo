@@ -2,7 +2,6 @@ package com.carlt.autogo.presenter.carauth;
 
 import android.annotation.SuppressLint;
 
-import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.net.base.ClientFactory;
@@ -35,7 +34,7 @@ public class AuthHandlePresenter extends BasePresenter<IAuthHandleView> {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         uuDialog.dismiss();
-                        ToastUtils.showShort("操作失败");
+//                        ToastUtils.showShort("操作失败");
                     }
                 });
     }
@@ -55,7 +54,8 @@ public class AuthHandlePresenter extends BasePresenter<IAuthHandleView> {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         uuDialog.dismiss();
-                        ToastUtils.showShort("操作失败");
+
+//                        ToastUtils.showShort("操作失败");
                     }
                 });
     }

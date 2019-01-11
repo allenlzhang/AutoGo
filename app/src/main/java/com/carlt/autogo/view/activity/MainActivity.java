@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.entry.car.SingletonCar;
@@ -65,7 +64,7 @@ public class MainActivity extends BaseMvpActivity {
 
     private void initSavedInstanceState(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            LogUtils.e("异常关闭----" + savedInstanceState.toString());
+//            LogUtils.e("异常关闭----" + savedInstanceState.toString());
             int currentIndex = savedInstanceState.getInt("currentItem", 0);
             setIndexFragment(currentIndex);
             bottomTabs.setCurrentTab(currentIndex);

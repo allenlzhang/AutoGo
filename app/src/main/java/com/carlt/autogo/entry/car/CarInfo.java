@@ -16,6 +16,7 @@ public class CarInfo {
     public String    carName; // 车辆名称
     public String    orgId; // 组织id
     public String    buyCarImgUrl; // 购车发票地址
+    public String    deviceNum; // 购车发票地址
     public int       brandid; // 品牌ID
     public int       modelid; // 车系ID
     public int       optionid; // 车型ID
