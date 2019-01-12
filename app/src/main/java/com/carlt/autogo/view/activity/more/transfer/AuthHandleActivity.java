@@ -21,9 +21,15 @@ import com.carlt.autogo.utils.MyTimeUtils;
 import com.carlt.autogo.view.activity.login.FaceLiveCheckActivity;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Description : 授权处理页面
@@ -56,6 +62,40 @@ public class AuthHandleActivity extends BaseMvpActivity<AuthHandlePresenter> imp
     public void init() {
         setTitleText("授权处理");
         initCarInfo();
+        interval();
+    }
+
+    int        count = 600;
+    Disposable disposable;
+
+    private void interval() {
+        disposable = Observable.interval(1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        if (count <= 0) {
+                            CommonDialog.createOneBtnDialog(AuthHandleActivity.this, "过户取消", false, new CommonDialog.DialogOneBtnClick() {
+                                @Override
+                                public void onOneBtnClick() {
+                                    finish();
+                                }
+                            });
+                            disposable.dispose();
+                        } else {
+                            count--;
+                        }
+                    }
+                });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (disposable != null) {
+            disposable.dispose();
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -67,7 +107,7 @@ public class AuthHandleActivity extends BaseMvpActivity<AuthHandlePresenter> imp
         }
         HashMap<String, Object> map = new HashMap<>();
         map.put("id", id);
-        getPresenter().getStepInfos(map);
+        getPresenter().getAuthInfo(map);
         //        ClientFactory.def(CarService.class).getById(map)
         //                .subscribe(new Consumer<CarBaseInfo>() {
         //                    @Override
@@ -93,6 +133,7 @@ public class AuthHandleActivity extends BaseMvpActivity<AuthHandlePresenter> imp
         tvAuthAccount.setText(carBaseInfo.mobile);
         tvAuthCar.setText(carBaseInfo.carName);
         String s = MyTimeUtils.formatDateTime(carBaseInfo.duration);
+        LogUtils.e(s);
         tvAuthDuration.setText(s);
     }
 
@@ -120,7 +161,7 @@ public class AuthHandleActivity extends BaseMvpActivity<AuthHandlePresenter> imp
                 break;
             case R.id.btnRefuseAgree:
                 String mobile = tvAuthAccount.getText().toString().trim();
-                CommonDialog.createTwoBtnDialog(this, "是否拒绝将爱车授权给"+"“"+mobile+"”"+"使用？", true, new CommonDialog.DialogWithTitleClick() {
+                CommonDialog.createTwoBtnDialog(this, "是否拒绝将爱车授权给" + "“" + mobile + "”" + "使用？", true, new CommonDialog.DialogWithTitleClick() {
                     @Override
                     public void onLeftClick() {
 
@@ -138,7 +179,7 @@ public class AuthHandleActivity extends BaseMvpActivity<AuthHandlePresenter> imp
 
     @SuppressLint("CheckResult")
     private void doAuthState(int status) {
-//        dialog.show();
+        //        dialog.show();
         HashMap<String, Object> map = new HashMap<>();
         map.put("id", id);
         map.put("status", status);

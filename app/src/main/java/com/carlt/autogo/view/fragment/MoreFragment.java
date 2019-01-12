@@ -15,12 +15,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpFragment;
+import com.carlt.autogo.basemvp.CreatePresenter;
+import com.carlt.autogo.basemvp.PresenterVariable;
+import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
+import com.carlt.autogo.presenter.car.ICarListView;
+import com.carlt.autogo.presenter.car.MyCarListPresenter;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.gildutils.GlideCircleTransform;
@@ -38,6 +43,8 @@ import com.zyyoona7.popup.XGravity;
 import com.zyyoona7.popup.YGravity;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -49,7 +56,8 @@ import io.reactivex.functions.Consumer;
  * Author : zhanglei
  * Date : 2018/9/10
  */
-public class MoreFragment extends BaseMvpFragment {
+@CreatePresenter(presenter = {MyCarListPresenter.class})
+public class MoreFragment extends BaseMvpFragment implements ICarListView {
 
 
     /**
@@ -97,17 +105,19 @@ public class MoreFragment extends BaseMvpFragment {
 
 
     @BindView(R.id.ll_more_layout1)
-    LinearLayout llMoreLayout1;
+    LinearLayout       llMoreLayout1;
     @BindView(R.id.ll_more_remote_update)
-    LinearLayout llMoreRemoteUpdate;
+    LinearLayout       llMoreRemoteUpdate;
     @BindView(R.id.ll_more_service_renewal)
-    LinearLayout llMoreServiceRenewal;
+    LinearLayout       llMoreServiceRenewal;
     @BindView(R.id.ll_more_contact)
-    LinearLayout llMoreContact;
+    LinearLayout       llMoreContact;
+    @PresenterVariable
+    MyCarListPresenter mCarListPresenter;
 
-
-    private UserInfo userInfo;
-    private boolean  isBindCar;
+    private UserInfo                    userInfo;
+    private boolean                     isBindCar;
+    private List<AuthCarInfo.MyCarBean> myCar;
 
     @Override
     public int getLayoutId() {
@@ -122,6 +132,7 @@ public class MoreFragment extends BaseMvpFragment {
     @Override
     public void onResume() {
         super.onResume();
+        initMyCarInfo();
         isBindCar = SingletonCar.getInstance().isBound();
         userInfo = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         if (!TextUtils.isEmpty(userInfo.realName)) {
@@ -147,17 +158,15 @@ public class MoreFragment extends BaseMvpFragment {
                 .skipMemoryCache(true)
                 .transform(new GlideCircleTransform(mContext))
                 .into(ivMoreHeadSculpture);
-        if (!isBindCar) {
-            llMoreLayout1.setVisibility(View.GONE);
-            llMoreRemoteUpdate.setVisibility(View.GONE);
-            llMoreServiceRenewal.setVisibility(View.GONE);
-            llMoreContact.setVisibility(View.GONE);
-        } else {
-            llMoreLayout1.setVisibility(View.VISIBLE);
-            llMoreRemoteUpdate.setVisibility(View.VISIBLE);
-            llMoreServiceRenewal.setVisibility(View.VISIBLE);
-            llMoreContact.setVisibility(View.VISIBLE);
-        }
+
+
+    }
+
+    private void initMyCarInfo() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", 1);//1我的车辆 2被授权车辆 3我的车辆和被授权车辆
+        map.put("isShowActive", 2);//默认1不显示，2显示设备等激活状态
+        mCarListPresenter.getCarList(map);
     }
 
     @OnClick({R.id.ll_more_remote_update, R.id.ivAdd, R.id.ll_more_myCar, R.id.tv_more_edit_profile, R.id.ll_more_accounts_and_security, R.id.ll_more_log_out})
@@ -203,12 +212,13 @@ public class MoreFragment extends BaseMvpFragment {
                         View tvLine = view.findViewById(R.id.tvLine);
                         View tvScanner = view.findViewById(R.id.tvScanner);
                         View tvQrCode = view.findViewById(R.id.tvQrCode);
-                        if (!isBindCar) {
-                            tvLine.setVisibility(View.GONE);
-                            tvQrCode.setVisibility(View.GONE);
-                        } else {
+                        if (isBindCar && myCar != null && myCar.size() != 0) {
                             tvLine.setVisibility(View.VISIBLE);
                             tvQrCode.setVisibility(View.VISIBLE);
+                        } else {
+
+                            tvLine.setVisibility(View.GONE);
+                            tvQrCode.setVisibility(View.GONE);
                         }
                         tvScanner.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -351,5 +361,21 @@ public class MoreFragment extends BaseMvpFragment {
                         LogUtils.e(throwable);
                     }
                 });
+    }
+
+    @Override
+    public void getCarListSuccess(AuthCarInfo info) {
+        myCar = info.myCar;
+        if (isBindCar && myCar != null && myCar.size() != 0) {
+            llMoreLayout1.setVisibility(View.VISIBLE);
+            llMoreRemoteUpdate.setVisibility(View.VISIBLE);
+            llMoreServiceRenewal.setVisibility(View.VISIBLE);
+            llMoreContact.setVisibility(View.VISIBLE);
+        } else {
+            llMoreLayout1.setVisibility(View.GONE);
+            llMoreRemoteUpdate.setVisibility(View.GONE);
+            llMoreServiceRenewal.setVisibility(View.GONE);
+            llMoreContact.setVisibility(View.GONE);
+        }
     }
 }

@@ -193,7 +193,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
     }
 
     @Override
-    public void createAuthQRCode(CarBaseInfo info) {
+    public void createAuthQRCode(final CarBaseInfo info) {
         if (info.id != 0) {
             long l = System.currentTimeMillis() / 1000;
             Bitmap codeBit = QRCodeUtils.createQRCode(GlobalKey.AUTH_REGEX + info.id + "&time=" + l);
@@ -205,6 +205,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
             CommonDialog.createOneBtnDialog(AuthQRCodeActivity.this, info.err.msg, false, new CommonDialog.DialogOneBtnClick() {
                 @Override
                 public void onOneBtnClick() {
+//                    info.err.code
                     //                    finish();
                 }
             });

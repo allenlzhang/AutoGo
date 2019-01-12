@@ -18,13 +18,10 @@ import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
-import com.carlt.autogo.net.base.ClientFactory;
-import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.presenter.safety.ChangeLoginPwdPresenter;
 import com.carlt.autogo.presenter.safety.IChangeLoginPwdView;
 import com.carlt.autogo.utils.ActivityControl;
-import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.MyInputFilter;
 import com.carlt.autogo.utils.MyTextWatcher;
 import com.carlt.autogo.utils.SharepUtil;
@@ -46,7 +43,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Marlon on 2018/9/13.
  */
 @CreatePresenter(presenter = ChangeLoginPwdPresenter.class)
-public class ChangeLoginPwdActivity extends BaseMvpActivity<ChangeLoginPwdPresenter> implements IChangeLoginPwdView{
+public class ChangeLoginPwdActivity extends BaseMvpActivity<ChangeLoginPwdPresenter> implements IChangeLoginPwdView {
     @BindView(R.id.edit_management_phone)
     EditText       editManagementPhone;
     @BindView(R.id.edit_management_code)
@@ -81,7 +78,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity<ChangeLoginPwdPresen
     /**
      * 倒计时
      */
-    private int count = 60;
+    private int     count = 60;
     private boolean isFromlogin;
 
     //    private Timer timer = new Timer();
@@ -99,6 +96,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity<ChangeLoginPwdPresen
     public void init() {
         type = getIntent().getIntExtra("changePwd", 1);
         isFromlogin = getIntent().getBooleanExtra("Login", false);
+        LogUtils.e(isFromlogin);
         loadTypeView(type);
 
         //密码输入屏蔽 中文其他不满足需求的字符
@@ -179,16 +177,19 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity<ChangeLoginPwdPresen
     @SuppressLint("CheckResult")
     private void sendCode() {
         phone = editManagementPhone.getText().toString().trim();
-        if (!isFromlogin) {
-            UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
-            if (!TextUtils.equals(phone, user.mobile)) {
-                showToast("请输入当前登录手机");
-                return;
-            }
-        } else {
+        int type ;
+        if (isFromlogin) {
+            type = 2;
             if (TextUtils.isEmpty(phone)) {
                 showToast("请输入手机号码");
                 LogUtils.e(phone);
+                return;
+            }
+        } else {
+            type = 3;
+            UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+            if (!TextUtils.equals(phone, user.mobile)) {
+                showToast("请输入当前登录手机");
                 return;
             }
         }
@@ -198,7 +199,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity<ChangeLoginPwdPresen
         //        btnManagementCode.setText(count + "秒后重发");
         Map<String, String> param = new HashMap<>();
         param.put("mobile", phone);
-        Observable<BaseError> observable = ObservableHelper.sendValidate(phone, param, 2);
+        Observable<BaseError> observable = ObservableHelper.sendValidate(phone, param, type);
 
         observable.subscribe(new Consumer<BaseError>() {
             @Override
@@ -335,7 +336,7 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity<ChangeLoginPwdPresen
                 getPresenter().doRememberPwdConfirm(oldPwd, newPwd);
                 break;
             case LoginPwdManagementActivity.FORGET:
-//                UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+                //                UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
 
                 if (!isFromlogin) {
                     UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
@@ -350,10 +351,10 @@ public class ChangeLoginPwdActivity extends BaseMvpActivity<ChangeLoginPwdPresen
                         return;
                     }
                 }
-//                if (TextUtils.isEmpty(phone) || !phone.equals(user.mobile)) {
-//                    showToast("手机号码不正确");
-//                    break;
-//                }
+                //                if (TextUtils.isEmpty(phone) || !phone.equals(user.mobile)) {
+                //                    showToast("手机号码不正确");
+                //                    break;
+                //                }
                 if (TextUtils.isEmpty(code)) {
                     showToast("验证码为空");
                     break;

@@ -37,12 +37,8 @@ import io.reactivex.schedulers.Schedulers;
 public class WaitAuthActivity extends BaseMvpActivity {
     @BindView(R.id.tvDes)
     TextView tvDes;
+    private String cancelTip;
 
-    //    @Override
-    //    protected void onCreate(Bundle savedInstanceState) {
-    //        super.onCreate(savedInstanceState);
-    //        setContentView(R.layout.activity_wait_auth);
-    //    }
 
     @Override
     protected int getContentView() {
@@ -58,20 +54,53 @@ public class WaitAuthActivity extends BaseMvpActivity {
                 setTitleText("等待过户");
                 tvDes.setText("已发送过户请求等待确认");
                 pollingTransferResult();
+                cancelTip = "过户取消";
                 break;
             case 2:
                 setTitleText("等待授权");
                 tvDes.setText("已发送授权请求等待确认");
-
+                cancelTip = "授权已取消";
                 pollingAuthResult();
                 break;
             default:
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        interval();
+    }
+
+    int        count = 600;
+    Disposable disposableCancel;
+
+    private void interval() {
+        disposableCancel = Observable.interval(1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+
+                    public void accept(Long aLong) throws Exception {
+                        if (count <= 0) {
+
+                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, cancelTip, false, new CommonDialog.DialogOneBtnClick() {
+                                @Override
+                                public void onOneBtnClick() {
+                                    finish();
+                                }
+                            });
+                            disposableCancel.dispose();
+                        } else {
+                            count--;
+                        }
+                    }
+                });
+    }
 
     private Disposable disposable;
-    private int        duration = 10 * 60;
+    private int        duration = 600;
 
     @SuppressLint("CheckResult")
     private void pollingAuthResult() {
@@ -91,12 +120,12 @@ public class WaitAuthActivity extends BaseMvpActivity {
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         LogUtils.e(carBaseInfo.checkStatus);
                         if (duration <= 0) {
-                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "授权已取消", false, new CommonDialog.DialogOneBtnClick() {
-                                @Override
-                                public void onOneBtnClick() {
-                                    finish();
-                                }
-                            });
+//                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "授权已取消", false, new CommonDialog.DialogOneBtnClick() {
+                            //                                @Override
+                            //                                public void onOneBtnClick() {
+                            //                                    finish();
+                            //                                }
+                            //                            });
                             disposable.dispose();
 
                         } else {
@@ -107,18 +136,14 @@ public class WaitAuthActivity extends BaseMvpActivity {
 
                                     @Override
                                     public void onOneBtnClick() {
-                                        if (!SingletonCar.getInstance().isBound()) {
-                                            GetCarList();
-                                        }
+                                        //                                        if (!SingletonCar.getInstance().isBound()) {
+                                        GetCarList();
+                                        //                                        }
                                         Intent intent = new Intent(WaitAuthActivity.this, MyCarActivity.class);
                                         intent.putExtra("currentTab", 1);
                                         startActivity(intent);
                                         finish();
-                                        //                                        if (!SingletonCar.getInstance().isBound()) {
-                                        //                                            GetCarList();
-                                        //                                        } else {
-                                        //                                            finish();
-                                        //                                        }
+
                                     }
                                 });
 
@@ -159,14 +184,27 @@ public class WaitAuthActivity extends BaseMvpActivity {
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         LogUtils.e(carBaseInfo.status);
                         if (duration <= 0) {
+//                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "过户已取消", false, new CommonDialog.DialogOneBtnClick() {
+//                                @Override
+//                                public void onOneBtnClick() {
+//                                    finish();
+//                                }
+//                            });
                             disposable.dispose();
                         } else {
                             duration--;
                             if (carBaseInfo.status == 3) {
                                 disposable.dispose();
                                 CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "过户成功", false, new CommonDialog.DialogOneBtnClick() {
+
                                     @Override
                                     public void onOneBtnClick() {
+                                        //                                        if (!SingletonCar.getInstance().isBound()) {
+                                        GetCarList();
+                                        //                                        }
+                                        Intent intent = new Intent(WaitAuthActivity.this, MyCarActivity.class);
+                                        intent.putExtra("currentTab", 0);
+                                        startActivity(intent);
                                         finish();
                                     }
                                 });
@@ -202,13 +240,13 @@ public class WaitAuthActivity extends BaseMvpActivity {
                     @Override
                     public void accept(AuthCarInfo info) throws Exception {
                         parseGetMyList(info);
-//                        finish();
+                        //                        finish();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         LogUtils.e(throwable);
-//                        finish();
+                        //                        finish();
                     }
                 });
     }

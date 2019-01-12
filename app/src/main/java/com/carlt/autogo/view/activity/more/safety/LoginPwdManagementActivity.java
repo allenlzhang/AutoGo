@@ -1,7 +1,6 @@
 package com.carlt.autogo.view.activity.more.safety;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -57,6 +56,7 @@ public class LoginPwdManagementActivity extends BaseMvpActivity {
     private void startActivity(int type){
         Intent intent1 = new Intent(LoginPwdManagementActivity.this,ChangeLoginPwdActivity.class);
         intent1.putExtra("changePwd",type);
+        intent1.putExtra("Login", false);
         startActivity(intent1);
     }
 

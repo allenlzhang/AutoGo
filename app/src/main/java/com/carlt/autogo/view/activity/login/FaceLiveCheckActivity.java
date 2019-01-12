@@ -29,6 +29,7 @@ import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.MainActivity;
+import com.carlt.autogo.view.activity.car.MyCarActivity;
 import com.carlt.autogo.view.activity.more.transfer.AuthHandleActivity;
 import com.carlt.autogo.view.activity.more.transfer.AuthQRCodeActivity;
 import com.carlt.autogo.view.activity.more.transfer.CheckSmsCodeActivity;
@@ -311,7 +312,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         dialog.dismiss();
-                        if (carBaseInfo.err == null) {
+                        if (carBaseInfo.code == 0) {
 
                             ToastUtils.showShort("操作成功");
                             closeActivity();
@@ -324,7 +325,7 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                     public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
                         LogUtils.e(throwable);
-//                        ToastUtils.showShort("操作失败");
+                        //                        ToastUtils.showShort("操作失败");
                     }
                 });
     }
@@ -364,10 +365,11 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         dialog.dismiss();
-                        if (carBaseInfo.err == null) {
+                        if (carBaseInfo.code == 0) {
 
                             ToastUtils.showShort("操作成功");
-                            closeActivity();
+                            //                            closeActivity();
+                            jump2Activity();
                         } else {
                             ToastUtils.showShort(carBaseInfo.msg);
                         }
@@ -377,10 +379,30 @@ public class FaceLiveCheckActivity extends FaceLivenessActivity {
                     public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
                         LogUtils.e(throwable);
-//                        ToastUtils.showShort("操作失败");
+                        //                        ToastUtils.showShort("操作失败");
                     }
                 });
 
+    }
+
+    private void jump2Activity() {
+        for (Activity activity : ActivityControl.mActivityList) {
+            if (activity instanceof AuthQRCodeActivity) {
+                activity.finish();
+            }
+            if (activity instanceof TransferQRCodeActivity) {
+                activity.finish();
+            }
+            if (activity instanceof TransHandleActivity) {
+                activity.finish();
+            }
+            if (activity instanceof AuthHandleActivity) {
+                activity.finish();
+            }
+        }
+        Intent intent = new Intent(this, MyCarActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void closeActivity() {

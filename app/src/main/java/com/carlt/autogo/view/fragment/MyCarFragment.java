@@ -19,8 +19,6 @@ import com.carlt.autogo.entry.car.AuthCarInfo;
 import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
-import com.carlt.autogo.net.base.ClientFactory;
-import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.presenter.car.ICarListView;
 import com.carlt.autogo.presenter.car.MyCarListPresenter;
 import com.carlt.autogo.utils.SharepUtil;
@@ -35,20 +33,17 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Marlon on 2018/11/21.
  */
-@CreatePresenter (presenter = MyCarListPresenter.class)
-public class MyCarFragment extends BaseMvpFragment<MyCarListPresenter> implements ICarListView{
+@CreatePresenter(presenter = MyCarListPresenter.class)
+public class MyCarFragment extends BaseMvpFragment<MyCarListPresenter> implements ICarListView {
     @BindView(R.id.fragment_lv_myCar)
     ListView fragmentLvMyCar;
     View bottomView;
-    private MyCarAdapter adapter;
-    private static final int CODE_ADDCAR_REQUEST = 1111;
+    private              MyCarAdapter adapter;
+    private static final int          CODE_ADDCAR_REQUEST = 1111;
 
     @Override
     public int getLayoutId() {
@@ -70,7 +65,7 @@ public class MyCarFragment extends BaseMvpFragment<MyCarListPresenter> implement
                     certification();
                 }
             });
-        }else {
+        } else {
             if (fragmentLvMyCar.getFooterViewsCount() == 0) {
                 fragmentLvMyCar.addFooterView(bottomView);
             }
@@ -114,14 +109,17 @@ public class MyCarFragment extends BaseMvpFragment<MyCarListPresenter> implement
             if (list.size() >= 5 && bottomView != null) {
                 fragmentLvMyCar.removeFooterView(bottomView);
             }
-//            adapter = new MyCarAdapter(mContext, list, MyCarAdapter.MYCAR);
-//            fragmentLvMyCar.setAdapter(adapter);
+            //            adapter = new MyCarAdapter(mContext, list, MyCarAdapter.MYCAR);
+            //            fragmentLvMyCar.setAdapter(adapter);
             adapter.update(list);
             LogUtils.e("listView---count---" + adapter.getCount());
             fragmentLvMyCar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     AuthCarInfo.MyCarBean item = (AuthCarInfo.MyCarBean) adapterView.getItemAtPosition(i);
+                    if (item == null) {
+                        return;
+                    }
                     Intent intent = new Intent(mContext, CarDetailsActivity.class);
                     intent.putExtra("id", item.id);
                     if (item.authStatus != 2) {

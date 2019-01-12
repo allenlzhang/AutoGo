@@ -20,10 +20,15 @@ import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.login.FaceLiveCheckActivity;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Description : 过户处理页面
@@ -42,8 +47,8 @@ public class TransHandleActivity extends BaseMvpActivity {
     Button   btnAgree;
     @BindView(R.id.btnRefuseAgree)
     Button   btnRefuseAgree;
-    private int id;
-
+    private int    id;
+    private String mobile;
 
     @Override
     protected int getContentView() {
@@ -59,6 +64,68 @@ public class TransHandleActivity extends BaseMvpActivity {
         tvCarName.setText(carName);
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         tvAccount.setText(user.mobile);
+        initTransferInfo();
+        interval();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (disposable != null) {
+            disposable.dispose();
+        }
+    }
+
+    int        count = 600;
+    Disposable disposable;
+
+    private void interval() {
+        disposable = Observable.interval(1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+
+                    public void accept(Long aLong) throws Exception {
+                        if (count <= 0) {
+                            CommonDialog.createOneBtnDialog(TransHandleActivity.this, "过户取消", false, new CommonDialog.DialogOneBtnClick() {
+                                @Override
+                                public void onOneBtnClick() {
+                                    //                                    finish();
+                                    closeActivity();
+                                }
+                            });
+                            disposable.dispose();
+                            //                            btnSendCode.setClickable(true);
+                            //                            btnSendCode.setText("发送验证码");
+                            //                            count = 60;
+                        } else {
+                            count--;
+                            //                            btnSendCode.setText(count + "秒");
+                        }
+                    }
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    private void initTransferInfo() {
+        if (id == 0) {
+            return;
+        }
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("transferId", id);
+        ClientFactory.def(CarService.class).getByTransferId(map)
+                .subscribe(new Consumer<CarBaseInfo>() {
+                    @Override
+                    public void accept(CarBaseInfo carBaseInfo) throws Exception {
+                        mobile = carBaseInfo.mobile;
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
     }
 
     @OnClick({R.id.btnAgree, R.id.btnRefuseAgree})
@@ -72,7 +139,7 @@ public class TransHandleActivity extends BaseMvpActivity {
                 startActivity(intent);
                 break;
             case R.id.btnRefuseAgree:
-                CommonDialog.createTwoBtnDialog(this, "您确定要拒绝吗", true, new CommonDialog.DialogWithTitleClick() {
+                CommonDialog.createTwoBtnDialog(this, "是否拒绝将爱车过户到“" + mobile + "”名下？", true, new CommonDialog.DialogWithTitleClick() {
                     @Override
                     public void onLeftClick() {
 
@@ -99,11 +166,11 @@ public class TransHandleActivity extends BaseMvpActivity {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         dialog.dismiss();
-                        if (carBaseInfo.err == null) {
+                        if (carBaseInfo.code == 0) {
                             showToast("操作成功");
                             closeActivity();
                         } else {
-                            showToast("操作失败");
+                            showToast(carBaseInfo.msg);
                         }
 
                     }
@@ -111,7 +178,7 @@ public class TransHandleActivity extends BaseMvpActivity {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
-//                        showToast("操作失败");
+                        //                        showToast("操作失败");
                     }
                 });
     }
@@ -130,6 +197,9 @@ public class TransHandleActivity extends BaseMvpActivity {
     private void closeActivity() {
         for (Activity activity : ActivityControl.mActivityList) {
             if (activity instanceof TransferQRCodeActivity) {
+                activity.finish();
+            }
+            if (activity instanceof AuthQRCodeActivity) {
                 activity.finish();
             }
 

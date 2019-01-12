@@ -20,7 +20,7 @@ import io.reactivex.functions.Consumer;
  */
 public class AuthHandlePresenter extends BasePresenter<IAuthHandleView> {
     @SuppressLint("CheckResult")
-    public void getStepInfos(Map<String, Object> params) {
+    public void getAuthInfo(Map<String, Object> params) {
         uuDialog.show();
 
         ClientFactory.def(CarService.class).getById(params)

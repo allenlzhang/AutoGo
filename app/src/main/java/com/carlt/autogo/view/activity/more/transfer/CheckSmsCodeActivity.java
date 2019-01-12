@@ -23,6 +23,7 @@ import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.presenter.ObservableHelper;
 import com.carlt.autogo.utils.ActivityControl;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.car.MyCarActivity;
 import com.carlt.autogo.view.activity.login.FaceLiveCheckActivity;
 
 import java.util.HashMap;
@@ -149,7 +150,7 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         dialog.dismiss();
-                        if (carBaseInfo.err == null) {
+                        if (carBaseInfo.code == 0) {
 
                             ToastUtils.showShort("操作成功");
                             closeActivity();
@@ -198,10 +199,10 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         dialog.dismiss();
-                        if (carBaseInfo.err == null) {
+                        if (carBaseInfo.code == 0) {
 
                             ToastUtils.showShort("操作成功");
-                            closeActivity();
+                            jump2Activity();
                         } else {
                             ToastUtils.showShort(carBaseInfo.msg);
                         }
@@ -215,7 +216,28 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
                     }
                 });
     }
-
+    private void jump2Activity() {
+        for (Activity activity : ActivityControl.mActivityList) {
+            if (activity instanceof AuthQRCodeActivity) {
+                activity.finish();
+            }
+            if (activity instanceof TransferQRCodeActivity) {
+                activity.finish();
+            }
+            if (activity instanceof TransHandleActivity) {
+                activity.finish();
+            }
+            if (activity instanceof AuthHandleActivity) {
+                activity.finish();
+            }
+            if (activity instanceof FaceLiveCheckActivity) {
+                activity.finish();
+            }
+        }
+        Intent intent = new Intent(this, MyCarActivity.class);
+        startActivity(intent);
+        finish();
+    }
     private void closeActivity() {
         for (Activity activity : ActivityControl.mActivityList) {
             if (activity instanceof AuthQRCodeActivity) {

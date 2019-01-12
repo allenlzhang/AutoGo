@@ -103,6 +103,10 @@ public class CarDetailsActivity extends BaseMvpActivity<CarDetailsPresenter> imp
 
     @BindView(R.id.btnCancelAuth)
     Button btnCancelAuth;//取消授权
+    @BindView(R.id.authLine)
+    View   authLine;
+    @BindView(R.id.line1)
+    View   line1;
 
 
     private             int type          = DETAILS_TYPE1;
@@ -138,6 +142,7 @@ public class CarDetailsActivity extends BaseMvpActivity<CarDetailsPresenter> imp
 
         Intent intent = getIntent();
         type = intent.getIntExtra("type", DETAILS_TYPE1);
+        LogUtils.e(type);
         switch (type) {
             case DETAILS_TYPE1:
                 llDetails.setVisibility(View.GONE);
@@ -147,6 +152,8 @@ public class CarDetailsActivity extends BaseMvpActivity<CarDetailsPresenter> imp
                 llDetailsAuthStart.setVisibility(View.GONE);
                 llDetailsAuthEnd.setVisibility(View.GONE);
                 btnCancelAuth.setVisibility(View.GONE);
+                authLine.setVisibility(View.GONE);
+                line1.setVisibility(View.GONE);
                 break;
             case DETAILS_TYPE3:
                 break;
@@ -283,15 +290,24 @@ public class CarDetailsActivity extends BaseMvpActivity<CarDetailsPresenter> imp
         switch (remoteStatus) {
             case 0:
                 intent.setClass(CarDetailsActivity.this, DeviceActivateActivity.class);
+                intent.putExtra("carId", carId);
+                intent.putExtra("withTbox", withTbox);
+                startActivity(intent);
                 break;
             case 1:
                 intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
+                intent.putExtra("carId", carId);
+                intent.putExtra("withTbox", withTbox);
+                startActivity(intent);
                 break;
-            case 2:
-                intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
-                break;
+            //            case 2:
+            //                intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
+            //                break;
             case 3:
                 intent.setClass(CarDetailsActivity.this, ActivateStepActivity.class);
+                intent.putExtra("carId", carId);
+                intent.putExtra("withTbox", withTbox);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -303,9 +319,7 @@ public class CarDetailsActivity extends BaseMvpActivity<CarDetailsPresenter> imp
         //        } else {
         //            intent.setClass(CarDetailsActivity.this, DeviceActivateActivity.class);
         //        }
-        intent.putExtra("carId", carId);
-        intent.putExtra("withTbox", withTbox);
-        startActivity(intent);
+
     }
 
     public void setData(CarInfo data) {
