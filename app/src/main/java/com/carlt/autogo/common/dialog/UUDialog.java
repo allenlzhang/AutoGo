@@ -45,7 +45,7 @@ public class UUDialog extends BaseDialog {
 		animator.setDuration(500);
 		animator.setInterpolator(new LinearInterpolator());
 		animator.start();
-
+		setCanceledOnTouchOutside(false);
 	}
 
 	public void setContentText(String t) {

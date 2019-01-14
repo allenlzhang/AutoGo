@@ -122,7 +122,7 @@ public class MyCarAdapter extends BaseAdapter {
         if (TYPE == MYCAR){
             holder.mTxtAuthEndTime.setVisibility(View.GONE);
             holder.mLlState.setVisibility(View.VISIBLE);
-            if (info.remoteStatus == 1){
+            if (info.remoteStatus == 1||info.remoteStatus == 3){
                 holder.mIvRemoteState.setImageResource(R.mipmap.ic_remote_activating);
             }else if (info.remoteStatus == 2){
                 holder.mIvRemoteState.setImageResource(R.mipmap.ic_remote_activated);

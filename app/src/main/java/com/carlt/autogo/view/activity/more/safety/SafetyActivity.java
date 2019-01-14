@@ -19,6 +19,7 @@ import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.alipay.AuthResult;
 import com.carlt.autogo.entry.user.BaseError;
@@ -27,6 +28,8 @@ import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.UserService;
+import com.carlt.autogo.presenter.safety.ISafetyView;
+import com.carlt.autogo.presenter.safety.SafetyPresenter;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.utils.alipay.OrderInfoUtil2_0;
 import com.carlt.autogo.view.activity.user.accept.IdfCompleteActivity;
@@ -54,7 +57,8 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by Marlon on 2018/9/12.
  */
-public class SafetyActivity extends BaseMvpActivity {
+@CreatePresenter(presenter = SafetyPresenter.class)
+public class SafetyActivity extends BaseMvpActivity<SafetyPresenter> implements ISafetyView{
     /**
      * 身份认证
      */
@@ -148,7 +152,7 @@ public class SafetyActivity extends BaseMvpActivity {
         if (list != null) {
             plat = list[0];
         }
-        checkShareLoginList();
+        getPresenter().checkShareLoginList();
         rlAliSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,42 +200,6 @@ public class SafetyActivity extends BaseMvpActivity {
 
     }
 
-    @SuppressLint("CheckResult")
-    private void checkShareLoginList() {
-        ClientFactory.def(UserService.class).getShareLogin(new HashMap<String, Object>())
-                .subscribe(new Consumer<ShareLoginList>() {
-                    @Override
-                    public void accept(ShareLoginList info) throws Exception {
-                        LogUtils.e(info.toString());
-                        if (info.err == null) {
-                            List<ShareLoginList.ListBean> list = info.list;
-                            for (ShareLoginList.ListBean listBean : list) {
-                                if (listBean.openType == 1) {
-                                    //支付宝绑定
-                                    cbALiPayLogin.setChecked(true);
-                                } else if (listBean.openType == 2) {
-                                    //微信绑定
-                                    cbWechatLogin.setChecked(true);
-                                    String name = SharepUtil.getPreferences().getString(GlobalKey.WECHAT_NICKNAME, "");
-                                    if (TextUtils.isEmpty(name)) {
-                                        tvWechatName.setText("");
-                                    } else {
-                                        tvWechatName.setText("(" + name + ")");
-                                    }
-
-                                }
-                            }
-                        }
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        LogUtils.e(throwable);
-                    }
-                });
-    }
-
     private void showUnBindAliTip(String content, final int type) {
         CommonDialog.createTwoBtnDialog(this, content, true, new CommonDialog.DialogWithTitleClick() {
             @Override
@@ -242,39 +210,10 @@ public class SafetyActivity extends BaseMvpActivity {
             @Override
             public void onRightClick() {
                 //                cbALiPayLogin.setChecked(false);
-                unBindALiAuth(type);
+                getPresenter().unBindALiAuth(type);
             }
         });
     }
-
-    @SuppressLint("CheckResult")
-    private void unBindALiAuth(final int type) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("openType", type);
-        ClientFactory.def(UserService.class).shareLoginUnbind(map)
-                .subscribe(new Consumer<BaseError>() {
-                    @Override
-                    public void accept(BaseError error) throws Exception {
-                        if (error.code == 0) {
-                            showToast("解绑成功");
-                            if (type == 1) {
-                                cbALiPayLogin.setChecked(false);
-                            } else {
-                                cbWechatLogin.setChecked(false);
-                                tvWechatName.setText("");
-                            }
-                        } else {
-                            showToast(error.msg);
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-
-                    }
-                });
-    }
-
 
     /**
      * 手机号中间*展示
@@ -393,6 +332,45 @@ public class SafetyActivity extends BaseMvpActivity {
                 authALiPay();
             }
         });
+    }
+
+    @Override
+    public void getShareLoginSuccess(ShareLoginList info) {
+        LogUtils.e(info.toString());
+        if (info.err == null) {
+            List<ShareLoginList.ListBean> list = info.list;
+            for (ShareLoginList.ListBean listBean : list) {
+                if (listBean.openType == 1) {
+                    //支付宝绑定
+                    cbALiPayLogin.setChecked(true);
+                } else if (listBean.openType == 2) {
+                    //微信绑定
+                    cbWechatLogin.setChecked(true);
+                    String name = SharepUtil.getPreferences().getString(GlobalKey.WECHAT_NICKNAME, "");
+                    if (TextUtils.isEmpty(name)) {
+                        tvWechatName.setText("");
+                    } else {
+                        tvWechatName.setText("(" + name + ")");
+                    }
+
+                }
+            }
+        }
+    }
+
+    @Override
+    public void shareLoginUnbindSuccess(BaseError baseError,final int type) {
+        if (baseError.code == 0) {
+            showToast("解绑成功");
+            if (type == 1) {
+                cbALiPayLogin.setChecked(false);
+            } else {
+                cbWechatLogin.setChecked(false);
+                tvWechatName.setText("");
+            }
+        } else {
+            showToast(baseError.msg);
+        }
     }
 
     public class MyPlatformActionListener implements PlatformActionListener {
