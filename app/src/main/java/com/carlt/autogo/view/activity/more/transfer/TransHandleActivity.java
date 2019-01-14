@@ -65,6 +65,11 @@ public class TransHandleActivity extends BaseMvpActivity {
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         tvAccount.setText(user.mobile);
         initTransferInfo();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         interval();
     }
 
@@ -91,17 +96,13 @@ public class TransHandleActivity extends BaseMvpActivity {
                             CommonDialog.createOneBtnDialog(TransHandleActivity.this, "过户取消", false, new CommonDialog.DialogOneBtnClick() {
                                 @Override
                                 public void onOneBtnClick() {
-                                    //                                    finish();
                                     closeActivity();
                                 }
                             });
                             disposable.dispose();
-                            //                            btnSendCode.setClickable(true);
-                            //                            btnSendCode.setText("发送验证码");
-                            //                            count = 60;
+
                         } else {
                             count--;
-                            //                            btnSendCode.setText(count + "秒");
                         }
                     }
                 });

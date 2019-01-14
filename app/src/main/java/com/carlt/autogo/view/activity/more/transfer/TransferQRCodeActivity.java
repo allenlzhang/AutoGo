@@ -39,9 +39,11 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Description : 生成过户二维码
@@ -93,7 +95,8 @@ public class TransferQRCodeActivity extends BaseMvpActivity<TransferQRCodePresen
 
     private void interval() {
         disposable = Observable.interval(5, TimeUnit.SECONDS)
-
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Function<Long, ObservableSource<CarBaseInfo>>() {
                     @Override
                     public ObservableSource<CarBaseInfo> apply(Long aLong) throws Exception {

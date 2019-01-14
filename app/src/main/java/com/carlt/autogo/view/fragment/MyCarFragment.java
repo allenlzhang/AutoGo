@@ -181,6 +181,8 @@ public class MyCarFragment extends BaseMvpFragment<MyCarListPresenter> implement
 
     @Override
     public void getCarListSuccess(AuthCarInfo info) {
+        SingletonCar.getInstance().setBound(true);
+        SingletonCar.getInstance().setCarBean(info.myCar.get(0));
         parseGetMyCarList(info);
     }
 }

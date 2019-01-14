@@ -163,7 +163,7 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
                     public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
                         LogUtils.e(throwable);
-//                        ToastUtils.showShort("操作失败");
+                        //                        ToastUtils.showShort("操作失败");
                     }
                 });
     }
@@ -212,10 +212,11 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
                     public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
                         LogUtils.e(throwable);
-//                        ToastUtils.showShort("操作失败");
+                        //                        ToastUtils.showShort("操作失败");
                     }
                 });
     }
+
     private void jump2Activity() {
         for (Activity activity : ActivityControl.mActivityList) {
             if (activity instanceof AuthQRCodeActivity) {
@@ -238,6 +239,7 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
         startActivity(intent);
         finish();
     }
+
     private void closeActivity() {
         for (Activity activity : ActivityControl.mActivityList) {
             if (activity instanceof AuthQRCodeActivity) {
@@ -319,5 +321,11 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
                 });
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (disposable != null) {
+            disposable.dispose();
+        }
+    }
 }

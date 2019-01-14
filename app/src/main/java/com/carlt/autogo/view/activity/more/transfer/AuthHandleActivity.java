@@ -62,6 +62,12 @@ public class AuthHandleActivity extends BaseMvpActivity<AuthHandlePresenter> imp
     public void init() {
         setTitleText("授权处理");
         initCarInfo();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         interval();
     }
 

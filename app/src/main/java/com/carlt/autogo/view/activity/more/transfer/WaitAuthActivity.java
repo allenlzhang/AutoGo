@@ -66,38 +66,34 @@ public class WaitAuthActivity extends BaseMvpActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        interval();
-    }
 
-    int        count = 600;
-    Disposable disposableCancel;
 
-    private void interval() {
-        disposableCancel = Observable.interval(1, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-
-                    public void accept(Long aLong) throws Exception {
-                        if (count <= 0) {
-
-                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, cancelTip, false, new CommonDialog.DialogOneBtnClick() {
-                                @Override
-                                public void onOneBtnClick() {
-                                    finish();
-                                }
-                            });
-                            disposableCancel.dispose();
-                        } else {
-                            count--;
-                        }
-                    }
-                });
-    }
+//    int        count = 600;
+//    Disposable disposableCancel;
+//
+//    private void interval() {
+//        disposableCancel = Observable.interval(1, TimeUnit.SECONDS)
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<Long>() {
+//                    @Override
+//
+//                    public void accept(Long aLong) throws Exception {
+//                        if (count <= 0) {
+//
+//                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, cancelTip, false, new CommonDialog.DialogOneBtnClick() {
+//                                @Override
+//                                public void onOneBtnClick() {
+//                                    finish();
+//                                }
+//                            });
+//                            disposableCancel.dispose();
+//                        } else {
+//                            count--;
+//                        }
+//                    }
+//                });
+//    }
 
     private Disposable disposable;
     private int        duration = 600;
@@ -108,7 +104,8 @@ public class WaitAuthActivity extends BaseMvpActivity {
         final HashMap<String, Object> map = new HashMap<>();
         map.put("id", id);
         disposable = Observable.interval(5, TimeUnit.SECONDS)
-
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Function<Long, ObservableSource<CarBaseInfo>>() {
                     @Override
                     public ObservableSource<CarBaseInfo> apply(Long aLong) throws Exception {
@@ -120,12 +117,12 @@ public class WaitAuthActivity extends BaseMvpActivity {
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         LogUtils.e(carBaseInfo.checkStatus);
                         if (duration <= 0) {
-//                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "授权已取消", false, new CommonDialog.DialogOneBtnClick() {
-                            //                                @Override
-                            //                                public void onOneBtnClick() {
-                            //                                    finish();
-                            //                                }
-                            //                            });
+                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "授权已取消", false, new CommonDialog.DialogOneBtnClick() {
+                                                            @Override
+                                                            public void onOneBtnClick() {
+                                                                finish();
+                                                            }
+                                                        });
                             disposable.dispose();
 
                         } else {
@@ -136,9 +133,6 @@ public class WaitAuthActivity extends BaseMvpActivity {
 
                                     @Override
                                     public void onOneBtnClick() {
-                                        //                                        if (!SingletonCar.getInstance().isBound()) {
-                                        GetCarList();
-                                        //                                        }
                                         Intent intent = new Intent(WaitAuthActivity.this, MyCarActivity.class);
                                         intent.putExtra("currentTab", 1);
                                         startActivity(intent);
@@ -172,7 +166,8 @@ public class WaitAuthActivity extends BaseMvpActivity {
         final HashMap<String, Object> map = new HashMap<>();
         map.put("transferId", transferId);
         disposable = Observable.interval(5, TimeUnit.SECONDS)
-
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Function<Long, ObservableSource<CarBaseInfo>>() {
                     @Override
                     public ObservableSource<CarBaseInfo> apply(Long aLong) throws Exception {
@@ -184,12 +179,12 @@ public class WaitAuthActivity extends BaseMvpActivity {
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         LogUtils.e(carBaseInfo.status);
                         if (duration <= 0) {
-//                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "过户已取消", false, new CommonDialog.DialogOneBtnClick() {
-//                                @Override
-//                                public void onOneBtnClick() {
-//                                    finish();
-//                                }
-//                            });
+                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "过户已取消", false, new CommonDialog.DialogOneBtnClick() {
+                                @Override
+                                public void onOneBtnClick() {
+                                    finish();
+                                }
+                            });
                             disposable.dispose();
                         } else {
                             duration--;
@@ -199,9 +194,6 @@ public class WaitAuthActivity extends BaseMvpActivity {
 
                                     @Override
                                     public void onOneBtnClick() {
-                                        //                                        if (!SingletonCar.getInstance().isBound()) {
-                                        GetCarList();
-                                        //                                        }
                                         Intent intent = new Intent(WaitAuthActivity.this, MyCarActivity.class);
                                         intent.putExtra("currentTab", 0);
                                         startActivity(intent);
@@ -283,8 +275,10 @@ public class WaitAuthActivity extends BaseMvpActivity {
     protected void onPause() {
         super.onPause();
         if (disposable != null) {
-
             disposable.dispose();
         }
+//        if (disposableCancel!=null) {
+//            disposableCancel.dispose();
+//        }
     }
 }
