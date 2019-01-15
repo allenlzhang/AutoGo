@@ -81,6 +81,8 @@ public class AuthFragment extends BaseMvpFragment<MyCarListPresenter> implements
                     }
                 });
                 fragmentLlNotData.setVisibility(View.GONE);
+                SingletonCar.getInstance().setBound(true);
+                SingletonCar.getInstance().setCarBean(listInfo.get(0));
             } else {
                 fragmentLlNotData.setVisibility(View.VISIBLE);
             }
@@ -90,8 +92,6 @@ public class AuthFragment extends BaseMvpFragment<MyCarListPresenter> implements
 
     @Override
     public void getCarListSuccess(AuthCarInfo info) {
-        SingletonCar.getInstance().setBound(true);
-        SingletonCar.getInstance().setCarBean(info.myCar.get(0));
         parseGetMyCarList(info);
     }
 }
