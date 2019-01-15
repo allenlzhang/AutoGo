@@ -326,25 +326,26 @@ public class CarDetailsActivity extends BaseMvpActivity<CarDetailsPresenter> imp
         remoteStatus = data.remoteStatus;
         authId = data.authId;
         withTbox = data.withTbox;
-
-        if(data.authStatus == 2){
-            llDetailsAuthStart.setVisibility(View.VISIBLE);
-            llDetailsAuthEnd.setVisibility(View.VISIBLE);
-            btnCancelAuth.setVisibility(View.VISIBLE);
-            authLine.setVisibility(View.VISIBLE);
-            line1.setVisibility(View.VISIBLE);
-            llDetails.setVisibility(View.VISIBLE);
-        }else {
-            if (remoteStatus == 2){
+        if (type != DETAILS_TYPE4) {
+            if (data.authStatus == 2) {
                 llDetails.setVisibility(View.VISIBLE);
-                llDetailsAuthStart.setVisibility(View.GONE);
-                llDetailsAuthEnd.setVisibility(View.GONE);
-                btnCancelAuth.setVisibility(View.GONE);
-                authLine.setVisibility(View.GONE);
-                line1.setVisibility(View.GONE);
-            }else {
-                llDetails.setVisibility(View.GONE);
-                btnCancelAuth.setVisibility(View.GONE);
+                llDetailsAuthStart.setVisibility(View.VISIBLE);
+                llDetailsAuthEnd.setVisibility(View.VISIBLE);
+                btnCancelAuth.setVisibility(View.VISIBLE);
+                authLine.setVisibility(View.VISIBLE);
+                line1.setVisibility(View.VISIBLE);
+            } else {
+                if (remoteStatus == 2) {
+                    llDetails.setVisibility(View.VISIBLE);
+                    llDetailsAuthStart.setVisibility(View.GONE);
+                    llDetailsAuthEnd.setVisibility(View.GONE);
+                    btnCancelAuth.setVisibility(View.GONE);
+                    authLine.setVisibility(View.GONE);
+                    line1.setVisibility(View.GONE);
+                } else {
+                    llDetails.setVisibility(View.GONE);
+                    btnCancelAuth.setVisibility(View.GONE);
+                }
             }
         }
 
