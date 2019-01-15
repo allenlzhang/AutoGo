@@ -7,10 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.CarBaseInfo;
+import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
@@ -48,7 +50,7 @@ public class TransHandleActivity extends BaseMvpActivity {
     @BindView(R.id.btnRefuseAgree)
     Button   btnRefuseAgree;
     private int    id;
-    private String mobile;
+    private String mobile = "";
 
     @Override
     protected int getContentView() {
@@ -65,21 +67,18 @@ public class TransHandleActivity extends BaseMvpActivity {
         UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
         tvAccount.setText(user.mobile);
         initTransferInfo();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         interval();
     }
 
+
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
         if (disposable != null) {
             disposable.dispose();
         }
     }
+
 
     int        count = 600;
     Disposable disposable;
@@ -92,6 +91,7 @@ public class TransHandleActivity extends BaseMvpActivity {
                     @Override
 
                     public void accept(Long aLong) throws Exception {
+                        LogUtils.e(count);
                         if (count <= 0) {
                             CommonDialog.createOneBtnDialog(TransHandleActivity.this, "过户取消", false, new CommonDialog.DialogOneBtnClick() {
                                 @Override
@@ -124,7 +124,7 @@ public class TransHandleActivity extends BaseMvpActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-
+                        LogUtils.e(throwable);
                     }
                 });
     }
@@ -163,9 +163,9 @@ public class TransHandleActivity extends BaseMvpActivity {
         map.put("transferId", id);
         map.put("isAgree", status);
         ClientFactory.def(CarService.class).dealTransferCode(map)
-                .subscribe(new Consumer<CarBaseInfo>() {
+                .subscribe(new Consumer<BaseError>() {
                     @Override
-                    public void accept(CarBaseInfo carBaseInfo) throws Exception {
+                    public void accept(BaseError carBaseInfo) throws Exception {
                         dialog.dismiss();
                         if (carBaseInfo.code == 0) {
                             showToast("操作成功");

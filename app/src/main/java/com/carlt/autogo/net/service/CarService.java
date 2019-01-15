@@ -37,7 +37,7 @@ public interface CarService {
 
     //处理过户
     @POST("Transfer/Deal")
-    Observable<CarBaseInfo> dealTransferCode(@Body Map<String, Object> param);
+    Observable<BaseError> dealTransferCode(@Body Map<String, Object> param);
 
     //获取授权配置
     @POST("CarAuth/GetAuthSetting")
@@ -53,7 +53,7 @@ public interface CarService {
 
     //同意授权/拒绝授权
     @POST("CarAuth/ModifyStatus")
-    Observable<CarBaseInfo> modifyStatus(@Body Map<String, Object> param);
+    Observable<BaseError> modifyStatus(@Body Map<String, Object> param);
 
     //获取我的车辆和被授权车辆
     @POST("CarAuth/GetMyCarList")

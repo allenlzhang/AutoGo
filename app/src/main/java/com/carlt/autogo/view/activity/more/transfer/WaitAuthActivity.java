@@ -64,36 +64,37 @@ public class WaitAuthActivity extends BaseMvpActivity {
                 break;
             default:
         }
+        interval();
     }
 
 
+    int        count = 600;
+    Disposable disposableCancel;
 
-//    int        count = 600;
-//    Disposable disposableCancel;
-//
-//    private void interval() {
-//        disposableCancel = Observable.interval(1, TimeUnit.SECONDS)
-//                .subscribeOn(Schedulers.newThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<Long>() {
-//                    @Override
-//
-//                    public void accept(Long aLong) throws Exception {
-//                        if (count <= 0) {
-//
-//                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, cancelTip, false, new CommonDialog.DialogOneBtnClick() {
-//                                @Override
-//                                public void onOneBtnClick() {
-//                                    finish();
-//                                }
-//                            });
-//                            disposableCancel.dispose();
-//                        } else {
-//                            count--;
-//                        }
-//                    }
-//                });
-//    }
+    private void interval() {
+        disposableCancel = Observable.interval(1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+
+                    public void accept(Long aLong) throws Exception {
+                        LogUtils.e(count);
+                        if (count <= 0) {
+
+                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, cancelTip, false, new CommonDialog.DialogOneBtnClick() {
+                                @Override
+                                public void onOneBtnClick() {
+                                    finish();
+                                }
+                            });
+                            disposableCancel.dispose();
+                        } else {
+                            count--;
+                        }
+                    }
+                });
+    }
 
     private Disposable disposable;
     private int        duration = 600;
@@ -116,13 +117,14 @@ public class WaitAuthActivity extends BaseMvpActivity {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         LogUtils.e(carBaseInfo.checkStatus);
+                        LogUtils.e(duration);
                         if (duration <= 0) {
-                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "授权已取消", false, new CommonDialog.DialogOneBtnClick() {
-                                                            @Override
-                                                            public void onOneBtnClick() {
-                                                                finish();
-                                                            }
-                                                        });
+                            //                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "授权已取消", false, new CommonDialog.DialogOneBtnClick() {
+                            //                                @Override
+                            //                                public void onOneBtnClick() {
+                            //                                    finish();
+                            //                                }
+                            //                            });
                             disposable.dispose();
 
                         } else {
@@ -178,13 +180,14 @@ public class WaitAuthActivity extends BaseMvpActivity {
                     @Override
                     public void accept(CarBaseInfo carBaseInfo) throws Exception {
                         LogUtils.e(carBaseInfo.status);
+                        LogUtils.e(duration);
                         if (duration <= 0) {
-                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "过户已取消", false, new CommonDialog.DialogOneBtnClick() {
-                                @Override
-                                public void onOneBtnClick() {
-                                    finish();
-                                }
-                            });
+                            //                            CommonDialog.createOneBtnDialog(WaitAuthActivity.this, "过户已取消", false, new CommonDialog.DialogOneBtnClick() {
+                            //                                @Override
+                            //                                public void onOneBtnClick() {
+                            //                                    finish();
+                            //                                }
+                            //                            });
                             disposable.dispose();
                         } else {
                             duration--;
@@ -277,8 +280,14 @@ public class WaitAuthActivity extends BaseMvpActivity {
         if (disposable != null) {
             disposable.dispose();
         }
-//        if (disposableCancel!=null) {
-//            disposableCancel.dispose();
-//        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (disposableCancel != null) {
+            disposableCancel.dispose();
+        }
     }
 }

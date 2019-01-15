@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
@@ -35,7 +36,7 @@ import retrofit2.Retrofit;
 public abstract class BaseRestClient implements Iservice {
     OkHttpClient.Builder okBuilder = new OkHttpClient.Builder();
     Retrofit.Builder     builder   = new Retrofit.Builder();
-    Retrofit retrofit;
+    Retrofit             retrofit;
 
     protected BaseRestClient() {
         //请求 超时 时间为5秒
@@ -51,56 +52,56 @@ public abstract class BaseRestClient implements Iservice {
 
     @SuppressLint("CheckResult")
     @Override
-    public <T> T getService(final Class<T> service){
+    public <T> T getService(final Class<T> service) {
 
-        final   T t =   retrofit.create(service);
+        final T t = retrofit.create(service);
 
         Object o = Proxy.newProxyInstance(service.getClassLoader(), new Class[]{service}, new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, final Object[] args) throws Throwable {
                 if (!NetworkUtils.isConnected() && !NetworkUtils.isAvailableByPing()) {
 
-//                    Toast.makeText(AutoGoApp.mAppContext,"网络错误，请检查网络",Toast.LENGTH_SHORT).show();
+                    //                    Toast.makeText(AutoGoApp.mAppContext,"网络错误，请检查网络",Toast.LENGTH_SHORT).show();
                     ToastUtils.showShort("网络错误，请检查网络");
                     return Observable.create(new ObservableOnSubscribe<Object>() {
                         @Override
                         public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
-                            ObservableHelper.errorMsg ="网络错误,请检查网络";
+                            ObservableHelper.errorMsg = "网络错误,请检查网络";
                             emitter.onNext(new Object());
                         }
                     });
                 }
-                Object o =  method.invoke(t,args);
-                if(o instanceof  Observable){
+                Object o = method.invoke(t, args);
+                if (o instanceof Observable) {
                     Observable observable = (Observable) o;
-                    return  observable
+                    return observable
                             .filter(new Predicate() {
                                 @Override
                                 public boolean test(Object o) throws Exception {
 
-//                                    LogUtils.e(o+ "==========================================");
-                                    if(o instanceof BaseError){
+                                    LogUtils.e(o + "==========================================");
+                                    if (o instanceof BaseError) {
                                         BaseError error = (BaseError) o;
-                                        if(error != null && error.code != 0){
+                                        if (error != null && error.code != 0) {
 
-                                            if(error.code == GlobalKey.TOKEN_OUT||error.code == GlobalKey.TOKEN_ERROR||error.code == GlobalKey.TOKEN_ERROR1){
+                                            if (error.code == GlobalKey.TOKEN_OUT || error.code == GlobalKey.TOKEN_ERROR || error.code == GlobalKey.TOKEN_ERROR1) {
                                                 ActivityControl.removeAll();
-                                                Activity activity =   ActivityControl.mActivityList.get(0);
+                                                Activity activity = ActivityControl.mActivityList.get(0);
                                                 Intent intent = new Intent(activity, LoginActivity.class);
                                                 ToastUtils.showShort(R.string.token_err);
                                                 activity.startActivity(intent);
 
                                                 return false;
-                                            }else {
-                                                return  true;
+                                            } else {
+                                                return true;
                                             }
 
-                                        }else {
+                                        } else {
                                             return true;
                                         }
 
-                                    }else {
-                                        return doelse( o);
+                                    } else {
+                                        return doelse(o);
 
                                     }
                                 }
@@ -124,16 +125,16 @@ public abstract class BaseRestClient implements Iservice {
             Field field = classO.getField("err");
             BaseError baseError = (BaseError) field.get(o);
 
-            if(baseError != null && baseError.code != 0 ){
-                if(baseError.code == GlobalKey.TOKEN_OUT || baseError.code == GlobalKey.TOKEN_ERROR || baseError.code == GlobalKey.TOKEN_ERROR1){
+            if (baseError != null && baseError.code != 0) {
+                if (baseError.code == GlobalKey.TOKEN_OUT || baseError.code == GlobalKey.TOKEN_ERROR || baseError.code == GlobalKey.TOKEN_ERROR1) {
                     ActivityControl.removeAll();
-                    Activity activity =  ActivityControl.mActivityList.get(0);
+                    Activity activity = ActivityControl.mActivityList.get(0);
                     Intent intent = new Intent(activity, LoginActivity.class);
                     ToastUtils.showShort(R.string.token_err);
                     activity.startActivity(intent);
 
                     return false;
-                }else {
+                } else {
                     return true;
                 }
 
@@ -143,15 +144,17 @@ public abstract class BaseRestClient implements Iservice {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        return  true ;
+        return true;
     }
 
     protected static Iservice getDefual() {
         return DefulatClient.getInstace();
     }
+
     protected static Iservice getUpdateImage() {
         return UpdateImageFileClient.getInstace();
     }
+
     protected static Iservice getDefual2() {
         return DefulatClient2.getInstance();
     }

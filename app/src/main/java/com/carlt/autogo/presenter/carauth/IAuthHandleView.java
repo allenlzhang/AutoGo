@@ -2,6 +2,7 @@ package com.carlt.autogo.presenter.carauth;
 
 import com.carlt.autogo.basemvp.BaseMvpView;
 import com.carlt.autogo.entry.car.CarBaseInfo;
+import com.carlt.autogo.entry.user.BaseError;
 
 /**
  * Description:
@@ -12,6 +13,6 @@ import com.carlt.autogo.entry.car.CarBaseInfo;
 public interface IAuthHandleView extends BaseMvpView {
     void getCarInfo(CarBaseInfo info);
 
-    void refuseAuth(CarBaseInfo info);
+    void refuseAuth(BaseError info);
 
 }

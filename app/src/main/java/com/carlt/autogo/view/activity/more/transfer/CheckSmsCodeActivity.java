@@ -13,7 +13,6 @@ import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
-import com.carlt.autogo.entry.car.CarBaseInfo;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
@@ -140,15 +139,15 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
 
                     }
                 })
-                .flatMap(new Function<BaseError, ObservableSource<CarBaseInfo>>() {
+                .flatMap(new Function<BaseError, ObservableSource<BaseError>>() {
                     @Override
-                    public ObservableSource<CarBaseInfo> apply(BaseError error) throws Exception {
+                    public ObservableSource<BaseError> apply(BaseError error) throws Exception {
                         return ClientFactory.def(CarService.class).modifyStatus(map1);
                     }
                 })
-                .subscribe(new Consumer<CarBaseInfo>() {
+                .subscribe(new Consumer<BaseError>() {
                     @Override
-                    public void accept(CarBaseInfo carBaseInfo) throws Exception {
+                    public void accept(BaseError carBaseInfo) throws Exception {
                         dialog.dismiss();
                         if (carBaseInfo.code == 0) {
 
@@ -189,15 +188,15 @@ public class CheckSmsCodeActivity extends BaseMvpActivity {
 
                     }
                 })
-                .flatMap(new Function<BaseError, ObservableSource<CarBaseInfo>>() {
+                .flatMap(new Function<BaseError, ObservableSource<BaseError>>() {
                     @Override
-                    public ObservableSource<CarBaseInfo> apply(BaseError error) throws Exception {
+                    public ObservableSource<BaseError> apply(BaseError error) throws Exception {
                         return ClientFactory.def(CarService.class).dealTransferCode(map1);
                     }
                 })
-                .subscribe(new Consumer<CarBaseInfo>() {
+                .subscribe(new Consumer<BaseError>() {
                     @Override
-                    public void accept(CarBaseInfo carBaseInfo) throws Exception {
+                    public void accept(BaseError carBaseInfo) throws Exception {
                         dialog.dismiss();
                         if (carBaseInfo.code == 0) {
 

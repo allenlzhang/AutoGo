@@ -13,6 +13,7 @@ import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.entry.car.CarBaseInfo;
+import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.presenter.carauth.AuthHandlePresenter;
 import com.carlt.autogo.presenter.carauth.IAuthHandleView;
@@ -62,14 +63,9 @@ public class AuthHandleActivity extends BaseMvpActivity<AuthHandlePresenter> imp
     public void init() {
         setTitleText("授权处理");
         initCarInfo();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         interval();
     }
+
 
     int        count = 600;
     Disposable disposable;
@@ -82,7 +78,7 @@ public class AuthHandleActivity extends BaseMvpActivity<AuthHandlePresenter> imp
                     @Override
                     public void accept(Long aLong) throws Exception {
                         if (count <= 0) {
-                            CommonDialog.createOneBtnDialog(AuthHandleActivity.this, "过户取消", false, new CommonDialog.DialogOneBtnClick() {
+                            CommonDialog.createOneBtnDialog(AuthHandleActivity.this, "授权取消", false, new CommonDialog.DialogOneBtnClick() {
                                 @Override
                                 public void onOneBtnClick() {
                                     finish();
@@ -97,12 +93,13 @@ public class AuthHandleActivity extends BaseMvpActivity<AuthHandlePresenter> imp
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
         if (disposable != null) {
             disposable.dispose();
         }
     }
+
 
     @SuppressLint("CheckResult")
     private void initCarInfo() {
@@ -144,7 +141,7 @@ public class AuthHandleActivity extends BaseMvpActivity<AuthHandlePresenter> imp
     }
 
     @Override
-    public void refuseAuth(CarBaseInfo carBaseInfo) {
+    public void refuseAuth(BaseError carBaseInfo) {
         if (carBaseInfo.code == 0) {
             showToast("操作成功");
             closeActivity();
