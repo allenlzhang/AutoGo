@@ -24,6 +24,7 @@ import com.carlt.autogo.basemvp.PresenterDispatch;
 import com.carlt.autogo.basemvp.PresenterProviders;
 import com.carlt.autogo.common.dialog.UUDialog;
 import com.carlt.autogo.layouthook.LayoutHook;
+import com.carlt.autogo.net.base.rxlife.RxLifeImpl;
 import com.carlt.autogo.utils.ActivityControl;
 
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     public UUDialog dialog;
     //用于取消每个网络请求
     public List<Disposable> disposables = new ArrayList<>();
+    public RxLifeImpl rxLifeImp = new RxLifeImpl();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -145,6 +147,10 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     @Override
     protected void onPause() {
         super.onPause();
+        if(rxLifeImp!=null){
+            rxLifeImp.onPause();
+        }
+
         for(Disposable disposable : disposables){
             if(!disposable.isDisposed()){
                 disposable.dispose();
@@ -156,6 +162,10 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (rxLifeImp!=null){
+            rxLifeImp.onDestroy();
+        }
+
         mPresenterDispatch.detachView();
         //        unbinder.unbind();
         dialog.dismiss();
