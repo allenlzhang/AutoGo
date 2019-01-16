@@ -3,8 +3,8 @@
               android:id="@+id/item_ll"
               android:layout_width="match_parent"
               android:layout_height="45dp"
-              android:orientation="horizontal"
               android:gravity="center_vertical"
+              android:orientation="horizontal"
               android:padding="5dp">
 
     <TextView
@@ -13,6 +13,9 @@
         android:layout_height="30dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:paddingLeft="40dp"
         android:text=""
         android:textSize="14dp"
@@ -21,9 +24,9 @@
     <ImageView
         android:id="@+id/ivSelect"
         android:layout_width="wrap_content"
-        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
-        android:src="@mipmap/ic_select"/>
+        android:src="@mipmap/ic_select"
+        android:visibility="gone"/>
 
 </LinearLayout>

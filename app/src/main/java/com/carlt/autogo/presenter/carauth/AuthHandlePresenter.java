@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.entry.car.CarBaseInfo;
+import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.net.service.CarService;
 
@@ -44,9 +45,9 @@ public class AuthHandlePresenter extends BasePresenter<IAuthHandleView> {
         uuDialog.show();
 
         ClientFactory.def(CarService.class).modifyStatus(params)
-                .subscribe(new Consumer<CarBaseInfo>() {
+                .subscribe(new Consumer<BaseError>() {
                     @Override
-                    public void accept(CarBaseInfo carBaseInfo) throws Exception {
+                    public void accept(BaseError carBaseInfo) throws Exception {
                         uuDialog.dismiss();
                         mView.refuseAuth(carBaseInfo);
                     }
