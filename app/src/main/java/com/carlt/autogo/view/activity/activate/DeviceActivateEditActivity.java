@@ -48,6 +48,7 @@ public class DeviceActivateEditActivity extends BaseMvpActivity implements IDevi
     DeviceActivatePresenter mActivatePresenter;
     @PresenterVariable
     CarDetailsPresenter     mCarDetailsPresenter;
+    private String pinCode;
 
     @Override
     protected int getContentView() {
@@ -66,6 +67,8 @@ public class DeviceActivateEditActivity extends BaseMvpActivity implements IDevi
             //前装
             etDeviceNum.setVisibility(View.GONE);
         } else if (withTbox == 2) {
+            //后装
+            etPin.setVisibility(View.GONE);
             etDeviceNum.setVisibility(View.VISIBLE);
         } else {
             etDeviceNum.setVisibility(View.GONE);
@@ -81,6 +84,7 @@ public class DeviceActivateEditActivity extends BaseMvpActivity implements IDevi
             etDeviceNum.setText(deviceNum);
         }
     }
+
     @Override
     public void modifySuccess(BaseError baseError) {
 
@@ -90,27 +94,33 @@ public class DeviceActivateEditActivity extends BaseMvpActivity implements IDevi
     public void cancelAuthSuccess(BaseError baseError) {
 
     }
+
     @OnClick(R.id.btnActivate)
     public void onViewClicked() {
-        if (TextUtils.isEmpty(etPin.getText())) {
-            ToastUtils.showShort("请输入PIN码");
-            return;
+        if (etPin.getVisibility() == View.VISIBLE) {
+            pinCode = etPin.getText().toString().trim();
+            if (TextUtils.isEmpty(pinCode)) {
+                ToastUtils.showShort("请输入PIN码");
+                return;
+            }
+            if (!checkTxt(pinCode) || !(pinCode.length() == 8 || pinCode.length() == 6)) {
+                ToastUtils.showShort("PIN码输入有误");
+                return;
+            }
         }
+
         if (etDeviceNum.getVisibility() == View.VISIBLE) {
-            deviceNum = etDeviceNum.getText().toString();
+            deviceNum = etDeviceNum.getText().toString().trim();
             if (TextUtils.isEmpty(deviceNum)) {
                 ToastUtils.showShort("请输入设备号");
                 return;
             }
-            if (!checkTxt(etDeviceNum.getText().toString()) || etDeviceNum.getText().length() != 16) {
+            if (!checkTxt(deviceNum) || deviceNum.length() != 16) {
                 ToastUtils.showShort("设备号输入有误");
                 return;
             }
         }
-        if (!checkTxt(etPin.getText().toString()) || !(etPin.getText().length() == 8 || etPin.getText().length() == 6)) {
-            ToastUtils.showShort("PIN码输入有误");
-            return;
-        }
+
         //        if (!checkTxt(etDeviceNum.getText().toString())||etDeviceNum.getText().length() != 16) {
         //            ToastUtils.showShort("设备号输入有误");
         //
@@ -128,7 +138,10 @@ public class DeviceActivateEditActivity extends BaseMvpActivity implements IDevi
     private void deviceActive() {
         Map<String, Object> params = new HashMap<>();
         params.put("carID", carId);
-        params.put("PIN", etPin.getText().toString().toUpperCase());
+        if (pinCode != null) {
+            params.put("PIN", pinCode.toUpperCase());
+        }
+
         if (deviceNum != null) {
             params.put("deviceNum", deviceNum.toUpperCase());
         }
@@ -161,11 +174,6 @@ public class DeviceActivateEditActivity extends BaseMvpActivity implements IDevi
         if (baseError != null) {
             if (!TextUtils.isEmpty(baseError.msg)) {
                 ToastUtils.showShort(baseError.msg);
-                //                                if (baseError.code == 2213) {
-                //                                    Intent intent = new Intent(DeviceActivateEditActivity.this, ActivateStepActivity.class);
-                //                                    intent.putExtra("carId", carId);
-                //                                    startActivity(intent);
-                //                                }
             } else {
                 ToastUtils.showShort("开始激活");
                 Intent intent = new Intent(DeviceActivateEditActivity.this, ActivateStepActivity.class);
@@ -176,7 +184,6 @@ public class DeviceActivateEditActivity extends BaseMvpActivity implements IDevi
             }
         }
     }
-
 
 
 }

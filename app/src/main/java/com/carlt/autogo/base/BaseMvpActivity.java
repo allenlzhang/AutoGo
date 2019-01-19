@@ -73,6 +73,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
         mPresenterDispatch.onCreatePresenter(savedInstanceState);
         ActivityControl.addActivity(this);
         init();
+
     }
 
     private void initBaseViews() {

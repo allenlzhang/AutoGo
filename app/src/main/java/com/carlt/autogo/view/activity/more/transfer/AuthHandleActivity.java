@@ -78,7 +78,7 @@ public class AuthHandleActivity extends BaseMvpActivity<AuthHandlePresenter> imp
                     @Override
                     public void accept(Long aLong) throws Exception {
                         if (count <= 0) {
-                            CommonDialog.createOneBtnDialog(AuthHandleActivity.this, "授权取消", false, new CommonDialog.DialogOneBtnClick() {
+                            CommonDialog.createOneBtnDialog(AuthHandleActivity.this, "授权失败", false, new CommonDialog.DialogOneBtnClick() {
                                 @Override
                                 public void onOneBtnClick() {
                                     finish();

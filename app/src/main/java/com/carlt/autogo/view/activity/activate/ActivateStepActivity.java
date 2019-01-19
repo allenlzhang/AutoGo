@@ -268,8 +268,8 @@ public class ActivateStepActivity extends BaseMvpActivity<ActivateStepPresenter>
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
         if (mAnimator != null) {
             mAnimator.cancel();
         }

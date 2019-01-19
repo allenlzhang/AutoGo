@@ -120,4 +120,5 @@ dependencies {
 
     compile 'com.contrarywind:Android-PickerView:3.2.7'
     compile(name: 'javaapkcomdatapicker', ext: 'aar')
+    implementation 'com.github.razerdp:BasePopup:2.1.7'
 }

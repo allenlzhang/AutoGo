@@ -10,25 +10,26 @@ import com.carlt.autogo.common.dialog.UUDialog;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public abstract   class CommoObserver<T>  implements Observer<T>   {
+public abstract class CommonObserver<T> implements Observer<T> {
 
-    private UUDialog uuDialog  ;
-    private BaseMvpActivity  base;
-    public CommoObserver(Context context) {
-        this.uuDialog   =new UUDialog(context, R.style.DialogCommon);
-        if (context instanceof BaseMvpActivity ){
+    private UUDialog        uuDialog;
+    private BaseMvpActivity base;
+
+    public CommonObserver(Context context) {
+        this.uuDialog = new UUDialog(context, R.style.DialogCommon);
+        if (context instanceof BaseMvpActivity) {
             this.base = (BaseMvpActivity) context;
         }
-        LogUtils.e(this.base+ "========context=======");
+        LogUtils.e(this.base + "========context=======");
 
     }
 
     @Override
     public void onSubscribe(Disposable d) {
-        if (uuDialog!=null){
+        if (uuDialog != null) {
             uuDialog.show();
         }
-        if(this.base!=null && this.base.rxLifeImp!=null){
+        if (this.base != null && this.base.rxLifeImp != null) {
             this.base.rxLifeImp.addDisposable(d);
         }
 
@@ -37,7 +38,7 @@ public abstract   class CommoObserver<T>  implements Observer<T>   {
     @Override
     public void onNext(T t) {
 
-        if (uuDialog!=null){
+        if (uuDialog != null) {
             uuDialog.dismiss();
         }
 
@@ -47,7 +48,7 @@ public abstract   class CommoObserver<T>  implements Observer<T>   {
 
     @Override
     public void onError(Throwable e) {
-        if (uuDialog!=null){
+        if (uuDialog != null) {
             uuDialog.dismiss();
         }
         throwable(e);
@@ -59,5 +60,6 @@ public abstract   class CommoObserver<T>  implements Observer<T>   {
     }
 
     public abstract void accept(T t);
-    public abstract  void throwable(Throwable e);
+
+    public abstract void throwable(Throwable e);
 }

@@ -93,7 +93,7 @@ public class TransHandleActivity extends BaseMvpActivity {
                     public void accept(Long aLong) throws Exception {
                         LogUtils.e(count);
                         if (count <= 0) {
-                            CommonDialog.createOneBtnDialog(TransHandleActivity.this, "过户取消", false, new CommonDialog.DialogOneBtnClick() {
+                            CommonDialog.createOneBtnDialog(TransHandleActivity.this, "过户失败", false, new CommonDialog.DialogOneBtnClick() {
                                 @Override
                                 public void onOneBtnClick() {
                                     closeActivity();

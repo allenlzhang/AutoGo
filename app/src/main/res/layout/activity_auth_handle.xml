@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
-        android:src="@mipmap/iv_transfer"/>
+        android:src="@mipmap/iv_auth"/>
 
     <LinearLayout
         android:layout_width="match_parent"

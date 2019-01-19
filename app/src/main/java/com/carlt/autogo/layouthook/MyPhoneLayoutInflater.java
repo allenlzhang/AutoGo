@@ -1,7 +1,6 @@
 package com.carlt.autogo.layouthook;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +10,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.blankj.utilcode.util.LogUtils;
 
 /**
  * @author wsq
@@ -70,25 +67,25 @@ public class MyPhoneLayoutInflater extends LayoutInflater {
 
                     switch (name){
                         case "TextView":
-                            ViemPlugin.pluginTexview((TextView) view);
+                            ViewPlugin.pluginTexview((TextView) view);
                             break;
                         case "Button":
-                            ViemPlugin.pluginButton((Button) view);
+                            ViewPlugin.pluginButton((Button) view);
                             break;
 
                         case "ImageView":
-                            ViemPlugin.pluginImage((ImageView) view);
+                            ViewPlugin.pluginImage((ImageView) view);
                             break;
 
                         case "EditText":
-                            ViemPlugin.pluginEdtext((EditText) view);
+                            ViewPlugin.pluginEdtext((EditText) view);
                             break;
                         case "AbsListView":
-                            ViemPlugin.pluginAbsListView((AbsListView) view);
+                            ViewPlugin.pluginAbsListView((AbsListView) view);
                             break;
 
                         case "RelativeLayout":
-                            ViemPlugin.pluginRelativeLayout((RelativeLayout) view);
+                            ViewPlugin.pluginRelativeLayout((RelativeLayout) view);
                             break;
                     }
                     return view;

@@ -54,12 +54,12 @@ public class WaitAuthActivity extends BaseMvpActivity {
                 setTitleText("等待过户");
                 tvDes.setText("已发送过户请求等待确认");
                 pollingTransferResult();
-                cancelTip = "过户取消";
+                cancelTip = "过户失败";
                 break;
             case 2:
                 setTitleText("等待授权");
                 tvDes.setText("已发送授权请求等待确认");
-                cancelTip = "授权已取消";
+                cancelTip = "授权失败";
                 pollingAuthResult();
                 break;
             default:

@@ -45,6 +45,17 @@ public class AuthHandlePresenter extends BasePresenter<IAuthHandleView> {
         uuDialog.show();
 
         ClientFactory.def(CarService.class).modifyStatus(params)
+//                .subscribe(new CommoObserver<BaseError>(mContext) {
+//                    @Override
+//                    public void accept(BaseError error) {
+//
+//                    }
+//
+//                    @Override
+//                    public void throwable(Throwable e) {
+//
+//                    }
+//                })
                 .subscribe(new Consumer<BaseError>() {
                     @Override
                     public void accept(BaseError carBaseInfo) throws Exception {
