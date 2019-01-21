@@ -32,6 +32,8 @@ import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
 import com.carlt.autogo.view.activity.car.CarDetailsActivity;
+import com.carlt.autogo.view.activity.home.CarLocationActivity;
+import com.carlt.autogo.view.activity.home.CarTiresStateActivity;
 import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 import com.carlt.autogo.widget.MaxListView;
@@ -230,9 +232,10 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
                 }
                 break;
             case R.id.rlCarLocation:
-                if (isActivated()) {
-
-                }
+//                if (isActivated()) {
+//
+//                }
+                startActivity(new Intent(mContext, CarLocationActivity.class));
                 break;
             case R.id.home_btn_lock:
                 certification();
@@ -243,9 +246,10 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
                 }
                 break;
             case R.id.rlTirePressure:
-                if (isActivated()) {
-
-                }
+//                if (isActivated()) {
+//
+//                }
+                startActivity(new Intent(mContext, CarTiresStateActivity.class));
                 break;
             case R.id.rlCarLog:
                 if (isActivated()) {

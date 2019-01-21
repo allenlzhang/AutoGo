@@ -10,12 +10,16 @@
 
     <TextView
         android:id="@+id/tv_base_title"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:maxLines="1"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:ellipsize="marquee"
         android:singleLine="true"
         android:text="会员登录"
+        android:gravity="center"
         android:textColor="@color/colorTitleTxt"
         android:textSize="@dimen/baseTitleTxtSize"/>
 

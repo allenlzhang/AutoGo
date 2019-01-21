@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import com.blankj.utilcode.util.SizeUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.RemoteAdapter;
 import com.carlt.autogo.base.BaseMvpFragment;
+import com.carlt.autogo.basemvp.CreatePresenter;
 import com.carlt.autogo.common.dialog.CommonDialog;
 import com.carlt.autogo.common.popup.AirConditionerPopup;
 import com.carlt.autogo.common.popup.EnginePopup;
@@ -25,10 +27,13 @@ import com.carlt.autogo.entry.car.RemoteInfo;
 import com.carlt.autogo.entry.car.SingletonCar;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
+import com.carlt.autogo.presenter.remote.IRemoteView;
+import com.carlt.autogo.presenter.remote.RemotePresenter;
 import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
 import com.carlt.autogo.view.activity.car.CarDetailsActivity;
 import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
+import com.carlt.autogo.view.activity.remote.RemoteLogActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -44,7 +49,8 @@ import butterknife.OnClick;
  * Author     : zhanglei
  * Date       : 2018/9/4 17:42
  */
-public class RemoteFragment extends BaseMvpFragment {
+@CreatePresenter(presenter = RemotePresenter.class)
+public class RemoteFragment extends BaseMvpFragment<RemotePresenter> implements IRemoteView{
     @BindView(R.id.tv_base_title)
     TextView       tvBaseTitle;
     @BindView(R.id.iv_base_back)
@@ -78,7 +84,12 @@ public class RemoteFragment extends BaseMvpFragment {
     @Override
     protected void init() {
         singletonCar = SingletonCar.getInstance();
-        tvBaseTitle.setText("远程");
+        if (TextUtils.isEmpty(singletonCar.getCarBean().carName)){
+            tvBaseTitle.setText("远程");
+        }else {
+            tvBaseTitle.setText(singletonCar.getCarBean().carName);
+        }
+        tvBaseTitle.setSelected(true);
         ivBaseBack.setImageResource(R.drawable.ic_remote_car_state_bg);
         tvBaseRight.setBackground(getResources().getDrawable(R.drawable.ic_remote_log_bg));
         rvListRemote.setHasFixedSize(true);
@@ -143,6 +154,7 @@ public class RemoteFragment extends BaseMvpFragment {
             }
         });
 
+        getPresenter().curCarConfig();
     }
 
     private void showCommonDialog(String title, String rightTxt, final boolean isActivated) {
@@ -187,8 +199,8 @@ public class RemoteFragment extends BaseMvpFragment {
                 }
                 break;
             case R.id.tv_base_right:
-                if (isActivated()) {
-                }
+//                if (isActivated()){}
+                startActivity(new Intent(mContext,RemoteLogActivity.class));
                 break;
             case R.id.remote_btn_lock:
                 certification();
@@ -254,4 +266,18 @@ public class RemoteFragment extends BaseMvpFragment {
         return false;
     }
 
+    @Override
+    public void curCarConfigSuccess(List<RemoteInfo> infoList) {
+        RemoteAdapter adapter = new RemoteAdapter(infoList);
+        rvListRemote.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (isActivated()){
+
+                }
+            }
+        });
+    }
 }
