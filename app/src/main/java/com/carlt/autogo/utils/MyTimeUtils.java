@@ -17,7 +17,7 @@ public class MyTimeUtils {
     public static final SimpleDateFormat FORMAT        = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     public static final SimpleDateFormat FORMAT_DAY    = new SimpleDateFormat("yyyy-MM-dd");
     public static final String           DEFULE_STRING = "";
-
+    public static final SimpleDateFormat FORMAT_SECOND = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /**
      * View 显示时间
      * @param input
@@ -39,7 +39,14 @@ public class MyTimeUtils {
         Calendar mCalendar = Calendar.getInstance();
         return FORMAT_DAY.format(mCalendar.getTime());
     }
-
+    /**
+     * 获取系统当前日期 格式：XXXX-0X-0X xx-xx-xx
+     * @return
+     */
+    public static String getDateSecond() {
+        Calendar mCalendar = Calendar.getInstance();
+        return FORMAT_SECOND.format(mCalendar.getTime());
+    }
     /**
      * 秒数转为 格式化时间，精确到秒
      * @param input

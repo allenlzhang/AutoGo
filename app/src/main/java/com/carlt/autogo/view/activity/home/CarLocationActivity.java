@@ -6,6 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -21,7 +24,9 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.maps.model.TextOptions;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 
@@ -30,24 +35,25 @@ import butterknife.BindView;
 /**
  * Created by Marlon on 2019/1/19.
  */
-public class CarLocationActivity extends BaseMvpActivity implements AMapLocationListener{
+public class CarLocationActivity extends BaseMvpActivity implements AMapLocationListener ,AMap.InfoWindowAdapter{
 
     @BindView(R.id.locationMap)
     MapView mMapView;
-    private AMap               mMap;
+    private AMap mMap;
     private AMapLocationClient mLocationClient;
-    private AMapLocation       mFirstLoc;
+    private AMapLocation mFirstLoc;
     private Marker mLocMarker;
     private boolean isMyLocenable = false;
     private boolean isNeedRefresh = false;//是否需要刷新
-    private AMapLocation      mCurrentLoc;
+    private AMapLocation mCurrentLoc;
     private final static int ZOOM = 17;// 缩放级别
-
+    private View infoWindow = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init(savedInstanceState);
     }
+
     @Override
     protected int getContentView() {
         return R.layout.activity_location;
@@ -57,6 +63,7 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
     public void init() {
         setTitleText("定位寻车");
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -75,7 +82,6 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
     }
-
 
 
     @Override
@@ -111,7 +117,7 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
         setMylocEnable(false);
-
+        mMap.setInfoWindowAdapter(this);
         if (mLocationClient == null) {
             mLocationClient = new AMapLocationClient(this);
             AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
@@ -137,7 +143,7 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
         //        loadSuccessUI();
-        LogUtils.e(aMapLocation.getErrorCode() + aMapLocation.getAddress());
+        LogUtils.e(aMapLocation.getErrorCode() + aMapLocation.getAddress() + "(" + aMapLocation.getLongitude() + "," + aMapLocation.getLatitude() + ")");
         if (aMapLocation.getErrorCode() == 0) {
             LogUtils.e("mFirstLoc----" + mFirstLoc);
 
@@ -150,6 +156,7 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
                 addMarker(location);// 添加定位图标
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,
                         ZOOM));
+                addCarMarker(new LatLng(34.2168,108.887));
             }
             mFirstLoc = aMapLocation;
 
@@ -186,7 +193,8 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
     }
 
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
-    private static final int FILL_COLOR   = Color.argb(10, 0, 0, 180);
+    private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);
+
     private void addCircle(LatLng latlng, double radius) {
         CircleOptions options = new CircleOptions();
         options.strokeWidth(1f);
@@ -209,6 +217,37 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
         mLocMarker = mMap.addMarker(options);
     }
 
+    private void addCarMarker(LatLng latLng) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        Bitmap bMap = BitmapFactory.decodeResource(this.getResources(), R.mipmap.icon_car_location);
+        BitmapDescriptor des = BitmapDescriptorFactory.fromBitmap(bMap);
+        markerOptions.icon(des);
+        markerOptions.anchor(0.5f, 0.5f);
+        markerOptions.position(latLng);
+        markerOptions.setInfoWindowOffset(0,320);
+        Marker marker = mMap.addMarker(markerOptions);
+        marker.showInfoWindow();
+    }
+    /**
+     * 自定义infowinfow窗口
+     */
+    public void render(Marker marker, View view) {
+        TextView mTxtNav = view.findViewById(R.id.txtLocationNav);
+        TextView mTxtUpdateLoc = view.findViewById(R.id.txtUpdateLoc);
+        TextView mTxtLocation = view.findViewById(R.id.txtCarLocation);
+        mTxtNav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ToastUtils.showShort("导航");
+            }
+        });
+        mTxtUpdateLoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ToastUtils.showShort("修改位置");
+            }
+        });
+    }
     public void setMylocEnable(boolean enable) {
         this.isMyLocenable = enable;
         if (!enable) {
@@ -216,5 +255,19 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
                 mLocMarker.remove();
             }
         }
+    }
+
+    @Override
+    public View getInfoWindow(Marker marker) {
+        if (infoWindow == null){
+            infoWindow = LayoutInflater.from(CarLocationActivity.this).inflate(R.layout.layout_car_location_txt,null);
+        }
+        render(marker,infoWindow);
+        return infoWindow;
+    }
+
+    @Override
+    public View getInfoContents(Marker marker) {
+        return null;
     }
 }

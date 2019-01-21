@@ -558,6 +558,79 @@
                     android:layout_marginRight="15dp"
                     android:src="@drawable/first_item_arrow_selector"/>
             </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorFirstItemLine"/>
+
+            <RelativeLayout
+                android:id="@+id/rlTesting"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:background="@drawable/first_item_bg_selector"
+                android:clickable="true">
+
+                <ImageView
+                    android:id="@+id/ivIcon5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/ic_nav_first"/>
+
+                <TextView
+                    android:id="@+id/line5"
+                    android:layout_width="1dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/ivIcon5"
+                    android:background="@color/colorFirstItemLine"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/line5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:text="车况检测"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="16dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Vehicle condition detection"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="12dp"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_toLeftOf="@id/ivRight5"
+                    android:src="@mipmap/ic_tire_warn_first"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/ivRight5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/first_item_arrow_selector"/>
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
     <RelativeLayout

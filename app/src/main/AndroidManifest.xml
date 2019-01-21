@@ -93,6 +93,7 @@
         <activity android:name=".view.activity.remote.RemoteLogActivity"/>
         <activity android:name=".view.activity.home.CarTiresStateActivity"/>
         <activity android:name=".view.activity.home.CarLocationActivity"/>
+        <activity android:name=".view.activity.home.CarTestingActivity"/>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.carlt.autogo.fileprovider"

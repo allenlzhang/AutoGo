@@ -3,9 +3,11 @@ package com.carlt.autogo.view.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,6 +35,7 @@ import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
 import com.carlt.autogo.view.activity.car.CarDetailsActivity;
 import com.carlt.autogo.view.activity.home.CarLocationActivity;
+import com.carlt.autogo.view.activity.home.CarTestingActivity;
 import com.carlt.autogo.view.activity.home.CarTiresStateActivity;
 import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
@@ -42,7 +45,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  * Description: 首页fragment
@@ -81,6 +86,8 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
     RelativeLayout rlNav;
     @BindView(R.id.ivCarChose)
     ImageView ivCarChose;
+    @BindView(R.id.rlTesting)
+    RelativeLayout rlTesting;
 
     private CarPopupAdapter adapter;
     private PopupWindow popupWindow;
@@ -167,11 +174,12 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
             } else {
                 homeRlLock.setVisibility(View.VISIBLE);
             }
-            if (adapter.getCount()>1){
+            if (adapter.getCount() > 1) {
                 ivCarChose.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 ivCarChose.setVisibility(View.GONE);
             }
+            tvCarType.setSelected(true);
         }
     }
 
@@ -223,7 +231,7 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
     }
 
     @OnClick({R.id.rl_home_chose_car_type, R.id.rlCarLocation, R.id.home_btn_lock, R.id.rlCarState,
-            R.id.rlTirePressure, R.id.rlCarLog, R.id.rlNav})
+            R.id.rlTirePressure, R.id.rlCarLog, R.id.rlNav,R.id.rlTesting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_home_chose_car_type:
@@ -260,6 +268,9 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
                 if (isActivated()) {
 
                 }
+                break;
+            case R.id.rlTesting:
+                startActivity(new Intent(mContext, CarTestingActivity.class));
                 break;
         }
     }
