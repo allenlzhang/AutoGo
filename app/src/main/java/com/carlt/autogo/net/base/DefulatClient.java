@@ -19,7 +19,7 @@ public class DefulatClient extends BaseRestClient {
     static  String URL_NEXT[]     = {GlobalUrl.TEST_BASE_URL, GlobalUrl.PRE_BASE_URL};
     static  String URL_ACCESSID[] = {GlobalKey.TEST_ACCESSID, GlobalKey.PRE_ACCESSID};
     //    static  String URL_ACCESSID[] = {GlobalKey.TEST_ACCESSID, GlobalKey.PRE_ACCESSID, GlobalKey.PRE_ACCESSID};
-    private int    id             = 0;
+    public static  int    idIndex             = 0;
 
     private DefulatClient() {
         super();
@@ -73,6 +73,7 @@ public class DefulatClient extends BaseRestClient {
                     return chain.proceed(request);
                 }
             });
+            idIndex = id;
             builder.baseUrl(URL_NEXT[id])
                     .client(okBuilder.build());
             retrofit = builder.build();

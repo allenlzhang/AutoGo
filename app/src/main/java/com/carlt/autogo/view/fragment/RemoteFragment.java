@@ -84,7 +84,7 @@ public class RemoteFragment extends BaseMvpFragment<RemotePresenter> implements 
     @Override
     protected void init() {
         singletonCar = SingletonCar.getInstance();
-        if (TextUtils.isEmpty(singletonCar.getCarBean().carName)){
+        if (singletonCar.getCarBean() == null||TextUtils.isEmpty(singletonCar.getCarBean().carName)){
             tvBaseTitle.setText("远程");
         }else {
             tvBaseTitle.setText(singletonCar.getCarBean().carName);
@@ -199,8 +199,8 @@ public class RemoteFragment extends BaseMvpFragment<RemotePresenter> implements 
                 }
                 break;
             case R.id.tv_base_right:
-//                if (isActivated()){}
-                startActivity(new Intent(mContext,RemoteLogActivity.class));
+                if (isActivated()){}
+//                startActivity(new Intent(mContext,RemoteLogActivity.class));
                 break;
             case R.id.remote_btn_lock:
                 certification();

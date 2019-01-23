@@ -270,6 +270,9 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
                 }
                 break;
             case R.id.rlTesting:
+//                if (isActivated()) {
+//
+//                }
                 startActivity(new Intent(mContext, CarTestingActivity.class));
                 break;
         }

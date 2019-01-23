@@ -5,6 +5,7 @@ import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.base.CommonObserver;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.CipherUtils;
 import com.carlt.autogo.utils.SharepUtil;
@@ -31,24 +32,20 @@ public class ChangeLoginPwdPresenter extends BasePresenter<IChangeLoginPwdView> 
         params.put("oldPassword", CipherUtils.md5(oldPwd));
         params.put("newPassword", CipherUtils.md5(newPwd));
         params.put("isMd5", true);
-        uuDialog.show();
-        Disposable dispRememberPwd = ClientFactory.def(UserService.class).userResetPwd(params)
+        ClientFactory.def(UserService.class).userResetPwd(params)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseError>() {
+                .subscribe(new CommonObserver<BaseError>(mContext) {
                     @Override
-                    public void accept(BaseError baseError) throws Exception {
-                        uuDialog.dismiss();
+                    public void accept(BaseError baseError) {
                         mView.userResetPwdSuccess(baseError);
                     }
-                }, new Consumer<Throwable>() {
+
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        uuDialog.dismiss();
-                        LogUtils.e(throwable);
+                    public void throwable(Throwable e) {
+                        LogUtils.e(e);
                     }
                 });
-        disposables.add(dispRememberPwd);
     }
 
     /**

@@ -1,10 +1,12 @@
 package com.carlt.autogo.view.activity.home;
 
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,11 +26,23 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
-import com.amap.api.maps.model.TextOptions;
+import com.amap.api.services.core.AMapException;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
+import com.amap.api.services.route.BusRouteResult;
+import com.amap.api.services.route.DriveRouteResult;
+import com.amap.api.services.route.RideRouteResult;
+import com.amap.api.services.route.RouteSearch;
+import com.amap.api.services.route.WalkPath;
+import com.amap.api.services.route.WalkRouteResult;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
+import com.carlt.autogo.utils.overlay.WalkRouteOverlay;
 
 import butterknife.BindView;
 
@@ -48,6 +62,8 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
     private AMapLocation mCurrentLoc;
     private final static int ZOOM = 17;// 缩放级别
     private View infoWindow = null;
+    private RouteSearch mRouteSearch;
+    private WalkRouteResult mWalkRouteResult;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +78,56 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
     @Override
     public void init() {
         setTitleText("定位寻车");
+        mRouteSearch = new RouteSearch(this);
+        mRouteSearch.setRouteSearchListener(new RouteSearch.OnRouteSearchListener() {
+            @Override
+            public void onBusRouteSearched(BusRouteResult busRouteResult, int i) {
+
+            }
+
+            @Override
+            public void onDriveRouteSearched(DriveRouteResult driveRouteResult, int i) {
+
+            }
+
+            @Override
+            public void onWalkRouteSearched(WalkRouteResult walkRouteResult, int i) {
+                if (i == AMapException.CODE_AMAP_SUCCESS) {
+                    if (walkRouteResult != null && walkRouteResult.getPaths() != null) {
+                        if (walkRouteResult.getPaths().size() > 0) {
+                            if (mLocMarker != null){
+                                mLocMarker.remove();
+                            }
+                            mWalkRouteResult = walkRouteResult;
+                            final WalkPath walkPath = mWalkRouteResult.getPaths()
+                                    .get(0);
+                            if(walkPath == null) {
+                                return;
+                            }
+                            WalkRouteOverlay walkRouteOverlay = new WalkRouteOverlay(
+                                    CarLocationActivity.this, mMap, walkPath,
+                                    mWalkRouteResult.getStartPos(),
+                                    mWalkRouteResult.getTargetPos());
+                            walkRouteOverlay.removeFromMap();
+                            walkRouteOverlay.addToMap();
+                            walkRouteOverlay.zoomToSpan();
+                        } else if (walkRouteResult.getPaths() == null) {
+                            ToastUtils.showShort("没有结果");
+                        }
+                    } else {
+                        ToastUtils.showShort("没有结果");
+                    }
+                } else {
+                    ToastUtils.showShort(i);
+                }
+
+            }
+
+            @Override
+            public void onRideRouteSearched(RideRouteResult rideRouteResult, int i) {
+
+            }
+        });
     }
 
     @Override
@@ -156,7 +222,9 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
                 addMarker(location);// 添加定位图标
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,
                         ZOOM));
-                addCarMarker(new LatLng(34.2168,108.887));
+//                addCarMarker(new LatLng(34.2168,108.887));
+                walkRoute(new LatLonPoint(aMapLocation.getLatitude(),aMapLocation.getLongitude()),
+                        new LatLonPoint(34.2168,108.887));
             }
             mFirstLoc = aMapLocation;
 
@@ -192,6 +260,18 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
         }
     }
 
+    /**
+     * 步行路线规划
+     * @param from 起点坐标
+     * @param to   终点坐标
+     */
+    private void walkRoute(LatLonPoint from,LatLonPoint to){
+        RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(from,to);
+
+        RouteSearch.WalkRouteQuery query = new RouteSearch.WalkRouteQuery(fromAndTo);
+        mRouteSearch.calculateWalkRouteAsyn(query);
+    }
+
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
     private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);
 
@@ -224,17 +304,38 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
         markerOptions.icon(des);
         markerOptions.anchor(0.5f, 0.5f);
         markerOptions.position(latLng);
-        markerOptions.setInfoWindowOffset(0,320);
+        markerOptions.setInfoWindowOffset(0,310);
         Marker marker = mMap.addMarker(markerOptions);
         marker.showInfoWindow();
     }
     /**
      * 自定义infowinfow窗口
      */
+    GeocodeSearch geocoderSearch;
+    String city;
     public void render(Marker marker, View view) {
         TextView mTxtNav = view.findViewById(R.id.txtLocationNav);
         TextView mTxtUpdateLoc = view.findViewById(R.id.txtUpdateLoc);
-        TextView mTxtLocation = view.findViewById(R.id.txtCarLocation);
+        final TextView mTxtLocation = view.findViewById(R.id.txtCarLocation);
+        geocoderSearch = new GeocodeSearch(this);
+        geocoderSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
+            @Override
+            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
+                if (i == AMapException.CODE_AMAP_SUCCESS){
+                    city = regeocodeResult.getRegeocodeAddress().getCity();
+                    mTxtLocation.setText(regeocodeResult.getRegeocodeAddress().getFormatAddress());
+                }
+            }
+
+            @Override
+            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+
+            }
+        });
+        RegeocodeQuery query = new RegeocodeQuery(new LatLonPoint(marker.getPosition().latitude,marker.getPosition().longitude), 200,GeocodeSearch.AMAP);
+
+        geocoderSearch.getFromLocationAsyn(query);
+
         mTxtNav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -245,6 +346,9 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
             @Override
             public void onClick(View view) {
                 ToastUtils.showShort("修改位置");
+                Intent intent = new Intent(CarLocationActivity.this,InputtipsActivity.class);
+                intent.putExtra("city",city);
+                startActivityForResult(intent,111);
             }
         });
     }
@@ -269,5 +373,21 @@ public class CarLocationActivity extends BaseMvpActivity implements AMapLocation
     @Override
     public View getInfoContents(Marker marker) {
         return null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == RESULT_OK&&requestCode == 111){
+            if (data != null) {
+                String LatLonPoint = data.getStringExtra("LatLonPoint");
+                if (LatLonPoint != null) {
+                    String latitude = LatLonPoint.split(",")[0];
+                    String longitude = LatLonPoint.split(",")[1];
+                    LatLng latLng = new LatLng(Double.valueOf(latitude),Double.valueOf(longitude));
+                    mMap.clear();
+                    walkRoute(new LatLonPoint(mFirstLoc.getLatitude(),mFirstLoc.getLongitude()),new LatLonPoint(latLng.latitude,latLng.longitude));
+                }
+            }
+        }
     }
 }

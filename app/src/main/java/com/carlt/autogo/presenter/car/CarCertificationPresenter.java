@@ -11,6 +11,7 @@ import com.carlt.autogo.entry.user.UpdateImageResultInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.global.GlobalUrl;
 import com.carlt.autogo.net.base.ClientFactory;
+import com.carlt.autogo.net.base.DefulatClient;
 import com.carlt.autogo.net.service.CarService;
 import com.carlt.autogo.net.service.UserService;
 import com.carlt.autogo.utils.SharepUtil;
@@ -45,9 +46,21 @@ public class CarCertificationPresenter extends BasePresenter<ICarCertificationVi
             ToastUtils.showShort("网络错误，请检查网络");
             uuDialog.dismiss();
         }else {
-            OkGo.<String>post(GlobalUrl.TEST_BASE_URL + "BrandProduct/AutoFilter")
+            String url = GlobalUrl.TEST_BASE_URL;
+            String accessId = GlobalKey.TEST_ACCESSID;
+            switch (DefulatClient.idIndex){
+                case 0:
+                    url = GlobalUrl.TEST_BASE_URL;
+                    accessId = GlobalKey.TEST_ACCESSID;
+                    break;
+                case 1:
+                    url = GlobalUrl.PRE_BASE_URL;
+                    accessId = GlobalKey.PRE_ACCESSID;
+                    break;
+            }
+            OkGo.<String>post(url + "BrandProduct/AutoFilter")
                     .headers("Content-Type", "application/json")
-                    .headers("Carlt-Access-Id", GlobalKey.TEST_ACCESSID)
+                    .headers("Carlt-Access-Id", accessId)
                     .headers("Carlt-Token", SharepUtil.getPreferences().getString("token", ""))
                     .upJson(gson.toJson(new HashMap<>()))
                     .execute(new StringCallback() {
