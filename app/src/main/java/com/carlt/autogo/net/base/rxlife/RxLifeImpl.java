@@ -43,15 +43,31 @@ public class RxLifeImpl implements RxLife {
         LogUtils.e("onDestory");
     }
 
-    private void cancleWork() {
+    private synchronized void cancleWork() {
+
         if (disposables != null && disposables.size() > 0) {
-            for (Disposable d : disposables) {
-                if (d.isDisposed()) {
-                    disposables.remove(d);
-                } else {
+//            for (Disposable d : disposables) {
+//                if (d.isDisposed()) {
+//                    disposables.remove(d);
+//                } else {
+//                    d.dispose();
+//                }
+//            }
+
+    //遍历List 时候尽量不要做删除操作，改变集合的大小，很容易出现异常,相当于数据读写不同步，必须保证同步。
+            for (int i =0 ;i < disposables.size();i++){
+                Disposable d = disposables.get(i);
+                if(d.isDisposed()){
+                    disposables.remove(i);
+                    // i -- ,保证集合容量同步
+                    i--;
+                }else {
                     d.dispose();
                 }
             }
         }
+
+
+
     }
 }
