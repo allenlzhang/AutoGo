@@ -94,14 +94,14 @@ public class MyCarAdapter extends BaseAdapter {
         if (!TextUtils.isEmpty(info.carLogo)) {
             Glide.with(AutoGoApp.mAppContext)
                     .load(info.carLogo)
-                    .placeholder(R.mipmap.ic_dorcen_logo)
-                    .error(R.mipmap.ic_dorcen_logo)
+                    .placeholder(R.mipmap.ic_car_log_default)
+                    .error(R.mipmap.ic_car_log_default)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .skipMemoryCache(true)
                     .transform(new GlideCircleTransform(mContext))
                     .into(holder.mLogo);
         } else {
-            holder.mLogo.setImageResource(R.mipmap.ic_dorcen_logo);
+            holder.mLogo.setImageResource(R.mipmap.ic_car_log_default);
         }
         if (info.authStatus == 2 && TYPE == MYCAR) {
             holder.mIvAuthState.setVisibility(View.VISIBLE);
