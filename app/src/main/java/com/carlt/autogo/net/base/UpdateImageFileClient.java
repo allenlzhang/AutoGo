@@ -13,7 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class UpdateImageFileClient extends BaseRestClient {
 
-    static String URL_NEXT[] = {GlobalUrl.UPDATE_IMG_TEST_URL, GlobalUrl.UPDATE_IMG_FORMAL_URL};
+    static String URL_NEXT[] = {GlobalUrl.UPDATE_IMG_TEST_URL, GlobalUrl.UPDATE_IMG_FORMAL_URL,GlobalUrl.UPDATE_IMG_FORMAL_URL};
 
     private UpdateImageFileClient() {
         super();

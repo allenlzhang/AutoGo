@@ -3,8 +3,8 @@ package com.carlt.autogo.view.fragment;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,10 +30,10 @@ import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.presenter.remote.IRemoteView;
 import com.carlt.autogo.presenter.remote.RemotePresenter;
 import com.carlt.autogo.utils.SharepUtil;
+import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
 import com.carlt.autogo.view.activity.car.CarDetailsActivity;
 import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
-import com.carlt.autogo.view.activity.remote.RemoteLogActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -50,7 +50,7 @@ import butterknife.OnClick;
  * Date       : 2018/9/4 17:42
  */
 @CreatePresenter(presenter = RemotePresenter.class)
-public class RemoteFragment extends BaseMvpFragment<RemotePresenter> implements IRemoteView{
+public class RemoteFragment extends BaseMvpFragment<RemotePresenter> implements IRemoteView {
     @BindView(R.id.tv_base_title)
     TextView       tvBaseTitle;
     @BindView(R.id.iv_base_back)
@@ -75,6 +75,7 @@ public class RemoteFragment extends BaseMvpFragment<RemotePresenter> implements 
     private OtherPopup          mOtherPopup;
     private SkyWindowPopup      mSkyWindowPopup;
     private WindowDoorPopup     mWindowDoorPopup;
+    private LinearLayoutManager mLinearLayoutManager;
 
     @Override
     public int getLayoutId() {
@@ -84,20 +85,22 @@ public class RemoteFragment extends BaseMvpFragment<RemotePresenter> implements 
     @Override
     protected void init() {
         singletonCar = SingletonCar.getInstance();
-        if (singletonCar.getCarBean() == null||TextUtils.isEmpty(singletonCar.getCarBean().carName)){
+        if (singletonCar.getCarBean() == null || TextUtils.isEmpty(singletonCar.getCarBean().carName)) {
             tvBaseTitle.setText("远程");
-        }else {
+        } else {
             tvBaseTitle.setText(singletonCar.getCarBean().carName);
         }
         tvBaseTitle.setSelected(true);
         ivBaseBack.setImageResource(R.drawable.ic_remote_car_state_bg);
         tvBaseRight.setBackground(getResources().getDrawable(R.drawable.ic_remote_log_bg));
+        mLinearLayoutManager = new LinearLayoutManager(mContext);
         rvListRemote.setHasFixedSize(true);
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
-        rvListRemote.setLayoutManager(linearLayoutManager);
-        RemoteAdapter adapter = new RemoteAdapter(getData());
-        rvListRemote.setAdapter(adapter);
+        rvListRemote.setLayoutManager(mLinearLayoutManager);
+        //        RemoteAdapter adapter = new RemoteAdapter(getData());
+        //        rvListRemote.setAdapter(adapter);
         mEnginePopup = new EnginePopup(mActivity);
+        //        mEnginePopup.setAllowInterceptTouchEvent(false);
+        //        mEnginePopup .setAllowDismissWhenTouchOutside(false);
         //        mEnginePopup.setShowAnimation(SimpleAnimationUtils.getDefaultAlphaAnimation(true));
         //        mEnginePopup.setDismissAnimation(SimpleAnimationUtils.getDefaultAlphaAnimation(false));
 
@@ -105,55 +108,6 @@ public class RemoteFragment extends BaseMvpFragment<RemotePresenter> implements 
         mOtherPopup = new OtherPopup(mActivity);
         mSkyWindowPopup = new SkyWindowPopup(mActivity);
         mWindowDoorPopup = new WindowDoorPopup(mActivity);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                int width = view.getWidth();
-                int height = view.getHeight();
-                int lastCompletelyVisibleItemPosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-                int firstCompletelyVisibleItemPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-                mEnginePopup.setWidth(width - SizeUtils.dp2px(24));
-                mSkyWindowPopup.setWidth(width - SizeUtils.dp2px(24));
-                mWindowDoorPopup.setWidth(width - SizeUtils.dp2px(24));
-                mOtherPopup.setWidth(width - SizeUtils.dp2px(24));
-                mEnginePopup.setHeight(height);
-                mSkyWindowPopup.setHeight(height);
-                mOtherPopup.setHeight(height);
-//                mWindowDoorPopup.setHeight(height);
-                mConditionerPopup.setWidth(width - SizeUtils.dp2px(24));
-                //                mEnginePopup.setHeight(SizeUtils.dp2px(135));
-
-                switch (position) {
-                    case 0:
-                        if (firstCompletelyVisibleItemPosition <= position && position <= lastCompletelyVisibleItemPosition) {
-
-                            mEnginePopup.showPopupWindow(view);
-                        } else {
-                            mEnginePopup.setPopupGravity(Gravity.CENTER);
-                            mEnginePopup.showPopupWindow();
-                        }
-                        break;
-                    case 1:
-                        mConditionerPopup.setPopupGravity(Gravity.CENTER);
-                        mConditionerPopup.showPopupWindow();
-                        break;
-                    case 2:
-                        mWindowDoorPopup.showPopupWindow(view);
-                        break;
-                    case 3:
-                        mSkyWindowPopup.showPopupWindow(view);
-                        break;
-                    case 4:
-                        mOtherPopup.showPopupWindow(view);
-                        break;
-                    default:
-                        break;
-                }
-
-
-            }
-        });
-
         getPresenter().curCarConfig();
     }
 
@@ -199,8 +153,9 @@ public class RemoteFragment extends BaseMvpFragment<RemotePresenter> implements 
                 }
                 break;
             case R.id.tv_base_right:
-                if (isActivated()){}
-//                startActivity(new Intent(mContext,RemoteLogActivity.class));
+                if (isActivated()) {
+                }
+                //                startActivity(new Intent(mContext,RemoteLogActivity.class));
                 break;
             case R.id.remote_btn_lock:
                 certification();
@@ -270,14 +225,61 @@ public class RemoteFragment extends BaseMvpFragment<RemotePresenter> implements 
     public void curCarConfigSuccess(List<RemoteInfo> infoList) {
         RemoteAdapter adapter = new RemoteAdapter(infoList);
         rvListRemote.setAdapter(adapter);
-
+        if (isActivated()) {
+            return;
+        }
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (isActivated()){
+                int width = view.getWidth();
+                int height = view.getHeight();
+                int lastCompletelyVisibleItemPosition = mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
+                int firstCompletelyVisibleItemPosition = mLinearLayoutManager.findFirstCompletelyVisibleItemPosition();
+                mEnginePopup.setWidth(width - SizeUtils.dp2px(24));
+                mSkyWindowPopup.setWidth(width - SizeUtils.dp2px(24));
+                mWindowDoorPopup.setWidth(width - SizeUtils.dp2px(24));
+                mOtherPopup.setWidth(width - SizeUtils.dp2px(24));
+                mEnginePopup.setHeight(height);
+                mSkyWindowPopup.setHeight(height);
+                mOtherPopup.setHeight(height);
+                //                mWindowDoorPopup.setHeight(height);
+                mConditionerPopup.setWidth(width - SizeUtils.dp2px(24));
+                //                mEnginePopup.setHeight(SizeUtils.dp2px(135));
 
+                switch (position) {
+                    case 0:
+                        if (firstCompletelyVisibleItemPosition <= position && position <= lastCompletelyVisibleItemPosition) {
+
+                            mEnginePopup.showPopupWindow(view);
+                        } else {
+                            //                            mEnginePopup.setPopupGravity(Gravity.CENTER);
+                            mEnginePopup.setAutoLocatePopup(true);
+                            mEnginePopup.showPopupWindow();
+                        }
+                        break;
+                    case 1:
+                        mConditionerPopup.setPopupGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                        MainActivity activity = (MainActivity) getActivity();
+                        if (activity != null) {
+                            mConditionerPopup.showPopupWindow(activity.bottomTabs);
+                        }
+                        break;
+                    case 2:
+                        mWindowDoorPopup.showPopupWindow(view);
+                        break;
+                    case 3:
+                        mSkyWindowPopup.showPopupWindow(view);
+                        break;
+                    case 4:
+                        mOtherPopup.showPopupWindow(view);
+                        break;
+                    default:
+                        break;
                 }
+
+
             }
         });
+
     }
 }

@@ -18,7 +18,7 @@ public class EnginePopup extends BasePopupWindow {
 
     public EnginePopup(Context context) {
         super(context);
-
+        setAutoLocatePopup(true);
         findViewById(R.id.ivClose).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

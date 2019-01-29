@@ -1,13 +1,12 @@
 package com.carlt.autogo.view.fragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,6 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.adapter.CarPopupAdapter;
@@ -34,20 +34,19 @@ import com.carlt.autogo.utils.SharepUtil;
 import com.carlt.autogo.view.activity.MainActivity;
 import com.carlt.autogo.view.activity.car.CarCertificationActivity;
 import com.carlt.autogo.view.activity.car.CarDetailsActivity;
-import com.carlt.autogo.view.activity.home.CarLocationActivity;
-import com.carlt.autogo.view.activity.home.CarTestingActivity;
-import com.carlt.autogo.view.activity.home.CarTiresStateActivity;
+import com.carlt.autogo.view.activity.home.NavigationSynchronizeToCarActivity;
 import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
 import com.carlt.autogo.view.activity.user.accept.UserIdChooseActivity;
 import com.carlt.autogo.widget.MaxListView;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * Description: 首页fragment
@@ -174,9 +173,9 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
             } else {
                 homeRlLock.setVisibility(View.VISIBLE);
             }
-            if (adapter.getCount() > 1) {
+            if (adapter.getCount()>1){
                 ivCarChose.setVisibility(View.VISIBLE);
-            } else {
+            }else {
                 ivCarChose.setVisibility(View.GONE);
             }
             tvCarType.setSelected(true);
@@ -240,10 +239,10 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
                 }
                 break;
             case R.id.rlCarLocation:
-//                if (isActivated()) {
-//
-//                }
-                startActivity(new Intent(mContext, CarLocationActivity.class));
+                if (isActivated()) {
+
+                }
+//                startActivity(new Intent(mContext, CarLocationActivity.class));
                 break;
             case R.id.home_btn_lock:
                 certification();
@@ -254,10 +253,10 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
                 }
                 break;
             case R.id.rlTirePressure:
-//                if (isActivated()) {
-//
-//                }
-                startActivity(new Intent(mContext, CarTiresStateActivity.class));
+                if (isActivated()) {
+
+                }
+//                startActivity(new Intent(mContext, CarTiresStateActivity.class));
                 break;
             case R.id.rlCarLog:
                 if (isActivated()) {
@@ -268,14 +267,39 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
                 if (isActivated()) {
 
                 }
+                go2FindCarActivity();
                 break;
             case R.id.rlTesting:
-//                if (isActivated()) {
-//
-//                }
-                startActivity(new Intent(mContext, CarTestingActivity.class));
+                if (isActivated()) {
+
+                }
+//                startActivity(new Intent(mContext, CarTestingActivity.class));
+
+
                 break;
         }
+    }
+
+    private void go2FindCarActivity() {
+        AndPermission.with(this)
+                .runtime()
+                .permission(Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                .onDenied(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        LogUtils.e(data.toString());
+                        showToast("未获取到权限，导航同步功能不可用");
+
+                    }
+                })
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        LogUtils.e(data.toString());
+                        startActivity(new Intent(mActivity, NavigationSynchronizeToCarActivity.class));
+                    }
+                }).start();
     }
 
 

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <com.amap.api.maps.MapView
+        android:id="@+id/navigationtocar_mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        android:id="@+id/ivLocationEnd"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/ic_location_end"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_navigationtocar_input"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginRight="9dp"
+        android:background="@drawable/position_input_bg"
+        android:paddingLeft="14dp"
+        android:paddingRight="12dp">
+
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:hint="查找地点"
+            android:paddingLeft="5dp"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/textColorGray1"
+            android:textColorHint="@color/textColorGray"
+            android:textSize="14sp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/navigationtocar_rl_address"
+        android:layout_width="fill_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginRight="9dp"
+        android:background="@drawable/position_input_bg"
+        android:paddingLeft="14dp"
+        android:paddingRight="12dp">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="33.5dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back_arrow_selector"/>
+
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="33.5dp"
+            android:layout_height="33.5dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:src="@drawable/ic_close_normal"/>
+
+        <TextView
+            android:id="@+id/tvInputAddress"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/ivDelete"
+            android:layout_toRightOf="@id/iv_back"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:hint="请输入目的地"
+            android:paddingLeft="5dp"
+            android:singleLine="true"
+            android:textColor="@color/textColorGray1"
+            android:textColorHint="@color/textColorGray"
+            android:textSize="14sp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlSendToCar"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:layout_alignParentBottom="true"
+        android:background="#F0FFFFFF"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp">
+
+        <View
+            android:id="@+id/viewLine"
+            android:layout_width="100dp"
+            android:layout_height="0.5dp"
+            android:layout_centerVertical="true"
+            android:background="@color/transparent"/>
+
+        <TextView
+            android:id="@+id/tv_navigationtocar_send"
+            android:layout_width="125dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/login_commit_bg_select"
+            android:clickable="true"
+            android:drawableLeft="@mipmap/ic_loction_nav"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="导航同步到车"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tvAddressName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/viewLine"
+            android:layout_toLeftOf="@id/tv_navigationtocar_send"
+            android:ellipsize="end"
+            android:gravity="left"
+            android:singleLine="true"
+            android:text="----"
+            android:textColor="@color/textColorGray1"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tvAddressdetail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/viewLine"
+            android:layout_marginTop="2dp"
+            android:layout_toLeftOf="@id/tv_navigationtocar_send"
+            android:ellipsize="end"
+            android:gravity="left"
+            android:maxLines="2"
+            android:singleLine="true"
+            android:text="----"
+            android:textColor="@color/textColorGray1"
+            android:textSize="16sp"/>
+    </RelativeLayout>
+
+</RelativeLayout>

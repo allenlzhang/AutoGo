@@ -160,8 +160,10 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
         }
         if (authType == 0) {
             map.put("authType", 1);
+            mTimeType = 1;
         } else {
             map.put("authType", authType);
+            mTimeType = authType;
         }
         getPresenter().createAuthQrcode(map);
         //        ClientFactory.def(CarService.class).createAuthQrcode(map)
@@ -385,7 +387,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
                                     LogUtils.e(info.name);
                                     tvTime.setText(info.name);
                                     easyPopup.dismiss();
-                                    initQrCode(0, info.type);
+                                    initQrCode(mCarId, info.type);
                                     mTimeType = info.type;
                                 }
                             });
@@ -398,7 +400,7 @@ public class AuthQRCodeActivity extends BaseMvpActivity<AuthQRCodePresenter> imp
                                     tvCarName.setText(carBean.carName);
                                     carName = carBean.carName;
                                     easyPopup.dismiss();
-                                    initQrCode(carBean.id, 0);
+                                    initQrCode(carBean.id, mTimeType);
                                     mCarId = carBean.id;
                                 }
                             });

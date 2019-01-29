@@ -8,10 +8,12 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.carlt.autogo.basemvp.BaseMvpView;
 import com.carlt.autogo.basemvp.BasePresenter;
 import com.carlt.autogo.basemvp.PresenterDispatch;
@@ -74,6 +76,11 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends Fragment 
         isPrepared = true;
         init();
         lazyLoad();
+    }
+
+    protected void showToast(String txt) {
+        ToastUtils.setGravity(Gravity.CENTER, 0, 0);
+        ToastUtils.showShort(txt);
     }
 
     @Override

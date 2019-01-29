@@ -86,9 +86,9 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     @BindView(R.id.btn_changeUrl)
     Button btnChangeUrl;
 
-    //    String[] tag = {"测试服", "正式服", "预发布"};
-    String[] tag  = {"测试服", "预发布"};
-    int      next = 0;
+    String[] tag  = {"测试服", "预发布", "正式服"};
+    //    String[] tag  = {"测试服", "预发布"};
+    int      next = 2;
 
     Disposable disposable;
     private String savePwd;
@@ -153,8 +153,14 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
                     }
                 }).start();
+        if (next == 2) {
+            btnChangeUrl.setVisibility(View.GONE);
+        } else {
+            btnChangeUrl.setVisibility(View.VISIBLE);
+        }
         btnChangeUrl.setText(tag[next]);
         ClientFactory.defChangeUrl(next);
+
     }
 
     @Override
@@ -169,8 +175,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
             //            }
             if (userInfo.loginState == GlobalKey.loginStateByPWd || userInfo.loginState == GlobalKey.loginStateByOther) {
                 userPhone.setText(userInfo.mobile);
-//                userPWd.setText(userInfo.password);
-//                savePwd = userInfo.password;
+                //                userPWd.setText(userInfo.password);
+                //                savePwd = userInfo.password;
             } else {
                 userPhone.setText(userInfo.mobile);
             }

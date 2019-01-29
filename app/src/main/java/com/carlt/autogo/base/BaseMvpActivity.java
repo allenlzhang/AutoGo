@@ -103,6 +103,9 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     protected void hideTitle(){
         rlTitle.setVisibility(View.INVISIBLE);
     }
+    protected void goneTitle(){
+        rlTitle.setVisibility(View.GONE);
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

@@ -36,6 +36,7 @@ import okhttp3.RequestBody;
  */
 public class CarCertificationPresenter extends BasePresenter<ICarCertificationView> {
     MultipartBody.Builder MultipartBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+
     /**
      * 添加车辆
      */
@@ -45,16 +46,20 @@ public class CarCertificationPresenter extends BasePresenter<ICarCertificationVi
         if (!NetworkUtils.isConnected() && !NetworkUtils.isAvailableByPing()) {
             ToastUtils.showShort("网络错误，请检查网络");
             uuDialog.dismiss();
-        }else {
+        } else {
             String url = GlobalUrl.TEST_BASE_URL;
             String accessId = GlobalKey.TEST_ACCESSID;
-            switch (DefulatClient.idIndex){
+            switch (DefulatClient.idIndex) {
                 case 0:
                     url = GlobalUrl.TEST_BASE_URL;
                     accessId = GlobalKey.TEST_ACCESSID;
                     break;
                 case 1:
                     url = GlobalUrl.PRE_BASE_URL;
+                    accessId = GlobalKey.PRE_ACCESSID;
+                    break;
+                case 2:
+                    url = GlobalUrl.FORMAL_BASE_URL;
                     accessId = GlobalKey.PRE_ACCESSID;
                     break;
             }
@@ -84,7 +89,6 @@ public class CarCertificationPresenter extends BasePresenter<ICarCertificationVi
 
     /**
      * 图像上传
-     *
      * @param file
      */
     @SuppressLint("CheckResult")
@@ -118,7 +122,6 @@ public class CarCertificationPresenter extends BasePresenter<ICarCertificationVi
 
     /**
      * 添加车辆 下一步按钮
-     *
      * @return
      */
     @SuppressLint("CheckResult")

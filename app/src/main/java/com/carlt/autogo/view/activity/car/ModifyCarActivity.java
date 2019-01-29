@@ -3,7 +3,9 @@ package com.carlt.autogo.view.activity.car;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.ReplacementTransformationMethod;
 import android.view.View;
 import android.widget.Button;
@@ -42,7 +44,7 @@ import butterknife.OnClick;
 
 // 车辆认证
 @CreatePresenter(presenter = {CarCertificationPresenter.class, CarDetailsPresenter.class})
-public class ModifyCarActivity extends BaseMvpActivity implements ICarCertificationView,ICarDetailsView{
+public class ModifyCarActivity extends BaseMvpActivity implements ICarCertificationView, ICarDetailsView {
 
     @BindView(R.id.ll_vehicle_certification_add)
     LinearLayout llVehicleCertificationAdd;
@@ -59,7 +61,7 @@ public class ModifyCarActivity extends BaseMvpActivity implements ICarCertificat
     @BindView(R.id.txt_vehicle_certification_add)
     TextView     txtVehicleCertificationAdd;
 
-    private static final int CODE_ADDCAR_REQUEST  = 0xb3;
+    private static final int CODE_ADDCAR_REQUEST = 0xb3;
 
     private CarBrandInfo.DataBean dataBean; //车款信息
     private int                   withTbox;
@@ -67,7 +69,7 @@ public class ModifyCarActivity extends BaseMvpActivity implements ICarCertificat
     @PresenterVariable
     CarCertificationPresenter carCertificationPresenter;
     @PresenterVariable
-    CarDetailsPresenter carDetailsPresenter;
+    CarDetailsPresenter       carDetailsPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,13 +100,35 @@ public class ModifyCarActivity extends BaseMvpActivity implements ICarCertificat
         carId = getIntent().getIntExtra("carId", 0);
         withTbox = getIntent().getIntExtra("withTbox", 0);
         carDetailsPresenter.ClientGetCarInfo(carId);
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String content = s.toString();
+                if (TextUtils.isEmpty(content)) {
+                    btnVehicleCertification.setEnabled(false);
+                } else {
+                    btnVehicleCertification.setEnabled(true);
+                }
+            }
+        };
+        txtVehicleCertificationAdd.addTextChangedListener(textWatcher);
     }
 
     private CarInfo mCarInfo;
 
     private void setData(CarInfo carInfo) {
         mCarInfo = carInfo;
-        txtVehicleCertificationAdd.setText(carInfo.carName);
+        //        txtVehicleCertificationAdd.setText(carInfo.carName);
         editVehicleCertificationVin.setText(carInfo.vin);
     }
 
