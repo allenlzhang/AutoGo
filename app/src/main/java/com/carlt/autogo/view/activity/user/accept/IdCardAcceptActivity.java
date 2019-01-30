@@ -99,7 +99,7 @@ public class IdCardAcceptActivity extends BaseMvpActivity {
         }
         hideName = encrypt(name);
         hideIdNume = encrypt(idCardNum);
-        Intent intent = new Intent(this, UploadIdCardPhotoActivity2.class);
+        Intent intent = new Intent(this, UploadIdCardPhotoActivity.class);
         //        intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceLiveCheckActivity.FROM_ID_CARDACCEPT_ACTIVITY);
         intent.putExtra("name", hideName);
         intent.putExtra("idcard", hideIdNume);

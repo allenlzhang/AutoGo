@@ -13,13 +13,19 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class DialogIdcardAccept extends BaseDialog {
-    ItemOnclickListner listner ;
-    @BindView(R.id.head)LinearLayout head;
-    @BindView(R.id.ll_show)LinearLayout llShow;
-    @BindView(R.id.tv_by_carmera)TextView tvByCarmera;
-    @BindView(R.id.tv_by_ablun)TextView tvByAblun;
-    @BindView(R.id.tv_cancle)TextView tvCancle;
-    @BindView(R.id.tv_ok)TextView tvOk;
+    ItemOnclickListner listner;
+    @BindView(R.id.head)
+    LinearLayout head;
+    @BindView(R.id.ll_show)
+    LinearLayout llShow;
+    @BindView(R.id.tv_by_carmera)
+    TextView     tvByCarmera;
+    @BindView(R.id.tv_by_ablun)
+    TextView     tvByAblun;
+    @BindView(R.id.tv_cancle)
+    TextView     tvCancle;
+    @BindView(R.id.tv_ok)
+    TextView     tvOk;
 
 
     public DialogIdcardAccept(@NonNull Context context) {
@@ -42,7 +48,7 @@ public class DialogIdcardAccept extends BaseDialog {
     }
 
     @OnClick({R.id.tv_ok})
-    public void onClickOk(){
+    public void onClickOk() {
 
         llShow.setVisibility(View.GONE);
         head.setVisibility(View.VISIBLE);
@@ -51,18 +57,18 @@ public class DialogIdcardAccept extends BaseDialog {
         show();
     }
 
-    @OnClick({R.id.tv_by_carmera,R.id.tv_by_ablun ,R.id.tv_cancle})
-    public void onClick(View view){
-        switch (view.getId()){
+    @OnClick({R.id.tv_by_carmera, R.id.tv_by_ablun, R.id.tv_cancle})
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.tv_by_carmera:
-                if(listner != null){
+                if (listner != null) {
                     listner.byCermera();
                 }
                 dismiss();
                 break;
 
             case R.id.tv_by_ablun:
-                if(listner != null){
+                if (listner != null) {
                     listner.byAblum();
                 }
                 dismiss();
@@ -75,12 +81,15 @@ public class DialogIdcardAccept extends BaseDialog {
         }
 
     }
-    public void setListner(ItemOnclickListner listner){
-        this.listner = listner ;
+
+    public void setListner(ItemOnclickListner listner) {
+        this.listner = listner;
     }
-    public   interface ItemOnclickListner {
+
+    public interface ItemOnclickListner {
 
         void byCermera();
+
         void byAblum();
 
     }
