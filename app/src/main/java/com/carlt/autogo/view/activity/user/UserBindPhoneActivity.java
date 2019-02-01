@@ -77,6 +77,7 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
      * 第三方平台的 id
      */
     String openId;
+    String nickName;
     /**
      * 三方平台类型 1 支付宝 2  微信
      */
@@ -94,6 +95,7 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
         setTitleText("用户绑定手机");
         openId = getIntent().getExtras().getString("openId");
         openType = getIntent().getExtras().getInt("openType");
+        nickName = getIntent().getExtras().getString("nickName");
         //        ivPwdToggle.setOnClickListener(new View.OnClickListener() {
         //            @Override
         //            public void onClick(View v) {
@@ -165,6 +167,7 @@ public class UserBindPhoneActivity extends BaseMvpActivity {
         parmas.put("openType", openType);
         parmas.put("mobile", phoneNum);
         parmas.put("validate", code);
+        parmas.put("nickName", nickName);
         parmas.put("regType", GlobalKey.RegStateByOther);
         doOtherRegister(parmas);
 

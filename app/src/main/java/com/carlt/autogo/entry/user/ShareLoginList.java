@@ -29,12 +29,14 @@ public class ShareLoginList {
 
         public int openType;
         public int CreateTime;
+        public String nickName;
 
         @Override
         public String toString() {
             return "ListBean{" +
                     "openType=" + openType +
                     ", CreateTime=" + CreateTime +
+                    ", nickName='" + nickName + '\'' +
                     '}';
         }
     }

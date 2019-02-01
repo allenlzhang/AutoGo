@@ -179,10 +179,11 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 public void onComplete(Platform platform, final int i, HashMap<String, Object> hashMap) {
                     LogUtils.e(hashMap);
                     final String unionid = (String) hashMap.get("unionid");
-                    final String nickname = (String) hashMap.get("nickname");
-                    SharepUtil.put(GlobalKey.WECHAT_NICKNAME, nickname);
+                    String nickname = (String) hashMap.get("nickname");
+                    LogUtils.e(nickname);
                     params.put("openId", unionid);
                     params.put("openType", 2);
+                    params.put("nickName", nickname);
                     params.put("loginType", GlobalKey.loginStateByOther);
                     LogUtils.e(params);
                     ObservableHelper.commonLogin(params, OtherActivity.this)

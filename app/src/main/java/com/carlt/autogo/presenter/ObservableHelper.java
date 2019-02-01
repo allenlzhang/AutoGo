@@ -66,9 +66,11 @@ public class ObservableHelper {
                             errorMsg = User.err.msg;
                             if (context != null) {
                                 String uId = (String) params.get("openId");
+                                String nickName = (String) params.get("nickName");
                                 Intent intent = new Intent(context, UserBindPhoneActivity.class);
                                 intent.putExtra("openId", uId);
                                 intent.putExtra("openType", (Integer) params.get("openType"));
+                                intent.putExtra("nickName", nickName);
                                 //保存微信或者支付宝登录请求参数
                                 context.startActivity(intent);
 

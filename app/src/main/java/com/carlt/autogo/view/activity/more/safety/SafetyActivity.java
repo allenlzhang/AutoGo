@@ -346,11 +346,12 @@ public class SafetyActivity extends BaseMvpActivity<SafetyPresenter> implements 
                 } else if (listBean.openType == 2) {
                     //微信绑定
                     cbWechatLogin.setChecked(true);
-                    String name = SharepUtil.getPreferences().getString(GlobalKey.WECHAT_NICKNAME, "");
-                    if (TextUtils.isEmpty(name)) {
+//                    String name = SharepUtil.getPreferences().getString(GlobalKey.WECHAT_NICKNAME, "");
+                    String nickName = listBean.nickName;
+                    if (TextUtils.isEmpty(nickName)) {
                         tvWechatName.setText("");
                     } else {
-                        tvWechatName.setText("(" + name + ")");
+                        tvWechatName.setText("(" + nickName + ")");
                     }
 
                 }
@@ -391,7 +392,7 @@ public class SafetyActivity extends BaseMvpActivity<SafetyPresenter> implements 
                     LogUtils.e(hashMap);
                     String unionid = (String) hashMap.get("unionid");
                     final String nickname = (String) hashMap.get("nickname");
-                    SharepUtil.put(GlobalKey.WECHAT_NICKNAME, nickname);
+//                    SharepUtil.put(GlobalKey.WECHAT_NICKNAME, nickname);
                     LogUtils.e(unionid);
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("openId", unionid);
