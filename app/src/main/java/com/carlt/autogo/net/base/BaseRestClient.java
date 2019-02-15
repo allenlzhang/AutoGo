@@ -40,8 +40,8 @@ public abstract class BaseRestClient implements Iservice {
 
     protected BaseRestClient() {
         //请求 超时 时间为5秒
-        okBuilder.connectTimeout(15, TimeUnit.SECONDS);
-        okBuilder.readTimeout(15, TimeUnit.SECONDS);
+        okBuilder.connectTimeout(60, TimeUnit.SECONDS);
+        okBuilder.readTimeout(60, TimeUnit.SECONDS);
         builder.baseUrl(GlobalUrl.TEST_BASE_URL)
                 .addConverterFactory(MyGsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create());

@@ -639,8 +639,7 @@
         android:layout_height="match_parent"
         android:background="#cc222222"
         android:clickable="true"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
         <ImageView
             android:id="@+id/home_iv_lock"
             android:layout_width="wrap_content"

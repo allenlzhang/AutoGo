@@ -154,7 +154,7 @@ public interface UserService {
 
     // 身份证认证相关接口
     @POST("Identity/AddIdentity")
-    Observable<User> addIdentity(@Body Map<String, Object> params);
+    Observable<BaseError> addIdentity(@Body Map<String, Object> params);
 
     @POST("Identity/GetIdentity")
     Observable<UserIdentity> getIdentity(@Body Map<String, Object> params);

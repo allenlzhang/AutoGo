@@ -58,21 +58,21 @@ import butterknife.OnClick;
 public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarListView {
 
     @BindView(R.id.tvCarType)
-    TextView tvCarType;
+    TextView       tvCarType;
     @BindView(R.id.rl_home_chose_car_type)
     RelativeLayout rlHomeChoseCarType;
     @BindView(R.id.tvDrivingTime)
-    TextView tvDrivingTime;
+    TextView       tvDrivingTime;
     @BindView(R.id.tvDrivingMileage)
-    TextView tvDrivingMileage;
+    TextView       tvDrivingMileage;
     @BindView(R.id.tvAverageSpeed)
-    TextView tvAverageSpeed;
+    TextView       tvAverageSpeed;
     @BindView(R.id.tvAverageOil)
-    TextView tvAverageOil;
+    TextView       tvAverageOil;
     @BindView(R.id.rlCarLocation)
     RelativeLayout rlCarLocation;
     @BindView(R.id.home_btn_lock)
-    Button homeBtnLock;
+    Button         homeBtnLock;
     @BindView(R.id.home_rl_lock)
     RelativeLayout homeRlLock;
     @BindView(R.id.rlCarState)
@@ -84,17 +84,17 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
     @BindView(R.id.rlNav)
     RelativeLayout rlNav;
     @BindView(R.id.ivCarChose)
-    ImageView ivCarChose;
+    ImageView      ivCarChose;
     @BindView(R.id.rlTesting)
     RelativeLayout rlTesting;
 
     private CarPopupAdapter adapter;
-    private PopupWindow popupWindow;
+    private PopupWindow     popupWindow;
 
     private SingletonCar singletonCar;
 
     @PresenterVariable
-    HomePresenter homePresenter;
+    HomePresenter      homePresenter;
     @PresenterVariable
     MyCarListPresenter carListPresenter;
 
@@ -112,7 +112,6 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
 
     /**
      * 是否绑定车辆
-     *
      * @param info
      */
     private void isBindCar(AuthCarInfo info) {
@@ -173,9 +172,9 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
             } else {
                 homeRlLock.setVisibility(View.VISIBLE);
             }
-            if (adapter.getCount()>1){
+            if (adapter.getCount() > 1) {
                 ivCarChose.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 ivCarChose.setVisibility(View.GONE);
             }
             tvCarType.setSelected(true);
@@ -215,7 +214,6 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
 
     /**
      * 根据屏幕适配PopupWindow显示高度
-     *
      * @param view
      * @return
      */
@@ -230,7 +228,7 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
     }
 
     @OnClick({R.id.rl_home_chose_car_type, R.id.rlCarLocation, R.id.home_btn_lock, R.id.rlCarState,
-            R.id.rlTirePressure, R.id.rlCarLog, R.id.rlNav,R.id.rlTesting})
+            R.id.rlTirePressure, R.id.rlCarLog, R.id.rlNav, R.id.rlTesting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_home_chose_car_type:
@@ -242,7 +240,7 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
                 if (isActivated()) {
 
                 }
-//                startActivity(new Intent(mContext, CarLocationActivity.class));
+                //                startActivity(new Intent(mContext, CarLocationActivity.class));
                 break;
             case R.id.home_btn_lock:
                 certification();
@@ -256,7 +254,7 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
                 if (isActivated()) {
 
                 }
-//                startActivity(new Intent(mContext, CarTiresStateActivity.class));
+                //                startActivity(new Intent(mContext, CarTiresStateActivity.class));
                 break;
             case R.id.rlCarLog:
                 if (isActivated()) {
@@ -273,7 +271,7 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView, ICarList
                 if (isActivated()) {
 
                 }
-//                startActivity(new Intent(mContext, CarTestingActivity.class));
+                //                startActivity(new Intent(mContext, CarTestingActivity.class));
 
 
                 break;

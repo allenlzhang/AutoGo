@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.activity.user.accept.UploadIdCardPhotoActivity"
-    android:background="@color/colorRegistBg"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorRegistBg"
+                tools:context=".view.activity.user.accept.UploadIdCardPhotoActivity"
     >
 
     <TextView
@@ -13,20 +13,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:text="拍摄/上传您的身份证"
         android:textColor="@color/textColorGray"
-        android:layout_marginTop="20dp"
         />
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_below="@+id/tv_head"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_head"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
         android:text=""
         android:textColor="@color/textColorGray"
-        android:layout_marginTop="8dp"
         />
 
     <RelativeLayout
@@ -44,23 +44,24 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/upload_idcard_img_delet_select"
             android:clickable="true"
+            android:src="@drawable/upload_idcard_img_delet_select"
             android:visibility="gone"
             />
 
         <FrameLayout
             android:layout_width="280dp"
             android:layout_height="180dp"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             >
+
             <ImageView
                 android:id="@+id/img_person"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@mipmap/idcard_person_bg"
                 android:scaleType="centerCrop"
+                android:src="@mipmap/idcard_person_bg"
                 />
 
             <ImageView
@@ -80,14 +81,16 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             >
+
             <ImageView
                 android:id="@+id/img_person_c"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_camera"
                 android:layout_centerInParent="true"
+                android:src="@mipmap/ic_camera"
 
                 />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -110,6 +113,7 @@
         android:layout_below="@+id/rl_person"
         android:layout_marginTop="15dp"
         >
+
         <ImageView
             android:id="@+id/img_delet_back_photo"
             android:layout_width="wrap_content"
@@ -117,23 +121,24 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/upload_idcard_img_delet_select"
             android:clickable="true"
+            android:src="@drawable/upload_idcard_img_delet_select"
             android:visibility="gone"
             />
 
         <FrameLayout
             android:layout_width="280dp"
             android:layout_height="180dp"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             >
+
             <ImageView
                 android:id="@+id/img_idcard_back"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@mipmap/idcard_back_bg"
                 android:scaleType="centerCrop"
+                android:src="@mipmap/idcard_back_bg"
                 />
 
             <ImageView
@@ -152,13 +157,14 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             >
+
             <ImageView
                 android:id="@+id/img_idcard_back_c"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_camera"
-                android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/ic_camera"
                 />
 
             <TextView
@@ -179,13 +185,22 @@
 
     <Button
         android:id="@+id/idcard_upload_commit"
+        style="@style/BtnCommonCommit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        style="@style/BtnCommonCommit"
-        android:layout_marginBottom="10dp"
-        android:textSize="17dp"
+        android:layout_below="@+id/rl_back"
+        android:layout_marginTop="40dp"
         android:text="确认并提交"
+        android:textSize="17dp"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:text="信息仅用于身份认证"
+        android:textColor="@color/textColorGray"/>
 </RelativeLayout>

@@ -24,8 +24,8 @@ import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.DialogIdcardAccept;
+import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
-import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
@@ -38,11 +38,14 @@ import com.carlt.autogo.view.activity.more.safety.FaceAuthSettingActivity;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -54,6 +57,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import top.zibin.luban.Luban;
 
 /**
  * @author wsq
@@ -196,6 +200,7 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
 
     }
 
+
     //提交
     @SuppressLint("CheckResult")
     @OnClick(R.id.idcard_upload_commit)
@@ -209,11 +214,122 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
             return;
         }
         dialog.show();
-        ObservableSource<UpdateImageResultInfo> o1 = getUpdateImageResultInfoObservableSource(IdCardFront);
-        ObservableSource<UpdateImageResultInfo> o2 = getUpdateImageResultInfoObservableSource(IdCardBack);
-        ObservableSource<UpdateImageResultInfo> o3 = getUpdateImageResultInfoObservableSource(waterIdCardFront);
-        ObservableSource<UpdateImageResultInfo> o4 = getUpdateImageResultInfoObservableSource(waterIdCardBack);
+        List<File> filesList = new ArrayList<>();
+        filesList.add(IdCardFront);
+        filesList.add(IdCardBack);
+        filesList.add(waterIdCardFront);
+        filesList.add(waterIdCardBack);
 
+        LogUtils.e("压缩前----" + IdCardFront.length() + "--1---" + filesList.get(1).length() + "--2---"
+                + filesList.get(2).length() + "--3---" + filesList.get(3).length());
+
+        Flowable.just(filesList)
+                .observeOn(Schedulers.io())
+                .map(new Function<List<File>, List<File>>() {
+                    @Override
+                    public List<File> apply(List<File> files) throws Exception {
+                        return Luban.with(UploadIdCardPhotoActivity.this).load(files).get();
+                    }
+                })
+                .subscribe(new Consumer<List<File>>() {
+                    @Override
+                    public void accept(List<File> files) throws Exception {
+                        LogUtils.e("压缩后----" + files.get(0).length() + "--1---" + files.get(1).length() + "--2---"
+                                + files.get(2).length() + "--3---" + files.get(3).length());
+
+                        ObservableSource<UpdateImageResultInfo> o1 = getUpdateImageResultInfoObservableSource(files.get(0));
+                        ObservableSource<UpdateImageResultInfo> o2 = getUpdateImageResultInfoObservableSource(files.get(1));
+                        ObservableSource<UpdateImageResultInfo> o3 = getUpdateImageResultInfoObservableSource(files.get(2));
+                        ObservableSource<UpdateImageResultInfo> o4 = getUpdateImageResultInfoObservableSource(files.get(3));
+
+                        checkInfo(o1, o2, o3, o4);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable.toString());
+                    }
+                });
+        //        ObservableSource<UpdateImageResultInfo> o1 = getUpdateImageResultInfoObservableSource(IdCardFront);
+        //        ObservableSource<UpdateImageResultInfo> o2 = getUpdateImageResultInfoObservableSource(IdCardBack);
+        //        ObservableSource<UpdateImageResultInfo> o3 = getUpdateImageResultInfoObservableSource(waterIdCardFront);
+        //        ObservableSource<UpdateImageResultInfo> o4 = getUpdateImageResultInfoObservableSource(waterIdCardBack);
+        //        Disposable disposableImage = Observable.zip(o1, o2, o3, o4, new Function4<UpdateImageResultInfo, UpdateImageResultInfo, UpdateImageResultInfo, UpdateImageResultInfo, ImgId>() {
+        //            @Override
+        //            public ImgId apply(UpdateImageResultInfo updateImageResultInfo, UpdateImageResultInfo updateImageResultInfo2, UpdateImageResultInfo updateImageResultInfo3, UpdateImageResultInfo updateImageResultInfo4) throws Exception {
+        //                ImgId imgId = new ImgId();
+        //                imgId.faceImgId = updateImageResultInfo.message.id;
+        //                imgId.nationalImgId = updateImageResultInfo2.message.id;
+        //                imgId.waterFaceImgId = updateImageResultInfo3.message.id;
+        //                imgId.waterNationalImgId = updateImageResultInfo4.message.id;
+        //                imgId.idNum = idRealNum;
+        //                imgId.name = realName;
+        //                return imgId;
+        //            }
+        //        }).flatMap(new Function<ImgId, ObservableSource<BaseError>>() {
+        //            @Override
+        //            public ObservableSource<BaseError> apply(ImgId imgId) throws Exception {
+        //                //                addIdentity(imgId);
+        //                Map<String, Object> map = new HashMap<>();
+        //                map.put("name", imgId.name);
+        //                map.put("number", imgId.idNum);
+        //                map.put("front", imgId.faceImgId);
+        //                map.put("back", imgId.nationalImgId);
+        //                map.put("watermarkFront", imgId.waterFaceImgId);
+        //                map.put("watermarkBack", imgId.waterNationalImgId);
+        //                return ClientFactory.def(UserService.class).addIdentity(map);
+        //            }
+        //        })
+        //                .subscribeOn(Schedulers.newThread())
+        //                .observeOn(AndroidSchedulers.mainThread())
+        //                .subscribe(new Consumer<BaseError>() {
+        //                    @Override
+        //                    public void accept(BaseError user) throws Exception {
+        //                        dialog.dismiss();
+        //                        LogUtils.e("成功后返回--" + user);
+        //                        if (user.code == 0) {
+        //                            UserInfo info = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
+        //                            showToast("上传成功");
+        //                            info.identityAuth = 2;
+        //                            SharepUtil.putByBean(GlobalKey.USER_INFO, info);
+        //                            Intent intent = new Intent(UploadIdCardPhotoActivity.this, FaceAuthSettingActivity.class);
+        //                            intent.putExtra(GlobalKey.FROM_ACTIVITY, FaceAuthSettingActivity.From_ID_Card);
+        //                            intent.putExtra("hideName", name);
+        //                            SharepUtil.put(GlobalKey.ID_CARD_NAME, name);
+        //                            startActivity(intent);
+        //                            for (Activity activity : ActivityControl.mActivityList) {
+        //                                if (activity instanceof IdCardAcceptActivity) {
+        //                                    activity.finish();
+        //                                }
+        //                                if (activity instanceof UserIdChooseActivity) {
+        //                                    activity.finish();
+        //                                }
+        //                            }
+        //
+        //                            finish();
+        //                        } else {
+        //                            showToast(user.msg);
+        //                        }
+        //
+        //                    }
+        //                }, new Consumer<Throwable>() {
+        //                    @Override
+        //                    public void accept(Throwable throwable) throws Exception {
+        //                        LogUtils.e(throwable.toString());
+        //                        dialog.dismiss();
+        //                        showToast("上传失败");
+        //                        LogUtils.e(throwable);
+        //                    }
+        //                });
+        //
+        //        disposables.add(disposableImage);
+
+    }
+
+    private void checkInfo(ObservableSource<UpdateImageResultInfo> o1,
+                           ObservableSource<UpdateImageResultInfo> o2,
+                           ObservableSource<UpdateImageResultInfo> o3,
+                           ObservableSource<UpdateImageResultInfo> o4) {
         Disposable disposableImage = Observable.zip(o1, o2, o3, o4, new Function4<UpdateImageResultInfo, UpdateImageResultInfo, UpdateImageResultInfo, UpdateImageResultInfo, ImgId>() {
             @Override
             public ImgId apply(UpdateImageResultInfo updateImageResultInfo, UpdateImageResultInfo updateImageResultInfo2, UpdateImageResultInfo updateImageResultInfo3, UpdateImageResultInfo updateImageResultInfo4) throws Exception {
@@ -226,9 +342,9 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
                 imgId.name = realName;
                 return imgId;
             }
-        }).flatMap(new Function<ImgId, ObservableSource<User>>() {
+        }).flatMap(new Function<ImgId, ObservableSource<BaseError>>() {
             @Override
-            public ObservableSource<User> apply(ImgId imgId) throws Exception {
+            public ObservableSource<BaseError> apply(ImgId imgId) throws Exception {
                 //                addIdentity(imgId);
                 Map<String, Object> map = new HashMap<>();
                 map.put("name", imgId.name);
@@ -242,9 +358,9 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
         })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<User>() {
+                .subscribe(new Consumer<BaseError>() {
                     @Override
-                    public void accept(User user) throws Exception {
+                    public void accept(BaseError user) throws Exception {
                         dialog.dismiss();
                         LogUtils.e("成功后返回--" + user);
                         if (user.code == 0) {
@@ -275,6 +391,7 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        LogUtils.e(throwable.toString());
                         dialog.dismiss();
                         showToast("上传失败");
                         LogUtils.e(throwable);
@@ -376,16 +493,22 @@ public class UploadIdCardPhotoActivity extends BaseMvpActivity {
      *         要上传的图片文件
      * @return 返回请求图片上传接口的回调结果
      */
+
+    @SuppressLint("CheckResult")
     private ObservableSource<UpdateImageResultInfo> getUpdateImageResultInfoObservableSource(File file) {
+
+
         RequestBody requestBody = MultipartBodyBuilder
-                .addFormDataPart("type", "autogo/face")
-                .addFormDataPart("fileOwner", "face")
+                .addFormDataPart("type", "autogo/identity")
+                .addFormDataPart("fileOwner", "identity")
                 .addFormDataPart("uid", "9999999999")
                 .addFormDataPart("name", "faceImage")
                 .addFormDataPart("faceImage", file.getName(), RequestBody.create(MediaType.parse("image/*"), file))
                 .build();
         //图片上传
         return ClientFactory.getUpdateImageService(UserService.class).updateImageFile(requestBody);
+
+
     }
 
 

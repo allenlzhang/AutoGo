@@ -131,4 +131,5 @@ dependencies {
     compile(name: 'javaapkcomdatapicker', ext: 'aar')
     implementation 'com.github.razerdp:BasePopup:2.1.7'
     implementation files('libs/AMap3DMap_6.6.0_AMapNavi_6.5.0_AMapSearch_6.5.0_AMapLocation_4.4.0_20181221.jar')
+    implementation 'top.zibin:Luban:1.1.8'
 }

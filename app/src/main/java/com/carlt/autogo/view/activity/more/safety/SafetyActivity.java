@@ -392,11 +392,11 @@ public class SafetyActivity extends BaseMvpActivity<SafetyPresenter> implements 
                     LogUtils.e(hashMap);
                     String unionid = (String) hashMap.get("unionid");
                     final String nickname = (String) hashMap.get("nickname");
-//                    SharepUtil.put(GlobalKey.WECHAT_NICKNAME, nickname);
                     LogUtils.e(unionid);
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("openId", unionid);
                     params.put("openType", 2);
+                    params.put("nickName", nickname);
                     LogUtils.e(params);
                     ClientFactory.def(UserService.class).shareLoginBind(params)
                             .subscribe(new Consumer<BaseError>() {

@@ -33,7 +33,7 @@ public class DeviceActivateActivity extends BaseMvpActivity {
 
     @OnClick(R.id.btnACCNext)
     public void onViewClicked() {
-        Intent intent = new Intent(DeviceActivateActivity.this, DeviceActivateEditActivity.class);
+        Intent intent = new Intent(this, DeviceActivateEditActivity.class);
         intent.putExtra("carId", carId);
         intent.putExtra("withTbox", withTbox);
         startActivity(intent);

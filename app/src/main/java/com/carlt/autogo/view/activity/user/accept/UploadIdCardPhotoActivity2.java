@@ -24,8 +24,8 @@ import com.blankj.utilcode.util.LogUtils;
 import com.carlt.autogo.R;
 import com.carlt.autogo.base.BaseMvpActivity;
 import com.carlt.autogo.common.dialog.DialogIdcardAccept;
+import com.carlt.autogo.entry.user.BaseError;
 import com.carlt.autogo.entry.user.UpdateImageResultInfo;
-import com.carlt.autogo.entry.user.User;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
 import com.carlt.autogo.net.base.ClientFactory;
@@ -318,9 +318,9 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
                 //                infos.add(resultInfo2);
                 return imgId;
             }
-        }).flatMap(new Function<ImgId, ObservableSource<User>>() {
+        }).flatMap(new Function<ImgId, ObservableSource<BaseError>>() {
             @Override
-            public ObservableSource<User> apply(ImgId imgId) throws Exception {
+            public ObservableSource<BaseError> apply(ImgId imgId) throws Exception {
                 //                addIdentity(imgId);
                 Map<String, Object> map = new HashMap<>();
                 map.put("name", imgId.name);
@@ -332,9 +332,9 @@ public class UploadIdCardPhotoActivity2 extends BaseMvpActivity {
         })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<User>() {
+                .subscribe(new Consumer<BaseError>() {
                     @Override
-                    public void accept(User user) throws Exception {
+                    public void accept(BaseError user) throws Exception {
                         dialog.dismiss();
                         LogUtils.e("成功后返回--" + user);
                         if (user.code == 0) {
