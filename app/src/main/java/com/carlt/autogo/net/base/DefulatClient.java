@@ -19,7 +19,7 @@ public class DefulatClient extends BaseRestClient {
 //    static  String URL_NEXT[]     = {GlobalUrl.TEST_BASE_URL, GlobalUrl.PRE_BASE_URL};
 //    static  String URL_ACCESSID[] = {GlobalKey.TEST_ACCESSID, GlobalKey.PRE_ACCESSID};
         static  String URL_ACCESSID[] = {GlobalKey.TEST_ACCESSID, GlobalKey.PRE_ACCESSID, GlobalKey.PRE_ACCESSID};
-    public static  int    idIndex             = 0;
+    public static  int    idIndex             = 2;
 
     private DefulatClient() {
         super();

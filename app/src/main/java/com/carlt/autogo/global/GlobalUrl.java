@@ -43,5 +43,20 @@ public class GlobalUrl {
         return url;
     }
 
+    public static String getAutoClientId() {
+        String clientId = "";
+        switch (version_flag) {
+            case VERSION_FORMAL:
+                clientId = GlobalKey.PRE_ACCESSID;
+                break;
+            case VERSION_PRE_RELEASE:
+                clientId = GlobalKey.PRE_ACCESSID;
+                break;
+            case VERSION_TEST:
+                clientId = GlobalKey.TEST_ACCESSID;
+                break;
+        }
+        return clientId;
+    }
 
 }

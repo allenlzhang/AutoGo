@@ -178,7 +178,7 @@ public class OtherActivity extends BaseMvpActivity implements IOtherRegisterView
                 @Override
                 public void onComplete(Platform platform, final int i, HashMap<String, Object> hashMap) {
                     LogUtils.e(hashMap);
-                    final String unionid = (String) hashMap.get("unionid");
+                    final String unionid = (String) hashMap.get("openid");
                     String nickname = (String) hashMap.get("nickname");
                     LogUtils.e(nickname);
                     params.put("openId", unionid);

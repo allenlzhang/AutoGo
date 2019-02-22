@@ -140,7 +140,6 @@ public class LoginByPhoneActivity extends BaseMvpActivity {
                     public void accept(Throwable throwable) throws Exception {
                         uuDialog.dismiss();
                         ToastUtils.showShort(ObservableHelper.errorMsg);
-                        ;
                     }
                 });
 

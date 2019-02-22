@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">AutoGo</string>
     <string name="app_def_txt">--</string>
-    <string name="app_law"> 服务条款及免费声明  </string>
+    <string name="app_law">《服务条款及免费声明》</string>
     <string name="user_id_accept_payment">个人支付宝</string>
     <string name="user_id_accept_payment_info">若支付宝已实名,只需一键授权</string>
     <string name="user_id_accept_idcard">身份证认证</string>

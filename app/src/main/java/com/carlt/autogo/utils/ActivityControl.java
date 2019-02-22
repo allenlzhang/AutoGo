@@ -24,6 +24,7 @@ public class ActivityControl {
     public static void addActivity(Activity activity) {
         if (null != activity) {
             mActivityList.add(activity);
+
         }
     }
 
@@ -67,18 +68,18 @@ public class ActivityControl {
                 //                SharepUtil.putBoolean(GlobalKey.PROCESS_SAFE_SWITCH, false);
                 UserInfo userInfo = SharepUtil.getBeanFromSp("user");
                 userInfo.password = "";
-                SharepUtil.putByBean(GlobalKey.USER_INFO,userInfo);
+                SharepUtil.putByBean(GlobalKey.USER_INFO, userInfo);
                 boolean faceSwitch = SharepUtil.getPreferences().getBoolean(GlobalKey.FACE_LOGIN_SWITCH, false);
-//                if (userInfo != null) {
-                    Intent intent;
-                    if (userInfo.faceId != 0 && faceSwitch) {
-                        intent = new Intent(context, FaceLoginActivity.class);
-                    } else {
-                        intent = new Intent(context, LoginActivity.class);
-                    }
-                    context.startActivity(intent);
-                    context.finish();
-//                }
+                //                if (userInfo != null) {
+                Intent intent;
+                if (userInfo.faceId != 0 && faceSwitch) {
+                    intent = new Intent(context, FaceLoginActivity.class);
+                } else {
+                    intent = new Intent(context, LoginActivity.class);
+                }
+                context.startActivity(intent);
+                context.finish();
+                //                }
 
             }
         });

@@ -390,7 +390,7 @@ public class SafetyActivity extends BaseMvpActivity<SafetyPresenter> implements 
                 @Override
                 public void onComplete(Platform platform, final int i, HashMap<String, Object> hashMap) {
                     LogUtils.e(hashMap);
-                    String unionid = (String) hashMap.get("unionid");
+                    String unionid = (String) hashMap.get("openid");
                     final String nickname = (String) hashMap.get("nickname");
                     LogUtils.e(unionid);
                     HashMap<String, Object> params = new HashMap<>();

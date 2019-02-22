@@ -13,9 +13,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="60dp"
+        android:gravity="center_vertical"
         android:text="1，账号处于安全状态：最近一个月内无绑定手机/修改手机、无找回密码/修改密码等操作"
         android:textColor="@color/colorTitleTxt"
-        android:gravity="center_vertical"
         android:textSize="14sp"/>
 
     <View
@@ -27,9 +27,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="60dp"
+        android:gravity="center_vertical"
         android:text="2，账号处于安全状态：最近一个月内无绑定手机/修改手机、无找回密码/修改密码等操作"
         android:textColor="@color/colorTitleTxt"
-        android:gravity="center_vertical"
         android:textSize="14sp"/>
 
     <View
@@ -41,9 +41,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="60dp"
+        android:gravity="center_vertical"
         android:text="3，账号处于安全状态：最近一个月内无绑定手机/修改手机、无找回密码/修改密码等操作"
         android:textColor="@color/colorTitleTxt"
-        android:gravity="center_vertical"
         android:textSize="14sp"/>
 
     <View
@@ -55,9 +55,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="60dp"
+        android:gravity="center_vertical"
         android:text="4，账号处于安全状态：最近一个月内无绑定手机/修改手机、无找回密码/修改密码等操作"
         android:textColor="@color/colorTitleTxt"
-        android:gravity="center_vertical"
         android:textSize="14sp"/>
 
     <View
@@ -92,7 +92,7 @@
             android:id="@+id/tv_law"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="注销协议"
+            android:text="《注销协议》"
             android:textColor="@color/colorForgotPasswd"/>
     </LinearLayout>
 

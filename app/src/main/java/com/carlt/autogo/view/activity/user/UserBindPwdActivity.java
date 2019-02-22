@@ -5,6 +5,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -43,6 +44,8 @@ public class UserBindPwdActivity extends BaseMvpActivity {
     ImageView imgPasswdToggle2;
     @BindView(R.id.btnConfirm)
     Button    btnConfirm;
+    @BindView(R.id.cb_law)
+    CheckBox  cbLaw;
     private String pwd;
 
     //    @Override
@@ -119,6 +122,10 @@ public class UserBindPwdActivity extends BaseMvpActivity {
             showToast("两次密码输入不一致");
             return;
         }
+        if (!cbLaw.isChecked()) {
+            showToast("您未同意服务条款!");
+            return;
+        }
         HashMap<String, Object> map = new HashMap<>();
         map.put("newPassword", pwd);
         ClientFactory.def(UserService.class).userResetPwd(map)
@@ -129,7 +136,7 @@ public class UserBindPwdActivity extends BaseMvpActivity {
                         if (error.code == 0) {
                             UserInfo user = SharepUtil.getBeanFromSp(GlobalKey.USER_INFO);
                             user.password = pwd;
-                            SharepUtil.putByBean(GlobalKey.USER_INFO,user);
+                            SharepUtil.putByBean(GlobalKey.USER_INFO, user);
                             ActivityControl.removeAllActivity(UserBindPwdActivity.this);
                             startActivity(MainActivity.class);
                         } else {

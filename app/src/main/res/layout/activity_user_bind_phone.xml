@@ -99,5 +99,5 @@
         android:text="确定"
         android:textSize="20dp"
         app:layout_constraintTop_toBottomOf="@+id/bind_phone_headl2"
-        app:layout_constraintVertical_bias="0.5"/>
+        app:layout_constraintVertical_bias="0.1"/>
 </android.support.constraint.ConstraintLayout>

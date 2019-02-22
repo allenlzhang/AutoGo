@@ -67,6 +67,45 @@
             android:tag="off"/>
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/head3"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp">
+
+        <CheckBox
+            android:id="@+id/cb_law"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_register_img_level_select"
+            android:button="@null"
+            android:checked="true"
+
+            />
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/cb_law"
+            android:text="已经阅读并同意"/>
+
+        <TextView
+            android:id="@+id/tv_law"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv1"
+            android:text="@string/app_law"
+            android:textColor="@color/colorForgotPasswd"/>
+
+    </RelativeLayout>
+
     <Button
         android:id="@+id/btnConfirm"
         style="@style/BtnCommonCommit"

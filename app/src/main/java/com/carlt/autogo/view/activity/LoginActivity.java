@@ -24,6 +24,7 @@ import com.carlt.autogo.common.dialog.BaseDialog;
 import com.carlt.autogo.common.dialog.LoginMoreDialog;
 import com.carlt.autogo.entry.user.UserInfo;
 import com.carlt.autogo.global.GlobalKey;
+import com.carlt.autogo.global.GlobalUrl;
 import com.carlt.autogo.net.base.ClientFactory;
 import com.carlt.autogo.presenter.login.ILoginView;
 import com.carlt.autogo.presenter.login.LoginPresenter;
@@ -88,7 +89,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     String[] tag  = {"测试服", "预发布", "正式服"};
     //    String[] tag  = {"测试服", "预发布"};
-    int      next = 0;
+    int      next = 2;
 
     Disposable disposable;
     private String savePwd;
@@ -153,6 +154,11 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
                     }
                 }).start();
+//        if (GlobalUrl.version_flag == GlobalUrl.VERSION_FORMAL) {
+//            btnChangeUrl.setVisibility(View.GONE);
+//        } else {
+//            btnChangeUrl.setVisibility(View.VISIBLE);
+//        }
         if (next == 2) {
             btnChangeUrl.setVisibility(View.GONE);
         } else {
@@ -160,7 +166,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
         }
         btnChangeUrl.setText(tag[next]);
         ClientFactory.defChangeUrl(next);
-
     }
 
     @Override
@@ -240,13 +245,30 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
     @OnClick(R.id.btn_changeUrl)
     public void changeUrl() {
 
-        btnChangeUrl.setText(tag[next]);
+//        btnChangeUrl.setText(tag[next]);
         ClientFactory.defChangeUrl(next);
         next++;
         if (next == tag.length) {
             next = 0;
         }
+        switch (GlobalUrl.version_flag) {
+            case GlobalUrl.VERSION_FORMAL:
+                // 正式服
+                GlobalUrl.version_flag = GlobalUrl.VERSION_TEST;
+                btnChangeUrl.setText("测试");
+                break;
 
+            case GlobalUrl.VERSION_PRE_RELEASE:
+                // 预发布服
+                GlobalUrl.version_flag = GlobalUrl.VERSION_FORMAL;
+                btnChangeUrl.setText("正式");
+                break;
+            case GlobalUrl.VERSION_TEST:
+                // 测试服
+                GlobalUrl.version_flag = GlobalUrl.VERSION_PRE_RELEASE;
+                btnChangeUrl.setText("预发布");
+                break;
+        }
     }
 
     @Override

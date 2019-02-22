@@ -157,7 +157,6 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends Fragment 
     }
 
     protected void onInvisible() {
-
     }
 
     @Override
