@@ -89,7 +89,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements IL
 
     String[] tag  = {"测试服", "预发布", "正式服"};
     //    String[] tag  = {"测试服", "预发布"};
-    int      next = 2;
+    int      next = 0;
 
     Disposable disposable;
     private String savePwd;

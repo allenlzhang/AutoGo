@@ -6,6 +6,7 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -48,13 +49,6 @@ public class UserBindPwdActivity extends BaseMvpActivity {
     CheckBox  cbLaw;
     private String pwd;
 
-    //    @Override
-    //    protected void onCreate(Bundle savedInstanceState) {
-    //        super.onCreate(savedInstanceState);
-    //        setContentView(R.layout.activity_user_bind_pwd);
-    //        ButterKnife.bind(this);
-    //    }
-
     @Override
     protected int getContentView() {
         return R.layout.activity_user_bind_pwd;
@@ -70,6 +64,16 @@ public class UserBindPwdActivity extends BaseMvpActivity {
 
         etPwd.addTextChangedListener(new MyTextWatcher());
         etConfirmPwd.addTextChangedListener(new MyTextWatcher());
+        cbLaw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    btnConfirm.setEnabled(true);
+                } else {
+                    btnConfirm.setEnabled(false);
+                }
+            }
+        });
     }
 
     @OnClick({R.id.img_passwd_toggle1, R.id.img_passwd_toggle2, R.id.btnConfirm})
@@ -122,10 +126,10 @@ public class UserBindPwdActivity extends BaseMvpActivity {
             showToast("两次密码输入不一致");
             return;
         }
-        if (!cbLaw.isChecked()) {
-            showToast("您未同意服务条款!");
-            return;
-        }
+//        if (!cbLaw.isChecked()) {
+//            showToast("您未同意服务条款!");
+//            return;
+//        }
         HashMap<String, Object> map = new HashMap<>();
         map.put("newPassword", pwd);
         ClientFactory.def(UserService.class).userResetPwd(map)

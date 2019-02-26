@@ -21,7 +21,7 @@
 #-renamesourcefileattribute SourceFile
 
 # Glide 混淆
--keeppublicclass *implements com.bumptech.glide.module.GlideModule
+#-keeppublicclass *implements com.bumptech.glide.module.GlideModule
 
 -keeppublic enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
 

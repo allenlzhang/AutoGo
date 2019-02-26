@@ -10,9 +10,9 @@ android {
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
-            abiFilters 'armeabi', 'armeabi-v7a'
+            abiFilters('armeabi', 'armeabi-v7a')
         }
-
+        resConfigs('zh-rCN', 'ko')
         multiDexEnabled true
 //        ndk {
 //
@@ -109,7 +109,7 @@ dependencies {
     implementation files('libs/alipaySdk-20180601.jar')
     //人脸识别
     implementation project(':faceplatform-ui')
-    compile 'com.lzy.net:okgo:3.0.4'
+    implementation 'com.lzy.net:okgo:3.0.4'
     implementation 'com.yanzhenjie:permission:2.0.0-rc12'
     //新添加 glide
     //noinspection GradleDependency

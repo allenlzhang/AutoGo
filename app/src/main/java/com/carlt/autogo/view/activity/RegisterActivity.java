@@ -6,6 +6,7 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -68,7 +69,7 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
     @BindView(R.id.img_passwd_toggle_d)
     ImageView imgPasswdToggleD;
 
-    int count = 60;
+    int        count = 60;
     Disposable disposable;
 
     @PresenterVariable
@@ -86,16 +87,25 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
         edRegisterPwdD.setFilters(new InputFilter[]{new MyInputFilter()});
         edRegisterPwd.addTextChangedListener(new MyTextWatcher());
         edRegisterPwdD.addTextChangedListener(new MyTextWatcher());
-
+        cbLaw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    btnRegisterCommit.setEnabled(true);
+                } else {
+                    btnRegisterCommit.setEnabled(false);
+                }
+            }
+        });
     }
 
     @Override
     public void onRegisterFinish() {
-//        for (Activity activity : ActivityControl.mActivityList) {
-//            if (activity instanceof LoginActivity) {
-//                activity.finish();
-//            }
-//        }
+        //        for (Activity activity : ActivityControl.mActivityList) {
+        //            if (activity instanceof LoginActivity) {
+        //                activity.finish();
+        //            }
+        //        }
         ActivityControl.removeAllActivity(this);
         startActivity(MainActivity.class);
     }
@@ -181,10 +191,10 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
         String code = registUserCode.getText().toString().trim();
 
         if (CheckValues(phoneNum, pwd, pwdD, code)) {
-            if (!cbLaw.isChecked()) {
-                showToast("您未同意服务条款!");
-                return;
-            }
+            //            if (!cbLaw.isChecked()) {
+            //                showToast("您未同意服务条款!");
+            //                return;
+            //            }
             Map<String, Object> params = new HashMap<>();
             params.put("mobile", phoneNum);
             params.put("password", CipherUtils.md5(pwd));
@@ -230,12 +240,12 @@ public class RegisterActivity extends BaseMvpActivity implements IRegisterView {
             }
         }
         if (!pwd.equals("-") || !pwdD.equals("-")) {
-            if(StringUtils.isEmpty(pwd)){
+            if (StringUtils.isEmpty(pwd)) {
                 ToastUtils.showLong("密码不能为空");
-                return  false;
-            }else if(pwd.length() < 6){
+                return false;
+            } else if (pwd.length() < 6) {
                 ToastUtils.showLong("密码至少为6位");
-                return  false;
+                return false;
             }
 
             if (!RegexUtils.isMatch(GlobalKey.PWD_REGEX, pwd)) {
