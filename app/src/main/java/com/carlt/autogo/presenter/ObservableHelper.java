@@ -185,7 +185,7 @@ public class ObservableHelper {
                             return null;
                         } else {
                             String token = smsToken.token;
-                            Map<String, Object> map = new HashMap();
+                            Map<String, Object> map = new HashMap<>();
                             map.put("mobile", phoneNum);
                             map.put("type", type);
                             map.put("smsToken", token);

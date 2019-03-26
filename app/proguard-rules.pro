@@ -60,3 +60,14 @@ public *;
 -keep class com.alipay.tscenter.** { *; }
 -keep class com.ta.utdid2.** { *;}
 -keep class com.ut.device.** { *;}
+
+-keep com.xxx.xxx.xxx.PresenterVariable class * {*;}
+-keep com.xxx.xxx.xxx.CreatePresenter class * {*;}
+-keep class * {
+   com.xxx.xxx.xxx.PresenterVariable <fields>;
+   com.xxx.xxx.xxx.CreatePresenter <fields>;
+}
+-keepclassmembers class ** {
+   com.xxx.xxx.xxx.PresenterVariable <methods>;
+   com.xxx.xxx.xxx.CreatePresenter <methods>;
+}

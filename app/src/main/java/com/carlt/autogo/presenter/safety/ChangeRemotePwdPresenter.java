@@ -25,7 +25,6 @@ public class ChangeRemotePwdPresenter extends BasePresenter<IChangeRemotePwdView
      * 设置远程密码
      */
     public void setRemotePwdClient(String token, String remoteNewPwd) {
-
         HashMap<String, String> params = new HashMap();
         params.put(GlobalKey.USER_TOKEN, token);
         params.put("remotePwd", CipherUtils.md5(remoteNewPwd));

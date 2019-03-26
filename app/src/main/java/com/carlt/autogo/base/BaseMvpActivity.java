@@ -41,24 +41,26 @@ import io.reactivex.disposables.Disposable;
 public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompatActivity implements BaseMvpView {
 
     @BindView(R.id.tv_base_title)
-    TextView  tvBaseTitle;
+    TextView tvBaseTitle;
     @BindView(R.id.iv_base_back)
-    public ImageView ivBaseBack;
+    public    ImageView      ivBaseBack;
     @BindView(R.id.rlTitle)
     protected RelativeLayout rlTitle;
     @BindView(R.id.flContent)
     FrameLayout flContent;
     @BindView(R.id.tv_base_right)
-    public TextView tvBaseRight;
+    public  TextView           tvBaseRight;
     private PresenterProviders mPresenterProviders;
     private PresenterDispatch  mPresenterDispatch;
-    private int requestCodePermsiision = 1020;
-    public PremissoinLisniter lisniter ;
+    private int                requestCodePermsiision = 1020;
+    public  PremissoinLisniter lisniter;
     //请求Loding
-    public UUDialog dialog;
+    public  UUDialog           dialog;
     //用于取消每个网络请求
-    public List<Disposable> disposables = new ArrayList<>();
-    public RxLifeImpl rxLifeImp = new RxLifeImpl();
+    public  List<Disposable>   disposables            = new ArrayList<>();
+    public  RxLifeImpl         rxLifeImp              = new RxLifeImpl();
+    private UUDialog           mUuDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -88,22 +90,24 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
             }
         });
 
-        LayoutHook.layoutInflaterHook(this,getContentView(),flContent);
-//       flContent.addView(getLayoutInflater().inflate(getContentView(), null));
-       // flContent.addView();
+        LayoutHook.layoutInflaterHook(this, getContentView(), flContent);
+        //       flContent.addView(getLayoutInflater().inflate(getContentView(), null));
+        // flContent.addView();
 
 
-        dialog = new UUDialog(this,R.style.DialogCommon);
+        dialog = new UUDialog(this, R.style.DialogCommon);
         dialog.setCanceledOnTouchOutside(false);
     }
 
     protected void setTitleText(String text) {
         tvBaseTitle.setText(text);
     }
-    protected void hideTitle(){
+
+    protected void hideTitle() {
         rlTitle.setVisibility(View.INVISIBLE);
     }
-    protected void goneTitle(){
+
+    protected void goneTitle() {
         rlTitle.setVisibility(View.GONE);
     }
 
@@ -127,17 +131,28 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
 
     @Override
     public void showError(String msg) {
-
+        showToast(msg);
     }
 
     @Override
     public void complete() {
+        if (mUuDialog != null && mUuDialog.isShowing()) {
+            mUuDialog.dismiss();
+        }
 
     }
 
     @Override
     public void showLoading(Boolean isShow) {
+        if (isShow) {
+            if (mUuDialog == null) {
+                mUuDialog = new UUDialog(this, R.style.DialogCommon);
+                mUuDialog.show();
+            } else {
+                mUuDialog.show();
+            }
 
+        }
     }
 
     protected void showToast(String txt) {
@@ -151,12 +166,12 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     @Override
     protected void onPause() {
         super.onPause();
-        if(rxLifeImp!=null){
+        if (rxLifeImp != null) {
             rxLifeImp.onPause();
         }
 
-        for(Disposable disposable : disposables){
-            if(!disposable.isDisposed()){
+        for (Disposable disposable : disposables) {
+            if (!disposable.isDisposed()) {
                 disposable.dispose();
             }
         }
@@ -166,7 +181,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (rxLifeImp!=null){
+        if (rxLifeImp != null) {
             rxLifeImp.onDestroy();
         }
 
@@ -177,36 +192,37 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
     }
 
 
-    public void setBaseBackStyle(Drawable drawable){
+    public void setBaseBackStyle(Drawable drawable) {
         ivBaseBack.setClickable(true);
         ivBaseBack.setImageDrawable(drawable);
     }
 
     //设置Header背景颜色,字体颜色
-    public void setHeadColor (int pColor, int tettleColor ,int righthColor ,int leftColor  ){
+    public void setHeadColor(int pColor, int tettleColor, int righthColor, int leftColor) {
 
-        if(pColor != 0){
+        if (pColor != 0) {
             rlTitle.setBackgroundColor(pColor);
         }
-        if(tettleColor != 0){
+        if (tettleColor != 0) {
             tvBaseTitle.setTextColor(tettleColor);
         }
 
-        if(righthColor != 0){
+        if (righthColor != 0) {
             tvBaseRight.setTextColor(righthColor);
         }
 
-        if(leftColor != 0){
+        if (leftColor != 0) {
             ivBaseBack.setBackgroundColor(leftColor);
         }
 
     }
 
     //展示头部右边样式
-    public void showHeaderRight(String text){
+    public void showHeaderRight(String text) {
 
         tvBaseRight.setText(text);
     }
+
     public void requestPermissions(int requestCode, String permission) {
         if (permission != null && permission.length() > 0) {
             try {
@@ -227,45 +243,48 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
         }
     }
 
-    /** 6.0 检查权限检查
-     * @param mPermissions   需要申请的检查项
-     * @param lisniter  回调接口,只有成功 才回调
+    /**
+     * 6.0 检查权限检查
+     * @param mPermissions
+     *         需要申请的检查项
+     * @param lisniter
+     *         回调接口,只有成功 才回调
      * @return ture  验证通过直接返回  , false 未授权,请求授权
-     *
      */
 
-    public void checkPermissions(String[] mPermissions , PremissoinLisniter lisniter) {
-        this.lisniter = lisniter ;
-        boolean created = true ;
+    public void checkPermissions(String[] mPermissions, PremissoinLisniter lisniter) {
+        this.lisniter = lisniter;
+        boolean created = true;
 
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             lisniter.createred();
             return;
         }
 
-        for(int  i = 0 ;i < mPermissions.length ; i++ ){
-            if(ActivityCompat.checkSelfPermission(BaseMvpActivity.this, mPermissions[i])  == PackageManager.PERMISSION_DENIED){
-                created =false ;
+        for (int i = 0; i < mPermissions.length; i++) {
+            if (ActivityCompat.checkSelfPermission(BaseMvpActivity.this, mPermissions[i]) == PackageManager.PERMISSION_DENIED) {
+                created = false;
             }
         }
-        if(created && lisniter!= null) {
+        if (created && lisniter != null) {
             lisniter.createred();
-        }else {
+        } else {
             ActivityCompat.requestPermissions(BaseMvpActivity.this, mPermissions, requestCodePermsiision);
         }
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == requestCodePermsiision) {
-            boolean created = true ;
-            for(int i= 0 ; i < grantResults.length ; i++){
-                if(grantResults[i] == PackageManager.PERMISSION_DENIED){
-                    created = false ;
+            boolean created = true;
+            for (int i = 0; i < grantResults.length; i++) {
+                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                    created = false;
                     ToastUtils.showShort("部分权限获取失败，正常功可能受到影响");
                 }
             }
-            if(created && lisniter!= null){
+            if (created && lisniter != null) {
                 lisniter.createred();
             }
         }
@@ -277,17 +296,18 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends AppCompat
      * createred 为授权成功 回调
      */
     public interface PremissoinLisniter {
-      void createred();
+        void createred();
 
     }
 
-    public void startActivity(Class activity){
-        startActivity(activity,true);
+    public void startActivity(Class activity) {
+        startActivity(activity, true);
     }
-    public void startActivity( Class activity ,Boolean finish ){
+
+    public void startActivity(Class activity, Boolean finish) {
         Intent intent = new Intent(this, activity);
         startActivity(intent);
-        if(finish){
+        if (finish) {
             finish();
         }
     }

@@ -10,7 +10,7 @@ android {
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
-            abiFilters('armeabi', 'armeabi-v7a')
+            abiFilters( 'armeabi-v7a')
         }
         resConfigs('zh-rCN', 'ko')
         multiDexEnabled true
@@ -105,6 +105,7 @@ dependencies {
     //okhttp 日志
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
     implementation 'com.blankj:utilcode:1.20.0'
+
     implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
     implementation files('libs/alipaySdk-20180601.jar')
     //人脸识别

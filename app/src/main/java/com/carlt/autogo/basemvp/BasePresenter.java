@@ -26,11 +26,12 @@ import io.reactivex.functions.Consumer;
  * Date       : 2018/9/3 16:22
  */
 public class BasePresenter<V> {
-    protected Context mContext;
-    protected V       mView;
-    public UUDialog uuDialog  ;
+    protected Context          mContext;
+    protected V                mView;
+    public    UUDialog         uuDialog;
     public    List<Disposable> disposables = new ArrayList<>();
-    public String errorMsg = "登录失败";
+    public    String           errorMsg    = "登录失败";
+
     protected void onCleared() {
 
     }
@@ -38,11 +39,12 @@ public class BasePresenter<V> {
     public void attachView(Context context, V view) {
         this.mContext = context;
         this.mView = view;
-        uuDialog  =new UUDialog(mContext, R.style.DialogCommon);
+        uuDialog = new UUDialog(mContext, R.style.DialogCommon);
     }
 
     public void detachView() {
         this.mView = null;
+//        mContext = null;
     }
 
     public boolean isAttachView() {
@@ -52,7 +54,6 @@ public class BasePresenter<V> {
     public void onCreatePresenter(@Nullable Bundle savedState) {
 
     }
-
 
 
     public void onDestroyPresenter() {
@@ -65,7 +66,7 @@ public class BasePresenter<V> {
     }
 
 
-    public class CommonThrowable<Throwable> implements Consumer<Throwable>{
+    public class CommonThrowable<Throwable> implements Consumer<Throwable> {
 
         @Override
         public void accept(Throwable t) throws Exception {
